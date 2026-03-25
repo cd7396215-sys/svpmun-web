@@ -20,8 +20,24 @@ async def crisis_roma(request: Request):
 async def crisis_roma(request: Request):
     return templates.TemplateResponse("crisis_ue_2035.html", {"request": request})
 
+import os
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
+
+app = FastAPI()
+
+# Esto detecta automáticamente la carpeta donde está parado el archivo
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Rutas absolutas para que Vercel no se pierda
+app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
+templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
+
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
+    # Asegúrate de que index.html esté DENTRO de la carpeta templates
     return templates.TemplateResponse("index.html", {"request": request})
 
 
