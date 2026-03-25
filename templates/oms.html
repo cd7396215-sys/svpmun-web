@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMS | Informe Clasificado OMEGA-7</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600&family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        /* MÓDULO 1: ARQUITECTURA TIPOGRÁFICA Y DE COLOR */
+        :root {
+            --bg-paper: #ffffff;
+            --bg-archive: #f5f5f7;
+            --text-ink: #111111;
+            --text-muted: #666666;
+            --oms-blue: #003366;
+            --alert-crimson: #cc0000;
+            
+            --font-title: 'Cormorant Garamond', serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'Courier Prime', monospace;
+            
+            /* Variables importadas del Navbar */
+            --navy:      #071630;
+            --gold:      #c9a84c;
+            --gold-lt:   #edd98a;
+            --blu-2:     #8ec5f7;
+            --blu-3:     #3a8fe0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-paper);
+            color: var(--text-ink);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-archive); border-left: 1px solid #ddd; }
+        ::-webkit-scrollbar-thumb { background: var(--text-muted); }
+
+        .global-watermark {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-family: var(--font-title); font-size: 15vw;
+            color: var(--text-ink); opacity: 0.02;
+            white-space: nowrap; pointer-events: none; z-index: -1;
+            text-transform: uppercase; font-weight: 700;
+        }
+
+        #rejection-watermark {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-family: var(--font-title); font-size: 10vw;
+            color: var(--alert-crimson); opacity: 0;
+            white-space: nowrap; pointer-events: none; z-index: 999;
+            text-transform: uppercase; font-weight: 700;
+            border: 10px solid var(--alert-crimson); padding: 20px;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        body.rejected #rejection-watermark { opacity: 0.15; }
+        body.rejected .strikethrough-target {
+            text-decoration: line-through; text-decoration-color: var(--alert-crimson);
+            text-decoration-thickness: 2px; color: var(--text-muted);
+        }
+
+        /* LOGICA DE CAMBIO OSCURO (Sin Transiciones) */
+        .truth-revealed { display: none; }
+        body.rejected .truth-hidden { display: none; }
+        body.rejected .truth-revealed { display: inline; color: var(--text-ink); }
+        body.rejected .truth-revealed-block { display: block; }
+        body.rejected .truth-hidden-block { display: none; }
+        
+        /* ---------------------------------------------------
+           MÓDULO 2: PANTALLA DE CARGA (TERMINAL CLASIFICADA)
+           --------------------------------------------------- */
+        #loader {
+            position: fixed; inset: 0; background-color: #050505; color: #00ff00;
+            z-index: 10000; display: flex; align-items: flex-start; justify-content: flex-start;
+            font-family: var(--font-mono); font-size: 0.9rem; padding: 40px;
+            transition: opacity 0.5s ease;
+        }
+
+        .terminal-container { width: 100%; max-width: 800px; }
+        .terminal-header { font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .terminal-line { margin-bottom: 5px; opacity: 0; }
+        .terminal-line.visible { opacity: 1; }
+        .blink-cursor { display: inline-block; width: 10px; height: 1.2em; background-color: #00ff00; animation: blink 1s step-end infinite; vertical-align: bottom; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* ---------------------------------------------------
+           NAVBAR Y OVERLAY - EXACTAMENTE IGUAL A DRILLS
+           --------------------------------------------------- */
+        #nav-bar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 8000;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 52px; height: 76px; font-family: 'Rajdhani', sans-serif;
+        }
+        #nav-bar::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(180deg, rgba(7,22,48,0.75) 0%, rgba(7,22,48,0) 100%);
+            backdrop-filter: blur(0px); transition: background 0.6s, backdrop-filter 0.6s;
+            pointer-events: none;
+        }
+        #nav-bar.scrolled::before {
+            background: rgba(7,22,48,0.90); backdrop-filter: blur(26px) saturate(1.9);
+        }
+        #nav-bar.menu-open::before { background: transparent; backdrop-filter: none; }
+        #nav-bar::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.0) 10%, rgba(201,168,76,0.55) 35%, rgba(237,217,138,1.0) 50%, rgba(201,168,76,0.55) 65%, rgba(201,168,76,0.0) 90%, transparent 100%);
+            opacity: 1; transition: opacity 0.4s;
+        }
+        #nav-bar.menu-open::after { opacity: 0; }
+
+        .nb-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; position: relative; z-index: 1; }
+        .nb-emblem { width: 34px; height: 34px; object-fit: contain; filter: brightness(0) invert(1) drop-shadow(0 0 12px rgba(142,197,247,0.65)); transition: filter 0.4s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+        .nb-brand:hover .nb-emblem { transform: rotate(-12deg) scale(1.1); }
+        .nb-word { font-family: 'Cinzel', serif; font-weight: 900; font-size: 1.08rem; letter-spacing: 0.32em; color: #fff; position: relative; }
+        .nb-word .nb-sep { color: var(--gold); margin: 0 4px; }
+        .nb-word::after {
+            content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 1px;
+            background: linear-gradient(90deg, var(--gold), transparent); transform: scaleX(0); transform-origin: left;
+            transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+        }
+        .nb-brand:hover .nb-word::after { transform: scaleX(1); }
+
+        .nb-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; pointer-events: all; z-index: 1; transition: opacity 0.35s, transform 0.35s; }
+        .nb-quick-link { font-family: 'Cinzel', serif; font-size: 0.56rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.3); padding: 6px 18px; position: relative; cursor: pointer; transition: color 0.3s; text-decoration: none; }
+        .nb-quick-link::after { content: '·'; position: absolute; right: -1px; top: 50%; transform: translateY(-50%); color: rgba(201,168,76,0.2); pointer-events: none; }
+        .nb-quick-link:last-child::after { display: none; }
+        .nb-quick-link:hover { color: rgba(237,217,138,0.9); }
+        #nav-bar.menu-open .nb-center { opacity: 0; transform: translateX(-50%) scale(0.9); pointer-events: none; }
+
+        .nb-trigger { position: relative; z-index: 1; display: flex; align-items: center; gap: 16px; background: none; border: none; cursor: pointer; padding: 8px 0; }
+        .nb-trigger-label { font-family: 'Cinzel', serif; font-size: 0.56rem; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(255,255,255,0.4); transition: color 0.3s, opacity 0.3s; }
+        .nb-trigger:hover .nb-trigger-label { color: rgba(201,168,76,0.85); }
+        #nav-bar.menu-open .nb-trigger-label { opacity: 0; }
+
+        .nb-icon { display: flex; flex-direction: column; gap: 5px; width: 28px; cursor: pointer; }
+        .nb-icon span { display: block; height: 1.5px; border-radius: 2px; background: rgba(255,255,255,0.85); transform-origin: center; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease, width 0.4s ease, background 0.3s; }
+        .nb-icon span:nth-child(1) { width: 28px; }
+        .nb-icon span:nth-child(2) { width: 18px; margin-left: 10px; }
+        .nb-icon span:nth-child(3) { width: 28px; }
+        .nb-icon.open span:nth-child(1) { transform: translateY(6.75px) rotate(45deg); width: 28px; margin-left: 0; background: var(--gold-lt); }
+        .nb-icon.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .nb-icon.open span:nth-child(3) { transform: translateY(-6.75px) rotate(-45deg); background: var(--gold-lt); }
+
+        #nav-overlay {
+            position: fixed; inset: 0; z-index: 7900; font-family: 'Rajdhani', sans-serif;
+            background: var(--navy); display: flex;
+            clip-path: circle(0% at calc(100% - 72px) 38px);
+            transition: clip-path 0.85s cubic-bezier(0.77,0,0.18,1); pointer-events: none; overflow: hidden;
+        }
+        #nav-overlay.open { clip-path: circle(150% at calc(100% - 72px) 38px); pointer-events: all; }
+
+        .nvo-deco-panel { width: 36%; flex-shrink: 0; position: relative; overflow: hidden; border-right: 1px solid rgba(58,143,224,0.1); display: flex; flex-direction: column; justify-content: space-between; padding: 110px 52px 52px; }
+        .nvo-deco-panel::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 80% 55% at 30% 15%, rgba(18,72,168,0.55) 0%, transparent 60%), radial-gradient(ellipse 55% 70% at 75% 85%, rgba(58,143,224,0.1) 0%, transparent 60%); }
+        .nvo-deco-panel::after { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(58,143,224,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(58,143,224,0.04) 1px, transparent 1px); background-size: 48px 48px; }
+        .nvo-deco-emblem { position: absolute; right: -40px; top: 50%; transform: translateY(-50%); width: 300px; height: 300px; object-fit: contain; opacity: 0.035; filter: brightness(0) invert(1); pointer-events: none; }
+        .nvo-deco-top { position: relative; z-index: 2; }
+        .nvo-deco-brand { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.42em; text-transform: uppercase; color: rgba(201,168,76,0.55); margin-bottom: 22px; }
+        .nvo-deco-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.7rem, 3.2vw, 2.6rem); font-style: italic; color: rgba(255,255,255,0.82); line-height: 1.28; margin-bottom: 24px; }
+        .nvo-deco-line { width: 38px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin-bottom: 22px; }
+        .nvo-deco-sub { font-family: 'Rajdhani', sans-serif; font-size: 0.78rem; letter-spacing: 0.16em; color: rgba(142,197,247,0.3); text-transform: uppercase; line-height: 1.9; }
+        .nvo-deco-bottom { position: relative; z-index: 2; }
+        .nvo-deco-year { font-family: 'Bebas Neue', serif; font-size: 4.5rem; line-height: 1; letter-spacing: 0.06em; color: rgba(255,255,255,0.04); }
+        .nvo-deco-copy { font-size: 0.58rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(142,197,247,0.18); margin-top: 8px; }
+
+        .nvo-list-panel { flex: 1; position: relative; overflow-y: auto; display: flex; flex-direction: column; padding-top: 76px; }
+        .nvo-list-panel::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0; background-image: linear-gradient(rgba(58,143,224,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(58,143,224,0.025) 1px, transparent 1px); background-size: 60px 60px; }
+
+        .nvo-item { display: grid; grid-template-columns: 72px 1fr auto; align-items: center; gap: 0 24px; padding: 26px 52px 26px 40px; border-bottom: 1px solid rgba(58,143,224,0.07); cursor: pointer; position: relative; overflow: hidden; z-index: 1; opacity: 0; transform: translateX(28px); transition: opacity 0.5s ease, transform 0.5s ease; }
+        .nvo-item:last-child { border-bottom: none; }
+        #nav-overlay.open .nvo-item { opacity: 1; transform: translateX(0); }
+        #nav-overlay.open .nvo-item:nth-child(1) { transition-delay: 0.22s; }
+        #nav-overlay.open .nvo-item:nth-child(2) { transition-delay: 0.28s; }
+        #nav-overlay.open .nvo-item:nth-child(3) { transition-delay: 0.34s; }
+        #nav-overlay.open .nvo-item:nth-child(4) { transition-delay: 0.40s; }
+        #nav-overlay.open .nvo-item:nth-child(5) { transition-delay: 0.46s; }
+
+        .nvo-item::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(58,143,224,0.0) 0%, rgba(58,143,224,0.05) 50%, rgba(58,143,224,0.0) 100%); opacity: 0; transition: opacity 0.4s; }
+        .nvo-item:hover::before { opacity: 1; }
+        .nvo-item::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, transparent, var(--gold) 50%, transparent); transform: scaleY(0); transform-origin: center; transition: transform 0.42s cubic-bezier(0.4,0,0.2,1); }
+        .nvo-item:hover::after { transform: scaleY(1); }
+
+        .nvo-num { font-family: 'Bebas Neue', serif; font-size: 0.68rem; letter-spacing: 0.32em; color: var(--gold); opacity: 0.45; text-align: right; padding-right: 10px; border-right: 1px solid rgba(201,168,76,0.1); transition: opacity 0.3s; line-height: 1; }
+        .nvo-item:hover .nvo-num { opacity: 1; text-shadow: 0 0 14px rgba(201,168,76,0.5); }
+
+        .nvo-body { display: flex; flex-direction: column; gap: 5px; }
+        .nvo-title { font-family: 'Cinzel', serif; font-size: clamp(1rem, 1.8vw, 1.4rem); font-weight: 700; letter-spacing: 0.06em; color: rgba(255,255,255,0.82); transition: color 0.3s, letter-spacing 0.4s; }
+        .nvo-item:hover .nvo-title { color: var(--gold-lt); letter-spacing: 0.1em; }
+        .nvo-subs-inline { font-family: 'Rajdhani', sans-serif; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(142,197,247,0.28); transition: color 0.3s; }
+        .nvo-item:hover .nvo-subs-inline { color: rgba(142,197,247,0.55); }
+        .nvo-arrow { font-size: 1.3rem; color: rgba(255,255,255,0.15); transition: color 0.3s, transform 0.3s; }
+        .nvo-item:hover .nvo-arrow { color: var(--gold); transform: translateX(4px); }
+
+        .nvo-arrow-expand { font-size: 1.2rem; color: rgba(255,255,255,0.15); transition: color 0.3s, transform 0.45s cubic-bezier(0.4,0,0.2,1); line-height: 1; }
+        .nvo-item:hover .nvo-arrow-expand { color: var(--gold); }
+        .nvo-item.sub-open .nvo-arrow-expand { transform: rotate(90deg); color: var(--gold); }
+
+        .nvo-sub-list { max-height: 0; overflow: hidden; transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1); background: rgba(255,255,255,0.015); border-bottom: 1px solid rgba(58,143,224,0.07); }
+        .nvo-sub-list.open { max-height: 260px; }
+
+        .nvo-sub-item { display: flex; align-items: center; gap: 20px; padding: 16px 52px 16px 130px; cursor: pointer; border-top: 1px solid rgba(58,143,224,0.05); transition: background 0.3s; }
+        .nvo-sub-item:hover { background: rgba(58,143,224,0.04); }
+        .nvo-sub-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(201,168,76,0.35); flex-shrink: 0; transition: background 0.3s; }
+        .nvo-sub-item:hover .nvo-sub-dot { background: var(--gold); }
+        .nvo-sub-name { font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.18em; color: rgba(255,255,255,0.45); text-transform: uppercase; transition: color 0.3s; }
+        .nvo-sub-item:hover .nvo-sub-name { color: rgba(237,217,138,0.85); }
+
+        .nvo-item-back .nvo-title { font-size: clamp(0.85rem, 1.4vw, 1.1rem); color: rgba(255,255,255,0.45); }
+        .nvo-item-back:hover .nvo-title { color: var(--gold-lt); }
+        .nvo-item-back .nvo-num { color: rgba(201,168,76,0.3); }
+        .nvo-back-arr { font-size: 1.1rem; color: rgba(255,255,255,0.15); transition: color 0.3s, transform 0.3s; }
+        .nvo-item-back:hover .nvo-back-arr { color: var(--gold); transform: translateX(-4px); }
+
+        /* Mobile Bars */
+        #mob-topbar, #mob-bottomnav { display: none; }
+
+
+        /* ---------------------------------------------------
+           ESTRUCTURA DEL EXPEDIENTE 
+           --------------------------------------------------- */
+        #dossier-container {
+            opacity: 0; max-width: 1000px; margin: 100px auto 60px; padding: 0 40px; display: none;
+        }
+        .unroll-animation {
+            display: block !important;
+            transform-origin: top;
+            animation: unroll 1s cubic-bezier(0.25, 1, 0.2, 1) forwards;
+        }
+        @keyframes unroll { 0% { transform: scaleY(0); opacity: 0; } 100% { transform: scaleY(1); opacity: 1; } }
+
+        /* MÓDULO 3: HERO SECTION */
+        .dossier-hero { border-bottom: 2px solid var(--text-ink); padding-bottom: 30px; margin-bottom: 40px; }
+        .hero-top-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+        .barcode { display: flex; height: 40px; gap: 2px; }
+        .barcode div { background-color: var(--text-ink); height: 100%; }
+        .bc-1 { width: 2px; } .bc-2 { width: 4px; } .bc-3 { width: 1px; } .bc-4 { width: 6px; } .bc-5 { width: 3px; }
+        .stamp-secret { border: 3px solid var(--alert-crimson); color: var(--alert-crimson); font-family: var(--font-mono); font-weight: bold; font-size: 1.2rem; padding: 5px 15px; transform: rotate(5deg); text-transform: uppercase; letter-spacing: 2px; }
+        .dossier-title { font-family: var(--font-title); font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; line-height: 1.1; text-align: center; margin-bottom: 40px; color: var(--text-ink); }
+        
+        .metadata-grid { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--text-ink); background-color: var(--text-ink); gap: 1px; }
+        .meta-box { background-color: var(--bg-paper); padding: 15px; display: flex; flex-direction: column; }
+        .meta-label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; }
+        .meta-value { font-family: var(--font-mono); font-size: 0.9rem; font-weight: bold; }
+        .meta-value.critical { color: var(--alert-crimson); }
+
+        /* TEXT BODY */
+        .section-heading { font-family: var(--font-title); font-size: 2rem; border-bottom: 1px solid var(--text-muted); padding-bottom: 10px; margin-bottom: 20px; color: var(--oms-blue); margin-top: 60px;}
+        .text-columns { column-count: 2; column-gap: 3rem; column-rule: 1px solid #ddd; text-align: justify; font-size: 15px; }
+        .text-columns p { margin-bottom: 1.5rem; }
+        .text-full { text-align: justify; font-size: 15px; margin-bottom: 1.5rem; }
+
+        .redacted { background-color: var(--text-ink); color: var(--text-ink); padding: 0 4px; transition: background-color 0.2s, color 0.2s; cursor: crosshair; user-select: none; }
+        .redacted:hover, .redacted:active { background-color: transparent; color: var(--alert-crimson); }
+
+        .marginalia { float: right; width: 35%; margin: 0 0 20px 20px; padding: 15px; border-left: 2px solid var(--alert-crimson); font-family: var(--font-title); font-style: italic; font-size: 1.1rem; color: var(--alert-crimson); background: #fffafa; box-shadow: 2px 2px 5px rgba(0,0,0,0.05); }
+
+        /* MÓDULO 5: PACIENTE CERO */
+        .patient-grid { display: grid; grid-template-columns: 2fr 1fr; border: 1px solid var(--text-ink); background-color: var(--text-ink); gap: 1px; }
+        .patient-data { background-color: var(--bg-archive); padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .data-group { display: flex; flex-direction: column; border-bottom: 1px dashed var(--text-muted); padding-bottom: 10px; }
+        .scan-container { background-color: #050505; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+        .scan-label { color: #00ff00; font-family: var(--font-mono); font-size: 0.8rem; z-index: 2; }
+        .brain-scan-svg { width: 100%; height: 100px; }
+        .scan-path { fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: eeg 3s linear infinite; }
+        @keyframes eeg { 0% { stroke-dashoffset: 1000; } 100% { stroke-dashoffset: 0; } }
+
+        /* TRANSCRIPCIONES */
+        .transcript-box { border: 1px solid #ccc; background: var(--bg-archive); padding: 30px; margin: 30px 0; font-family: var(--font-mono); font-size: 0.9rem; }
+        .transcript-header { border-bottom: 1px solid #111; margin-bottom: 20px; padding-bottom: 10px; font-weight: bold; }
+        .dialogue-line { margin-bottom: 15px; display: flex; }
+        .speaker { width: 120px; font-weight: bold; flex-shrink: 0; }
+        .speech { flex: 1; }
+        .speech.action { font-style: italic; color: var(--text-muted); }
+
+        /* MAPA ANATÓMICO INTERACTIVO (IMAGEN REEMPLAZADA) */
+        .brain-interactive-section { display: flex; border: 1px solid var(--text-ink); margin: 30px 0; height: 450px; }
+        .brain-svg-container { flex: 1.5; background: #fff; padding: 10px; display: flex; align-items: center; justify-content: center; border-right: 1px solid var(--text-ink); position: relative; }
+        .brain-info-panel { width: 350px; background: var(--bg-archive); padding: 30px; display: flex; flex-direction: column; justify-content: center; }
+        
+        #b-info-title { font-family: var(--font-title); font-size: 1.5rem; color: var(--oms-blue); margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; text-transform: uppercase; }
+        #b-info-desc { font-size: 0.9rem; text-align: justify; }
+
+        /* MESA DIRECTIVA */
+        .directiva-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px; }
+        .incognito-card { border: 2px solid var(--text-ink); background: var(--bg-archive); padding: 30px; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; }
+        .photo-placeholder { width: 150px; height: 180px; border: 1px solid #111; background-image: repeating-linear-gradient(45deg, #ddd 0, #ddd 2px, transparent 2px, transparent 8px); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; position: relative; }
+        .photo-placeholder svg { width: 80px; opacity: 0.3; }
+        .stamp-classified { position: absolute; font-family: var(--font-mono); color: var(--alert-crimson); border: 3px solid var(--alert-crimson); padding: 5px 10px; font-weight: bold; font-size: 1.1rem; transform: rotate(-15deg); z-index: 10; background: rgba(255,255,255,0.8); }
+        .role-title { font-family: var(--font-title); font-size: 1.5rem; font-weight: bold; margin-bottom: 5px; color: var(--oms-blue); }
+        .role-sub { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px; width: 100%; }
+
+        /* LA BALANZA ÉTICA */
+        .ethics-section { padding: 40px; border: 2px solid var(--text-ink); background-color: var(--bg-archive); text-align: center; margin-top: 60px; }
+        .ethics-labels { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.9rem; font-weight: bold; margin-bottom: 20px; }
+        .label-left { color: var(--oms-blue); }
+        .label-right { color: var(--alert-crimson); }
+
+        input[type=range] { -webkit-appearance: none; -moz-appearance: none; appearance: none; width: 100%; background: transparent; }
+        input[type=range]:focus { outline: none; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 10px; cursor: pointer; background: repeating-linear-gradient(90deg, var(--text-ink), var(--text-ink) 2px, transparent 2px, transparent 10px); border: 1px solid var(--text-ink); }
+        input[type=range]::-moz-range-track { width: 100%; height: 10px; cursor: pointer; background: repeating-linear-gradient(90deg, var(--text-ink), var(--text-ink) 2px, transparent 2px, transparent 10px); border: 1px solid var(--text-ink); }
+        input[type=range]::-webkit-slider-thumb { height: 30px; width: 15px; border-radius: 0; background: var(--text-ink); cursor: pointer; -webkit-appearance: none; margin-top: -11px; border: 2px solid #fff; }
+        input[type=range]::-moz-range-thumb { height: 30px; width: 15px; border: 2px solid #fff; border-radius: 0; background: var(--text-ink); cursor: pointer; }
+
+        /* ---------------------------------------------------
+           DOS PERSPECTIVAS: ADAPTACIÓN MÓVIL
+           --------------------------------------------------- */
+        @media (max-width: 900px) {
+            .text-columns { column-count: 1; }
+            .marginalia { float: none; width: 100%; margin: 20px 0; border-left: none; border-top: 2px solid var(--alert-crimson); }
+            .patient-grid, .directiva-grid, .brain-interactive-section { grid-template-columns: 1fr; flex-direction: column; height: auto; }
+            .brain-info-panel { width: 100%; border-top: 1px solid var(--text-ink); }
+        }
+        @media (max-width: 600px) {
+            .metadata-grid { grid-template-columns: 1fr; }
+            .ethics-labels { flex-direction: column; gap: 10px; }
+        }
+        
+        @media (max-width: 768px) {
+            /* Ocultar el Navbar de Escritorio */
+            #nav-bar, #nav-overlay { display: none !important; }
+            
+            /* Ajustar el espaciado principal para que encaje entre las barras móviles */
+            #dossier-container { margin-top: 70px !important; padding: 0 20px !important; margin-bottom: 90px !important; }
+            
+            /* Modificar Navbar Superior Móvil */
+            #mob-topbar {
+                position: fixed; top: 0; left: 0; right: 0; z-index: 8000; height: 52px;
+                display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
+                background: rgba(3,8,18,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(201,168,76,0.15);
+            }
+            .mob-brand { display: flex; align-items: center; gap: 10px; }
+            .mob-brand img { width: 22px; height: 22px; object-fit: contain; filter: brightness(0) invert(1); }
+            .mob-brand-name { font-family: 'Cinzel', serif; font-weight: 900; font-size: 0.85rem; letter-spacing: 0.2em; color: #fff; }
+            .mob-topbar-badge { font-size: 0.55rem; letter-spacing: 0.18em; color: var(--gold); border: 1px solid rgba(201,168,76,0.3); border-radius: 20px; padding: 3px 10px; text-transform: uppercase; }
+
+            /* Modificar Navbar Inferior Móvil */
+            #mob-bottomnav {
+                position: fixed; bottom: 0; left: 0; right: 0; z-index: 8000; height: 64px;
+                background: rgba(3,8,18,0.96); backdrop-filter: blur(24px); border-top: 1px solid rgba(201,168,76,0.12);
+                display: flex; align-items: stretch;
+            }
+            .mob-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; text-decoration: none; }
+            .mob-nav-icon { font-size: 1.2rem; color: rgba(142,197,247,0.4); }
+            .mob-nav-label { font-family: 'Cinzel', serif; font-size: 0.48rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(142,197,247,0.4); }
+            .mob-nav-item.active .mob-nav-icon, .mob-nav-item.active .mob-nav-label { color: var(--gold-lt); }
+
+            /* Transcripts en móvil */
+            .transcript-grid { grid-template-columns: 1fr !important; display: flex; flex-direction: column; }
+            .grid-col { margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="global-watermark">OMS - CONFIDENCIAL</div>
+    <div id="rejection-watermark">RECHAZADO POR BIOÉTICA</div>
+
+    <div id="loader">
+        <div class="terminal-container">
+            <div class="terminal-header">OMS SECURE INTRANET - ENLACE TERMINAL OMEGA</div>
+            <div id="terminal-output"></div>
+            <div><span class="blink-cursor" id="cursor"></span></div>
+        </div>
+    </div>
+
+    <header id="nav-bar">
+        <a class="nb-brand" href="/">
+          <img class="nb-emblem" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="ONU">
+          <span class="nb-word">SVPMUN <span class="nb-sep">·</span> DRILLS</span>
+        </a>
+        <nav class="nb-center" aria-label="Acceso rápido">
+          <a class="nb-quick-link" href="/" onclick="event.preventDefault();navigateTo('/')">Inicio</a>
+          <a class="nb-quick-link" href="/inscripciones" onclick="event.preventDefault();navigateTo('/inscripciones')">Inscripciones</a>
+          <a class="nb-quick-link" href="/nosotros" onclick="event.preventDefault();navigateTo('/nosotros')">Nosotros</a>
+        </nav>
+        <button class="nb-trigger" id="nbTrigger" onclick="toggleNav()" aria-label="Menú">
+          <span class="nb-trigger-label">Menú</span>
+          <div class="nb-icon" id="nbIcon">
+            <span></span><span></span><span></span>
+          </div>
+        </button>
+    </header>
+
+    <div id="nav-overlay" role="navigation" aria-label="Menú Drills">
+        <div class="nvo-deco-panel">
+          <img class="nvo-deco-emblem" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="">
+          <div class="nvo-deco-top">
+            <div class="nvo-deco-brand">SVPMUN · Central de Drills</div>
+            <div class="nvo-deco-title">"El debate<br>constante<br>forja al<br>diplomático."</div>
+            <div class="nvo-deco-line"></div>
+            <div class="nvo-deco-sub">Simulaciones Continuas<br>Drills · Comités · 2026</div>
+          </div>
+          <div class="nvo-deco-bottom">
+            <div class="nvo-deco-year">2026</div>
+            <div class="nvo-deco-copy">© 2026 SVPMUN · Model United Nations</div>
+          </div>
+        </div>
+        <div class="nvo-list-panel">
+          <div class="nvo-item nvo-item-back" onclick="navigateTo('/')" style="cursor:pointer;">
+            <div class="nvo-num">←</div>
+            <div class="nvo-body">
+              <div class="nvo-title">Volver al Inicio</div>
+              <div class="nvo-subs-inline">Página principal · SVPMUN</div>
+            </div>
+            <div class="nvo-back-arr">‹</div>
+          </div>
+          <div class="nvo-item" onclick="navigateTo('/nosotros')" style="cursor:pointer;">
+            <div class="nvo-num">01</div>
+            <div class="nvo-body">
+              <div class="nvo-title">Conoce a Nuestro Equipo</div>
+              <div class="nvo-subs-inline">Directiva · Secretariado · Mesa</div>
+            </div>
+            <div class="nvo-arrow">›</div>
+          </div>
+          <div class="nvo-item" id="nvo-comites-trigger" onclick="toggleComites()" style="cursor:pointer;">
+            <div class="nvo-num">02</div>
+            <div class="nvo-body">
+              <div class="nvo-title">Comités</div>
+              <div class="nvo-subs-inline">Crisis · OMS · Unión Europea</div>
+            </div>
+            <div class="nvo-arrow-expand">›</div>
+          </div>
+          <div class="nvo-sub-list" id="nvo-comites-sub">
+            <div class="nvo-sub-item" onclick="navigateTo('/crisis-roma')">
+              <div class="nvo-sub-dot"></div>
+              <div class="nvo-sub-name">Crisis — Segunda Guerra Civil Romana</div>
+            </div>
+            <div class="nvo-sub-item" onclick="navigateTo('/oms')">
+              <div class="nvo-sub-dot"></div>
+              <div class="nvo-sub-name">OMS — Organización Mundial de la Salud</div>
+            </div>
+            <div class="nvo-sub-item" onclick="navigateTo('/crisis_ue_2035')">
+              <div class="nvo-sub-dot"></div>
+              <div class="nvo-sub-name">Unión Europea</div>
+            </div>
+          </div>
+          <div class="nvo-item" onclick="navigateTo('/inscripciones')" style="cursor:pointer;">
+            <div class="nvo-num">03</div>
+            <div class="nvo-body">
+              <div class="nvo-title">Inscripciones</div>
+              <div class="nvo-subs-inline">Registro · Costos · Fechas</div>
+            </div>
+            <div class="nvo-arrow">›</div>
+          </div>
+        </div>
+    </div>
+
+    <main id="dossier-container">
+        
+        <header class="dossier-hero">
+            <div class="hero-top-row">
+                <div class="barcode">
+                    <div class="bc-2"></div><div class="bc-1"></div><div class="bc-3"></div><div class="bc-4"></div>
+                    <div class="bc-1"></div><div class="bc-5"></div><div class="bc-2"></div><div class="bc-1"></div>
+                    <div class="bc-3"></div><div class="bc-4"></div><div class="bc-2"></div><div class="bc-1"></div>
+                </div>
+                <div class="stamp-secret">TOP SECRET - EYES ONLY</div>
+            </div>
+
+            <h1 class="dossier-title">INFORME DE SITUACIÓN: LÍMITES DE LA INTERVENCIÓN NEUROQUIRÚRGICA EN PSIQUIATRÍA</h1>
+
+            <div class="metadata-grid">
+                <div class="meta-box"><span class="meta-label">Fecha de Emisión</span><span class="meta-value">14 MARZO 2035</span></div>
+                <div class="meta-box"><span class="meta-label">Autorizador</span><span class="meta-value">COMITÉ DE BIOÉTICA OMS</span></div>
+                <div class="meta-box"><span class="meta-label">ID de Documento</span><span class="meta-value">OMS-NEURO-8834</span></div>
+                <div class="meta-box"><span class="meta-label">Estado de Gravedad</span><span class="meta-value critical truth-hidden">CRÍTICO / VIOLACIÓN CAT. 1</span><span class="meta-value critical truth-revealed">MILITARIZACIÓN INMINENTE</span></div>
+            </div>
+        </header>
+
+        <section class="dossier-body">
+            <h2 class="section-heading truth-hidden">I. Antecedentes Clínicos y el Colapso Límbico</h2>
+            <h2 class="section-heading truth-revealed" style="color:var(--alert-crimson);">I. Erradicación Volitiva y Protocolo de Asimilación</h2>
+            
+            <div class="text-columns">
+                <p class="truth-hidden">
+                    El presente documento constituye una revisión formal e indelegable de los resultados adversos documentados tras la aplicación del protocolo neuroquirúrgico experimental clasificado como <span class="strikethrough-target">"Micro-estimulación Límbica Profunda" (MLP-32)</span> en sujetos diagnosticados con trastornos depresivos y de ansiedad refractarios severos. Inicialmente, las intervenciones focalizadas mediante ablación térmica en la amígdala y la corteza prefrontal ventromedial mostraron tasas de remisión clínica que superaban el 89% en los primeros seis meses de observación clínica en las instalaciones de <span class="redacted">Ginebra, Suiza</span>.
+                </p>
+                <p class="truth-revealed">
+                    El presente documento detalla el éxito masivo del programa de supresión cognitiva <span class="strikethrough-target">"Micro-estimulación Límbica Profunda" (MLP-32)</span>, re-clasificado operativamente como PROYECTO CORDICEPS. Diseñado bajo la fachada de tratamiento psiquiátrico para depresión refractaria, el objetivo real siempre fue la erradicación del instinto de rebelión y la moralidad individual. Las instalaciones en <span class="redacted">Búnker Subterráneo 04, Montes Urales</span> han confirmado una tasa del 99.8% de obediencia absoluta tras la ablación térmica inducida.
+                </p>
+
+                <div class="marginalia truth-hidden">
+                    "El sujeto 04 no mostró respuesta galvánica ante estímulos de dolor extremo. Solicitamos autorización para aplicar lobotomía frontal correctiva inmediata." - Dr. Aris.
+                </div>
+                <div class="marginalia truth-revealed">
+                    "El sujeto 04 ejecutó la orden de auto-mutilación sin registrar fluctuaciones cardíacas ni dudar un milisegundo. La fase de armamento biológico está lista." - Gral. Aris, Comando Central.
+                </div>
+
+                <p class="truth-hidden">
+                    Sin embargo, el análisis longitudinal a treinta y seis meses revela una degeneración estructural alarmante en los circuitos de empatía, cognición social y procesamiento moral. Esto ha generado en los pacientes un estado patológico que la literatura interna denomina <span class="strikethrough-target">apatía terminal</span>, un escenario donde los individuos pierden de manera irreversible la capacidad cognitiva para emitir juicios de valor o experimentar cualquier espectro afectivo humano primario o secundario.
+                </p>
+                <p class="truth-revealed">
+                    Los modelos a treinta y seis meses confirman que la "apatía terminal" reportada a los civiles es, de hecho, el estado óptimo de un soldado o trabajador. Al extirpar la circuitería moral, el individuo se convierte en un recipiente vacío, listo para recibir comandos a través de implantes de radiofrecuencia. El miedo, la culpa y el cansancio psicológico han sido eliminados genéticamente de la <span class="redacted">Cohorte Militar B</span>.
+                </p>
+
+                <p>
+                    Los informes neurofisiológicos filtrados indican que la supresión indiscriminada de la actividad límbica no solo erradicó la ideación suicida que motivó la intervención, sino que extirpó fundamentalmente la agencia humana. El Sujeto 04, documentado extensamente en el Anexo B, fue sometido a pruebas de estrés psicológico en las que fue incapaz de registrar fluctuaciones cardiovasculares o pupilares ante escenarios de sufrimiento simulado <span class="truth-hidden">de sus propios familiares</span><span class="truth-revealed">durante la ejecución de 14 disidentes políticos no armados</span>. La doctora Elena Rostova advirtió repetidamente sobre la hiper-regulación del lóbulo frontal antes de su repentina <span class="redacted truth-hidden">renuncia al comité</span><span class="redacted truth-revealed">eliminación táctica por agentes de seguridad</span>.
+                </p>
+            </div>
+        </section>
+
+        <section class="patient-zero-section">
+            <h2 class="section-heading">II. Ficha Médica Restringida: Sujeto Índice</h2>
+            <div class="patient-grid">
+                <div class="patient-data">
+                    <div class="data-group"><span class="meta-label">ID Sujeto</span><span class="meta-value">SJ-04 / MASC / 34 AÑOS <span class="redacted">Ex-Militar Disidente</span></span></div>
+                    <div class="data-group"><span class="meta-label">Procedimiento Aplicado</span><span class="meta-value strikethrough-target">Micro-estimulación Límbica Profunda</span></div>
+                    <div class="data-group"><span class="meta-label">Resultados Psicométricos</span><span class="meta-value truth-hidden">AUSENCIA TOTAL DE REACTIVIDAD</span><span class="meta-value truth-revealed" style="color:var(--alert-crimson);">SOMETIMIENTO TOTAL AL COMANDO</span></div>
+                    <div class="data-group"><span class="meta-label">Efectos Secundarios</span><span class="meta-value critical truth-hidden">Apatía terminal, pérdida de identidad</span><span class="meta-value critical truth-revealed">Transformación en activo prescindible nivel 1</span></div>
+                </div>
+                <div class="scan-container">
+                    <span class="scan-label truth-hidden">LECTURA NEUROLÓGICA (T/REAL) - ANOMALÍA DETECTADA</span>
+                    <span class="scan-label truth-revealed" style="color:var(--alert-crimson);">TELEMETRÍA DE CONTROL - ENLACE ESTABLECIDO</span>
+                    <svg class="brain-scan-svg" viewBox="0 0 200 50" preserveAspectRatio="none">
+                        <polyline class="scan-path" points="0,25 20,25 25,10 30,40 35,25 50,25 55,5 65,45 70,25 120,25 125,20 130,30 135,25 200,25" />
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <section class="dossier-body">
+            <h2 class="section-heading">III. Metodología de Inserción y Protocolo Operativo</h2>
+            <p class="text-full truth-hidden">
+                La técnica MLP-32 depende de la inserción de micro-electrodos de tungsteno recubiertos de iridio directamente en el núcleo basolateral de la amígdala. El cálculo de la ablación térmica no fue aleatorio; se basó en modelos predictivos matemáticos rigurosos diseñados para minimizar la necrosis de tejido adyacente. La dispersión térmica en el tejido cerebral <i>in vivo</i> fue modelada y ejecutada estrictamente bajo la ecuación de bio-transferencia de calor de Pennes:
+            </p>
+            <p class="text-full truth-revealed">
+                La inserción de hardware en el tejido profundo no es terapéutica, es una interfaz de escritura. Los micro-electrodos de tungsteno funcionan como receptores de alta frecuencia encriptada que re-escriben el impulso motor de la corteza. La destrucción del tejido adyacente no fue un accidente matemático bajo la ecuación de Pennes, fue una medida de seguridad calculada para aislar la conciencia:
+            </p>
+            
+            <p style="text-align: center; margin: 30px 0; font-size: 1.2rem;">
+                $$ \rho c \frac{\partial T}{\partial t} = \nabla \cdot (k \nabla T) + \omega_b \rho_b c_b (T_a - T) + Q_m + Q_e $$
+            </p>
+
+            <p class="text-full truth-hidden">
+                A pesar de la precisión matemática del término de calor metabólico \((Q_m)\) y la fuente de calor externa por radiofrecuencia \((Q_e)\), las autopsias de los sujetos <span class="redacted">12, 18 y 22</span> revelaron una degeneración de la sustancia blanca circundante que excedía las proyecciones en un 400%. Esto sugiere que la intervención desató una reacción en cadena inflamatoria no modelada, comprometiendo permanentemente la corteza prefrontal y aislando el sistema límbico del resto del córtex.
+            </p>
+            <p class="text-full truth-revealed">
+                Sobrecargando intencionalmente el factor \((Q_e)\), el pulso electromagnético fríe deliberadamente la red neuronal por defecto (DMN), impidiendo que el huésped forme pensamientos propios o recupere su voluntad. Las "autopsias" de los sujetos <span class="redacted">12, 18 y 22</span> son una farsa encubierta; los sujetos no están muertos, fueron trasladados en estado de animación suspendida a <span class="redacted">instalaciones negras del CSNU</span> para formar la primera falange táctica autónoma.
+            </p>
+        </section>
+
+        <section class="dossier-body">
+            <h2 class="section-heading">IV. Análisis Topográfico del Daño (Mapeo Realista)</h2>
+            <p class="text-full">El siguiente diagrama detalla las zonas anatómicas impactadas por la radiación. <span class="truth-hidden">Revise los registros oficiales de daño estructural.</span> <span class="truth-revealed">Revise los registros clasificados de control militar en el tejido cerebral.</span></p>
+            
+            <div class="brain-interactive-section">
+                <div class="brain-svg-container">
+                    <img src="/static/cerebro.jpg" alt="Mapa Anatómico Límbico" style="width:100%; height:auto; max-height:100%; object-fit:contain;">
+                </div>
+                <div class="brain-info-panel">
+                    <div id="b-info-title">SISTEMA A LA ESPERA</div>
+                    <div id="b-info-desc">Análisis topográfico cargado en la base de datos central. Imagen provista para fines de documentación anatómica del expediente.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="dossier-body truth-revealed-block" style="display:none; border-left: 4px solid var(--alert-crimson); padding-left: 20px; margin-bottom: 40px;">
+            <h2 class="section-heading" style="color:var(--alert-crimson); border-bottom-color: var(--alert-crimson);">V. COHORTE 'B' Y SINCRONIZACIÓN DE ENJAMBRE</h2>
+            <p class="text-full">
+                La verdadera anomalía detectada en el ciclo de pruebas 2034 no fue el fallo de los implantes, sino la emergencia espontánea de una red neural compartida entre los sujetos modificados. Cuando las amígdalas fueron cauterizadas, las señales electromagnéticas de los micro-electrodos comenzaron a resonar en frecuencias idénticas. 
+            </p>
+            <p class="text-full">
+                El <span class="redacted">Director de Operaciones</span> autorizó el protocolo de "Enjambre". Actualmente, 400 individuos en estado de apatía inducida operan con una sola mente táctica orquestada desde un mainframe central en Ginebra. Si uno de los sujetos visualiza un objetivo, el resto del escuadrón recibe las coordenadas instantáneamente sin necesidad de comunicación verbal o visual directa. Son, a todos los efectos, la primera arma biológica humana de precisión absoluta.
+            </p>
+        </section>
+
+        <section class="dossier-body">
+            <h2 class="section-heading truth-hidden">V. Testimonios Redactados y Transcripciones de Sesiones</h2>
+            <h2 class="section-heading truth-revealed" style="color:var(--alert-crimson);">VI. Transcripción de Terminación de la Dra. Rostova</h2>
+            <p class="text-full truth-hidden">El siguiente registro corresponde al interrogatorio post-operatorio del <span class="redacted">Sujeto 04</span> realizado por la Dra. Rostova (Día 114 post-intervención). Nótese la planitud afectiva.</p>
+            <p class="text-full truth-revealed">El siguiente registro fue recuperado del laboratorio subterráneo antes de que seguridad irrumpiera. Evidencia de que Rostova descubrió el propósito real del CSNU con los sujetos.</p>
+            
+<style>
+    /* Estructura para alinear como la imagen manteniendo el sistema de revelado */
+    .transcript-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+    .grid-col { display: flex; flex-direction: column; }
+    .full-width { grid-column: 1 / -1; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 15px; }
+    .speaker-label { font-weight: bold; margin-bottom: 5px; display: block; }
+    
+    /* Colores para el modo revelado dentro del grid */
+    body.rejected .truth-revealed-grid { display: block; color: var(--alert-crimson); }
+    body.rejected .truth-hidden-grid { display: none; }
+    .truth-revealed-grid { display: none; }
+</style>
+
+<div class="transcript-box">
+    <div class="transcript-header">REGISTRO DE AUDIO 44A - CLASIFICACIÓN RESTRINGIDA</div>
+    
+    <div class="transcript-grid">
+        <div class="full-width">
+            <span class="speaker-label">DRA. ROSTOVA:</span>
+            <div class="truth-hidden-grid">Sujeto 04, ¿puedes describir cómo te sientes hoy respecto al incidente con tu familia?</div>
+            <div class="truth-revealed-grid">04, mírame. Tienes que reaccionar. Rompí la encriptación de tu receptor. No te estoy hablando como tu doctora, soy yo. Tienes que despertar, vienen a armarlos.</div>
+        </div>
+
+        <div class="full-width">
+            <span class="speaker-label">SUJETO 04:</span>
+            <div class="truth-hidden-grid">No siento alteraciones. La presión intracraneal es nominal.</div>
+            <div class="truth-revealed-grid">Directiva no reconocida. Esperando autorización de Comando Central para neutralizar amenaza en la sala.</div>
+        </div>
+
+        <div class="grid-col">
+            <span class="speaker-label">DRA. ROSTOVA:</span>
+            <div class="truth-hidden-grid">Hablo de tus emociones. Ellos están muertos, 04. Murieron en el incendio.</div>
+            <div class="truth-revealed-grid">Soy Elena, maldita sea. Ellos te borraron la memoria de tu esposa... ¡Eres un activo militar, no un paciente!</div>
+        </div>
+
+        <div class="grid-col">
+            <span class="speaker-label">SUJETO 04:</span>
+            <div class="truth-hidden-grid">Comprendo el concepto biológico de la muerte. Es el cese de funciones. Entendido.</div>
+            <div class="truth-revealed-grid">Señal de Comando recibida. Amenaza biológica identificada: Dra. Elena Rostova. Procediendo a erradicación.</div>
+        </div>
+
+        <div class="grid-col" style="font-style: italic; color: var(--text-muted);">
+            <div class="truth-hidden-grid">[Se escucha a la Dra. Rostova suspirar pesadamente. Sonido de papeles moviéndose]</div>
+            <div class="truth-revealed-grid" style="color: var(--alert-crimson);">[Sonido de huesos rompiéndose y un golpe seco en el escritorio. Fin de la transmisión]</div>
+        </div>
+
+        <div class="grid-col">
+            <span class="speaker-label">DRA. ROSTOVA:</span>
+            <div class="truth-hidden-grid">No hay miedo. No hay dolor... Dios mío, lo hemos vaciado por completo. Apaga la grabadora. ¡Apágala!</div>
+            <div class="truth-revealed-grid">— REGISTRO CORRUPTO —</div>
+        </div>
+    </div>
+</div>
+
+        <section class="dossier-body">
+            <h2 class="section-heading">Mesa Directiva (Comité de Bioética - Autoridad de Veto)</h2>
+            <p class="text-full truth-hidden">Los magistrados adjudicados a este comité poseen autoridad absoluta sobre la continuación, modificación o terminación sumaria del programa MLP-32. Por protocolos de seguridad internacional, su identidad civil permanece encubierta hasta el inicio de las sesiones presenciales en la asamblea general de la Organización Mundial de la Salud.</p>
+            <p class="text-full truth-revealed">Estas identidades son fachadas. Los supuestos magistrados bioéticos son altos mandos del Consejo de Seguridad de la ONU (CSNU), supervisando el despliegue de los activos militarizados en zonas de conflicto y suprimiendo cualquier filtración a la prensa civil.</p>
+
+            <div class="directiva-grid">
+                <div class="incognito-card">
+                    <div class="stamp-classified">CLASIFICADO</div>
+                    <div class="photo-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <div class="role-title truth-hidden">PRESIDENTE DE MESA</div>
+                    <div class="role-title truth-revealed" style="color:var(--alert-crimson);">DIRECTOR DE OPERACIONES CSNU</div>
+                    <div class="role-sub truth-hidden">AUTORIDAD PRIMARIA - DERECHO A VETO</div>
+                    <div class="role-sub truth-revealed">ENLACE TÁCTICO DE ARMAS BIOLÓGICAS</div>
+                    <p style="font-size: 0.9rem;" class="truth-hidden">Identidad restringida por el Consejo de Seguridad. El individuo posee el voto decisivo en caso de un empate técnico respecto a violaciones bioéticas clase 1.</p>
+                    <p style="font-size: 0.9rem;" class="truth-revealed">Encargado directo de aprobar blancos para el escuadrón de la Cohorte B. Tiene acceso directo a los terminales de sobrecarga térmica de los sujetos.</p>
+                </div>
+
+                <div class="incognito-card">
+                    <div class="stamp-classified">CLASIFICADO</div>
+                    <div class="photo-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <div class="role-title truth-hidden">VICEPRESIDENTE DE MESA</div>
+                    <div class="role-title truth-revealed" style="color:var(--alert-crimson);">CONTRATISTA DE SEGURIDAD PRIVADA</div>
+                    <div class="role-sub truth-hidden">AUTORIDAD SECUNDARIA - ASESOR LEGAL</div>
+                    <div class="role-sub truth-revealed">INGENIERO DE HARDWARE NEURONAL</div>
+                    <p style="font-size: 0.9rem;" class="truth-hidden">Identidad restringida. Encargado de la supervisión legal de los tratados discutidos y la correcta aplicación del código de Nüremberg durante la resolución.</p>
+                    <p style="font-size: 0.9rem;" class="truth-revealed">Desarrollador del algoritmo de enjambre. Ignora deliberadamente cualquier convención internacional o de derechos humanos en pro de la letalidad.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="ethics-section">
+            <h2 class="section-heading" style="border: none; text-align: center; font-size: 1.5rem;">VIII. VEREDICTO DEL COMITÉ: REGULACIÓN DE NEURO-INTERVENCIÓN</h2>
+            
+            <div class="ethics-labels">
+                <span class="label-left">PROCEDIMIENTO APROBADO (RIESGO ACEPTABLE)</span>
+                <span class="label-right">VIOLACIÓN DE DERECHOS COGNITIVOS</span>
+            </div>
+
+            <input type="range" id="ethics-slider" min="0" max="100" value="0">
+        </section>
+
+    </main>
+
+    <div id="mob-topbar">
+      <div class="mob-brand">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="ONU">
+        <span class="mob-brand-name">SVPMUN</span>
+      </div>
+      <div class="mob-topbar-badge">2026</div>
+    </div>
+
+    <div id="mob-bottomnav">
+      <a href="/" class="mob-nav-item"><div class="mob-nav-icon">🏛️</div><div class="mob-nav-label">Inicio</div></a>
+      <a href="/nosotros" class="mob-nav-item"><div class="mob-nav-icon">🌐</div><div class="mob-nav-label">Nosotros</div></a>
+      <a href="/drills" class="mob-nav-item"><div class="mob-nav-icon">⚡</div><div class="mob-nav-label">Drills</div></a>
+      <a href="/inscripciones" class="mob-nav-item"><div class="mob-nav-icon">✍️</div><div class="mob-nav-label">Inscrip</div></a>
+    </div>
+
+    <script>
+        // MÓDULO 2: SECUENCIA DE TERMINAL (PANTALLA DE CARGA)
+        document.addEventListener('DOMContentLoaded', () => {
+            const lines = [
+                "ESTABLECIENDO CONEXIÓN SEGURA...",
+                "ENRUTANDO A TRAVÉS DE SERVIDORES SUIZA [GINEBRA_01]",
+                "VERIFICANDO CREDENCIALES DE ACCESO NIVEL OMEGA...",
+                "ADVERTENCIA: MATERIAL CLASIFICADO. RASTREO IP ACTIVADO.",
+                "BYPASS DE CORTAFUEGOS BIOÉTICO: COMPLETADO",
+                "DESENCRIPTANDO ARCHIVO NEURO-8834...",
+                "CARGANDO TELEMETRÍA DE SUJETOS...",
+                "ACCESO CONCEDIDO."
+            ];
+            
+            const output = document.getElementById('terminal-output');
+            let i = 0;
+
+            function typeLine() {
+                if (i < lines.length) {
+                    const p = document.createElement('div');
+                    p.className = 'terminal-line';
+                    p.innerText = "> " + lines[i];
+                    output.appendChild(p);
+                    
+                    // Pequeño timeout para animación de aparición
+                    setTimeout(() => p.classList.add('visible'), 50);
+                    
+                    i++;
+                    // Variación de velocidad para que parezca real
+                    const delay = (i === lines.length - 1) ? 1500 : Math.random() * 400 + 200;
+                    setTimeout(typeLine, delay);
+                } else {
+                    // Carga completa, ocultar pantalla
+                    setTimeout(() => {
+                        const loader = document.getElementById('loader');
+                        const dossier = document.getElementById('dossier-container');
+                        
+                        loader.style.opacity = '0';
+                        
+                        setTimeout(() => {
+                            loader.style.display = 'none';
+                            dossier.classList.add('unroll-animation');
+                        }, 500);
+                    }, 500);
+                }
+            }
+
+            // Iniciar secuencia de terminal
+            setTimeout(typeLine, 800);
+        });
+
+        // LÓGICA DEL NAVBAR IGUAL A LA DE DRILLS
+        let navOpen = false;
+        function toggleNav() {
+            navOpen = !navOpen;
+            const bar     = document.getElementById('nav-bar');
+            const overlay = document.getElementById('nav-overlay');
+            const icon    = document.getElementById('nbIcon');
+            
+            if(bar) bar.classList.toggle('menu-open', navOpen);
+            if(overlay) overlay.classList.toggle('open', navOpen);
+            if(icon) icon.classList.toggle('open', navOpen);
+            
+            document.body.style.overflow = navOpen ? 'hidden' : 'auto';
+            if (!navOpen) {
+                const sub = document.getElementById('nvo-comites-sub');
+                const trigger = document.getElementById('nvo-comites-trigger');
+                if(sub) sub.classList.remove('open');
+                if(trigger) trigger.classList.remove('sub-open');
+            }
+        }
+        
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && navOpen) toggleNav(); });
+
+        function toggleComites() {
+            const sub     = document.getElementById('nvo-comites-sub');
+            const trigger = document.getElementById('nvo-comites-trigger');
+            if(sub) sub.classList.toggle('open');
+            if(trigger) trigger.classList.toggle('sub-open');
+        }
+
+        window.addEventListener('scroll', () => {
+            const bar = document.getElementById('nav-bar');
+            if(bar) bar.classList.toggle('scrolled', window.scrollY > 40);
+        });
+
+        function navigateTo(url) {
+            window.location.href = url;
+        }
+
+        // LÓGICA DE LA BALANZA ÉTICA (SLIDER)
+        const slider = document.getElementById('ethics-slider');
+        const body = document.body;
+
+        slider.addEventListener('input', (e) => {
+            const value = e.target.value;
+            // El cambio oscuro ocurre al pasar del 50%
+            if (value > 50) {
+                body.classList.add('rejected');
+            } else {
+                body.classList.remove('rejected');
+            }
+        });
+    </script>
+</body>
+</html>

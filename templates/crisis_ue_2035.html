@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRITICAL ALERT: EUROPE'S LAST STAND</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Uncial+Antiqua&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #050505;
+      --bg-panel: #0d0d0d;
+      --alert: #ff0033;
+      --tech: #ffb300;
+      --ghost: #cffff4;
+      --text: #e0e0e0;
+      --border: #333333;
+      
+      --font-head: 'Archivo Black', sans-serif;
+      --font-title: 'Bebas Neue', cursive;
+      --font-body: 'Space Mono', monospace;
+
+      /* Variables importadas del Navbar Romano */
+      --navy: #071630;
+      --navy-mid: #0e254a;
+      --blu-3: #3a8fe0;
+      --gold-nav: #c9a84c;
+      --gold-lt-nav: #edd98a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body, html {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* ══════════════════════════════════════
+       CRT & EFECTOS DE PANTALLA
+    ══════════════════════════════════════ */
+    body::before {
+      content: " ";
+      display: block;
+      position: fixed;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      z-index: 9999;
+      background-size: 100% 4px, 3px 100%;
+      pointer-events: none;
+    }
+
+    .flicker { animation: crt-flicker 0.15s infinite; }
+    @keyframes crt-flicker {
+      0% { opacity: 0.95; }
+      50% { opacity: 1; }
+      100% { opacity: 0.92; }
+    }
+
+    /* ══════════════════════════════════════
+       GLITCH EFFECT
+    ══════════════════════════════════════ */
+    .glitch {
+      position: relative;
+      color: var(--text);
+      display: inline-block;
+    }
+    .glitch::before, .glitch::after {
+      content: attr(data-text);
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: transparent;
+    }
+    .glitch::before {
+      left: 3px; text-shadow: -2px 0 var(--alert);
+      clip-path: inset(24% 0 53% 0);
+      animation: glitch-anim-1 2s infinite linear alternate-reverse;
+    }
+    .glitch::after {
+      left: -3px; text-shadow: -2px 0 var(--ghost);
+      clip-path: inset(80% 0 5% 0);
+      animation: glitch-anim-2 3s infinite linear alternate-reverse;
+    }
+    @keyframes glitch-anim-1 {
+      0% { clip-path: inset(20% 0 80% 0); transform: translate(0); }
+      20% { clip-path: inset(60% 0 10% 0); transform: translate(-2px, 2px); }
+      40% { clip-path: inset(40% 0 50% 0); transform: translate(2px, -2px); }
+      60% { clip-path: inset(80% 0 5% 0); transform: translate(-2px, 0); }
+      80% { clip-path: inset(10% 0 70% 0); transform: translate(2px, 2px); }
+      100% { clip-path: inset(30% 0 50% 0); transform: translate(0); }
+    }
+    @keyframes glitch-anim-2 {
+      0% { clip-path: inset(10% 0 60% 0); transform: translate(2px, -2px); }
+      20% { clip-path: inset(30% 0 20% 0); transform: translate(-2px, 2px); }
+      40% { clip-path: inset(70% 0 10% 0); transform: translate(2px, 0); }
+      60% { clip-path: inset(20% 0 50% 0); transform: translate(-2px, -2px); }
+      80% { clip-path: inset(50% 0 30% 0); transform: translate(0, 2px); }
+      100% { clip-path: inset(5% 0 80% 0); transform: translate(-2px, 0); }
+    }
+
+    /* ══════════════════════════════════════
+       GATEKEEPER & LOADER
+    ══════════════════════════════════════ */
+    #gatekeeper, #loader-screen {
+      position: fixed; inset: 0;
+      background: var(--bg);
+      z-index: 10002; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center; padding: 20px;
+    }
+    
+    #gatekeeper::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at center, rgba(255,0,51,0.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    #gatekeeper h2 { font-size: 1.5rem; color: var(--alert); margin-bottom: 30px; letter-spacing: 5px; }
+    .btn-protocol {
+      background: rgba(255, 0, 51, 0.1); border: 2px solid var(--alert);
+      color: var(--alert); padding: 20px 40px;
+      font-family: var(--font-body); font-weight: 700; font-size: 1.2rem;
+      cursor: pointer; text-transform: uppercase; transition: all 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .btn-protocol:hover { background: var(--alert); color: var(--bg); box-shadow: 0 0 30px var(--alert); }
+
+    #loader-screen { display: none; }
+    .eu-stars {
+      position: relative; width: 150px; height: 150px; margin-bottom: 40px;
+      animation: rotate-slow 4s linear infinite;
+    }
+    .star {
+      position: absolute; width: 14px; height: 14px; background: var(--tech);
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+      top: 50%; left: 50%; margin-top: -7px; margin-left: -7px;
+      transition: background 0.3s;
+    }
+    
+    .star:nth-child(1) { transform: rotate(0deg) translate(75px) rotate(0deg); }
+    .star:nth-child(2) { transform: rotate(30deg) translate(75px) rotate(-30deg); }
+    .star:nth-child(3) { transform: rotate(60deg) translate(75px) rotate(-60deg); }
+    .star:nth-child(4) { transform: rotate(90deg) translate(75px) rotate(-90deg); }
+    .star:nth-child(5) { transform: rotate(120deg) translate(75px) rotate(-120deg); }
+    .star:nth-child(6) { transform: rotate(150deg) translate(75px) rotate(-150deg); }
+    .star:nth-child(7) { transform: rotate(180deg) translate(75px) rotate(-180deg); }
+    .star:nth-child(8) { transform: rotate(210deg) translate(75px) rotate(-210deg); }
+    .star:nth-child(9) { transform: rotate(240deg) translate(75px) rotate(-240deg); }
+    .star:nth-child(10) { transform: rotate(270deg) translate(75px) rotate(-270deg); }
+    .star:nth-child(11) { transform: rotate(300deg) translate(75px) rotate(-300deg); }
+    .star:nth-child(12) { transform: rotate(330deg) translate(75px) rotate(-330deg); }
+
+    @keyframes rotate-slow { 100% { transform: rotate(360deg); } }
+
+    /* Fragmentación de estrellas */
+    .falling .star {
+      background: var(--alert);
+      animation: shatterFall 1.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
+    }
+    @keyframes shatterFall {
+      0% { clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+      20% { clip-path: polygon(0 0, 100% 0, 80% 100%, 20% 100%); background: #fff;}
+      100% { transform: translateY(100vh) rotate(720deg) scale(0); opacity: 0; }
+    }
+
+    #loader-text { font-size: 1.2rem; color: var(--ghost); letter-spacing: 2px; min-height: 2em; }
+
+    /* ══════════════════════════════════════
+       NAVBAR (IMPORTADO DE CRISIS ROMA)
+    ══════════════════════════════════════ */
+    #nav-bar {
+      position:fixed; top:0; left:0; right:0; z-index:10000;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 52px; height:76px;
+    }
+    #nav-bar::before {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(180deg,rgba(7,22,48,0.75) 0%,rgba(7,22,48,0) 100%);
+      backdrop-filter:blur(0px);
+      transition:background 0.6s, backdrop-filter 0.6s; pointer-events:none;
+    }
+    #nav-bar.scrolled::before { background:rgba(7,22,48,0.90); backdrop-filter:blur(26px) saturate(1.9); }
+    #nav-bar.menu-open::before { background:transparent; backdrop-filter:none; }
+    #nav-bar::after {
+      content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
+      background:linear-gradient(90deg,transparent 0%,rgba(201,168,76,0.0) 10%,rgba(201,168,76,0.55) 35%,rgba(237,217,138,1.0) 50%,rgba(201,168,76,0.55) 65%,rgba(201,168,76,0.0) 90%,transparent 100%);
+      opacity:1; transition:opacity 0.4s;
+    }
+    #nav-bar.menu-open::after { opacity:0; }
+    .nb-brand { display:flex; align-items:center; gap:14px; text-decoration:none; position:relative; z-index:1; }
+    .nb-emblem { width:34px; height:34px; object-fit:contain; filter:brightness(0) invert(1) drop-shadow(0 0 12px rgba(142,197,247,0.65)); transition:filter 0.4s,transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+    .nb-brand:hover .nb-emblem { transform:rotate(-12deg) scale(1.1); }
+    .nb-word { font-family:'Cinzel',serif; font-weight:900; font-size:1.08rem; letter-spacing:0.32em; color:#fff; position:relative; }
+    .nb-word .nb-sep { color:var(--gold-nav); margin:0 4px; }
+    .nb-word::after { content:''; position:absolute; bottom:-5px; left:0; width:100%; height:1px; background:linear-gradient(90deg,var(--gold-nav),transparent); transform:scaleX(0); transform-origin:left; transition:transform 0.5s cubic-bezier(0.4,0,0.2,1); }
+    .nb-brand:hover .nb-word::after { transform:scaleX(1); }
+    .nb-center { position:absolute; left:50%; transform:translateX(-50%); display:flex; align-items:center; pointer-events:all; z-index:1; transition:opacity 0.35s,transform 0.35s; }
+    .nb-quick-link { font-family:'Cinzel',serif; font-size:0.56rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.3); padding:6px 18px; position:relative; cursor:pointer; transition:color 0.3s; text-decoration:none; }
+    .nb-quick-link::after { content:'·'; position:absolute; right:-1px; top:50%; transform:translateY(-50%); color:rgba(201,168,76,0.2); pointer-events:none; }
+    .nb-quick-link:last-child::after { display:none; }
+    .nb-quick-link:hover { color:rgba(237,217,138,0.9); }
+    #nav-bar.menu-open .nb-center { opacity:0; transform:translateX(-50%) scale(0.9); pointer-events:none; }
+    .nb-trigger { position:relative; z-index:1; display:flex; align-items:center; gap:16px; background:none; border:none; cursor:pointer; padding:8px 0; }
+    .nb-trigger-label { font-family:'Cinzel',serif; font-size:0.56rem; letter-spacing:0.4em; text-transform:uppercase; color:rgba(255,255,255,0.4); transition:color 0.3s,opacity 0.3s; }
+    .nb-trigger:hover .nb-trigger-label { color:rgba(201,168,76,0.85); }
+    #nav-bar.menu-open .nb-trigger-label { opacity:0; }
+    .nb-icon { display:flex; flex-direction:column; gap:5px; width:28px; cursor:pointer; }
+    .nb-icon span { display:block; height:1.5px; border-radius:2px; background:rgba(255,255,255,0.85); transform-origin:center; transition:transform 0.5s cubic-bezier(0.4,0,0.2,1),opacity 0.35s ease,width 0.4s ease,background 0.3s; }
+    .nb-icon span:nth-child(1){width:28px;} .nb-icon span:nth-child(2){width:18px;margin-left:10px;} .nb-icon span:nth-child(3){width:28px;}
+    .nb-icon.open span:nth-child(1){transform:translateY(6.75px) rotate(45deg);width:28px;margin-left:0;background:var(--gold-lt-nav);}
+    .nb-icon.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+    .nb-icon.open span:nth-child(3){transform:translateY(-6.75px) rotate(-45deg);background:var(--gold-lt-nav);}
+
+    #nav-overlay { position:fixed; inset:0; z-index:9990; background:var(--navy); display:flex; clip-path:circle(0% at calc(100% - 72px) 38px); transition:clip-path 0.85s cubic-bezier(0.77,0,0.18,1); pointer-events:none; overflow:hidden; }
+    #nav-overlay.open { clip-path:circle(150% at calc(100% - 72px) 38px); pointer-events:all; }
+    .nvo-deco-panel { width:36%; flex-shrink:0; position:relative; overflow:hidden; border-right:1px solid rgba(58,143,224,0.1); display:flex; flex-direction:column; justify-content:space-between; padding:110px 52px 52px; }
+    .nvo-deco-panel::before { content:''; position:absolute; inset:0; pointer-events:none; background:radial-gradient(ellipse 80% 55% at 30% 15%,rgba(18,72,168,0.55) 0%,transparent 60%),radial-gradient(ellipse 55% 70% at 75% 85%,rgba(58,143,224,0.1) 0%,transparent 60%); }
+    .nvo-deco-emblem { position:absolute; right:-40px; top:50%; transform:translateY(-50%); width:300px; height:300px; object-fit:contain; opacity:0.035; filter:brightness(0) invert(1); pointer-events:none; }
+    .nvo-deco-brand { font-family:'Cinzel',serif; font-size:0.62rem; letter-spacing:0.42em; text-transform:uppercase; color:rgba(201,168,76,0.55); margin-bottom:22px; }
+    .nvo-deco-title { font-family:'Cormorant Garamond',serif; font-size:clamp(1.7rem,3.2vw,2.6rem); font-style:italic; color:rgba(255,255,255,0.82); line-height:1.28; margin-bottom:24px; }
+    .nvo-deco-line { width:38px; height:1px; background:linear-gradient(90deg,var(--gold-nav),transparent); margin-bottom:22px; }
+    .nvo-deco-sub { font-family:'Rajdhani',sans-serif; font-size:0.78rem; letter-spacing:0.16em; color:rgba(142,197,247,0.3); text-transform:uppercase; line-height:1.9; }
+    .nvo-deco-bottom { position:relative; z-index:2; }
+    .nvo-deco-year { font-family:'Bebas Neue',serif; font-size:4.5rem; line-height:1; letter-spacing:0.06em; color:rgba(255,255,255,0.04); }
+    .nvo-deco-copy { font-size:0.58rem; letter-spacing:0.24em; text-transform:uppercase; color:rgba(142,197,247,0.18); margin-top:8px; }
+    .nvo-list-panel { flex:1; position:relative; overflow-y:auto; display:flex; flex-direction:column; padding-top:76px; }
+    .nvo-list-panel::before { content:''; position:absolute; inset:0; pointer-events:none; z-index:0; background-image:linear-gradient(rgba(58,143,224,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(58,143,224,0.025) 1px,transparent 1px); background-size:60px 60px; }
+    .nvo-item { display:grid; grid-template-columns:72px 1fr auto; align-items:center; gap:0 24px; padding:26px 52px 26px 40px; border-bottom:1px solid rgba(58,143,224,0.07); cursor:pointer; position:relative; overflow:hidden; z-index:1; opacity:0; transform:translateX(28px); transition:opacity 0.5s ease,transform 0.5s ease; }
+    .nvo-item:last-child { border-bottom:none; }
+    #nav-overlay.open .nvo-item { opacity:1; transform:translateX(0); }
+    #nav-overlay.open .nvo-item:nth-child(1){transition-delay:0.22s;} #nav-overlay.open .nvo-item:nth-child(2){transition-delay:0.28s;} #nav-overlay.open .nvo-item:nth-child(3){transition-delay:0.34s;} #nav-overlay.open .nvo-item:nth-child(4){transition-delay:0.40s;}
+    .nvo-item::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg,rgba(58,143,224,0) 0%,rgba(58,143,224,0.05) 50%,rgba(58,143,224,0) 100%); opacity:0; transition:opacity 0.4s; }
+    .nvo-item:hover::before { opacity:1; }
+    .nvo-item::after { content:''; position:absolute; top:0; left:0; bottom:0; width:2px; background:linear-gradient(180deg,transparent,var(--gold-nav) 50%,transparent); transform:scaleY(0); transform-origin:center; transition:transform 0.42s cubic-bezier(0.4,0,0.2,1); }
+    .nvo-item:hover::after { transform:scaleY(1); }
+    .nvo-num { font-family:'Bebas Neue',serif; font-size:0.68rem; letter-spacing:0.32em; color:var(--gold-nav); opacity:0.45; text-align:right; padding-right:10px; border-right:1px solid rgba(201,168,76,0.1); transition:opacity 0.3s; line-height:1; }
+    .nvo-item:hover .nvo-num { opacity:1; text-shadow:0 0 14px rgba(201,168,76,0.5); }
+    .nvo-body { display:flex; flex-direction:column; gap:5px; }
+    .nvo-title { font-family:'Cinzel',serif; font-size:clamp(1rem,1.8vw,1.4rem); font-weight:700; letter-spacing:0.06em; color:rgba(255,255,255,0.82); transition:color 0.3s,letter-spacing 0.4s; }
+    .nvo-item:hover .nvo-title { color:var(--gold-lt-nav); letter-spacing:0.1em; }
+    .nvo-subs-inline { font-family:'Rajdhani',sans-serif; font-size:0.7rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(142,197,247,0.28); transition:color 0.3s; }
+    .nvo-item:hover .nvo-subs-inline { color:rgba(142,197,247,0.55); }
+    .nvo-arrow { font-size:1.3rem; color:rgba(255,255,255,0.15); transition:color 0.3s,transform 0.3s; }
+    .nvo-item:hover .nvo-arrow { color:var(--gold-nav); transform:translateX(4px); }
+    .nvo-arrow-expand { font-size:1.2rem; color:rgba(255,255,255,0.15); transition:color 0.3s,transform 0.45s cubic-bezier(0.4,0,0.2,1); line-height:1; }
+    .nvo-item:hover .nvo-arrow-expand { color:var(--gold-nav); }
+    .nvo-item.sub-open .nvo-arrow-expand { transform:rotate(90deg); color:var(--gold-nav); }
+    .nvo-sub-list { max-height:0; overflow:hidden; transition:max-height 0.45s cubic-bezier(0.4,0,0.2,1); background:rgba(255,255,255,0.015); border-bottom:1px solid rgba(58,143,224,0.07); }
+    .nvo-sub-list.open { max-height:320px; }
+    .nvo-sub-item { display:flex; align-items:center; gap:20px; padding:16px 52px 16px 130px; cursor:pointer; border-top:1px solid rgba(58,143,224,0.05); transition:background 0.3s; }
+    .nvo-sub-item:hover { background:rgba(58,143,224,0.04); }
+    .nvo-sub-dot { width:5px; height:5px; border-radius:50%; background:rgba(201,168,76,0.35); flex-shrink:0; transition:background 0.3s; }
+    .nvo-sub-item:hover .nvo-sub-dot { background:var(--gold-nav); }
+    .nvo-sub-name { font-family:'Cinzel',serif; font-size:0.72rem; letter-spacing:0.18em; color:rgba(255,255,255,0.45); text-transform:uppercase; transition:color 0.3s; }
+    .nvo-sub-item:hover .nvo-sub-name { color:rgba(237,217,138,0.85); }
+    .nvo-item-back .nvo-title { font-size:clamp(0.85rem,1.4vw,1.1rem); color:rgba(255,255,255,0.45); }
+    .nvo-item-back:hover .nvo-title { color:var(--gold-lt-nav); }
+    .nvo-back-arr { font-size:1.1rem; color:rgba(255,255,255,0.15); transition:color 0.3s,transform 0.3s; }
+    .nvo-item-back:hover .nvo-back-arr { color:var(--gold-nav); transform:translateX(-4px); }
+    @media(max-width:860px) { #nav-bar { padding:0 20px; }.nb-center{display:none;}.nvo-deco-panel{display:none;}.nvo-item{padding:22px 24px 22px 20px;}.nvo-sub-item{padding:14px 24px 14px 56px;}}
+
+
+    /* ══════════════════════════════════════
+       HERO & BACKGROUND VIDEO
+    ══════════════════════════════════════ */
+    #main-content { display: none; padding-bottom: 100px; position: relative; }
+
+    .hero-container {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 5%;
+      border-bottom: 2px solid var(--alert);
+      overflow: hidden;
+    }
+
+    .video-bg {
+      position: absolute; inset: 0; z-index: -2;
+      overflow: hidden; background: #000;
+    }
+    .video-bg video {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: grayscale(100%) contrast(1.5) brightness(0.3);
+    }
+    .video-overlay {
+      position: absolute; inset: 0; z-index: -1;
+      background: radial-gradient(circle at center, transparent 0%, #000 80%);
+    }
+
+    /* Decoraciones Hero */
+    .rec-indicator {
+      position: absolute; top: 100px; right: 40px;
+      display: flex; align-items: center; gap: 10px;
+      color: var(--alert); font-weight: bold; letter-spacing: 2px;
+    }
+    .rec-dot { width: 12px; height: 12px; background: var(--alert); border-radius: 50%; animation: blink 1s infinite; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    .date-stamp {
+      color: var(--tech); font-weight: bold; font-size: 1.2rem;
+      margin-bottom: 20px; display: inline-block;
+      background: rgba(255, 179, 0, 0.1); border: 1px solid var(--tech); padding: 5px 15px;
+    }
+
+    h1 {
+      font-family: var(--font-head);
+      font-size: clamp(4rem, 12vw, 10rem);
+      line-height: 0.85; text-transform: uppercase;
+      margin-bottom: 20px; color: var(--text);
+      text-shadow: 4px 4px 0px var(--alert);
+    }
+
+    .countdown-wrapper {
+      margin-top: 40px; background: rgba(0,0,0,0.8);
+      border-left: 8px solid var(--alert); padding: 20px 30px;
+      display: inline-block; backdrop-filter: blur(5px);
+    }
+    .countdown-label { color: var(--alert); font-size: 1rem; margin-bottom: 5px; font-weight: bold; letter-spacing: 2px;}
+    .countdown { font-family: var(--font-title); font-size: 4.5rem; color: var(--text); letter-spacing: 5px; line-height: 1; }
+
+    /* ══════════════════════════════════════
+       NEWS TICKER
+    ══════════════════════════════════════ */
+    .ticker-wrap {
+      background: var(--alert); color: #000; padding: 12px 0;
+      overflow: hidden; white-space: nowrap; font-weight: bold;
+      border-top: 2px solid var(--bg); border-bottom: 2px solid var(--bg);
+      box-shadow: 0 0 20px rgba(255,0,51,0.5);
+    }
+    .ticker { display: inline-block; animation: ticker 25s linear infinite; font-size: 1.3rem; letter-spacing: 1px;}
+    @keyframes ticker { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
+
+    /* ══════════════════════════════════════
+       SECCIONES Y REVEAL
+    ══════════════════════════════════════ */
+    .content-wrapper { max-width: 1400px; margin: 0 auto; padding: 0 5%; }
+    
+    .section-title {
+      font-family: var(--font-title); font-size: 4rem;
+      margin: 80px 0 40px; color: var(--ghost);
+      border-bottom: 1px solid var(--border); padding-bottom: 10px;
+      display: flex; justify-content: space-between; align-items: flex-end;
+    }
+    .section-title span { font-family: var(--font-body); font-size: 1rem; color: var(--tech); letter-spacing: 2px; }
+
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: stretch; }
+    @media(max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    .text-block {
+      background: var(--bg-panel); padding: 40px;
+      border: 1px solid var(--border); font-size: 1.1rem; line-height: 1.8;
+      position: relative;
+    }
+    .text-block::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 40px; height: 40px;
+      border-top: 3px solid var(--ghost); border-left: 3px solid var(--ghost);
+    }
+    .text-block p { margin-bottom: 20px; }
+    .highlight-red { color: var(--alert); font-weight: bold; background: rgba(255,0,51,0.1); padding: 2px 5px; }
+
+    /* CSS ART: Cámara / Drone Feed */
+    .drone-feed {
+      position: relative; width: 100%; height: 300px;
+      background: #000; border: 1px solid var(--border);
+      overflow: hidden; margin-top: 30px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .drone-feed::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.8) 100%);
+    }
+    .crosshair {
+      position: absolute; width: 60px; height: 60px;
+      border: 1px solid rgba(255,255,255,0.3);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .crosshair::before { content: ''; width: 100%; height: 1px; background: rgba(255,255,255,0.3); position: absolute; }
+    .crosshair::after { content: ''; height: 100%; width: 1px; background: rgba(255,255,255,0.3); position: absolute; }
+    .drone-text { position: absolute; bottom: 15px; left: 15px; font-size: 0.8rem; color: #0f0; z-index: 10; }
+
+    /* ══════════════════════════════════════
+       DEBT MONITOR WIDGET
+    ══════════════════════════════════════ */
+    .widget {
+      background: var(--bg-panel); border: 2px solid var(--alert);
+      padding: 40px; display: flex; flex-direction: column; justify-content: center;
+      box-shadow: inset 0 0 50px rgba(255,0,51,0.1);
+      position: relative;
+    }
+    .widget-header { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; color: var(--ghost); font-size: 1.2rem; }
+    
+    .progress-container { width: 100%; height: 50px; background: #000; border: 2px solid var(--border); position: relative; margin-top: 10px; }
+    .progress-bar { height: 100%; width: 160%; background: repeating-linear-gradient(45deg, var(--alert), var(--alert) 10px, #b30000 10px, #b30000 20px); position: relative; }
+    .shake { animation: shake 0.3s infinite; }
+    
+    @keyframes shake {
+      0% { transform: translate(1px, 1px) rotate(0deg); }
+      20% { transform: translate(-2px, -1px) rotate(-1deg); }
+      40% { transform: translate(-1px, 2px) rotate(1deg); }
+      60% { transform: translate(2px, 1px) rotate(0deg); }
+      80% { transform: translate(1px, -2px) rotate(1deg); }
+      100% { transform: translate(-1px, 1px) rotate(-1deg); }
+    }
+    
+    .limit-marker { position: absolute; top: -15px; bottom: -15px; left: 100%; width: 4px; background: var(--tech); z-index: 10; box-shadow: 0 0 10px var(--tech); }
+    .limit-label { position: absolute; top: -40px; left: calc(100% - 20px); color: var(--tech); font-size: 1.2rem; font-weight: bold; }
+    
+    #euro-chart { width: 100%; height: 150px; margin-top: 30px; border-bottom: 1px solid var(--border); border-left: 1px solid var(--border); background: rgba(0,0,0,0.5); }
+
+    /* ══════════════════════════════════════
+       MAPA CSS - RADARES MIGRATORIOS
+    ══════════════════════════════════════ */
+    .radar-map {
+      background: #050505; border: 1px solid var(--border);
+      height: 100%; min-height: 400px; position: relative;
+      overflow: hidden; display: flex; align-items: center; justify-content: center;
+    }
+    .radar-grid {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+    /* Línea de barrido del radar */
+    .radar-sweep {
+      position: absolute; top: 50%; left: 50%; width: 200%; height: 200%;
+      background: conic-gradient(from 0deg, transparent 70%, rgba(255, 179, 0, 0.4) 100%);
+      transform-origin: 0 0; animation: radarSpin 4s linear infinite;
+    }
+    @keyframes radarSpin { 100% { transform: rotate(360deg); } }
+
+    /* Puntos de crisis (Malta, Sicilia, Este) */
+    .crisis-point {
+      position: absolute; width: 20px; height: 20px;
+      background: var(--alert); border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 20px var(--alert);
+    }
+    .crisis-point::after {
+      content: ''; position: absolute; inset: -20px;
+      border: 2px solid var(--alert); border-radius: 50%;
+      animation: ping 1.5s infinite ease-out;
+    }
+    @keyframes ping { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
+
+    .cp-sicily { top: 70%; left: 45%; }
+    .cp-malta { top: 80%; left: 47%; }
+    .cp-poland { top: 35%; left: 70%; background: var(--tech); box-shadow: 0 0 20px var(--tech); }
+    .cp-poland::after { border-color: var(--tech); }
+    
+    .map-label { position: absolute; color: #fff; font-size: 0.8rem; background: #000; padding: 2px 6px; border: 1px solid #444; }
+
+    /* ══════════════════════════════════════
+       EXPEDIENTES CLASIFICADOS (PREGUNTAS)
+    ══════════════════════════════════════ */
+    .files-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; margin-top: 40px; }
+    .file-card {
+      background: var(--bg-panel); border: 2px solid var(--border);
+      padding: 40px 30px; position: relative;
+      transition: all 0.3s;
+    }
+    .file-card:hover { border-color: var(--ghost); transform: translateY(-10px); box-shadow: 0 10px 30px rgba(207, 255, 244, 0.1); }
+    .file-card::before {
+      content: "TOP SECRET // ART.26"; position: absolute;
+      top: -12px; left: 20px; background: var(--bg); padding: 0 10px;
+      font-size: 0.8rem; color: var(--tech); font-weight: bold; letter-spacing: 2px;
+    }
+    .file-card h3 { font-family: var(--font-title); color: var(--ghost); margin-bottom: 20px; font-size: 2.5rem; line-height: 1; }
+    .file-card p { color: #aaa; font-size: 1.05rem; line-height: 1.6; }
+    
+    .file-card.danger { border-color: rgba(255,0,51,0.4); }
+    .file-card.danger:hover { border-color: var(--alert); box-shadow: 0 10px 30px rgba(255, 0, 51, 0.2); }
+    .file-card.danger::before { color: var(--alert); content: "CRITICAL THREAT //"; }
+    .file-card.danger h3 { color: var(--alert); }
+
+    /* ════════ MESA DIRECTIVA EXTRA CSS ════════ */
+    .redacted-bar {
+      background: #000; color: #000;
+      display: inline-block; padding: 0 5px;
+      user-select: none; position: relative;
+    }
+    .redacted-bar::after {
+      content: "CLASSIFIED";
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--alert); font-size: 0.6rem;
+      font-weight: bold; letter-spacing: 1px;
+    }
+    .incognito-avatar {
+      filter: brightness(0.1) contrast(1.2) blur(4px);
+      pointer-events: none;
+    }
+    .access-denied-msg {
+      color: var(--alert);
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      border: 1px solid var(--alert);
+      padding: 5px; margin-top: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="flicker">
+  
+  <header id="nav-bar">
+    <a class="nb-brand" href="/drills">
+      <img class="nb-emblem"
+           src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png"
+           alt="ONU">
+      <span class="nb-word">SVPMUN <span class="nb-sep">·</span> CRISIS</span>
+    </a>
+    <nav class="nb-center" aria-label="Acceso rápido">
+      <a class="nb-quick-link" href="/" onclick="event.preventDefault();navigateTo('/')">Inicio</a>
+      <a class="nb-quick-link" href="/drills" onclick="event.preventDefault();navigateTo('/drills')">Drills</a>
+      <a class="nb-quick-link" href="/inscripciones" onclick="event.preventDefault();navigateTo('/inscripciones')">Inscripciones</a>
+    </nav>
+    <button class="nb-trigger" id="nbTrigger" onclick="toggleNav()" aria-label="Menú">
+      <span class="nb-trigger-label">Menú</span>
+      <div class="nb-icon" id="nbIcon">
+        <span></span><span></span><span></span>
+      </div>
+    </button>
+  </header>
+
+  <div id="nav-overlay" role="navigation" aria-label="Menú Crisis">
+    <div class="nvo-deco-panel">
+      <img class="nvo-deco-emblem" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="">
+      <div class="nvo-deco-top">
+        <div class="nvo-deco-brand">SVPMUN · Crisis Comitial</div>
+        <div class="nvo-deco-title">"Alea<br>iacta<br>est."</div>
+        <div class="nvo-deco-line"></div>
+        <div class="nvo-deco-sub">Segunda Guerra Civil<br>49 A.C. · Comité de Crisis</div>
+      </div>
+      <div class="nvo-deco-bottom">
+        <div class="nvo-deco-year">XLIX</div>
+        <div class="nvo-deco-copy">© 2026 SVPMUN · Model United Nations</div>
+      </div>
+    </div>
+    <div class="nvo-list-panel">
+      <div class="nvo-item nvo-item-back" onclick="navigateTo('/drills')" style="cursor:pointer;">
+        <div class="nvo-num">←</div>
+        <div class="nvo-body">
+          <div class="nvo-title">Volver a Drills</div>
+          <div class="nvo-subs-inline">Central de Drills · SVPMUN</div>
+        </div>
+        <div class="nvo-back-arr">‹</div>
+      </div>
+      <div class="nvo-item" onclick="navigateTo('/')" style="cursor:pointer;">
+        <div class="nvo-num">01</div>
+        <div class="nvo-body">
+          <div class="nvo-title">Inicio</div>
+          <div class="nvo-subs-inline">Página principal · SVPMUN</div>
+        </div>
+        <div class="nvo-arrow">›</div>
+      </div>
+      <div class="nvo-item" id="nvo-comites-trigger" onclick="toggleComites()" style="cursor:pointer;">
+        <div class="nvo-num">02</div>
+        <div class="nvo-body">
+          <div class="nvo-title">Comités</div>
+          <div class="nvo-subs-inline">Crisis Roma · OMS · Unión Europea</div>
+        </div>
+        <div class="nvo-arrow-expand">›</div>
+      </div>
+      <div class="nvo-sub-list" id="nvo-comites-sub">
+        <div class="nvo-sub-item" onclick="navigateTo('/crisis-roma')">
+          <div class="nvo-sub-dot"></div>
+          <div class="nvo-sub-name">Crisis — Segunda Guerra Civil Romana</div>
+        </div>
+        <div class="nvo-sub-item">
+          <div class="nvo-sub-dot"></div>
+          <div class="nvo-sub-name">OMS — Organización Mundial de la Salud</div>
+        </div>
+        <div class="nvo-sub-item">
+          <div class="nvo-sub-dot"></div>
+          <div class="nvo-sub-name">Unión Europea</div>
+        </div>
+      </div>
+      <div class="nvo-item" onclick="navigateTo('/inscripciones')" style="cursor:pointer;">
+        <div class="nvo-num">03</div>
+        <div class="nvo-body">
+          <div class="nvo-title">Inscripciones</div>
+          <div class="nvo-subs-inline">Registro · Costos · Fechas</div>
+        </div>
+        <div class="nvo-arrow">›</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="gatekeeper">
+    <h2 class="glitch" data-text="[ ADVERTENCIA DE SEGURIDAD GLOBAL ]">[ ADVERTENCIA DE SEGURIDAD GLOBAL ]</h2>
+    <button class="btn-protocol" onclick="initProtocol()">Aceptar Protocolo de Crisis</button>
+  </div>
+
+  <div id="loader-screen">
+    <div class="eu-stars" id="star-container">
+      <div class="star"></div><div class="star"></div><div class="star"></div>
+      <div class="star"></div><div class="star"></div><div class="star"></div>
+      <div class="star"></div><div class="star"></div><div class="star"></div>
+      <div class="star"></div><div class="star"></div><div class="star"></div>
+    </div>
+    <div id="loader-text" class="glitch" data-text="INICIANDO PROTOCOLO...">INICIANDO PROTOCOLO...</div>
+  </div>
+
+  <main id="main-content">
+    
+    <div class="hero-container">
+      <div class="video-bg">
+        <video autoplay loop muted playsinline src="/static/onu-debate.mp4"></video>
+        <div class="video-overlay"></div>
+      </div>
+
+      <div class="rec-indicator"><div class="rec-dot"></div> LIVE SAT FEED</div>
+
+      <div class="date-stamp">FECHA DE CRISIS: 6 DE MARZO DE 2035</div>
+      <h1 class="glitch reveal" data-text="EUROPE'S LAST STAND">EUROPE'S LAST STAND</h1>
+      <p style="max-width: 700px; font-size: 1.3rem; color: #ccc;" class="reveal">
+        El flujo migratorio colapsó la demografía. La política se fracturó. El tratado es letra muerta. 
+        El continente enfrenta el abismo de la fragmentación total.
+      </p>
+      
+      <div class="countdown-wrapper reveal">
+        <div class="countdown-label">BCE EMERGENCY MEETING IN:</div>
+        <div class="countdown" id="countdown-timer">48:00:00:00</div>
+      </div>
+    </div>
+
+    <div class="ticker-wrap">
+      <div class="ticker">
+        ITALIA RECHAZA EL PRESUPUESTO DE BRUSELAS... /// SPREAD ALEMÁN-ITALIANO EN 500 PUNTOS BÁSICOS... /// DISTURBIOS EN PARÍS POR CRISIS IDENTITARIA... /// MALTA DECLARA ESTADO DE EMERGENCIA MIGRATORIA... /// EL BCE CONVOCA REUNIÓN DE URGENCIA... /// POLONIA Y HUNGRÍA CERRARÁN FRONTERAS ESTA MEDIANOCHE... /// 
+      </div>
+    </div>
+
+    <div class="content-wrapper">
+      
+      <h2 class="section-title reveal"><span>[ ARCHIVO 01 ]</span> LA FRACTURA INTERNA</h2>
+      
+      <div class="grid-2">
+        <div class="text-block reveal">
+          <p>La UE se encuentra fracturada desde adentro. El flujo migratorio desde el Sahel y el norte de África, que se triplicó entre 2025 y 2033 por el colapso climático, transformó la demografía de las ciudades europeas a una velocidad que ningún gobierno supo gestionar.</p>
+          <p>En Francia, Alemania e Italia, el debate sobre identidad, cultura y el lugar del islam en Europa dejó de ser académico y se convirtió en la grieta política más profunda del continente. A raíz de eso, los partidos políticos nacionalistas se consolidaron bajo una misma agenda: <span class="highlight-red">“menos Bruselas, más capital nacional”</span>.</p>
+          
+          <div class="drone-feed">
+            <video autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover; filter: sepia(1) hue-rotate(180deg) saturate(3) brightness(0.4);" src="/static/drill.mp4"></video>
+            <div class="crosshair"></div>
+            <div class="drone-text">UAV FEED // PARIS_RIOT_0306 // REC</div>
+          </div>
+        </div>
+
+        <div class="widget reveal">
+          <div class="widget-header">
+            <span>DEBT MONITOR: ITALY</span>
+            <span style="color:var(--alert); animation: blink 1s infinite;">CRITICAL FAILURE</span>
+          </div>
+          <div style="margin-bottom: 10px; font-size: 1rem; color: #aaa;">DEUDA PÚBLICA VS PIB: <span style="color:var(--alert); font-weight:bold; font-size:1.5rem;">>160%</span></div>
+          
+          <div style="padding-right: 60px; margin-top: 15px;">
+            <div class="progress-container">
+              <div class="limit-label">100%</div>
+              <div class="limit-marker"></div>
+              <div class="progress-bar shake"></div>
+            </div>
+          </div>
+          
+          <p style="margin-top: 30px; font-size: 1rem; color:#888;">
+            El euro lleva tres semanas bajo ataque especulativo. El diferencial con el bono alemán roza los <strong>500 puntos básicos</strong>. El BCE ha convocado una reunión en 48 horas porque si ese umbral se rompe, no hay retorno.
+          </p>
+
+          <div style="margin-top: 30px; font-size:0.9rem; color:var(--tech); font-weight: bold;">MERCADO DE DIVISAS (EUR/USD) - COLAPSO EN TIEMPO REAL</div>
+          <canvas id="euro-chart"></canvas>
+        </div>
+      </div>
+
+      <h2 class="section-title reveal"><span>[ ARCHIVO 02 ]</span> ESTADO DE EXCEPCIÓN MIGRATORIO</h2>
+      
+      <div class="grid-2">
+        <div class="radar-map reveal">
+          <div class="radar-grid"></div>
+          <div class="radar-sweep"></div>
+          
+          <div class="crisis-point cp-sicily"></div>
+          <div class="map-label" style="top: 74%; left: 42%;">SICILIA - OVERFLOW</div>
+          
+          <div class="crisis-point cp-malta"></div>
+          <div class="map-label" style="top: 84%; left: 44%;">MALTA - SOS</div>
+          
+          <div class="crisis-point cp-poland"></div>
+          <div class="map-label" style="top: 28%; left: 65%; color: var(--tech);">BLOQUE ESTE - BORDERS CLOSED</div>
+        </div>
+        
+        <div class="text-block reveal">
+          <p>Esta semana, todo colapsó al mismo tiempo. Italia declaró que no reconoce la autoridad del Tribunal de Justicia de la UE en materia presupuestaria. Polonia y Hungría aplaudieron y cerraron filas.</p>
+          <p>En las costas de Malta y Sicilia hay una nueva oleada migratoria sin respuesta, donde el mecanismo de crisis migratoria aprobado en 2024 <span class="highlight-red">no se está aplicando</span> porque cinco países del este se niegan a cumplir sus cuotas, blindando sus fronteras con el ejército.</p>
+        </div>
+      </div>
+
+      <h2 class="section-title reveal"><span>[ DIRECTIVA SUPREMA ]</span> ARTÍCULO 26 INVOCADO</h2>
+      
+      <p style="font-size: 1.4rem; color: #fff; text-align: center; max-width: 900px; margin: 0 auto 50px;" class="reveal">
+        El presidente del Consejo Europeo invocó el Artículo 26 del Tratado de la Unión Europea y convocó esta cumbre de emergencia, una medida reservada estrictamente para amenazas existenciales. Tres preguntas definen esta sesión:
+      </p>
+
+      <div class="files-grid reveal">
+        <div class="file-card">
+          <h3>¿QUÉ ES LA UE?</h3>
+          <p>¿Qué significa la Unión cuando sus propios miembros deciden qué leyes obedecen y cuáles ignoran según su conveniencia política nacional?</p>
+        </div>
+        <div class="file-card">
+          <h3>LA DEUDA</h3>
+          <p>¿Quién paga la deuda astronómica del sur, y bajo qué condiciones de rescate o castigo impuestas por los países del norte?</p>
+        </div>
+        <div class="file-card danger">
+          <h3>¿UNIÓN O CAOS?</h3>
+          <p>¿Tiene Europa la voluntad real de actuar unida, o acepta finalmente que cada nación resuelva por su cuenta lo que todos produjeron juntos?</p>
+        </div>
+      </div>
+
+    </div>
+
+    <section id="directiva" class="board-section reveal">
+      <h2 class="section-title"><span>[ SECURITY PROTOCOL ]</span> MESA DIRECTIVA</h2>
+      
+      <div class="dossier-grid">
+        <div class="dossier-card">
+          <div class="dossier-header">
+            <span>REF: EU-REDACTED-01</span>
+            <span style="color: var(--alert);">UNAUTHORIZED ACCESS</span>
+          </div>
+          <div class="biometric-frame incognito-avatar">
+            <div class="biometric-line"></div>
+            <div class="css-avatar"></div>
+          </div>
+          <div class="dossier-body">
+            <span class="dossier-role"><span class="redacted-bar">XXXXXXXX XXXXXXXX</span></span>
+            <h4 style="font-size: 1.5rem;"><span class="redacted-bar">REDACTED_IDENTITY</span></h4>
+            <p style="font-size: 0.8rem; color: #555;">[DATOS ELIMINADOS POR PROTOCOLO DE CRISIS 2035. ESPERE A LA REVELACIÓN OFICIAL].</p>
+            <div class="access-denied-msg">NIVEL DE ACCESO INSUFICIENTE</div>
+          </div>
+        </div>
+
+        <div class="dossier-card">
+          <div class="dossier-header">
+            <span>REF: EU-REDACTED-02</span>
+            <span style="color: var(--alert);">UNAUTHORIZED ACCESS</span>
+          </div>
+          <div class="biometric-frame incognito-avatar">
+            <div class="biometric-line" style="animation-delay: -1s;"></div>
+            <div class="css-avatar"></div>
+          </div>
+          <div class="dossier-body">
+            <span class="dossier-role"><span class="redacted-bar">XXXXXXXX XXXXXXXX</span></span>
+            <h4 style="font-size: 1.5rem;"><span class="redacted-bar">REDACTED_IDENTITY</span></h4>
+            <p style="font-size: 0.8rem; color: #555;">[DATOS ELIMINADOS POR PROTOCOLO DE CRISIS 2035. ESPERE A LA REVELACIÓN OFICIAL].</p>
+            <div class="access-denied-msg">NIVEL DE ACCESO INSUFICIENTE</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /* =================================================================
+       LÓGICA DEL GATEKEEPER Y LOADER
+    ================================================================= */
+    const gatekeeper = document.getElementById('gatekeeper');
+    const loaderScreen = document.getElementById('loader-screen');
+    const mainContent = document.getElementById('main-content');
+    const loaderText = document.getElementById('loader-text');
+    const stars = document.querySelectorAll('.star');
+    
+    const loaderMessages = [
+      "VERIFICANDO TRATADO DE LISBOA...",
+      "ERROR: ARTÍCULO 26 INVOCADO",
+      "COLAPSO DE LIQUIDEZ DETECTADO",
+      "ACCESO CONCEDIDO"
+    ];
+
+    function initProtocol() {
+      gatekeeper.style.display = 'none';
+      loaderScreen.style.display = 'flex';
+      
+      // Secuencia de mensajes y colores
+      setTimeout(() => updateLoader(1, 'var(--alert)'), 1500);
+      setTimeout(() => updateLoader(2, 'var(--alert)'), 3000);
+      setTimeout(() => {
+        updateLoader(3, 'var(--ghost)');
+        triggerStarCollapse();
+      }, 4500);
+      
+      // Fin del loader y muestra del contenido
+      setTimeout(() => {
+        loaderScreen.style.display = 'none';
+        mainContent.style.display = 'block';
+        initCharts();
+        initScrollReveal();
+        startCountdown();
+      }, 6000);
+    }
+
+    function updateLoader(index, color) {
+      loaderText.innerText = loaderMessages[index];
+      loaderText.setAttribute('data-text', loaderMessages[index]);
+      loaderText.style.color = color;
+    }
+
+    function triggerStarCollapse() {
+      document.getElementById('star-container').classList.add('falling');
+      // Aleatorizar el retraso de la caída para que se rompan caóticamente
+      stars.forEach((star) => {
+        const delay = Math.random() * 0.5;
+        star.style.animationDelay = `${delay}s`;
+      });
+    }
+
+    /* =================================================================
+       GRÁFICO DEL EURO (CANVAS EN TIEMPO REAL)
+    ================================================================= */
+    function initCharts() {
+      const canvas = document.getElementById('euro-chart');
+      const ctx = canvas.getContext('2d');
+      
+      // Responsive canvas width
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = 150;
+      
+      let points = [];
+      let y = 30; // Inicia arriba
+      let x = 0;
+      
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Simular caída de mercado (tiende a subir en Y, que es bajar en el gráfico)
+        x += 2.5;
+        y += (Math.random() * 10) - 2; 
+        
+        // Límites
+        if(y > canvas.height) y = canvas.height - 5;
+        if(y < 10) y = 10;
+        
+        points.push({x, y});
+        
+        // Mantener dentro del canvas moviendo los puntos a la izquierda
+        if(x > canvas.width) {
+          points.shift();
+          points.forEach(p => p.x -= 2.5);
+          x -= 2.5;
+        }
+        
+        // Dibujar línea
+        ctx.beginPath();
+        ctx.moveTo(points[0]?.x, points[0]?.y);
+        for(let i=1; i<points.length; i++){
+          ctx.lineTo(points[i].x, points[i].y);
+        }
+        
+        // Cambiar a rojo si cae demasiado
+        const currentVal = points[points.length-1]?.y || 0;
+        ctx.strokeStyle = currentVal > canvas.height * 0.6 ? '#ff0033' : '#ffb300';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+        
+        // Relleno debajo de la línea
+        ctx.lineTo(points[points.length-1].x, canvas.height);
+        ctx.lineTo(points[0].x, canvas.height);
+        ctx.fillStyle = currentVal > canvas.height * 0.6 ? 'rgba(255,0,51,0.2)' : 'rgba(255,179,0,0.1)';
+        ctx.fill();
+        
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    /* =================================================================
+       SCROLL REVEAL (Reemplaza el clip-path defectuoso)
+    ================================================================= */
+    function initScrollReveal() {
+      const elements = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if(entry.isIntersecting) {
+            entry.target.classList.add('active');
+            // Opcional: dejar de observar una vez revelado
+            // observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      
+      elements.forEach(el => observer.observe(el));
+    }
+
+    /* =================================================================
+       CUENTA REGRESIVA MILISEGUNDOS
+    ================================================================= */
+    function startCountdown() {
+      const el = document.getElementById('countdown-timer');
+      let ms = 48 * 60 * 60 * 1000; // 48h
+      
+      setInterval(() => {
+        ms -= 47; // Restar número primo para que los ms se vean rápidos e irregulares
+        if(ms < 0) ms = 0;
+        
+        let h = Math.floor(ms / (1000 * 60 * 60));
+        let m = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+        let s = Math.floor((ms % (1000 * 60)) / 1000);
+        let mil = Math.floor((ms % 1000) / 10);
+        
+        el.innerText = 
+          String(h).padStart(2, '0') + ":" + 
+          String(m).padStart(2, '0') + ":" + 
+          String(s).padStart(2, '0') + ":" + 
+          String(mil).padStart(2, '0');
+      }, 47);
+    }
+
+    /* ══════════════════════════════════════
+       NAVBAR TOGGLE (IMPORTADO DE CRISIS ROMA)
+    ══════════════════════════════════════ */
+    let navOpen = false;
+    function toggleNav(){
+      navOpen = !navOpen;
+      const bar=document.getElementById('nav-bar');
+      const overlay=document.getElementById('nav-overlay');
+      const icon=document.getElementById('nbIcon');
+      bar.classList.toggle('menu-open',navOpen);
+      overlay.classList.toggle('open',navOpen);
+      icon.classList.toggle('open',navOpen);
+      document.body.style.overflow=navOpen?'hidden':'';
+      if(!navOpen){
+        document.getElementById('nvo-comites-sub').classList.remove('open');
+        document.getElementById('nvo-comites-trigger').classList.remove('sub-open');
+      }
+    }
+    function toggleComites(){
+      const sub=document.getElementById('nvo-comites-sub');
+      const trigger=document.getElementById('nvo-comites-trigger');
+      sub.classList.toggle('open');
+      trigger.classList.toggle('sub-open');
+    }
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&navOpen)toggleNav();});
+    window.addEventListener('scroll',()=>{
+      document.getElementById('nav-bar').classList.toggle('scrolled',window.scrollY>40);
+    });
+
+    /* ══════════════════════════════════════
+       PAGE TRANSITION CURTAIN
+    ══════════════════════════════════════ */
+    (function(){
+      const curtain = document.createElement('div');
+      curtain.id = 'curtain';
+      curtain.style.cssText = 'position:fixed;inset:0;z-index:9998;pointer-events:none;display:flex;';
+      curtain.innerHTML =
+        '<div class="c-half L" style="flex:1;height:100%;background:#0d0a06;transform:scaleX(0);transform-origin:left;"></div>'+
+        '<div class="c-half R" style="flex:1;height:100%;background:#0d0a06;transform:scaleX(0);transform-origin:right;"></div>';
+      document.body.prepend(curtain);
+      const s = document.createElement('style');
+      s.textContent = `
+        body.entering .c-half.L{animation:cOpenL .65s cubic-bezier(.77,0,.18,1) forwards;}
+        body.entering .c-half.R{animation:cOpenR .65s cubic-bezier(.77,0,.18,1) .05s forwards;}
+        body.exiting  .c-half.L{animation:cCloseL .45s cubic-bezier(.77,0,.18,1) forwards;}
+        body.exiting  .c-half.R{animation:cCloseR .45s cubic-bezier(.77,0,.18,1) .04s forwards;}
+        @keyframes cOpenL{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+        @keyframes cOpenR{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+        @keyframes cCloseL{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+        @keyframes cCloseR{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+      `;
+      document.head.appendChild(s);
+      document.body.classList.add('entering');
+      window.navigateTo = function(url){
+        document.body.classList.remove('entering');
+        document.body.classList.add('exiting');
+        document.getElementById('curtain').style.pointerEvents='all';
+        setTimeout(()=>{window.location.href=url;},520);
+      };
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,2257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crisis — Segunda Guerra Civil Romana · SVPMUN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Uncial+Antiqua&family=Rajdhani:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dark:       #0d0a06;
+      --stone-bg:   #1a1209;
+      --stone-mid:  #2a2215;
+      --stone-lt:   #3d3020;
+      --silver:     #c0bfbb;
+      --silver-lt:  #e8e4dc;
+      --gold:       #d4af37;
+      --gold-lt:    #edd98a;
+      --gold-ox:    #8b6914;
+      --copper:     #b87333;
+      --red:        #8b1a1a;
+      --red-lt:     #c0392b;
+      --blood:      #5a0000;
+      --grey:       #7a7470;
+      --parchment:  #c8a97a;
+      --cream:      #e8dcc8;
+      --navy: #071630;
+      --navy-mid: #0e254a;
+      --blu-3: #3a8fe0;
+      --gold-nav: #c9a84c;
+      --gold-lt-nav: #edd98a;
+    }
+
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body {
+      font-family:'Cormorant Garamond',serif;
+      background:var(--dark);
+      color:var(--silver-lt);
+      overflow-x:hidden;
+    }
+
+    /* ══════════════════════════════════════
+       LOADER — ROMANO ANTIGUO
+    ══════════════════════════════════════ */
+    #loader {
+      position:fixed; inset:0; z-index:9999;
+      background: radial-gradient(ellipse at 50% 80%, #3b0808 0%, #1a0303 40%, #050101 100%);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      transition:opacity 1.2s ease, transform 1.4s ease;
+      overflow:hidden;
+    }
+    #loader.hide { opacity:0; transform:scale(1.04); pointer-events:none; }
+
+    .loader-fire-base {
+      position:absolute; bottom:0; left:0; right:0; height:220px;
+      background: linear-gradient(to top, rgba(180,40,10,0.55) 0%, rgba(200,80,20,0.3) 30%, transparent 100%);
+      pointer-events:none;
+    }
+    .loader-fire-flicker {
+      position:absolute; bottom:0; left:0; right:0; height:120px;
+      background: linear-gradient(to top, rgba(255,120,20,0.4) 0%, rgba(220,60,10,0.15) 50%, transparent 100%);
+      animation: fireFlicker 0.18s ease-in-out infinite alternate;
+    }
+    @keyframes fireFlicker {
+      0%  { opacity:0.6; transform:scaleX(1)   scaleY(1); }
+      50% { opacity:1;   transform:scaleX(1.02) scaleY(1.06); }
+      100%{ opacity:0.7; transform:scaleX(0.98) scaleY(0.95); }
+    }
+
+    .loader-torch { position:absolute; bottom:0; width:60px; display:flex; flex-direction:column; align-items:center; }
+    .loader-torch.left  { left:8%; }
+    .loader-torch.right { right:8%; }
+    .torch-flame {
+      width:24px; height:48px;
+      background:radial-gradient(ellipse at 50% 80%, #ff9a00 0%, #e05a00 40%, rgba(180,20,0,0.3) 100%);
+      border-radius:50% 50% 30% 30%;
+      animation:torchFlame 0.22s ease-in-out infinite alternate;
+      filter:blur(1.5px);
+    }
+    @keyframes torchFlame {
+      0%  { transform:scaleX(1) scaleY(1) rotate(-3deg); opacity:0.9; }
+      100%{ transform:scaleX(0.85) scaleY(1.18) rotate(3deg); opacity:1; }
+    }
+    .torch-inner {
+      width:10px; height:10px; margin-top:-6px;
+      background:radial-gradient(circle, #fff8e0, #ffd060);
+      border-radius:50%; filter:blur(2px);
+      animation:torchFlame 0.15s ease-in-out infinite alternate-reverse;
+    }
+    .torch-body {
+      width:10px; height:90px;
+      background:linear-gradient(to bottom, #8b6914, #5a3e10, #2a1a08);
+      border-radius:2px;
+    }
+
+    .loader-scroll {
+      position:relative; z-index:2;
+      width:min(560px, 90vw);
+      background:linear-gradient(160deg, #1e1508 0%, #120e05 50%, #1a1309 100%);
+      border:1px solid rgba(180,130,40,0.35);
+      box-shadow:
+        0 0 60px rgba(180,60,0,0.3),
+        0 0 120px rgba(140,30,0,0.15),
+        inset 0 0 40px rgba(0,0,0,0.7),
+        inset 0 1px 0 rgba(212,175,55,0.15);
+      padding:48px 52px 44px;
+      text-align:center;
+    }
+    .loader-scroll::before, .loader-scroll::after {
+      content:'';
+      position:absolute; left:0; right:0; height:6px;
+      background:linear-gradient(90deg, transparent, rgba(180,115,51,0.6) 20%, rgba(212,175,55,0.9) 50%, rgba(180,115,51,0.6) 80%, transparent);
+    }
+    .loader-scroll::before { top:0; }
+    .loader-scroll::after  { bottom:0; }
+
+    .loader-eagle {
+      width:70px; height:70px; object-fit:contain; margin:0 auto 20px;
+      filter: invert(0.85) sepia(0.6) hue-rotate(5deg) saturate(2);
+      animation:eaglePulse 2.5s ease-in-out infinite;
+    }
+    @keyframes eaglePulse {
+      0%,100%{ opacity:0.7; filter:invert(0.85) sepia(0.6) hue-rotate(5deg) saturate(2) drop-shadow(0 0 8px rgba(212,175,55,0.4)); }
+      50%    { opacity:1;   filter:invert(0.85) sepia(0.6) hue-rotate(5deg) saturate(2) drop-shadow(0 0 18px rgba(212,175,55,0.8)); }
+    }
+
+    .loader-spqr {
+      font-family:'Uncial Antiqua',serif;
+      font-size:0.55rem; letter-spacing:0.55em; color:rgba(212,175,55,0.5);
+      text-transform:uppercase; margin-bottom:14px;
+    }
+    .loader-alert-title {
+      font-family:'Uncial Antiqua',serif;
+      font-size:clamp(1.1rem,3vw,1.7rem);
+      color:#c0bfbb;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+      margin-bottom:8px;
+      text-shadow:0 2px 12px rgba(180,60,10,0.6);
+      animation:carve 0.8s ease both;
+    }
+    .loader-proclama {
+      font-family:'Cinzel',serif;
+      font-size:clamp(0.62rem,1.5vw,0.78rem);
+      color:rgba(180,115,51,0.8);
+      letter-spacing:0.28em; text-transform:uppercase;
+      margin:14px 0 22px;
+      line-height:2.2;
+    }
+    .loader-sep {
+      width:100%; height:1px; margin:18px 0;
+      background:linear-gradient(90deg,transparent,rgba(212,175,55,0.4),transparent);
+    }
+    .loader-status-roman {
+      font-family:'Cormorant Garamond',serif; font-style:italic;
+      font-size:1rem; color:rgba(200,169,122,0.75);
+      letter-spacing:0.06em; min-height:1.4em;
+      margin-bottom:20px;
+    }
+    .loader-tally {
+      display:flex; justify-content:center; gap:8px; margin-top:12px;
+    }
+    .tally-mark {
+      width:2px; height:20px; background:rgba(212,175,55,0.2);
+      border-radius:1px; transition:background 0.3s, box-shadow 0.3s;
+    }
+    .tally-mark.lit {
+      background:rgba(212,175,55,0.8);
+      box-shadow:0 0 8px rgba(212,175,55,0.5);
+    }
+    @keyframes carve {
+      from { opacity:0; letter-spacing:0.3em; }
+      to   { opacity:1; letter-spacing:0.12em; }
+    }
+
+    .rv { opacity:0; transform:translateY(24px); transition:opacity 0.85s ease, transform 0.85s ease; }
+    .rv.on { opacity:1; transform:translateY(0); }
+    .d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}.d5{transition-delay:.5s;}
+
+    /* ══════════════════════════════════════
+       NAVBAR
+    ══════════════════════════════════════ */
+    #nav-bar {
+      position:fixed; top:0; left:0; right:0; z-index:800;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 52px; height:76px;
+    }
+    #nav-bar::before {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(180deg,rgba(7,22,48,0.75) 0%,rgba(7,22,48,0) 100%);
+      backdrop-filter:blur(0px);
+      transition:background 0.6s, backdrop-filter 0.6s; pointer-events:none;
+    }
+    #nav-bar.scrolled::before { background:rgba(7,22,48,0.90); backdrop-filter:blur(26px) saturate(1.9); }
+    #nav-bar.menu-open::before { background:transparent; backdrop-filter:none; }
+    #nav-bar::after {
+      content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
+      background:linear-gradient(90deg,transparent 0%,rgba(201,168,76,0.0) 10%,rgba(201,168,76,0.55) 35%,rgba(237,217,138,1.0) 50%,rgba(201,168,76,0.55) 65%,rgba(201,168,76,0.0) 90%,transparent 100%);
+      opacity:1; transition:opacity 0.4s;
+    }
+    #nav-bar.menu-open::after { opacity:0; }
+    .nb-brand { display:flex; align-items:center; gap:14px; text-decoration:none; position:relative; z-index:1; }
+    .nb-emblem { width:34px; height:34px; object-fit:contain; filter:brightness(0) invert(1) drop-shadow(0 0 12px rgba(142,197,247,0.65)); transition:filter 0.4s,transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+    .nb-brand:hover .nb-emblem { transform:rotate(-12deg) scale(1.1); }
+    .nb-word { font-family:'Cinzel',serif; font-weight:900; font-size:1.08rem; letter-spacing:0.32em; color:#fff; position:relative; }
+    .nb-word .nb-sep { color:var(--gold-nav); margin:0 4px; }
+    .nb-word::after { content:''; position:absolute; bottom:-5px; left:0; width:100%; height:1px; background:linear-gradient(90deg,var(--gold-nav),transparent); transform:scaleX(0); transform-origin:left; transition:transform 0.5s cubic-bezier(0.4,0,0.2,1); }
+    .nb-brand:hover .nb-word::after { transform:scaleX(1); }
+    .nb-center { position:absolute; left:50%; transform:translateX(-50%); display:flex; align-items:center; pointer-events:all; z-index:1; transition:opacity 0.35s,transform 0.35s; }
+    .nb-quick-link { font-family:'Cinzel',serif; font-size:0.56rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.3); padding:6px 18px; position:relative; cursor:pointer; transition:color 0.3s; text-decoration:none; }
+    .nb-quick-link::after { content:'·'; position:absolute; right:-1px; top:50%; transform:translateY(-50%); color:rgba(201,168,76,0.2); pointer-events:none; }
+    .nb-quick-link:last-child::after { display:none; }
+    .nb-quick-link:hover { color:rgba(237,217,138,0.9); }
+    #nav-bar.menu-open .nb-center { opacity:0; transform:translateX(-50%) scale(0.9); pointer-events:none; }
+    .nb-trigger { position:relative; z-index:1; display:flex; align-items:center; gap:16px; background:none; border:none; cursor:pointer; padding:8px 0; }
+    .nb-trigger-label { font-family:'Cinzel',serif; font-size:0.56rem; letter-spacing:0.4em; text-transform:uppercase; color:rgba(255,255,255,0.4); transition:color 0.3s,opacity 0.3s; }
+    .nb-trigger:hover .nb-trigger-label { color:rgba(201,168,76,0.85); }
+    #nav-bar.menu-open .nb-trigger-label { opacity:0; }
+    .nb-icon { display:flex; flex-direction:column; gap:5px; width:28px; cursor:pointer; }
+    .nb-icon span { display:block; height:1.5px; border-radius:2px; background:rgba(255,255,255,0.85); transform-origin:center; transition:transform 0.5s cubic-bezier(0.4,0,0.2,1),opacity 0.35s ease,width 0.4s ease,background 0.3s; }
+    .nb-icon span:nth-child(1){width:28px;} .nb-icon span:nth-child(2){width:18px;margin-left:10px;} .nb-icon span:nth-child(3){width:28px;}
+    .nb-icon.open span:nth-child(1){transform:translateY(6.75px) rotate(45deg);width:28px;margin-left:0;background:var(--gold-lt-nav);}
+    .nb-icon.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+    .nb-icon.open span:nth-child(3){transform:translateY(-6.75px) rotate(-45deg);background:var(--gold-lt-nav);}
+
+    #nav-overlay { position:fixed; inset:0; z-index:790; background:var(--navy); display:flex; clip-path:circle(0% at calc(100% - 72px) 38px); transition:clip-path 0.85s cubic-bezier(0.77,0,0.18,1); pointer-events:none; overflow:hidden; }
+    #nav-overlay.open { clip-path:circle(150% at calc(100% - 72px) 38px); pointer-events:all; }
+    .nvo-deco-panel { width:36%; flex-shrink:0; position:relative; overflow:hidden; border-right:1px solid rgba(58,143,224,0.1); display:flex; flex-direction:column; justify-content:space-between; padding:110px 52px 52px; }
+    .nvo-deco-panel::before { content:''; position:absolute; inset:0; pointer-events:none; background:radial-gradient(ellipse 80% 55% at 30% 15%,rgba(18,72,168,0.55) 0%,transparent 60%),radial-gradient(ellipse 55% 70% at 75% 85%,rgba(58,143,224,0.1) 0%,transparent 60%); }
+    .nvo-deco-emblem { position:absolute; right:-40px; top:50%; transform:translateY(-50%); width:300px; height:300px; object-fit:contain; opacity:0.035; filter:brightness(0) invert(1); pointer-events:none; }
+    .nvo-deco-brand { font-family:'Cinzel',serif; font-size:0.62rem; letter-spacing:0.42em; text-transform:uppercase; color:rgba(201,168,76,0.55); margin-bottom:22px; }
+    .nvo-deco-title { font-family:'Cormorant Garamond',serif; font-size:clamp(1.7rem,3.2vw,2.6rem); font-style:italic; color:rgba(255,255,255,0.82); line-height:1.28; margin-bottom:24px; }
+    .nvo-deco-line { width:38px; height:1px; background:linear-gradient(90deg,var(--gold-nav),transparent); margin-bottom:22px; }
+    .nvo-deco-sub { font-family:'Rajdhani',sans-serif; font-size:0.78rem; letter-spacing:0.16em; color:rgba(142,197,247,0.3); text-transform:uppercase; line-height:1.9; }
+    .nvo-deco-bottom { position:relative; z-index:2; }
+    .nvo-deco-year { font-family:'Bebas Neue',serif; font-size:4.5rem; line-height:1; letter-spacing:0.06em; color:rgba(255,255,255,0.04); }
+    .nvo-deco-copy { font-size:0.58rem; letter-spacing:0.24em; text-transform:uppercase; color:rgba(142,197,247,0.18); margin-top:8px; }
+    .nvo-list-panel { flex:1; position:relative; overflow-y:auto; display:flex; flex-direction:column; padding-top:76px; }
+    .nvo-list-panel::before { content:''; position:absolute; inset:0; pointer-events:none; z-index:0; background-image:linear-gradient(rgba(58,143,224,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(58,143,224,0.025) 1px,transparent 1px); background-size:60px 60px; }
+    .nvo-item { display:grid; grid-template-columns:72px 1fr auto; align-items:center; gap:0 24px; padding:26px 52px 26px 40px; border-bottom:1px solid rgba(58,143,224,0.07); cursor:pointer; position:relative; overflow:hidden; z-index:1; opacity:0; transform:translateX(28px); transition:opacity 0.5s ease,transform 0.5s ease; }
+    .nvo-item:last-child { border-bottom:none; }
+    #nav-overlay.open .nvo-item { opacity:1; transform:translateX(0); }
+    #nav-overlay.open .nvo-item:nth-child(1){transition-delay:0.22s;} #nav-overlay.open .nvo-item:nth-child(2){transition-delay:0.28s;} #nav-overlay.open .nvo-item:nth-child(3){transition-delay:0.34s;} #nav-overlay.open .nvo-item:nth-child(4){transition-delay:0.40s;}
+    .nvo-item::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg,rgba(58,143,224,0) 0%,rgba(58,143,224,0.05) 50%,rgba(58,143,224,0) 100%); opacity:0; transition:opacity 0.4s; }
+    .nvo-item:hover::before { opacity:1; }
+    .nvo-item::after { content:''; position:absolute; top:0; left:0; bottom:0; width:2px; background:linear-gradient(180deg,transparent,var(--gold-nav) 50%,transparent); transform:scaleY(0); transform-origin:center; transition:transform 0.42s cubic-bezier(0.4,0,0.2,1); }
+    .nvo-item:hover::after { transform:scaleY(1); }
+    .nvo-num { font-family:'Bebas Neue',serif; font-size:0.68rem; letter-spacing:0.32em; color:var(--gold-nav); opacity:0.45; text-align:right; padding-right:10px; border-right:1px solid rgba(201,168,76,0.1); transition:opacity 0.3s; line-height:1; }
+    .nvo-item:hover .nvo-num { opacity:1; text-shadow:0 0 14px rgba(201,168,76,0.5); }
+    .nvo-body { display:flex; flex-direction:column; gap:5px; }
+    .nvo-title { font-family:'Cinzel',serif; font-size:clamp(1rem,1.8vw,1.4rem); font-weight:700; letter-spacing:0.06em; color:rgba(255,255,255,0.82); transition:color 0.3s,letter-spacing 0.4s; }
+    .nvo-item:hover .nvo-title { color:var(--gold-lt-nav); letter-spacing:0.1em; }
+    .nvo-subs-inline { font-family:'Rajdhani',sans-serif; font-size:0.7rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(142,197,247,0.28); transition:color 0.3s; }
+    .nvo-item:hover .nvo-subs-inline { color:rgba(142,197,247,0.55); }
+    .nvo-arrow { font-size:1.3rem; color:rgba(255,255,255,0.15); transition:color 0.3s,transform 0.3s; }
+    .nvo-item:hover .nvo-arrow { color:var(--gold-nav); transform:translateX(4px); }
+    .nvo-arrow-expand { font-size:1.2rem; color:rgba(255,255,255,0.15); transition:color 0.3s,transform 0.45s cubic-bezier(0.4,0,0.2,1); line-height:1; }
+    .nvo-item:hover .nvo-arrow-expand { color:var(--gold-nav); }
+    .nvo-item.sub-open .nvo-arrow-expand { transform:rotate(90deg); color:var(--gold-nav); }
+    .nvo-sub-list { max-height:0; overflow:hidden; transition:max-height 0.45s cubic-bezier(0.4,0,0.2,1); background:rgba(255,255,255,0.015); border-bottom:1px solid rgba(58,143,224,0.07); }
+    .nvo-sub-list.open { max-height:320px; }
+    .nvo-sub-item { display:flex; align-items:center; gap:20px; padding:16px 52px 16px 130px; cursor:pointer; border-top:1px solid rgba(58,143,224,0.05); transition:background 0.3s; }
+    .nvo-sub-item:hover { background:rgba(58,143,224,0.04); }
+    .nvo-sub-dot { width:5px; height:5px; border-radius:50%; background:rgba(201,168,76,0.35); flex-shrink:0; transition:background 0.3s; }
+    .nvo-sub-item:hover .nvo-sub-dot { background:var(--gold-nav); }
+    .nvo-sub-name { font-family:'Cinzel',serif; font-size:0.72rem; letter-spacing:0.18em; color:rgba(255,255,255,0.45); text-transform:uppercase; transition:color 0.3s; }
+    .nvo-sub-item:hover .nvo-sub-name { color:rgba(237,217,138,0.85); }
+    .nvo-item-back .nvo-title { font-size:clamp(0.85rem,1.4vw,1.1rem); color:rgba(255,255,255,0.45); }
+    .nvo-item-back:hover .nvo-title { color:var(--gold-lt-nav); }
+    .nvo-back-arr { font-size:1.1rem; color:rgba(255,255,255,0.15); transition:color 0.3s,transform 0.3s; }
+    .nvo-item-back:hover .nvo-back-arr { color:var(--gold-nav); transform:translateX(-4px); }
+    @media(max-width:860px) { #nav-bar { padding:0 20px; }.nb-center{display:none;}.nvo-deco-panel{display:none;}.nvo-item{padding:22px 24px 22px 20px;}.nvo-sub-item{padding:14px 24px 14px 56px;}}
+
+    /* ══════════════════════════════════════
+       ASH PARTICLES CANVAS
+    ══════════════════════════════════════ */
+    #ash-canvas {
+      position:fixed; inset:0; z-index:900; pointer-events:none;
+    }
+
+    /* ══════════════════════════════════════
+       HERO SECTION
+    ══════════════════════════════════════ */
+    #hero {
+      position:relative; min-height:100vh; z-index:3;
+      display:flex; flex-direction:column; align-items:center;
+      justify-content:center; text-align:center;
+      padding:120px 24px 100px; overflow:hidden;
+    }
+    .hero-bg {
+      position:absolute; inset:0; z-index:0;
+      background:
+        radial-gradient(ellipse 100% 80% at 50% 100%, rgba(90,0,0,0.5) 0%, transparent 55%),
+        radial-gradient(ellipse 80% 60% at 50% 50%, rgba(26,18,9,0) 0%, rgba(13,10,6,0.95) 100%),
+        linear-gradient(to bottom, #0d0a06 0%, #150e06 50%, #0d0604 100%);
+    }
+    .hero-bg-img {
+      position:absolute; inset:0; z-index:-1;
+      background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Forum_romanum_6k_%285765477647%29.jpg/1280px-Forum_romanum_6k_%285765477647%29.jpg');
+      background-size:cover; background-position:center;
+      filter:sepia(0.8) brightness(0.18) contrast(1.2);
+      opacity:0.85;
+    }
+    .hero-stone-texture {
+      position:absolute; inset:0; z-index:1; pointer-events:none;
+      background-image:
+        repeating-linear-gradient(-45deg,transparent,transparent 3px,rgba(255,255,255,0.008) 3px,rgba(255,255,255,0.008) 4px),
+        repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(0,0,0,0.04) 3px,rgba(0,0,0,0.04) 4px);
+    }
+    .hero-content { position:relative; z-index:5; }
+
+    .hero-spears {
+      display:block; margin:0 auto 28px; width:120px; height:120px;
+      filter:drop-shadow(0 0 16px rgba(212,175,55,0.5));
+      animation:spearsGlow 3s ease-in-out infinite alternate;
+    }
+    @keyframes spearsGlow {
+      from { filter:drop-shadow(0 0 10px rgba(212,175,55,0.3)); }
+      to   { filter:drop-shadow(0 0 24px rgba(212,175,55,0.7)); }
+    }
+
+    .hero-title-wrap {
+      position:relative; margin-bottom:24px;
+    }
+    .hero-title-top {
+      font-family:'Uncial Antiqua',serif;
+      font-size:clamp(0.65rem,1.5vw,0.85rem);
+      letter-spacing:0.55em; color:var(--copper);
+      text-transform:uppercase; margin-bottom:10px;
+      opacity:0.75;
+    }
+    .hero-title {
+      font-family:'Cinzel',serif;
+      font-size:clamp(2.2rem,7vw,6.5rem);
+      font-weight:900;
+      line-height:1.05;
+      color:transparent;
+      background: linear-gradient(160deg, #e8e4dc 0%, #c0bfbb 30%, #d4af37 55%, #8b6914 80%, #7a7470 100%);
+      -webkit-background-clip:text; background-clip:text;
+      text-shadow:none;
+      letter-spacing:0.04em;
+      filter:url(#crack-filter);
+      position:relative;
+      /* Animación de "Cicatrices" en el Título */
+      transition: filter 0.6s ease-in-out;
+      cursor: default;
+    }
+    .hero-title:hover {
+      /* Añade resplandor interno rojo/lava a las grietas generadas por el filtro SVG */
+      filter: url(#crack-filter) drop-shadow(0 0 15px rgba(255, 69, 0, 0.9)) drop-shadow(0 0 35px rgba(136, 8, 8, 0.9));
+    }
+
+    .hero-title-sub {
+      font-family:'Cormorant Garamond',serif; font-style:italic;
+      font-size:clamp(1rem,2vw,1.35rem);
+      color:rgba(200,169,122,0.7);
+      letter-spacing:0.12em; margin-top:16px;
+    }
+
+    /* ══════════════════════════════════════
+       CRONÓMETRO DE CRISIS
+    ══════════════════════════════════════ */
+    .crisis-countdown-wrapper {
+      margin: 30px auto 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .crisis-countdown-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--silver-lt); /* Ahora usa un plateado más claro */
+      opacity: 1; /* Opacidad subida al máximo */
+      margin-bottom: 8px;
+    }
+    .crisis-countdown {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1;
+      letter-spacing: 0.1em;
+      transition: color 0.8s ease, text-shadow 0.8s ease;
+    }
+    /* Estilo César (Dorado Fuego) */
+    .crisis-countdown.caesar-time {
+      color: var(--gold-lt);
+      text-shadow: 0 0 15px rgba(255, 69, 0, 0.6), 0 0 30px rgba(212, 175, 55, 0.4);
+    }
+    /* Estilo Pompeyo (Azul Lunar) */
+    .crisis-countdown.pompey-time {
+      color: #aebce0;
+      text-shadow: 0 0 15px rgba(100, 150, 255, 0.6), 0 0 30px rgba(150, 180, 255, 0.4);
+    }
+
+    .hero-divider {
+      width:200px; height:1px; margin:24px auto;
+      background:linear-gradient(90deg,transparent,var(--copper),var(--gold),var(--copper),transparent);
+    }
+    .hero-topic {
+      font-family:'Cinzel',serif;
+      font-size:clamp(0.7rem,1.2vw,0.88rem);
+      letter-spacing:0.3em; text-transform:uppercase;
+      color:var(--silver); opacity:0.6;
+      margin-bottom:8px;
+    }
+    .hero-year {
+      font-family:'Uncial Antiqua',serif;
+      font-size:clamp(1.3rem,3vw,2.4rem);
+      color:var(--gold); opacity:0.5;
+      letter-spacing:0.2em;
+    }
+
+    /* ══════════════════════════════════════
+       INTRO BAND
+    ══════════════════════════════════════ */
+    #intro {
+      position:relative; z-index:3;
+      padding:80px 8% 80px;
+      background:linear-gradient(180deg, #0d0a06 0%, #180e08 50%, #0d0a06 100%);
+      border-top:1px solid rgba(180,115,51,0.2);
+      border-bottom:1px solid rgba(180,115,51,0.2);
+      text-align:center;
+    }
+    .intro-label {
+      font-family:'Cinzel',serif; font-size:0.62rem; letter-spacing:0.5em;
+      text-transform:uppercase; color:var(--copper); margin-bottom:18px;
+    }
+    .intro-body {
+      font-family:'Cormorant Garamond',serif; font-style:italic;
+      font-size:clamp(1rem,2vw,1.3rem); color:var(--silver-lt);
+      max-width:900px; margin:0 auto; line-height:1.9;
+      opacity:0.8;
+    }
+    .intro-stats {
+      display:grid; grid-template-columns:repeat(4,1fr);
+      gap:1px; max-width:900px; margin:60px auto 0;
+      border:1px solid rgba(180,115,51,0.15);
+      background:rgba(180,115,51,0.15);
+    }
+    .intro-stat {
+      padding:28px 20px; text-align:center;
+      background:rgba(13,10,6,0.95);
+    }
+    .intro-stat-num {
+      font-family:'Cinzel',serif; font-size:2.2rem; font-weight:700;
+      color:var(--gold); letter-spacing:0.05em; display:block; margin-bottom:4px;
+    }
+    .intro-stat-lbl {
+      font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.3em;
+      text-transform:uppercase; color:var(--grey);
+    }
+
+    /* ══════════════════════════════════════
+       FACTION TOGGLE
+    ══════════════════════════════════════ */
+    #faction-toggle {
+      position:relative; z-index:3;
+      padding:70px 8% 0;
+      text-align:center;
+      background:var(--dark);
+    }
+    .toggle-label {
+      font-family:'Cinzel',serif; font-size:0.62rem; letter-spacing:0.5em;
+      text-transform:uppercase; color:var(--grey); margin-bottom:36px;
+    }
+    .faction-btns {
+      display:flex; justify-content:center; gap:0; max-width:700px; margin:0 auto;
+    }
+    .faction-btn {
+      flex:1; padding:28px 40px; cursor:pointer; border:none;
+      font-family:'Cinzel',serif; font-size:1rem; letter-spacing:0.2em;
+      text-transform:uppercase; position:relative; overflow:hidden;
+      transition:all 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .faction-btn.caesar-btn {
+      background:linear-gradient(135deg, #3d1010 0%, #250a0a 100%);
+      border:1px solid rgba(139,26,26,0.5);
+      border-right:none;
+      color:var(--silver);
+    }
+    .faction-btn.caesar-btn.active {
+      background:linear-gradient(135deg, #7a1515 0%, #4a0d0d 100%);
+      border-color:rgba(192,57,43,0.8);
+      color:var(--gold-lt);
+      box-shadow:inset 0 0 40px rgba(139,26,26,0.3), 0 0 30px rgba(139,26,26,0.2);
+    }
+    .faction-btn.pompey-btn {
+      background:linear-gradient(135deg, #1a1e2d 0%, #0f1220 100%);
+      border:1px solid rgba(90,90,120,0.4);
+      color:var(--silver);
+    }
+    .faction-btn.pompey-btn.active {
+      background:linear-gradient(135deg, #252c45 0%, #181e38 100%);
+      border-color:rgba(140,150,192,0.7);
+      color:var(--silver-lt);
+      box-shadow:inset 0 0 40px rgba(90,100,160,0.2), 0 0 30px rgba(90,100,160,0.15);
+    }
+    .faction-btn-inner { position:relative; z-index:1; }
+    .faction-btn-rome {
+      font-family:'Uncial Antiqua',serif;
+      font-size:0.62rem; letter-spacing:0.4em;
+      opacity:0.5; display:block; margin-bottom:6px;
+    }
+    .faction-btn-name {
+      display:block; font-size:1.3rem; font-weight:700; letter-spacing:0.15em;
+    }
+    .faction-btn-sub {
+      display:block; font-size:0.58rem; letter-spacing:0.3em;
+      opacity:0.45; margin-top:5px;
+    }
+    .faction-divider-btn {
+      width:2px; background:linear-gradient(to bottom, transparent, rgba(212,175,55,0.5), transparent);
+    }
+
+    /* ══════════════════════════════════════
+       MAPAS TÁCTICOS (PINTADOS CON CÓDIGO)
+    ══════════════════════════════════════ */
+    /* ══════════════════════════════════════
+   MAPAS TÁCTICOS (PINTADOS CON CÓDIGO)
+══════════════════════════════════════ */
+.map-section {
+  position: relative;
+  margin: 80px auto;
+  max-width: 900px;
+  padding: 40px;
+  background: linear-gradient(160deg, #1e1508 0%, #120e05 100%);
+  border: 1px solid rgba(180,115,51,0.3);
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.9);
+  border-radius: 4px;
+}
+.map-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-lt);
+  text-align: center;
+  margin-bottom: 30px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+}
+.map-container {
+  position: relative;
+  width: 100%;
+  height: 450px;
+  /* 1. Colores del mar más opacos y grises */
+  background: linear-gradient(to bottom right, #8c7e68, #5a4f3b);
+  border: 3px solid #0d0a06; /* Marco oscuro tipo foto */
+  border-radius: 6px; /* Bordes ligeramente redondeados */
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.6); /* Sombra exterior */
+}
+
+/* 2. El truco del marco quemado: una capa por encima del SVG */
+.map-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none; /* ¡Vital para que se puedan seguir tocando los hotspots! */
+  box-shadow: 
+    inset 0 0 60px 25px rgba(25, 10, 5, 0.95),  /* Quemado muy oscuro en el borde */
+    inset 0 0 120px 40px rgba(10, 5, 0, 0.7);   /* Oscurecimiento general hacia el centro */
+  z-index: 5;
+}
+
+.map-svg {
+  width: 100%;
+  height: 100%;
+  filter: url(#coastline-filter) drop-shadow(2px 2px 5px rgba(0,0,0,0.6));
+}
+
+/* 3. Colores de la tierra más sucios/tipo pergamino antiguo */
+.map-land {
+  fill: #b09f80; /* Antes era #e1cfab (muy brillante) */
+  stroke: #36291b; /* Borde costero más oscuro */
+  stroke-width: 2px;
+}
+.map-sea {
+  fill: transparent;
+}
+    
+    /* Hotspots (Puntos Interactivos) */
+    .hotspot {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: var(--red-lt);
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0,0,0,0.8);
+      z-index: 10;
+      transition: transform 0.3s ease;
+    }
+    .hotspot.pompey-point {
+      background: #4a5d8f;
+      border-color: #aebce0;
+    }
+    .hotspot:hover {
+      transform: translate(-50%, -50%) scale(1.3);
+    }
+    .hotspot::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+    @keyframes ping {
+      75%, 100% { transform: scale(2); opacity: 0; }
+    }
+    
+    /* Tooltip */
+    .map-tooltip {
+      position: absolute;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      width: max-content;
+      max-width: 200px;
+      background: rgba(13, 10, 6, 0.95);
+      border: 1px solid var(--gold);
+      padding: 12px;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 20;
+      text-align: center;
+    }
+    .hotspot:hover .map-tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .tooltip-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      color: var(--gold-lt);
+      margin-bottom: 5px;
+      letter-spacing: 0.1em;
+    }
+    .tooltip-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem;
+      color: var(--silver);
+      line-height: 1.4;
+    }
+
+
+    .ruina-cifrada {
+      position: relative;
+      margin: 50px auto 60px;
+      max-width: 800px;
+      padding: 35px 45px;
+      background: linear-gradient(135deg, #1f160c 0%, #0d0905 100%);
+      border: 1px solid rgba(180, 115, 51, 0.2);
+      border-radius: 2px;
+      box-shadow:
+        inset 0 0 50px 20px rgba(0, 0, 0, 0.95),
+        0 15px 30px rgba(0,0,0,0.8);
+      text-align: center;
+      overflow: hidden;
+      cursor: help;
+      transition: all 0.5s ease;
+    }
+    .ruina-cifrada::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+      pointer-events: none;
+    }
+    .ruina-title {
+      position: relative;
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(180, 115, 51, 0.7);
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(180, 115, 51, 0.3);
+      padding-bottom: 12px;
+      display: inline-block;
+    }
+    .ruina-content {
+      position: relative;
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cipher-text {
+      font-family: 'Uncial Antiqua', serif;
+      font-size: 1.25rem;
+      color: rgba(200, 169, 122, 0.4);
+      letter-spacing: 0.1em;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      position: absolute;
+      text-shadow: 0 0 5px rgba(0,0,0,0.8);
+      line-height: 1.5;
+    }
+    .plain-text {
+      font-family: 'Cinzel', serif;
+      font-size: 1.15rem;
+      color: var(--gold-lt);
+      letter-spacing: 0.15em;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      position: absolute;
+      text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+      line-height: 1.5;
+    }
+    .pompey-ruin .plain-text {
+      color: #aebce0;
+      text-shadow: 0 0 15px rgba(174, 188, 224, 0.6);
+    }
+    .pompey-ruin .cipher-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.4rem;
+      letter-spacing: 0.05em;
+    }
+    .ruina-cifrada:hover .cipher-text { opacity: 0; transform: scale(1.05); }
+    .ruina-cifrada:hover .plain-text { opacity: 1; transform: scale(1); }
+    .ruina-hint {
+      position: relative;
+      margin-top: 25px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      color: rgba(255, 255, 255, 0.25);
+      text-transform: uppercase;
+    }
+    .caesar-ruin { border-left: 3px solid rgba(139, 26, 26, 0.6); }
+    .pompey-ruin { border-left: 3px solid rgba(90, 100, 160, 0.6); }
+    /* ══════════════════════════════════════
+       FACTION SECTIONS
+    ══════════════════════════════════════ */
+    .faction-section {
+      position:relative; z-index:3;
+      display:none; padding:80px 8%;
+    }
+    .faction-section.active { display:block; }
+
+    #section-caesar {
+      background:
+        radial-gradient(ellipse 70% 40% at 50% 0%, rgba(90,0,0,0.25) 0%, transparent 60%),
+        linear-gradient(180deg, #100505 0%, #0d0a06 100%);
+      border-top:2px solid rgba(139,26,26,0.4);
+    }
+    #section-pompey {
+      background:
+        radial-gradient(ellipse 70% 40% at 50% 0%, rgba(30,40,80,0.3) 0%, transparent 60%),
+        linear-gradient(180deg, #060810 0%, #0d0a06 100%);
+      border-top:2px solid rgba(90,100,160,0.35);
+    }
+
+    .fsec-header { text-align:center; margin-bottom:70px; }
+    .fsec-eagle { width:54px; height:54px; object-fit:contain; margin:0 auto 20px; display:block; filter:sepia(1) saturate(2); }
+    .fsec-label {
+      font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.52em;
+      text-transform:uppercase; margin-bottom:12px;
+    }
+    .fsec-label.caesar-c { color:var(--red-lt); }
+    .fsec-label.pompey-c { color:rgba(140,155,210,0.7); }
+    .fsec-name {
+      font-family:'Uncial Antiqua',serif;
+      font-size:clamp(2rem,5vw,4rem);
+      line-height:1.1; margin-bottom:10px;
+    }
+    .fsec-name.caesar-c { color:var(--silver-lt); text-shadow:0 0 30px rgba(180,40,20,0.4); }
+    .fsec-name.pompey-c { color:var(--silver-lt); text-shadow:0 0 30px rgba(90,110,180,0.4); }
+    .fsec-title-sub {
+      font-family:'Cormorant Garamond',serif; font-style:italic;
+      font-size:1rem; letter-spacing:0.12em; margin-bottom:30px;
+    }
+    .fsec-title-sub.caesar-c { color:rgba(200,169,122,0.6); }
+    .fsec-title-sub.pompey-c { color:rgba(170,185,220,0.6); }
+    .fsec-hdivider { width:120px; height:1px; margin:0 auto; }
+    .caesar-div { background:linear-gradient(90deg,transparent,var(--red-lt),var(--gold),var(--red-lt),transparent); }
+    .pompey-div { background:linear-gradient(90deg,transparent,rgba(120,140,200,0.7),var(--silver),rgba(120,140,200,0.7),transparent); }
+
+    .fsec-portrait-row {
+      display:grid; grid-template-columns:360px 1fr;
+      gap:60px; align-items:start; margin-bottom:80px;
+    }
+    .fsec-portrait-frame {
+      position:relative;
+    }
+    .portrait-frame-border {
+      position:relative;
+      border:2px solid rgba(180,115,51,0.3);
+      overflow:hidden;
+    }
+    .portrait-frame-border::before {
+      content:'';
+      position:absolute; inset:0; z-index:2; pointer-events:none;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 0%, rgba(0,0,0,0) 0%, rgba(13,10,6,0.95) 100%),
+        radial-gradient(ellipse 100% 30% at 50% 100%, rgba(13,10,6,0.9) 0%, transparent 100%),
+        radial-gradient(ellipse 30% 100% at 0% 50%, rgba(13,10,6,0.7) 0%, transparent 100%),
+        radial-gradient(ellipse 30% 100% at 100% 50%, rgba(13,10,6,0.7) 0%, transparent 100%);
+    }
+    .portrait-frame-border::after {
+      content:'';
+      position:absolute; inset:-4px; z-index:3; pointer-events:none;
+      background:
+        radial-gradient(circle 40px at 0% 0%, rgba(0,0,0,0.9) 0%, transparent 100%),
+        radial-gradient(circle 40px at 100% 0%, rgba(0,0,0,0.9) 0%, transparent 100%),
+        radial-gradient(circle 40px at 0% 100%, rgba(0,0,0,0.9) 0%, transparent 100%),
+        radial-gradient(circle 40px at 100% 100%, rgba(0,0,0,0.9) 0%, transparent 100%);
+    }
+    .portrait-img {
+      width:100%; display:block;
+      filter:sepia(0.65) contrast(1.1) brightness(0.8);
+      transition:filter 0.5s;
+    }
+    .portrait-img:hover { filter:sepia(0.3) contrast(1.0) brightness(0.95); }
+    .portrait-caption {
+      position:absolute; bottom:0; left:0; right:0; z-index:4;
+      padding:18px 20px 14px;
+      background:linear-gradient(to top, rgba(13,10,6,0.98), transparent);
+      font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.3em;
+      text-transform:uppercase; color:var(--gold); text-align:center;
+    }
+    .portrait-frame-deco {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:10px 14px;
+      border:1px solid rgba(180,115,51,0.2);
+      border-top:none;
+      background:rgba(0,0,0,0.4);
+    }
+    .frame-deco-text {
+      font-family:'Cormorant Garamond',serif; font-style:italic;
+      font-size:0.75rem; color:rgba(200,169,122,0.45);
+      letter-spacing:0.12em;
+    }
+
+    .fsec-text-col {
+      padding: 1rem;
+    }
+
+    .fsec-quote-block {
+      position:relative; padding:28px 36px 28px 48px;
+      margin-bottom:32px;
+    }
+    .fsec-quote-block::before {
+      content:'';
+      position:absolute; top:0; left:0; bottom:0; width:3px;
+    }
+    .caesar-quote-b::before { background:linear-gradient(to bottom, transparent, var(--red), transparent); }
+    .pompey-quote-b::before { background:linear-gradient(to bottom, transparent, rgba(140,155,210,0.8), transparent); }
+    .fsec-quote-block::after {
+      content:'"';
+      position:absolute; top:-10px; left:14px;
+      font-family:'Cormorant Garamond',serif; font-size:5rem;
+      line-height:1; color:rgba(212,175,55,0.12);
+      pointer-events:none;
+    }
+    .quote-inner {
+      font-family:'Cormorant Garamond',serif; font-style:italic;
+      font-size:clamp(1.05rem,1.6vw,1.3rem);
+      line-height:1.85; color:var(--silver-lt);
+    }
+    .fsec-body-text {
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(0.95rem,1.4vw,1.1rem);
+      line-height:1.9; color:rgba(192,191,187,0.72);
+      margin-bottom:24px;
+    }
+    .fsec-body-text strong {
+      color:var(--gold); font-weight:600;
+    }
+    .fsec-tactical-label {
+      font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.4em;
+      text-transform:uppercase; margin-bottom:18px;
+    }
+    .caesar-tc { color:var(--copper); }
+    .pompey-tc { color:rgba(140,155,210,0.7); }
+
+    .fsec-info-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:60px;
+    }
+    .fsec-info-card {
+      padding:20px 18px; text-align:center;
+      border:1px solid rgba(180,115,51,0.15);
+      background:rgba(255,255,255,0.02);
+      position:relative;
+    }
+    .fsec-info-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    }
+    .caesar-info-card::before { background:linear-gradient(90deg,transparent,var(--red-lt),transparent); }
+    .pompey-info-card::before { background:linear-gradient(90deg,transparent,rgba(140,155,210,0.7),transparent); }
+    .info-card-num {
+      font-family:'Cinzel',serif; font-size:1.8rem; font-weight:700;
+      color:var(--gold); margin-bottom:4px;
+    }
+    .info-card-lbl {
+      font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.28em;
+      text-transform:uppercase; color:var(--grey);
+    }
+
+    .fsec-img-strip {
+      position:relative; width:100%; height:320px; overflow:hidden; margin-bottom:60px;
+    }
+    .fsec-img-strip img {
+      width:100%; height:100%; object-fit:cover;
+      filter:sepia(0.5) contrast(1.1) brightness(0.6);
+    }
+    .fsec-img-strip::before {
+      content:''; position:absolute; inset:0; z-index:1;
+      background:
+        linear-gradient(90deg, rgba(13,10,6,0.9) 0%, transparent 30%, transparent 70%, rgba(13,10,6,0.9) 100%),
+        linear-gradient(to bottom, rgba(13,10,6,0.7) 0%, transparent 30%, transparent 70%, rgba(13,10,6,0.85) 100%);
+    }
+    .fsec-img-caption {
+      position:absolute; bottom:20px; right:32px; z-index:2;
+      font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.3em;
+      text-transform:uppercase; color:rgba(200,169,122,0.5);
+    }
+    .fsec-img-title {
+      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:2;
+      font-family:'Uncial Antiqua',serif; font-size:clamp(1.2rem,2.5vw,2rem);
+      color:rgba(212,175,55,0.5); letter-spacing:0.15em; text-align:center; width:80%;
+      text-shadow:0 2px 20px rgba(0,0,0,0.8);
+    }
+
+    .fsec-context-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:30px; margin-bottom:70px;
+    }
+    .context-card {
+      padding:32px 28px;
+      border:1px solid rgba(180,115,51,0.12);
+      background:rgba(255,255,255,0.015);
+      position:relative; overflow:hidden;
+    }
+    .context-card::after {
+      content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
+    }
+    .caesar-ctx::after { background:linear-gradient(90deg,transparent,rgba(139,26,26,0.5),transparent); }
+    .pompey-ctx::after { background:linear-gradient(90deg,transparent,rgba(90,100,160,0.5),transparent); }
+    .ctx-label {
+      font-family:'Cinzel',serif; font-size:0.58rem; letter-spacing:0.38em;
+      text-transform:uppercase; margin-bottom:14px;
+    }
+    .ctx-title {
+      font-family:'Cinzel',serif; font-size:1rem; font-weight:700;
+      letter-spacing:0.06em; margin-bottom:12px; color:var(--silver-lt);
+    }
+    .ctx-body {
+      font-family:'Cormorant Garamond',serif; font-size:0.95rem;
+      line-height:1.8; color:rgba(192,191,187,0.6);
+    }
+
+    .fsec-landmark {
+      position:relative; margin-bottom:70px; border:1px solid rgba(180,115,51,0.15);
+      overflow:hidden;
+    }
+    .fsec-landmark img {
+      width:100%; height:400px; object-fit:cover; display:block;
+      filter:sepia(0.6) contrast(1.15) brightness(0.55);
+    }
+    .fsec-landmark::before {
+      content:''; position:absolute; inset:0; z-index:1;
+      background:
+        linear-gradient(180deg, rgba(13,10,6,0.6) 0%, transparent 25%, transparent 75%, rgba(13,10,6,0.7) 100%);
+    }
+    .landmark-overlay {
+      position:absolute; inset:0; z-index:2; display:flex; flex-direction:column;
+      justify-content:flex-end; align-items:flex-start;
+      padding:36px 40px;
+    }
+    .landmark-title {
+      font-family:'Uncial Antiqua',serif;
+      font-size:clamp(1.3rem,2.5vw,2.2rem);
+      color:var(--gold); margin-bottom:8px;
+      text-shadow:0 2px 20px rgba(0,0,0,0.9);
+    }
+    .landmark-sub {
+      font-family:'Cormorant Garamond',serif; font-style:italic;
+      font-size:0.95rem; color:rgba(200,169,122,0.6);
+      max-width:480px; line-height:1.6;
+    }
+
+    /* ══════════════════════════════════════
+       ALTO MANDO — FLIP CARDS
+    ══════════════════════════════════════ */
+    .alto-mando-section {
+      padding:70px 8% 90px;
+      border-top:1px solid rgba(180,115,51,0.2);
+    }
+    .alto-mando-header {
+      text-align:center; margin-bottom:60px;
+    }
+    .am-label {
+      font-family:'Cinzel',serif; font-size:0.58rem; letter-spacing:0.55em;
+      text-transform:uppercase; color:var(--copper); margin-bottom:12px;
+    }
+    .am-title {
+      font-family:'Uncial Antiqua',serif;
+      font-size:clamp(1.8rem,4vw,3.2rem);
+      color:var(--silver-lt);
+      letter-spacing:0.08em;
+      text-shadow:0 2px 20px rgba(0,0,0,0.5);
+    }
+    .am-divider {
+      width:80px; height:1px; margin:18px auto;
+      background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    }
+    .am-sub {
+      font-family:'Cormorant Garamond',serif; font-style:italic;
+      font-size:1rem; color:rgba(200,169,122,0.5);
+    }
+    .am-cards-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:28px;
+      max-width:1000px; margin:0 auto;
+    }
+    .flip-card {
+      height:280px; perspective:1200px; cursor:pointer;
+    }
+    .flip-card-inner {
+      position:relative; width:100%; height:100%;
+      transform-style:preserve-3d;
+      transition:transform 0.75s cubic-bezier(0.4,0,0.2,1);
+    }
+    .flip-card:hover .flip-card-inner,
+    .flip-card.flipped .flip-card-inner {
+      transform:rotateY(180deg);
+    }
+    .flip-face {
+      position:absolute; inset:0;
+      backface-visibility:hidden; -webkit-backface-visibility:hidden;
+      border:1px solid rgba(180,115,51,0.2);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:28px 22px; text-align:center;
+      overflow:hidden;
+    }
+    .flip-front {
+      background:linear-gradient(160deg, #1e1809 0%, #120e05 100%);
+    }
+    .flip-back {
+      transform:rotateY(180deg);
+      background:linear-gradient(160deg, #1c1205 0%, #0f0b03 100%);
+    }
+    .flip-face::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background:linear-gradient(90deg,transparent,var(--gold),var(--copper),transparent);
+    }
+    .flip-face::after {
+      content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+      background:linear-gradient(90deg,transparent,var(--copper),var(--gold),transparent);
+    }
+    .flip-corner {
+      position:absolute; width:18px; height:18px;
+    }
+    .flip-corner.tl { top:8px; left:8px; border-top:1px solid rgba(212,175,55,0.4); border-left:1px solid rgba(212,175,55,0.4); }
+    .flip-corner.tr { top:8px; right:8px; border-top:1px solid rgba(212,175,55,0.4); border-right:1px solid rgba(212,175,55,0.4); }
+    .flip-corner.bl { bottom:8px; left:8px; border-bottom:1px solid rgba(212,175,55,0.4); border-left:1px solid rgba(212,175,55,0.4); }
+    .flip-corner.br { bottom:8px; right:8px; border-bottom:1px solid rgba(212,175,55,0.4); border-right:1px solid rgba(212,175,55,0.4); }
+    .flip-icon {
+      font-family:'Uncial Antiqua',serif; font-size:2.2rem; color:var(--gold);
+      opacity:0.35; margin-bottom:14px; line-height:1;
+    }
+    .flip-role {
+      font-family:'Cinzel',serif; font-size:0.72rem; letter-spacing:0.2em;
+      text-transform:uppercase; color:var(--gold); margin-bottom:8px;
+    }
+    .flip-desc {
+      font-family:'Cormorant Garamond',serif; font-style:italic;
+      font-size:0.88rem; color:rgba(192,191,187,0.45);
+      line-height:1.6;
+    }
+    .flip-hint {
+      position:absolute; bottom:12px;
+      font-family:'Cinzel',serif; font-size:0.52rem;
+      letter-spacing:0.3em; text-transform:uppercase;
+      color:rgba(180,115,51,0.35);
+    }
+    .flip-back .flip-name {
+      font-family:'Cinzel',serif; font-size:1rem; font-weight:700;
+      letter-spacing:0.1em; color:var(--silver-lt); margin-bottom:10px;
+    }
+    .flip-back .flip-back-role {
+      font-family:'Cinzel',serif; font-size:0.62rem; letter-spacing:0.3em;
+      text-transform:uppercase; color:var(--copper); margin-bottom:14px;
+    }
+    .flip-back .flip-back-desc {
+      font-family:'Cormorant Garamond',serif; font-style:italic;
+      font-size:0.85rem; color:rgba(192,191,187,0.55); line-height:1.65;
+    }
+
+    footer {
+      background:linear-gradient(to top, #060401, #0d0a06);
+      padding:50px 52px 36px;
+      border-top:1px solid rgba(180,115,51,0.2);
+      text-align:center; position:relative; z-index:3;
+    }
+    .foot-spqr {
+      font-family:'Uncial Antiqua',serif; font-size:1rem;
+      color:rgba(212,175,55,0.25); letter-spacing:0.4em; margin-bottom:12px;
+    }
+    .foot-rule { width:120px; height:1px; margin:0 auto 16px; background:linear-gradient(90deg,transparent,rgba(180,115,51,0.4),transparent); }
+    .foot-copy {
+      font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.28em;
+      text-transform:uppercase; color:rgba(122,116,112,0.4);
+    }
+
+    .marco-quemado {
+      position: relative;
+      display: block;
+      width: 100%;
+      max-width: 480px; 
+      margin: 0 auto;
+      background-color: var(--stone-bg);
+      padding: 12px;
+      box-shadow: 
+        0 0 20px rgba(0,0,0,0.9), 
+        inset 0 0 25px 15px rgba(0,0,0,0.95);
+      border: 2px solid #080604;
+      border-radius: 4px 12px 6px 18px / 15px 5px 20px 8px; 
+      overflow: hidden;
+      filter: drop-shadow(0px 0px 15px rgba(0,0,0,0.8));
+    }
+
+    .marco-quemado::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.85) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .marco-quemado img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      filter: sepia(0.4) contrast(1.15) brightness(0.85) grayscale(0.2);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .fsec-portrait-senado {
+      max-width: 550px;
+      margin: 0 auto;
+      border: 2px solid rgba(180,115,51,0.3);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 25px rgba(0,0,0,0.8);
+    }
+
+    @media(max-width:900px){
+      .fsec-portrait-row { grid-template-columns:1fr; }
+      .fsec-portrait-frame { max-width:380px; margin:0 auto; }
+      .fsec-context-grid { grid-template-columns:1fr; }
+      .am-cards-grid { grid-template-columns:1fr; max-width:380px; }
+      .intro-stats { grid-template-columns:repeat(2,1fr); }
+      .fsec-info-grid { grid-template-columns:1fr; max-width:300px; margin-left:auto; margin-right:auto; }
+    }
+    @media(max-width:600px){
+      .faction-btns { flex-direction:column; }
+      .faction-divider-btn { width:100%; height:2px; }
+      .faction-btn { border-right:1px solid; }
+      .crisis-countdown { font-size: 2.2rem; }
+    }
+
+    /* ══════════════════════════════════════
+   EFECTO DE MAPA: FOTO ANTIGUA QUEMADA
+══════════════════════════════════════ */
+.marco-quemado1 {
+  /* Color base del marco usando la variable de tu paleta */
+  background-color: var(--silver-lt); 
+  
+  /* Grosor del marco tipo foto (puedes aumentar el de abajo si quieres estilo Polaroid) */
+  padding: 15px; 
+  border-radius: 3px;
+  
+  /* El efecto de quemado en los bordes usando múltiples sombras internas */
+  box-shadow: 
+    inset 0 0 25px 12px rgba(35, 15, 0, 0.85),  /* Quemado oscuro profundo */
+    inset 0 0 45px 20px rgba(70, 30, 10, 0.6),  /* Tono tostado intermedio */
+    0 10px 15px rgba(0, 0, 0, 0.7);             /* Sombra exterior para dar volumen */
+    
+  border: 1px solid var(--dark);
+  margin: 30px auto;
+  display: block;
+  max-width: 100%; /* Para que sea responsivo */
+  width: fit-content;
+}
+
+.marco-quemado1 img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  
+  /* Aquí apagamos los colores para que no resalten demasiado */
+  filter: 
+    saturate(45%)    /* Reduce la intensidad del color (0% es blanco y negro) */
+    sepia(50%)       /* Le da un tono café/antiguo */
+    brightness(80%)  /* Oscurece la imagen ligeramente */
+    contrast(115%);  /* Mantiene los detalles nítidos */
+    
+  border-radius: 1px;
+}
+  </style>
+</head>
+<body>
+
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <defs>
+    <filter id="crack-filter" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise"/>
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 9 -3.5" in="noise" result="alphaNoise"/>
+      <feComposite operator="in" in="SourceGraphic" in2="alphaNoise" result="maskedText"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="1" result="displaceNoise"/>
+      <feDisplacementMap in="maskedText" in2="displaceNoise" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+
+    <filter id="coastline-filter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="4" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+    
+    <linearGradient id="spear-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#edd98a"/>
+      <stop offset="45%" stop-color="#d4af37"/>
+      <stop offset="100%" stop-color="#8b6914"/>
+    </linearGradient>
+    <filter id="spear-glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+</svg>
+
+<div id="loader">
+  <div class="loader-fire-base"></div>
+  <div class="loader-fire-flicker"></div>
+
+  <div class="loader-torch left">
+    <div class="torch-flame"></div>
+    <div class="torch-inner"></div>
+    <div class="torch-body"></div>
+  </div>
+  <div class="loader-torch right">
+    <div class="torch-flame"></div>
+    <div class="torch-inner"></div>
+    <div class="torch-body"></div>
+  </div>
+
+  <div class="loader-scroll">
+    <img class="loader-eagle"
+         src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Aquila.svg/200px-Aquila.svg.png"
+         alt="Aquila SPQR"
+         onerror="this.style.display='none'">
+    <div class="loader-spqr">· Senatus Populusque Romanus ·</div>
+
+    <div class="loader-sep"></div>
+
+    <div class="loader-alert-title">Senatus Consultum Ultimum</div>
+
+    <div class="loader-proclama">
+      CRISIS COMITIALIS · SVPMUN MMXXVI<br>
+      Anno Domini XLIX ante Christum
+    </div>
+
+    <div class="loader-sep"></div>
+
+    <div class="loader-status-roman" id="loader-status">
+      Cargando los registros del Senado...
+    </div>
+
+    <div class="loader-tally" id="loader-tally">
+      <div class="tally-mark"></div>
+      <div class="tally-mark"></div>
+      <div class="tally-mark"></div>
+      <div class="tally-mark"></div>
+      <div class="tally-mark"></div>
+      <div class="tally-mark"></div>
+      <div class="tally-mark"></div>
+      <div class="tally-mark"></div>
+      <div class="tally-mark"></div>
+      <div class="tally-mark"></div>
+    </div>
+  </div>
+</div>
+
+<canvas id="ash-canvas"></canvas>
+
+<header id="nav-bar">
+  <a class="nb-brand" href="/drills">
+    <img class="nb-emblem"
+         src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png"
+         alt="ONU">
+    <span class="nb-word">SVPMUN <span class="nb-sep">·</span> CRISIS</span>
+  </a>
+  <nav class="nb-center" aria-label="Acceso rápido">
+    <a class="nb-quick-link" href="/" onclick="event.preventDefault();navigateTo('/')">Inicio</a>
+    <a class="nb-quick-link" href="/drills" onclick="event.preventDefault();navigateTo('/drills')">Drills</a>
+    <a class="nb-quick-link" href="/inscripciones" onclick="event.preventDefault();navigateTo('/inscripciones')">Inscripciones</a>
+  </nav>
+  <button class="nb-trigger" id="nbTrigger" onclick="toggleNav()" aria-label="Menú">
+    <span class="nb-trigger-label">Menú</span>
+    <div class="nb-icon" id="nbIcon">
+      <span></span><span></span><span></span>
+    </div>
+  </button>
+</header>
+
+<div id="nav-overlay" role="navigation" aria-label="Menú Crisis">
+  <div class="nvo-deco-panel">
+    <img class="nvo-deco-emblem" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="">
+    <div class="nvo-deco-top">
+      <div class="nvo-deco-brand">SVPMUN · Crisis Comitial</div>
+      <div class="nvo-deco-title">"Alea<br>iacta<br>est."</div>
+      <div class="nvo-deco-line"></div>
+      <div class="nvo-deco-sub">Segunda Guerra Civil<br>49 A.C. · Comité de Crisis</div>
+    </div>
+    <div class="nvo-deco-bottom">
+      <div class="nvo-deco-year">XLIX</div>
+      <div class="nvo-deco-copy">© 2026 SVPMUN · Model United Nations</div>
+    </div>
+  </div>
+  <div class="nvo-list-panel">
+    <div class="nvo-item nvo-item-back" onclick="navigateTo('/drills')" style="cursor:pointer;">
+      <div class="nvo-num">←</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Volver a Drills</div>
+        <div class="nvo-subs-inline">Central de Drills · SVPMUN</div>
+      </div>
+      <div class="nvo-back-arr">‹</div>
+    </div>
+    <div class="nvo-item" onclick="navigateTo('/')" style="cursor:pointer;">
+      <div class="nvo-num">01</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Inicio</div>
+        <div class="nvo-subs-inline">Página principal · SVPMUN</div>
+      </div>
+      <div class="nvo-arrow">›</div>
+    </div>
+    <div class="nvo-item" id="nvo-comites-trigger" onclick="toggleComites()" style="cursor:pointer;">
+      <div class="nvo-num">02</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Comités</div>
+        <div class="nvo-subs-inline">Crisis Roma · OMS · Unión Europea</div>
+      </div>
+      <div class="nvo-arrow-expand">›</div>
+    </div>
+    <div class="nvo-sub-list" id="nvo-comites-sub">
+      <div class="nvo-sub-item" onclick="navigateTo('/crisis-roma')">
+        <div class="nvo-sub-dot"></div>
+        <div class="nvo-sub-name">Crisis — Segunda Guerra Civil Romana</div>
+      </div>
+      <div class="nvo-sub-item">
+        <div class="nvo-sub-dot"></div>
+        <div class="nvo-sub-name">OMS — Organización Mundial de la Salud</div>
+      </div>
+      <div class="nvo-sub-item">
+        <div class="nvo-sub-dot"></div>
+        <div class="nvo-sub-name">Unión Europea</div>
+      </div>
+    </div>
+    <div class="nvo-item" onclick="navigateTo('/inscripciones')" style="cursor:pointer;">
+      <div class="nvo-num">03</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Inscripciones</div>
+        <div class="nvo-subs-inline">Registro · Costos · Fechas</div>
+      </div>
+      <div class="nvo-arrow">›</div>
+    </div>
+  </div>
+</div>
+
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-bg-img"></div>
+  <div class="hero-stone-texture"></div>
+
+  <div class="hero-content">
+    <svg class="hero-spears rv" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="sg1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#edd98a"/>
+          <stop offset="50%" stop-color="#d4af37"/>
+          <stop offset="100%" stop-color="#8b6914"/>
+        </linearGradient>
+        <filter id="sf1">
+          <feGaussianBlur stdDeviation="2" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <g transform="rotate(-45,60,60)" filter="url(#sf1)">
+        <rect x="57.5" y="18" width="5" height="84" rx="1.5" fill="url(#sg1)"/>
+        <path d="M60 8 L53 24 L60 19 L67 24 Z" fill="#edd98a"/>
+        <rect x="55" y="24" width="10" height="4" rx="1" fill="#8b6914"/>
+        <path d="M60 102 L56 112 L60 108 L64 112 Z" fill="#d4af37"/>
+      </g>
+      <g transform="rotate(45,60,60)" filter="url(#sf1)">
+        <rect x="57.5" y="18" width="5" height="84" rx="1.5" fill="url(#sg1)"/>
+        <path d="M60 8 L53 24 L60 19 L67 24 Z" fill="#edd98a"/>
+        <rect x="55" y="24" width="10" height="4" rx="1" fill="#8b6914"/>
+        <path d="M60 102 L56 112 L60 108 L64 112 Z" fill="#d4af37"/>
+      </g>
+      <circle cx="60" cy="60" r="4" fill="#d4af37" filter="url(#sf1)"/>
+    </svg>
+
+    <div class="hero-title-wrap rv d1">
+      <div class="hero-title-top">Comité de Crisis · SVPMUN 2026</div>
+      <h1 class="hero-title">Segunda Guerra<br>Civil Romana</h1>
+      <div class="hero-title-sub">César contra Pompeyo · La República en llamas</div>
+    </div>
+
+    <div class="crisis-countdown-wrapper rv d2">
+      <div class="crisis-countdown-label">Tiempo hasta la Sesión</div>
+      <div id="crisis-countdown" class="crisis-countdown caesar-time">00 : 00 : 00 : 00</div>
+    </div>
+
+    <div class="hero-divider rv d3"></div>
+
+    <div class="rv d4">
+      <div class="hero-topic">Tópico Oficial</div>
+      <div class="hero-year">XLIX A.C.</div>
+    </div>
+  </div>
+</section>
+
+<section id="intro">
+  <div class="intro-label rv">Contexto Histórico</div>
+  <p class="intro-body rv d1">
+    El año 49 antes de Cristo. La República Romana, pillar de la civilización occidental, se fractura
+    ante la más terrible de sus crisis: dos de sus hombres más poderosos llevan al mundo conocido
+    al borde del abismo. <strong style="color:var(--gold)">La ley ha sido rota. El Rubicón, cruzado.</strong>
+    Lo que una vez fue la gloria de Roma se convierte en el campo de batalla de la ambición desmedida
+    y el honor traicionado. El Senado tiembla. Los dioses observan. El destino de la República
+    descansa en las manos de los delegados reunidos en este Comité de Crisis.
+  </p>
+  <div class="intro-stats rv d2">
+    <div class="intro-stat">
+      <span class="intro-stat-num">XIII</span>
+      <span class="intro-stat-lbl">Legión de César</span>
+    </div>
+    <div class="intro-stat">
+      <span class="intro-stat-num">49 A.C.</span>
+      <span class="intro-stat-lbl">Año de la Crisis</span>
+    </div>
+    <div class="intro-stat">
+      <span class="intro-stat-num">II</span>
+      <span class="intro-stat-lbl">Facciones en Guerra</span>
+    </div>
+    <div class="intro-stat">
+      <span class="intro-stat-num">Roma</span>
+      <span class="intro-stat-lbl">En Juego</span>
+    </div>
+  </div>
+</section>
+
+<section id="faction-toggle">
+  <div class="toggle-label rv">Selecciona tu Facción</div>
+  <div class="faction-btns rv d1">
+    <button class="faction-btn caesar-btn active" id="btn-caesar" onclick="switchFaction('caesar')" type="button">
+      <div class="faction-btn-inner">
+        <span class="faction-btn-rome">Populares · XIII Gemina</span>
+        <span class="faction-btn-name">CAESAR</span>
+        <span class="faction-btn-sub">Cayo Julio César · Cónsul en Armas</span>
+      </div>
+    </button>
+    <div class="faction-divider-btn"></div>
+    <button class="faction-btn pompey-btn" id="btn-pompey" onclick="switchFaction('pompey')" type="button">
+      <div class="faction-btn-inner">
+        <span class="faction-btn-rome">Optimates · Defensor del Senado</span>
+        <span class="faction-btn-name">POMPEIVS</span>
+        <span class="faction-btn-sub">Cneo Pompeyo Magno · Protector de la República</span>
+      </div>
+    </button>
+  </div>
+</section>
+
+<section id="section-caesar" class="faction-section active">
+
+  <div class="fsec-header">
+    <img class="fsec-eagle"
+         src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Aquila.svg/200px-Aquila.svg.png"
+         alt="Aquila"
+         onerror="this.style.display='none'">
+    <div class="fsec-label caesar-c">Populares · Conquistador de la Galia</div>
+    <h2 class="fsec-name caesar-c">Cayo Julio César</h2>
+    <div class="fsec-title-sub caesar-c">Líder de los Populares · Conquistador de la Galia · Padre de la Legión Gemina</div>
+    <div class="fsec-hdivider caesar-div"></div>
+  </div>
+
+  <div class="fsec-portrait-row rv">
+    <div class="fsec-portrait-frame">
+      <div class="marco-quemado">
+        <img class="portrait-img"
+             src="static/Cesar.png"
+             alt="Cayo Julio César">
+        <div class="portrait-caption">Cayo Julio César · 100 – 44 A.C.</div>
+      </div>
+      <div class="portrait-frame-deco">
+        <span class="frame-deco-text">Veni, Vidi, Vici</span>
+        <span class="frame-deco-text" style="color:rgba(139,26,26,0.5)">Populares</span>
+      </div>
+    </div>
+
+    <div class="fsec-text-col">
+      <div class="fsec-quote-block caesar-quote-b rv d1">
+        <div class="quote-inner">
+          El Senado, cegado por el miedo y la envidia, ha exigido que entregues el mando
+          de tus legiones y regreses a Roma como un ciudadano desarmado. Sabes lo que eso significa:
+          juicio, exilio o muerte. Pero tus veteranos de la <strong>XIII Legión, la Legión Gemina</strong>,
+          te son leales a ti, no a políticos corruptos.
+        </div>
+      </div>
+      <p class="fsec-body-text rv d2">
+        <strong>Has cruzado el Rubicón.</strong> La ley se ha roto, pero la justicia exige que marches
+        sobre Roma para restaurar el orden y proteger los derechos del pueblo y de tus soldados.
+        Las fuerzas de Pompeyo huyen, pero la guerra no ha hecho más que empezar.
+        Los truenos resuenan; <strong>Júpiter está de tu lado.</strong>
+      </p>
+      <p class="fsec-body-text rv d3">
+        Diez años de campaña en la Galia han forjado de tus legiones la máquina de guerra más
+        temida del mundo conocido. Tus hombres han marchado desde las orillas del Rin hasta
+        las costas de Britania. Han soportado el hambre, el frío, la emboscada. Y hoy, cuando
+        Roma los llama traidores, te siguen a ti —no al Senado— porque tú eres su
+        <strong>general, su padre, su Roma</strong>.
+      </p>
+      <div class="fsec-tactical-label caesar-tc rv d4">Situación Táctica Actual</div>
+      <p class="fsec-body-text rv d4">
+        La XIII Legión avanza sin oposición seria. Pompeyo ha abandonado Roma, proclamando
+        que la ciudad es indefendible. Sus fuerzas se retiran hacia Brindisi, donde prepara
+        la evacuación hacia Grecia. Cada ciudad que dejas atrás se rinde o cae.
+        El tiempo juega a tu favor: si cortas el escape de Pompeyo, esta guerra acaba antes
+        de comenzar en serio.
+      </p>
+    </div>
+  </div>
+
+  <div class="map-section rv">
+    <h3 class="map-title">Escenario Táctico: Galia e Italia</h3>
+    <div class="map-container">
+      <svg class="map-svg" viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+        <path class="map-land" d="M -50,50 L 250,80 L 350,200 L 450,250 L 550,400 L 500,450 L 400,380 L 300,280 L 150,300 L 50,250 Z" />
+      </svg>
+      <div class="hotspot" style="top: 180px; left: 330px;">
+        <div class="map-tooltip">
+          <div class="tooltip-title">El Rubicón</div>
+          <div class="tooltip-desc">El río fronterizo. Al cruzarlo, César declaró formalmente la guerra a la República.</div>
+        </div>
+      </div>
+      <div class="hotspot" style="top: 250px; left: 400px;">
+        <div class="map-tooltip">
+          <div class="tooltip-title">Roma</div>
+          <div class="tooltip-desc">La capital evacuada. El tesoro público quedó atrás tras la apresurada huida del Senado.</div>
+        </div>
+      </div>
+      <div class="hotspot" style="top: 150px; left: 150px;">
+        <div class="map-tooltip">
+          <div class="tooltip-title">Galia (Reserva)</div>
+          <div class="tooltip-desc">Las 10 legiones veteranas de César esperan la orden de marchar hacia el sur.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fsec-info-grid rv">
+    <div class="fsec-info-card caesar-info-card">
+      <div class="info-card-num">XI</div>
+      <div class="info-card-lbl">Legiones bajo mando</div>
+    </div>
+    <div class="fsec-info-card caesar-info-card">
+      <div class="info-card-num">Roma</div>
+      <div class="info-card-lbl">Objetivo inmediato</div>
+    </div>
+    <div class="fsec-info-card caesar-info-card">
+      <div class="info-card-num">POPVLVS</div>
+      <div class="info-card-lbl">Facción política</div>
+    </div>
+  </div>
+
+  <div class="fsec-landmark rv">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/1280px-Colosseo_2020.jpg"
+         alt="Coliseo Romano"
+         onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Colosseum_in_Rome%2C_Italy_-_April_2007.jpg/1280px-Colosseum_in_Rome%2C_Italy_-_April_2007.jpg'; this.onerror=null;">
+    <div class="landmark-overlay">
+      <div class="landmark-title">Roma Aeterna</div>
+      <div class="landmark-sub">
+        La Ciudad Eterna aguarda a su nuevo amo. Las calles están vacías,
+        el Senado huido, los templos silenciosos. Solo los ecos de las legiones
+        que se aproximan resuenan entre sus piedras milenarias.
+      </div>
+    </div>
+  </div>
+
+  <div class="fsec-context-grid rv">
+    <div class="context-card caesar-ctx">
+      <div class="ctx-label caesar-tc">Orden de Batalla</div>
+      <div class="ctx-title">La Legión que Cruzó el Rubicón</div>
+      <div class="ctx-body">
+        La XIII Legión Gemina es la punta de lanza de César. Veteranos de diez años de guerras galas,
+        son hombres de hierro que han visto caer reinos enteros. Su lealtad es absoluta, su disciplina
+        legendaria. Cada soldado lleva grabado en el escudo el aguila de César —no la del Senado—.
+        Detras de ellos, otras diez legiones se preparan para cruzar los Alpes y descender sobre
+        la península itálica como una tormenta de acero.
+      </div>
+    </div>
+    <div class="context-card caesar-ctx">
+      <div class="ctx-label caesar-tc">Apoyo Popular</div>
+      <div class="ctx-title">El Pueblo Clama por César</div>
+      <div class="ctx-body">
+        En Roma, la plebe recuerda quién construyó el Foro Iulium, quién redujo el precio del trigo,
+        quién los entretuvo con los más grandes espectáculos de gladiadores jamás vistos.
+        Los Populares —el partido de los humildes, de los veteranos sin tierra— ven en César
+        al hombre que romperá el dominio eterno de los aristócratas que llevan siglos
+        vaciando las arcas de la República en beneficio propio.
+      </div>
+    </div>
+    <div class="context-card caesar-ctx">
+      <div class="ctx-label caesar-tc">El Cruce del Rubicón</div>
+      <div class="ctx-title">Alea Iacta Est — La Suerte Está Echada</div>
+      <div class="ctx-body">
+        El río Rubicón marcaba el límite sagrado: ningún general con mando sobre tropas
+        podía cruzarlo sin deponer su cargo. Al franquearlo con la XIII Legión en la madrugada
+        del 10 de enero del 49 A.C., César declaró la guerra al Estado romano.
+        Según se dice, se detuvo ante las aguas, vaciló largo tiempo, y pronunció
+        las palabras que cambiarían el mundo: <em>Alea iacta est</em>. La suerte está echada.
+      </div>
+    </div>
+    <div class="context-card caesar-ctx">
+      <div class="ctx-label caesar-tc">Alianzas y Recursos</div>
+      <div class="ctx-title">El Tesoro de la Galia</div>
+      <div class="ctx-body">
+        Diez años de conquistas en la Galia han llenado las arcas de César de oro galo y botín
+        de guerra incalculable. Sus veteranos son tierra prometida: César les ha jurado tierras,
+        dinero y honores al final de la campaña. Cuenta además con la simpatía de los gobernadores
+        de las provincias occidentales y el apoyo creciente de los tribunos de la plebe en Roma.
+      </div>
+    </div>
+  </div>
+
+  <div class="fsec-img-strip rv">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Trajan%27s_Column_Rome_2014.jpg/800px-Trajan%27s_Column_Rome_2014.jpg"
+         alt="Columna de Trajano"
+         onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Forum_romanum_6k_%285765477647%29.jpg/1200px-Forum_romanum_6k_%285765477647%29.jpg'; this.onerror=null;">
+    <div class="fsec-img-caption">Columna Traiana · Roma Aeterna</div>
+    <div class="fsec-img-title">Las Marchas de la Legión</div>
+  </div>
+<div class="ruina-cifrada caesar-ruin rv">
+    <div class="ruina-title">Fragmento Interceptado · Cifrado Imperial</div>
+    <div class="ruina-content">
+      <span class="cipher-text">"FUXCDG HO UXELFRQ DO DPDQHFHU. URPD LQYLFWD."</span>
+      <span class="plain-text">"CRUZAD EL RUBICON AL AMANECER. ROMA INVICTA."</span>
+    </div>
+    <div class="ruina-hint">Mensaje cifrado con desplazamiento de tres. (Pasa el cursor para desencriptar)</div>
+  </div>
+  <div class="fsec-quote-block caesar-quote-b rv" style="max-width:800px;margin:0 auto 60px;border:1px solid rgba(139,26,26,0.15);background:rgba(139,26,26,0.04);">
+    <div class="quote-inner" style="font-size:1.15rem;text-align:center;">
+      "Los truenos resuenan; Júpiter está de tu lado. Veinticinco mil hombres marchan bajo
+      tu aquila. La República no te abandonó — la República <em>eres tú</em>."
+    </div>
+    <div style="text-align:right;margin-top:14px;font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.3em;color:var(--copper);opacity:0.6;">
+      — Proclama a la XIII Legión · 49 A.C.
+    </div>
+  </div>
+
+  <div class="alto-mando-section" style="background:rgba(139,26,26,0.04);border-color:rgba(139,26,26,0.2);">
+    <div class="alto-mando-header">
+      <div class="am-label">Facción Cesariana</div>
+      <div class="am-title">Alto Mando</div>
+      <div class="am-divider"></div>
+      <div class="am-sub">Los magistrados que guían la deliberación de la Guerra Civil</div>
+    </div>
+    <div class="am-cards-grid">
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front">
+            <div class="flip-corner tl"></div><div class="flip-corner tr"></div>
+            <div class="flip-corner bl"></div><div class="flip-corner br"></div>
+            <div class="flip-icon">I</div>
+            <div class="flip-role">Presidente de Mesa</div>
+            <div class="flip-desc">Magistrado supremo de la deliberación. Preside el comité con la autoridad del Senado.</div>
+            <div class="flip-hint">· Toca para revelar ·</div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="flip-corner tl"></div><div class="flip-corner tr"></div>
+            <div class="flip-corner bl"></div><div class="flip-corner br"></div>
+            <div class="flip-name">Por Confirmar</div>
+            <div class="flip-back-role">Presidente de Mesa</div>
+            <div class="flip-back-desc">Dirige los debates, concede la palabra y mantiene el orden en la sala de deliberación.</div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front">
+            <div class="flip-corner tl"></div><div class="flip-corner tr"></div>
+            <div class="flip-corner bl"></div><div class="flip-corner br"></div>
+            <div class="flip-icon">II</div>
+            <div class="flip-role">Vicepresidente de Mesa</div>
+            <div class="flip-desc">Auxilia al Presidente. Gestiona el protocolo y el flujo de la deliberación.</div>
+            <div class="flip-hint">· Toca para revelar ·</div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="flip-corner tl"></div><div class="flip-corner tr"></div>
+            <div class="flip-corner bl"></div><div class="flip-corner br"></div>
+            <div class="flip-name">Por Confirmar</div>
+            <div class="flip-back-role">Vicepresidente de Mesa</div>
+            <div class="flip-back-desc">Apoya la conducción del debate y coordina los procedimientos parlamentarios del comité.</div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front">
+            <div class="flip-corner tl"></div><div class="flip-corner tr"></div>
+            <div class="flip-corner bl"></div><div class="flip-corner br"></div>
+            <div class="flip-icon">III</div>
+            <div class="flip-role">Crisis Staff</div>
+            <div class="flip-desc">Los arquitectos de la crisis. Inyectan noticias, giros y decisiones que cambian el rumbo del comité.</div>
+            <div class="flip-hint">· Toca para revelar ·</div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="flip-corner tl"></div><div class="flip-corner tr"></div>
+            <div class="flip-corner bl"></div><div class="flip-corner br"></div>
+            <div class="flip-name">Por Confirmar</div>
+            <div class="flip-back-role">Crisis Staff</div>
+            <div class="flip-back-desc">Diseñan y ejecutan los injects de crisis, controlando la narrativa del comité en tiempo real.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<section id="section-pompey" class="faction-section">
+
+  <div class="fsec-header">
+    <img class="fsec-eagle"
+         src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Aquila.svg/200px-Aquila.svg.png"
+         alt="Aquila"
+         onerror="this.style.display='none'"
+         style="filter:sepia(0) brightness(0.7) saturate(0.3);">
+    <div class="fsec-label pompey-c">Optimates · Defensor del Senado de Roma</div>
+    <h2 class="fsec-name pompey-c">Cneo Pompeyo Magno</h2>
+    <div class="fsec-title-sub pompey-c">Defensor de los Optimates · Campeón del Senado · Tres veces Cónsul</div>
+    <div class="fsec-hdivider pompey-div"></div>
+  </div>
+
+  <div class="fsec-portrait-row rv">
+    <div class="fsec-portrait-frame">
+      <div class="marco-quemado" style="border-color: rgba(90,100,160,0.3);">
+        <img class="portrait-img"
+             src="static/Pompeyo.png"
+             alt="Cneo Pompeyo Magno"
+             style="filter:sepia(0.5) contrast(1.05) brightness(0.82) hue-rotate(200deg) saturate(0.4);">
+        <div class="portrait-caption" style="color:rgba(140,155,210,0.9);">Cneo Pompeyo Magno · 106 – 48 A.C.</div>
+      </div>
+      <div class="portrait-frame-deco" style="border-color:rgba(90,100,160,0.2);">
+        <span class="frame-deco-text">Magnus · Tres Triunfos</span>
+        <span class="frame-deco-text" style="color:rgba(90,100,160,0.5)">Optimates</span>
+      </div>
+    </div>
+
+    <div class="fsec-text-col">
+      <div class="fsec-quote-block pompey-quote-b rv d1" style="border-left:3px solid transparent;background:rgba(90,100,160,0.04);">
+        <style>.pompey-quote-b::before{background:linear-gradient(to bottom,transparent,rgba(140,155,210,0.8),transparent)!important;}</style>
+        <div class="quote-inner">
+          César ha traicionado a la República. Al cruzar el río con su ejército,
+          ha declarado la guerra a las instituciones sagradas de Roma. El Senado aterrorizado
+          te ha otorgado poderes extraordinarios para proteger la ciudad, pero sabes que
+          estratégicamente, <strong style="color:rgba(180,195,240,0.9);">Roma es indefendible en este momento.</strong>
+        </div>
+      </div>
+      <p class="fsec-body-text rv d2" style="color:rgba(180,190,220,0.7);">
+        Has ordenado la retirada hacia Grecia para consolidar tus fuerzas orientales y
+        cortar los suministros a la península itálica. <strong style="color:rgba(200,210,240,0.9);">Eres el salvador de la República,</strong>
+        y bajo las columnas del Senado, has jurado destruir al tirano. La ley, la tradición
+        y los dioses antiguos exigen la cabeza de César.
+      </p>
+      <p class="fsec-body-text rv d3" style="color:rgba(180,190,220,0.7);">
+        Tus tres triunfos te han consagrado <strong style="color:rgba(200,210,240,0.9);">"Magnus"</strong> —el Grande—.
+        Venciste a Sertorio en Hispania, aplastaste la rebelión de Espartaco junto a Craso,
+        barriste a los piratas del Mediterráneo y conquistaste el Oriente hasta los confines
+        del mundo conocido. Reyes y senadores te deben el trono. Pero hoy, por primera vez
+        en tu vida, retrocedes. Y esa decisión definirá tu legado.
+      </p>
+      <div class="fsec-tactical-label pompey-tc rv d4">Estrategia de Retirada</div>
+      <p class="fsec-body-text rv d4" style="color:rgba(180,190,220,0.7);">
+        La retirada hacia Brindisi no es cobardía: es estrategia. En Grecia y el Oriente
+        tienes nueve legiones, las flotas más poderosas del Mediterráneo y el apoyo de
+        docenas de reyes clientes. Cuando regreses, regresarás con un ejército que
+        aplastará la aventura de César como se aplasta una serpiente bajo el talón de Roma.
+      </p>
+    </div>
+  </div>
+
+  <div class="map-section rv">
+    <h3 class="map-title" style="color: #aebce0;">Escenario Táctico: Grecia y el Adriático</h3>
+    <div class="map-container" style="border-color: #2b334a;">
+      <svg class="map-svg" viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+        <path class="map-land" d="M 250,-50 L 300,100 L 450,250 L 400,350 L 500,450 L 650,450 L 700,300 L 600,150 L 750,-50 Z" />
+        <path class="map-land" d="M 350,400 L 400,380 L 430,450 L 380,480 Z" /> </svg>
+      <div class="hotspot pompey-point" style="top: 250px; left: 450px;">
+        <div class="map-tooltip">
+          <div class="tooltip-title">Dirraquio</div>
+          <div class="tooltip-desc">Puerto vital en el Epiro. Punto de desembarco del Senado y cuartel general de Pompeyo.</div>
+        </div>
+      </div>
+      <div class="hotspot pompey-point" style="top: 150px; left: 250px;">
+        <div class="map-tooltip">
+          <div class="tooltip-title">Brundisium (Italia)</div>
+          <div class="tooltip-desc">El último puerto itálico antes del asedio. La flota republicana controla el estrecho.</div>
+        </div>
+      </div>
+      <div class="hotspot pompey-point" style="top: 350px; left: 550px;">
+        <div class="map-tooltip">
+          <div class="tooltip-title">Farsalia (Llanuras)</div>
+          <div class="tooltip-desc">Terreno óptimo para la aplastante caballería optimate. Se presagia una batalla decisiva.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fsec-info-grid rv">
+    <div class="fsec-info-card pompey-info-card" style="border-color:rgba(90,100,160,0.2);">
+      <style>.pompey-info-card::before{background:linear-gradient(90deg,transparent,rgba(140,155,210,0.7),transparent)!important;}</style>
+      <div class="info-card-num" style="color:rgba(180,195,240,0.8);">IX</div>
+      <div class="info-card-lbl">Legiones en Oriente</div>
+    </div>
+    <div class="fsec-info-card pompey-info-card" style="border-color:rgba(90,100,160,0.2);">
+      <div class="info-card-num" style="color:rgba(180,195,240,0.8);">Epiro</div>
+      <div class="info-card-lbl">Cuartel General</div>
+    </div>
+    <div class="fsec-info-card pompey-info-card" style="border-color:rgba(90,100,160,0.2);">
+      <div class="info-card-num" style="color:rgba(180,195,240,0.8);">SPQR</div>
+      <div class="info-card-lbl">Legitimidad Senatorial</div>
+    </div>
+  </div>
+
+  <div class="fsec-landmark rv fsec-portrait-senado" style="border-color:rgba(90,100,160,0.15);">
+    <img src="static/Senado.jpg"
+         alt="Curia Iulia — Senado Romano"
+         style="filter:sepia(0.4) contrast(1.1) brightness(0.5) hue-rotate(200deg) saturate(0.6); width: 100%; height: auto; object-fit: cover;"
+         onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/1280px-Colosseo_2020.jpg'; this.onerror=null;">
+    <div class="landmark-overlay">
+      <div class="landmark-title" style="color:rgba(180,195,240,0.8);">Curia Iulia — El Senado de Roma</div>
+      <div class="landmark-sub" style="color:rgba(170,185,220,0.55);">
+        Las columnas del Senado son la voz de la civilización. Pompeyo jura ante ellas:
+        regresará, y con él la ley, el orden y la República Romana que César pretende enterrar.
+      </div>
+    </div>
+  </div>
+
+  <div class="fsec-context-grid rv">
+    <div class="context-card" style="border-color:rgba(90,100,160,0.12);">
+      <div class="ctx-label pompey-tc">Legitimidad Legal</div>
+      <div class="ctx-title" style="color:rgba(200,210,240,0.9);">El Senado Habla por Roma</div>
+      <div class="ctx-body" style="color:rgba(170,185,220,0.6);">
+        El Senatus Consultum Ultimum es la máxima autoridad de la República: una orden
+        de emergencia que exige a todo ciudadano tomar las armas para defender el Estado.
+        Pompeyo no es un rebelde —es el instrumento de la ley contra el tirano que la ha violado.
+        Todos los magistrados legítimos, los ex-cónsules, los senadores: su bando
+        es el de la constitución de Roma.
+      </div>
+    </div>
+    <div class="context-card" style="border-color:rgba(90,100,160,0.12);">
+      <div class="ctx-label pompey-tc">El Poder Naval</div>
+      <div class="ctx-title" style="color:rgba(200,210,240,0.9);">Señor del Mediterráneo</div>
+      <div class="ctx-body" style="color:rgba(170,185,220,0.6);">
+        Pompeyo tiene la marina más grande del mundo romano. Fue él quien limpió el
+        Mediterráneo de piratas en tan solo cuarenta y nueve días. Ahora puede usar ese
+        poder para aislar a Italia, cortar los suministros de grano de Sicilia y África,
+        y asfixiar a César sin disparar un solo proyectil de ballesta.
+      </div>
+    </div>
+    <div class="context-card" style="border-color:rgba(90,100,160,0.12);">
+      <div class="ctx-label pompey-tc">Oriente Fiel</div>
+      <div class="ctx-title" style="color:rgba(200,210,240,0.9);">Reyes Clientes de Pompeyo</div>
+      <div class="ctx-body" style="color:rgba(170,185,220,0.6);">
+        Desde Siria hasta Bitinia, docenas de reyes y tetrarcas deben su trono
+        a Pompeyo Magno. Los reinos de Ptolemeo en Egipto, el rey de Capadocia,
+        los príncipes armenios: todos enviarán tropas, dinero y grano cuando Pompeyo
+        llame. César puede controlar Italia, pero Pompeyo controla el mundo.
+      </div>
+    </div>
+    <div class="context-card" style="border-color:rgba(90,100,160,0.12);">
+      <div class="ctx-label pompey-tc">La Retirada Estratégica</div>
+      <div class="ctx-title" style="color:rgba(200,210,240,0.9);">Brindisi — El Puerto de la Salvación</div>
+      <div class="ctx-body" style="color:rgba(170,185,220,0.6);">
+        Brindisi es el talón de la bota italiana: el último puerto antes de Grecia.
+        Pompeyo concentra aquí sus fuerzas para el cruce al Epiro. César lo sabe
+        y marcha a toda velocidad para cerrar la trampa. Pero los barcos están listos.
+        Si Pompeyo llega a tiempo, la guerra cambiará de escenario y, con ella, toda la suerte.
+      </div>
+    </div>
+  </div>
+
+  <div class="fsec-img-strip rv">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Forum_romanum_6k_%285765477647%29.jpg/1200px-Forum_romanum_6k_%285765477647%29.jpg"
+         alt="Foro Romano"
+         onerror="this.style.background='#0a0c1a';"
+         style="filter:sepia(0.3) contrast(1.1) brightness(0.55) hue-rotate(200deg) saturate(0.5);">
+    <div class="fsec-img-caption">Foro Romano · El corazón de la República</div>
+    <div class="fsec-img-title">La República que Juramos Defender</div>
+  </div>
+<div class="ruina-cifrada pompey-ruin rv">
+    <div class="ruina-title">Epístola Senatorial · Clave Literaria</div>
+    <div class="ruina-content">
+      <span class="cipher-text">"Los vientos exigen el sacrificio de Agamenón antes de partir hacia Ilión."</span>
+      <span class="plain-text">"Quemad los barcos en el puerto de Brundisium antes de la retirada."</span>
+    </div>
+    <div class="ruina-hint">Solo los eruditos de Roma entenderán la referencia... (Pasa el cursor para traducir)</div>
+  </div>
+  <div class="fsec-quote-block rv" style="max-width:800px;margin:0 auto 60px;border:1px solid rgba(90,100,160,0.15);background:rgba(90,100,160,0.04);border-left:3px solid rgba(140,155,210,0.8);">
+    <div class="quote-inner" style="font-size:1.15rem;text-align:center;color:rgba(200,210,240,0.9);">
+      "La ley, la tradición y los dioses antiguos exigen la cabeza de César.
+      Bajo las columnas del Senado, lo hemos jurado. <em>Pro Republica.</em>"
+    </div>
+    <div style="text-align:right;margin-top:14px;font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.3em;color:rgba(140,155,210,0.6);">
+      — Proclama del Senado · 49 A.C.
+    </div>
+  </div>
+  
+
+  <div class="alto-mando-section" style="background:rgba(30,40,80,0.06);border-color:rgba(90,100,160,0.2);">
+    <div class="alto-mando-header">
+      <div class="am-label" style="color:rgba(140,155,210,0.7);">Facción Pompeyana</div>
+      <div class="am-title">Alto Mando</div>
+      <div class="am-divider" style="background:linear-gradient(90deg,transparent,rgba(140,155,210,0.6),transparent);"></div>
+      <div class="am-sub">Los magistrados que guían la deliberación de la Guerra Civil</div>
+    </div>
+    <div class="am-cards-grid">
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="background:linear-gradient(160deg,#0e1224,#080c1a);">
+            <div class="flip-corner tl"></div><div class="flip-corner tr"></div>
+            <div class="flip-corner bl"></div><div class="flip-corner br"></div>
+            <div class="flip-icon" style="color:rgba(140,155,210,0.5);">I</div>
+            <div class="flip-role" style="color:rgba(140,155,210,0.8);">Presidente de Mesa</div>
+            <div class="flip-desc">Magistrado supremo de la deliberación. Preside el comité con la autoridad del Senado.</div>
+            <div class="flip-hint">· Toca para revelar ·</div>
+          </div>
+          <div class="flip-face flip-back" style="background:linear-gradient(160deg,#0c1020,#06090f);">
+            <div class="flip-corner tl"></div><div class="flip-corner tr"></div>
+            <div class="flip-corner bl"></div><div class="flip-corner br"></div>
+            <div class="flip-name">Por Confirmar</div>
+            <div class="flip-back-role" style="color:rgba(140,155,210,0.7);">Presidente de Mesa</div>
+            <div class="flip-back-desc">Dirige los debates, concede la palabra y mantiene el orden en la sala de deliberación.</div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="background:linear-gradient(160deg,#0e1224,#080c1a);">
+            <div class="flip-corner tl"></div><div class="flip-corner tr"></div>
+            <div class="flip-corner bl"></div><div class="flip-corner br"></div>
+            <div class="flip-icon" style="color:rgba(140,155,210,0.5);">II</div>
+            <div class="flip-role" style="color:rgba(140,155,210,0.8);">Vicepresidente de Mesa</div>
+            <div class="flip-desc">Auxilia al Presidente. Gestiona el protocolo y el flujo de la deliberación.</div>
+            <div class="flip-hint">· Toca para revelar ·</div>
+          </div>
+          <div class="flip-face flip-back" style="background:linear-gradient(160deg,#0c1020,#06090f);">
+            <div class="flip-corner tl"></div><div class="flip-corner tr"></div>
+            <div class="flip-corner bl"></div><div class="flip-corner br"></div>
+            <div class="flip-name">Por Confirmar</div>
+            <div class="flip-back-role" style="color:rgba(140,155,210,0.7);">Vicepresidente de Mesa</div>
+            <div class="flip-back-desc">Apoya la conducción del debate y coordina los procedimientos parlamentarios del comité.</div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-face flip-front" style="background:linear-gradient(160deg,#0e1224,#080c1a);">
+            <div class="flip-corner tl"></div><div class="flip-corner tr"></div>
+            <div class="flip-corner bl"></div><div class="flip-corner br"></div>
+            <div class="flip-icon" style="color:rgba(140,155,210,0.5);">III</div>
+            <div class="flip-role" style="color:rgba(140,155,210,0.8);">Crisis Staff</div>
+            <div class="flip-desc">Los arquitectos de la crisis. Inyectan noticias, giros y decisiones que cambian el rumbo del comité.</div>
+            <div class="flip-hint">· Toca para revelar ·</div>
+          </div>
+          <div class="flip-face flip-back" style="background:linear-gradient(160deg,#0c1020,#06090f);">
+            <div class="flip-corner tl"></div><div class="flip-corner tr"></div>
+            <div class="flip-corner bl"></div><div class="flip-corner br"></div>
+            <div class="flip-name">Por Confirmar</div>
+            <div class="flip-back-role" style="color:rgba(140,155,210,0.7);">Crisis Staff</div>
+            <div class="flip-back-desc">Diseñan y ejecutan los injects de crisis, controlando la narrativa del comité en tiempo real.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<footer>
+  <div class="foot-spqr">SPQR · SVPMUN MMXXVI</div>
+  <div class="foot-rule"></div>
+  <div class="foot-copy">© 2026 SVPMUN · Comité de Crisis · Segunda Guerra Civil Romana</div>
+</footer>
+
+<script>
+/* ══════════════════════════════════════
+   LOADER
+══════════════════════════════════════ */
+(function(){
+  const statusMsgs = [
+    'Convocando al Senado...',
+    'Las águilas marchan desde el Rubicón...',
+    'Pompeyo ordena la retirada...',
+    'César cruza el Apenino...',
+    'Los dioses preparan su veredicto...',
+    'La República entra en crisis...',
+    'Alea iacta est — La suerte está echada'
+  ];
+  const marks = document.querySelectorAll('.tally-mark');
+  const statusEl = document.getElementById('loader-status');
+  let step = 0;
+  const total = marks.length;
+
+  function advance() {
+    if (step < total) {
+      marks[step].classList.add('lit');
+      step++;
+      if (statusMsgs[Math.floor(step * statusMsgs.length / total)]) {
+        statusEl.textContent = statusMsgs[Math.floor(step * statusMsgs.length / total)];
+      }
+    }
+    if (step < total) {
+      setTimeout(advance, 280 + Math.random() * 180);
+    } else {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hide');
+        setTimeout(()=>{ document.getElementById('loader').style.display='none'; }, 1400);
+      }, 600);
+    }
+  }
+  setTimeout(advance, 600);
+})();
+
+/* ══════════════════════════════════════
+   ASH PARTICLE SYSTEM (MEJORADO A FUEGO)
+══════════════════════════════════════ */
+(function(){
+  const canvas = document.getElementById('ash-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function Particle() {
+    this.reset();
+  }
+  Particle.prototype.reset = function() {
+    this.x = Math.random() * W;
+    this.y = H + 10;
+    this.vy = -(0.8 + Math.random() * 2.5);
+    this.vx = (Math.random() - 0.5) * 0.8;
+    this.size = 1.5 + Math.random() * 4;
+    this.alpha = 0;
+    this.maxAlpha = 0.5 + Math.random() * 0.5;
+    this.life = 0;
+    this.maxLife = 150 + Math.random() * 250;
+    
+    const r = 255;
+    const g = Math.floor(Math.random() * 120 + 50); 
+    const b = Math.floor(Math.random() * 20);
+    this.color = `rgb(${r},${g},${b})`;
+    
+    this.wobble = Math.random() * Math.PI * 2;
+  };
+  Particle.prototype.update = function() {
+    this.life++;
+    this.wobble += 0.04;
+    this.x += this.vx + Math.sin(this.wobble) * 0.5;
+    this.y += this.vy;
+    const prog = this.life / this.maxLife;
+    if (prog < 0.2) this.alpha = (prog / 0.2) * this.maxAlpha;
+    else if (prog > 0.7) this.alpha = ((1 - prog) / 0.3) * this.maxAlpha;
+    else this.alpha = this.maxAlpha;
+    if (this.life >= this.maxLife || this.y < -20) this.reset();
+  };
+  Particle.prototype.draw = function() {
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = this.color;
+    ctx.shadowBlur = 12;
+    ctx.shadowColor = this.color;
+    
+    ctx.beginPath();
+    ctx.ellipse(this.x, this.y, this.size, this.size * 0.6, this.wobble, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  };
+
+  for (let i = 0; i < 35; i++) {
+    const p = new Particle();
+    p.life = Math.random() * p.maxLife; 
+    p.y = H - Math.random() * H;
+    particles.push(p);
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+/* ══════════════════════════════════════
+   CRISIS COUNTDOWN LOGIC
+══════════════════════════════════════ */
+(function() {
+  // Establece la fecha de la simulación: 1 de Junio de 2026 (Puedes cambiarla)
+  const countDownDate = new Date("Jun 1, 2026 09:00:00").getTime();
+
+  const timer = setInterval(function() {
+    const now = new Date().getTime();
+    const distance = countDownDate - now;
+
+    if (distance < 0) {
+      clearInterval(timer);
+      document.getElementById("crisis-countdown").innerHTML = "00 : 00 : 00 : 00";
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    const fDays = days < 10 ? "0" + days : days;
+    const fHours = hours < 10 ? "0" + hours : hours;
+    const fMins = minutes < 10 ? "0" + minutes : minutes;
+    const fSecs = seconds < 10 ? "0" + seconds : seconds;
+
+    document.getElementById("crisis-countdown").innerHTML = 
+      `${fDays} : ${fHours} : ${fMins} : ${fSecs}`;
+  }, 1000);
+})();
+
+/* ══════════════════════════════════════
+   FACTION TOGGLE + TEXTURE CHANGE
+══════════════════════════════════════ */
+function switchFaction(faction) {
+  // Ocultar todas las secciones
+  document.querySelectorAll('.faction-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.faction-btn').forEach(b => b.classList.remove('active'));
+  
+  // Mostrar la sección activa
+  document.getElementById('section-' + faction).classList.add('active');
+  document.getElementById('btn-' + faction).classList.add('active');
+  
+  // Lógica del Cronómetro Celestial (Cambiar Clase Textura)
+  const countdownEl = document.getElementById('crisis-countdown');
+  if(faction === 'caesar') {
+      countdownEl.classList.remove('pompey-time');
+      countdownEl.classList.add('caesar-time');
+  } else {
+      countdownEl.classList.remove('caesar-time');
+      countdownEl.classList.add('pompey-time');
+  }
+
+  setTimeout(() => {
+    document.querySelectorAll('#section-' + faction + ' .rv:not(.on)').forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.92) el.classList.add('on');
+    });
+  }, 80);
+  document.getElementById('section-' + faction).scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+/* ══════════════════════════════════════
+   PAGE TRANSITION CURTAIN
+══════════════════════════════════════ */
+(function(){
+  const curtain = document.createElement('div');
+  curtain.id = 'curtain';
+  curtain.style.cssText = 'position:fixed;inset:0;z-index:9998;pointer-events:none;display:flex;';
+  curtain.innerHTML =
+    '<div class="c-half L" style="flex:1;height:100%;background:#0d0a06;transform:scaleX(0);transform-origin:left;"></div>'+
+    '<div class="c-half R" style="flex:1;height:100%;background:#0d0a06;transform:scaleX(0);transform-origin:right;"></div>';
+  document.body.prepend(curtain);
+  const s = document.createElement('style');
+  s.textContent = `
+    body.entering .c-half.L{animation:cOpenL .65s cubic-bezier(.77,0,.18,1) forwards;}
+    body.entering .c-half.R{animation:cOpenR .65s cubic-bezier(.77,0,.18,1) .05s forwards;}
+    body.exiting  .c-half.L{animation:cCloseL .45s cubic-bezier(.77,0,.18,1) forwards;}
+    body.exiting  .c-half.R{animation:cCloseR .45s cubic-bezier(.77,0,.18,1) .04s forwards;}
+    @keyframes cOpenL{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+    @keyframes cOpenR{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+    @keyframes cCloseL{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+    @keyframes cCloseR{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  `;
+  document.head.appendChild(s);
+  document.body.classList.add('entering');
+  window.navigateTo = function(url){
+    document.body.classList.remove('entering');
+    document.body.classList.add('exiting');
+    document.getElementById('curtain').style.pointerEvents='all';
+    setTimeout(()=>{window.location.href=url;},520);
+  };
+})();
+
+/* ══════════════════════════════════════
+   NAVBAR TOGGLE
+══════════════════════════════════════ */
+let navOpen = false;
+function toggleNav(){
+  navOpen = !navOpen;
+  const bar=document.getElementById('nav-bar');
+  const overlay=document.getElementById('nav-overlay');
+  const icon=document.getElementById('nbIcon');
+  bar.classList.toggle('menu-open',navOpen);
+  overlay.classList.toggle('open',navOpen);
+  icon.classList.toggle('open',navOpen);
+  document.body.style.overflow=navOpen?'hidden':'';
+  if(!navOpen){
+    document.getElementById('nvo-comites-sub').classList.remove('open');
+    document.getElementById('nvo-comites-trigger').classList.remove('sub-open');
+  }
+}
+function toggleComites(){
+  const sub=document.getElementById('nvo-comites-sub');
+  const trigger=document.getElementById('nvo-comites-trigger');
+  sub.classList.toggle('open');
+  trigger.classList.toggle('sub-open');
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&navOpen)toggleNav();});
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav-bar').classList.toggle('scrolled',window.scrollY>40);
+});
+
+/* ══════════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════════ */
+const revealObserver = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('on'); });
+},{threshold:0.08});
+document.querySelectorAll('.rv').forEach(el=>revealObserver.observe(el));
+</script>
+</body>
+</html>

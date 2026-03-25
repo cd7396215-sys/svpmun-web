@@ -1,0 +1,82 @@
+<!-- ══ TRANSITION CURTAIN — pegar justo antes de </body> en index.html ══ -->
+
+<!-- 1. Agregar este HTML justo después del <body> opening tag -->
+<!--
+<div id="curtain" style="position:fixed;inset:0;z-index:9999;pointer-events:none;display:flex;">
+  <div id="cL" style="flex:1;height:100%;background:#071630;transform:scaleX(0);transform-origin:left;"></div>
+  <div id="cR" style="flex:1;height:100%;background:#071630;transform:scaleX(0);transform-origin:right;"></div>
+</div>
+-->
+
+<!-- 2. Agregar este CSS dentro del <style> de index.html -->
+<!--
+#curtain { position:fixed; inset:0; z-index:9999; pointer-events:none; display:flex; }
+.c-half   { flex:1; height:100%; background:#071630; transform:scaleX(0); }
+.c-half.L { transform-origin:left; }
+.c-half.R { transform-origin:right; }
+body.entering .c-half.L { animation: cOpenL 0.65s cubic-bezier(0.77,0,0.18,1) forwards; }
+body.entering .c-half.R { animation: cOpenR 0.65s cubic-bezier(0.77,0,0.18,1) 0.05s forwards; }
+body.exiting  .c-half.L { animation: cCloseL 0.45s cubic-bezier(0.77,0,0.18,1) forwards; }
+body.exiting  .c-half.R { animation: cCloseR 0.45s cubic-bezier(0.77,0,0.18,1) 0.04s forwards; }
+@keyframes cOpenL  { from{transform:scaleX(1)} to{transform:scaleX(0)} }
+@keyframes cOpenR  { from{transform:scaleX(1)} to{transform:scaleX(0)} }
+@keyframes cCloseL { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+@keyframes cCloseR { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+-->
+
+<!-- 3. Reemplazar el script del onclick de galería en index.html con esto:
+     En la función toggleNav() ya existente, NO cambies nada.
+     Solo agrega este nuevo script al final del <script> existente:
+-->
+<script>
+/* ══ PAGE TRANSITIONS for index.html ══ */
+
+// HTML del curtain — agregar al inicio del body manualmente:
+// <div id="curtain" style="..."> etc.
+// O bien insértalo dinámicamente:
+(function() {
+  // Inject curtain
+  const curtain = document.createElement('div');
+  curtain.id = 'curtain';
+  curtain.style.cssText = 'position:fixed;inset:0;z-index:9999;pointer-events:none;display:flex;';
+  curtain.innerHTML =
+    '<div class="c-half L" style="flex:1;height:100%;background:#071630;transform:scaleX(0);transform-origin:left;"></div>' +
+    '<div class="c-half R" style="flex:1;height:100%;background:#071630;transform:scaleX(0);transform-origin:right;"></div>';
+  document.body.prepend(curtain);
+
+  // Inject styles
+  const style = document.createElement('style');
+  style.textContent = `
+    body.entering .c-half.L { animation: cOpenL 0.65s cubic-bezier(0.77,0,0.18,1) forwards; }
+    body.entering .c-half.R { animation: cOpenR 0.65s cubic-bezier(0.77,0,0.18,1) 0.05s forwards; }
+    body.exiting  .c-half.L { animation: cCloseL 0.45s cubic-bezier(0.77,0,0.18,1) forwards; }
+    body.exiting  .c-half.R { animation: cCloseR 0.45s cubic-bezier(0.77,0,0.18,1) 0.04s forwards; }
+    @keyframes cOpenL  { from{transform:scaleX(1)} to{transform:scaleX(0)} }
+    @keyframes cOpenR  { from{transform:scaleX(1)} to{transform:scaleX(0)} }
+    @keyframes cCloseL { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+    @keyframes cCloseR { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+  `;
+  document.head.appendChild(style);
+
+  // Enter animation on load
+  document.body.classList.add('entering');
+
+  // Navigate with exit transition
+  window.navigateTo = function(url) {
+    document.body.classList.remove('entering');
+    document.body.classList.add('exiting');
+    document.getElementById('curtain').style.pointerEvents = 'all';
+    setTimeout(() => { window.location.href = url; }, 520);
+  };
+
+  // Override the galeria nvo-item onclick
+  // Find the item and rewire it
+  document.addEventListener('DOMContentLoaded', () => {
+    const galeriaItem = document.querySelector('.nvo-item[onclick]');
+    if (galeriaItem) {
+      galeriaItem.removeAttribute('onclick');
+      galeriaItem.addEventListener('click', () => navigateTo('/galeria'));
+    }
+  });
+})();
+</script>

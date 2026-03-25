@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SVPMUN — Conoce más de nosotros</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:      #050d1a; 
+      --navy-mid:  #0a1931;
+      --gold:      #c9a84c;
+      --gold-lt:   #edd98a;
+      --blu-2:     #8ec5f7;
+      --blu-3:     #3a8fe0;
+      --blu-4:     #1248a8;
+      --txt-soft:  #7a9bbf;
+      --glass-bg:  rgba(10, 25, 49, 0.45);
+      --glass-brd: rgba(58,143,224,0.3);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Rajdhani', sans-serif; background: var(--navy); color: #fff; overflow-x: hidden; }
+
+    #orbs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(100px); }
+    .orb-a { width: 800px; height: 800px; background: #1248a8; opacity: 0.15; top: -250px; left: -200px; animation: of1 20s ease-in-out infinite alternate; }
+    .orb-b { width: 600px; height: 600px; background: #3a8fe0; opacity: 0.1; top: 40%; right: -200px; animation: of2 25s ease-in-out infinite alternate; }
+    .orb-c { width: 500px; height: 500px; background: #c9a84c; opacity: 0.05; bottom: -100px; left: 20%; animation: of3 18s ease-in-out infinite alternate; }
+    @keyframes of1 { to { transform: translate(60px,80px); } }
+    @keyframes of2 { to { transform: translate(-60px,-70px); } }
+    @keyframes of3 { to { transform: translate(50px,-60px); } }
+
+    #bg { position:fixed; inset:0; z-index:0; pointer-events:none; }
+    #bg::after { content:''; position:absolute; inset:0;
+      background-image:linear-gradient(rgba(58,143,224,0.03) 1px,transparent 1px),
+                       linear-gradient(90deg,rgba(58,143,224,0.03) 1px,transparent 1px);
+      background-size:40px 40px; }
+    #bg::before { content:''; position:absolute; inset:0; opacity:0.03; background-image:url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E'); }
+
+    #new-loader {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--navy);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-direction: column;
+    }
+    #new-loader::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at center, rgba(58,143,224,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    #new-loader.exit { animation: ldExit 1s cubic-bezier(0.77,0,0.18,1) forwards; }
+    @keyframes ldExit { 0% { opacity: 1; transform: scale(1); filter: blur(0px); } 100% { opacity: 0; transform: scale(1.1); filter: blur(15px); visibility: hidden; } }
+
+    .ld-terminal { position: absolute; top: 40px; left: 40px; font-family: 'Rajdhani', monospace; font-size: 0.85rem; color: var(--gold); text-transform: uppercase; letter-spacing: 0.2em; line-height: 1.6; opacity: 0; animation: termFade 7.5s linear forwards; }
+    @keyframes termFade { 0%{opacity:0} 10%{opacity:1} 85%{opacity:1} 100%{opacity:0} }
+
+    .ld-ring-container { position: relative; width: 420px; height: 420px; display: flex; align-items: center; justify-content: center; }
+    .ld-ring { position: absolute; border-radius: 50%; border: 1px solid rgba(58,143,224,0.1); border-top-color: var(--blu-3); animation: spin 2s linear infinite; }
+    .ld-ring-1 { width: 300px; height: 300px; border-width: 2px; animation-duration: 4s; }
+    .ld-ring-2 { width: 250px; height: 250px; border-width: 1px; border-right-color: var(--gold); animation-duration: 2.5s; animation-direction: reverse; }
+    .ld-ring-3 { width: 190px; height: 190px; border-width: 3px; border-left-color: var(--blu-2); animation-duration: 5s; }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    @keyframes spinRev { 100% { transform: rotate(-360deg); } }
+
+    .ld-flags-orbit { position: absolute; width: 400px; height: 400px; animation: spin 20s linear infinite; }
+    .ld-flag-wrap { position: absolute; top: 0; left: 50%; width: 40px; height: 200px; margin-left: -20px; transform-origin: bottom center; }
+    .ld-flag-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(201,168,76,0.8); box-shadow: 0 0 15px rgba(201,168,76,0.4), inset 0 0 10px rgba(0,0,0,0.5); animation: spinRev 20s linear infinite, flagPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: scale(0); }
+    @keyframes flagPop { to { opacity: 1; transform: scale(1); } }
+    .ld-flag-wrap:nth-child(1) { transform: rotate(0deg); }   .ld-flag-wrap:nth-child(1) .ld-flag-img { animation-delay: 1.0s; }
+    .ld-flag-wrap:nth-child(2) { transform: rotate(45deg); }  .ld-flag-wrap:nth-child(2) .ld-flag-img { animation-delay: 1.5s; }
+    .ld-flag-wrap:nth-child(3) { transform: rotate(90deg); }  .ld-flag-wrap:nth-child(3) .ld-flag-img { animation-delay: 2.0s; }
+    .ld-flag-wrap:nth-child(4) { transform: rotate(135deg); } .ld-flag-wrap:nth-child(4) .ld-flag-img { animation-delay: 2.5s; }
+    .ld-flag-wrap:nth-child(5) { transform: rotate(180deg); } .ld-flag-wrap:nth-child(5) .ld-flag-img { animation-delay: 3.0s; }
+    .ld-flag-wrap:nth-child(6) { transform: rotate(225deg); } .ld-flag-wrap:nth-child(6) .ld-flag-img { animation-delay: 3.5s; }
+    .ld-flag-wrap:nth-child(7) { transform: rotate(270deg); } .ld-flag-wrap:nth-child(7) .ld-flag-img { animation-delay: 4.0s; }
+    .ld-flag-wrap:nth-child(8) { transform: rotate(315deg); } .ld-flag-wrap:nth-child(8) .ld-flag-img { animation-delay: 4.5s; }
+
+    .ld-logo-wrap { position: absolute; z-index: 5; opacity: 0; transform: scale(0.5); animation: logoReveal 4s cubic-bezier(0.16,1,0.3,1) 3s forwards; }
+    .ld-logo { width: 110px; filter: brightness(0) invert(1) drop-shadow(0 0 20px rgba(58,143,224,0.8)); }
+    @keyframes logoReveal { 0%{opacity:0; transform:scale(0.5);} 15%{opacity:1; transform:scale(1);} 85%{opacity:1; transform:scale(1);} 100%{opacity:0; transform:scale(1.2) blur(5px);} }
+
+    .ld-giant-text { position: absolute; font-family: 'Bebas Neue', serif; font-size: clamp(4rem, 16vw, 13rem); background: linear-gradient(135deg, #fff 0%, var(--blu-2) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 30px rgba(58,143,224,0.5)); opacity: 0; transform: scale(1.5) blur(15px); animation: textSlam 2.5s cubic-bezier(0.16,1,0.3,1) 5.8s forwards; z-index: 10; pointer-events: none; }
+    @keyframes textSlam { 0%{opacity:0; transform:scale(1.5) blur(20px);} 20%{opacity:1; transform:scale(1) blur(0px);} 90%{opacity:1; transform:scale(1) blur(0px);} 100%{opacity:0; transform:scale(0.9) blur(10px);} }
+
+    .ld-status { position: absolute; bottom: 60px; font-family: 'Cinzel', serif; font-size: 0.9rem; letter-spacing: 0.4em; color: rgba(185,215,255,0.7); text-transform: uppercase; text-align: center; opacity: 0; animation: fadeStatus 7s ease 0.5s forwards; }
+    .ld-status::after { content: 'ESTABLECIENDO CONEXIÓN GLOBAL...'; animation: statusChange 7.5s steps(1) forwards; }
+    @keyframes fadeStatus { 0%{opacity:0} 5%{opacity:1} 95%{opacity:1} 100%{opacity:0} }
+    @keyframes statusChange { 0% { content: 'INICIANDO RED DIPLOMÁTICA...'; } 20% { content: 'ENLAZANDO DELEGACIONES REGIONALES...'; } 40% { content: 'ENCRIPTANDO CANAL DE ASAMBLEA...'; } 60% { content: 'VERIFICANDO CREDENCIALES DE DELEGADO...'; } 80% { content: 'ACCESO DIPLOMÁTICO CONCEDIDO.'; color: var(--gold); } }
+
+    @keyframes dPulse { 0%,100%{opacity:.3;transform:scale(1);} 50%{opacity:1;transform:scale(1.4);} }
+
+    /* ══════════════════════════════════════════
+       NAVBAR — Edición Embassy
+    ══════════════════════════════════════════ */
+    #nav-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 800;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 52px; height: 76px;
+    }
+    #nav-bar::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(7,22,48,0.75) 0%, rgba(7,22,48,0) 100%);
+      backdrop-filter: blur(0px); transition: background 0.6s, backdrop-filter 0.6s;
+      pointer-events: none;
+    }
+    #nav-bar.scrolled::before { background: rgba(7,22,48,0.90); backdrop-filter: blur(26px) saturate(1.9); }
+    #nav-bar.menu-open::before { background: transparent; backdrop-filter: none; }
+
+    #nav-bar::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.0) 10%, rgba(201,168,76,0.55) 35%, rgba(237,217,138,1.0) 50%, rgba(201,168,76,0.55) 65%, rgba(201,168,76,0.0) 90%, transparent 100%);
+      opacity: 1; transition: opacity 0.4s;
+    }
+    #nav-bar.menu-open::after { opacity: 0; }
+
+    .nb-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; position: relative; z-index: 1; }
+    .nb-emblem { width: 34px; height: 34px; object-fit: contain; filter: brightness(0) invert(1) drop-shadow(0 0 12px rgba(142,197,247,0.65)); transition: filter 0.4s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+    .nb-brand:hover .nb-emblem { transform: rotate(-12deg) scale(1.1); }
+    .nb-word { font-family: 'Cinzel', serif; font-weight: 900; font-size: 1.08rem; letter-spacing: 0.32em; color: #fff; position: relative; }
+    .nb-word::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); transform: scaleX(0); transform-origin: left; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); }
+    .nb-brand:hover .nb-word::after { transform: scaleX(1); }
+
+    .nb-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; pointer-events: all; z-index: 1; transition: opacity 0.35s, transform 0.35s; }
+    .nb-quick-link { font-family: 'Cinzel', serif; font-size: 0.56rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.3); padding: 6px 18px; position: relative; cursor: pointer; transition: color 0.3s; text-decoration: none; }
+    .nb-quick-link::after { content: '·'; position: absolute; right: -1px; top: 50%; transform: translateY(-50%); color: rgba(201,168,76,0.2); pointer-events: none; }
+    .nb-quick-link:last-child::after { display: none; }
+    .nb-quick-link:hover { color: rgba(237,217,138,0.9); }
+    #nav-bar.menu-open .nb-center { opacity: 0; transform: translateX(-50%) scale(0.9); pointer-events: none; }
+
+    .nb-trigger { position: relative; z-index: 1; display: flex; align-items: center; gap: 16px; background: none; border: none; cursor: pointer; padding: 8px 0; }
+    .nb-trigger-label { font-family: 'Cinzel', serif; font-size: 0.56rem; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(255,255,255,0.4); transition: color 0.3s, opacity 0.3s; }
+    .nb-trigger:hover .nb-trigger-label { color: rgba(201,168,76,0.85); }
+    #nav-bar.menu-open .nb-trigger-label { opacity: 0; }
+
+    .nb-icon { display: flex; flex-direction: column; gap: 5px; width: 28px; cursor: pointer; }
+    .nb-icon span { display: block; height: 1.5px; border-radius: 2px; background: rgba(255,255,255,0.85); transform-origin: center; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease, width 0.4s ease, background 0.3s; }
+    .nb-icon span:nth-child(1) { width: 28px; }
+    .nb-icon span:nth-child(2) { width: 18px; margin-left: 10px; }
+    .nb-icon span:nth-child(3) { width: 28px; }
+    .nb-icon.open span:nth-child(1) { transform: translateY(6.75px) rotate(45deg); width: 28px; margin-left: 0; background: var(--gold-lt); }
+    .nb-icon.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nb-icon.open span:nth-child(3) { transform: translateY(-6.75px) rotate(-45deg); background: var(--gold-lt); }
+
+    /* ═══════════════════════════════════════
+       FULLSCREEN OVERLAY — Embassy Split
+    ═══════════════════════════════════════ */
+    #nav-overlay {
+      position: fixed; inset: 0; z-index: 790; background: var(--navy); display: flex;
+      clip-path: circle(0% at calc(100% - 72px) 38px); transition: clip-path 0.85s cubic-bezier(0.77,0,0.18,1); pointer-events: none; overflow: hidden;
+    }
+    #nav-overlay.open { clip-path: circle(150% at calc(100% - 72px) 38px); pointer-events: all; }
+
+    .nvo-deco-panel { width: 36%; flex-shrink: 0; position: relative; overflow: hidden; border-right: 1px solid rgba(58,143,224,0.1); display: flex; flex-direction: column; justify-content: space-between; padding: 110px 52px 52px; }
+    .nvo-deco-panel::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 80% 55% at 30% 15%, rgba(18,72,168,0.55) 0%, transparent 60%), radial-gradient(ellipse 55% 70% at 75% 85%, rgba(58,143,224,0.1) 0%, transparent 60%); }
+    .nvo-deco-panel::after { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(58,143,224,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(58,143,224,0.04) 1px, transparent 1px); background-size: 48px 48px; }
+    .nvo-deco-emblem { position: absolute; right: -40px; top: 50%; transform: translateY(-50%); width: 300px; height: 300px; object-fit: contain; opacity: 0.035; filter: brightness(0) invert(1); pointer-events: none; }
+    .nvo-deco-top { position: relative; z-index: 2; }
+    .nvo-deco-brand { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.42em; text-transform: uppercase; color: rgba(201,168,76,0.55); margin-bottom: 22px; }
+    .nvo-deco-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.7rem, 3.2vw, 2.6rem); font-style: italic; color: rgba(255,255,255,0.82); line-height: 1.28; margin-bottom: 24px; }
+    .nvo-deco-line { width: 38px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin-bottom: 22px; }
+    .nvo-deco-sub { font-family: 'Rajdhani', sans-serif; font-size: 0.78rem; letter-spacing: 0.16em; color: rgba(142,197,247,0.3); text-transform: uppercase; line-height: 1.9; }
+    .nvo-deco-bottom { position: relative; z-index: 2; }
+    .nvo-deco-year { font-family: 'Bebas Neue', serif; font-size: 4.5rem; line-height: 1; letter-spacing: 0.06em; color: rgba(255,255,255,0.04); }
+    .nvo-deco-copy { font-size: 0.58rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(142,197,247,0.18); margin-top: 8px; }
+
+    .nvo-list-panel { flex: 1; position: relative; overflow-y: auto; display: flex; flex-direction: column; padding-top: 76px; }
+    .nvo-list-panel::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0; background-image: linear-gradient(rgba(58,143,224,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(58,143,224,0.025) 1px, transparent 1px); background-size: 60px 60px; }
+
+    .nvo-item { display: grid; grid-template-columns: 72px 1fr auto; align-items: center; gap: 0 24px; padding: 26px 52px 26px 40px; border-bottom: 1px solid rgba(58,143,224,0.07); cursor: pointer; position: relative; overflow: hidden; z-index: 1; opacity: 0; transform: translateX(28px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .nvo-item:last-child { border-bottom: none; }
+    #nav-overlay.open .nvo-item { opacity: 1; transform: translateX(0); }
+    #nav-overlay.open .nvo-item:nth-child(1) { transition-delay: 0.22s; }
+    #nav-overlay.open .nvo-item:nth-child(2) { transition-delay: 0.28s; }
+    #nav-overlay.open .nvo-item:nth-child(3) { transition-delay: 0.34s; }
+    #nav-overlay.open .nvo-item:nth-child(4) { transition-delay: 0.40s; }
+    #nav-overlay.open .nvo-item:nth-child(5) { transition-delay: 0.46s; }
+    #nav-overlay.open .nvo-item:nth-child(6) { transition-delay: 0.52s; }
+    #nav-overlay.open .nvo-item:nth-child(7) { transition-delay: 0.58s; }
+
+    .nvo-item::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(58,143,224,0.0) 0%, rgba(58,143,224,0.05) 50%, rgba(58,143,224,0.0) 100%); opacity: 0; transition: opacity 0.4s; }
+    .nvo-item:hover::before { opacity: 1; }
+    .nvo-item::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, transparent, var(--gold) 50%, transparent); transform: scaleY(0); transform-origin: center; transition: transform 0.42s cubic-bezier(0.4,0,0.2,1); }
+    .nvo-item:hover::after { transform: scaleY(1); }
+
+    .nvo-num { font-family: 'Bebas Neue', serif; font-size: 0.68rem; letter-spacing: 0.32em; color: var(--gold); opacity: 0.45; text-align: right; padding-right: 10px; border-right: 1px solid rgba(201,168,76,0.1); transition: opacity 0.3s; line-height: 1; }
+    .nvo-item:hover .nvo-num { opacity: 1; text-shadow: 0 0 14px rgba(201,168,76,0.5); }
+    .nvo-body { display: flex; flex-direction: column; gap: 5px; }
+    .nvo-title { font-family: 'Cinzel', serif; font-size: clamp(1rem, 1.8vw, 1.4rem); font-weight: 700; letter-spacing: 0.06em; color: rgba(255,255,255,0.82); transition: color 0.3s, letter-spacing 0.4s; }
+    .nvo-item:hover .nvo-title { color: var(--gold-lt); letter-spacing: 0.1em; }
+    .nvo-subs-inline { font-family: 'Rajdhani', sans-serif; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(142,197,247,0.28); transition: color 0.3s; }
+    .nvo-item:hover .nvo-subs-inline { color: rgba(142,197,247,0.55); }
+    .nvo-arrow { font-family: 'Cinzel', serif; font-size: 1.1rem; color: rgba(201,168,76,0); transition: color 0.35s, transform 0.35s; flex-shrink: 0; align-self: center; }
+    .nvo-item:hover .nvo-arrow { color: rgba(201,168,76,0.65); transform: translateX(5px); }
+
+    .nvo-badge-live { display: flex; align-items: center; gap: 6px; flex-shrink: 0; background: rgba(58,143,224,0.08); border: 1px solid rgba(58,143,224,0.2); border-radius: 20px; padding: 4px 12px 4px 8px; }
+    .nvo-badge-dot { width: 5px; height: 5px; border-radius: 50%; background: #8ec5f7; box-shadow: 0 0 6px #3a8fe0; animation: dPulse 1.4s ease-in-out infinite; }
+    .nvo-badge-live span { font-family: 'Cinzel', serif; font-size: 0.5rem; letter-spacing: 0.2em; color: rgba(142,197,247,0.65); }
+
+    .section-wrap { position: relative; z-index: 1; padding: 100px 40px; max-width: 1200px; margin: 0 auto; perspective: 1500px; }
+    
+    .hero { text-align: center; padding: 80px 0 40px; position: relative; transform-style: preserve-3d; }
+    .hero-eye { font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.46em; text-transform:uppercase; color:var(--gold); display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:24px; opacity:0; animation:up 0.8s ease 0.3s forwards; }
+    .hero-eye::before, .hero-eye::after { content:''; width:40px; height:1px; background:linear-gradient(90deg,transparent,var(--gold)); }
+    .hero-eye::after { background:linear-gradient(90deg,var(--gold),transparent); }
+    .hero-title { font-family:'Bebas Neue',serif; font-size:clamp(4rem,14vw,10rem); letter-spacing:0.06em; line-height:0.85; margin: 0; padding: 0; background:linear-gradient(180deg,#ffffff 0%,#b9d7ff 40%,var(--blu-4) 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 15px 40px rgba(58,143,224,0.4)); opacity:0; animation:up 0.9s ease 0.5s forwards; transform: translateZ(50px); }
+    .hero-line { width:min(400px,80vw); height:2px; background:rgba(58,143,224,0.2); margin:30px auto; position:relative; overflow:hidden; opacity:0; animation:up 0.8s ease 0.7s forwards; box-shadow: 0 0 15px rgba(58,143,224,0.5); }
+    .hero-line::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent,var(--gold) 50%,transparent); animation:scan 3s ease-in-out infinite; }
+    .hero-sub { font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-style:italic; color:rgba(185,215,255,0.7); max-width:600px; margin:0 auto; line-height:1.8; opacity:0; animation:up 0.8s ease 0.9s forwards; transform: translateZ(30px); }
+    @keyframes up { from{opacity:0;transform:translateY(30px) translateZ(-20px);} to{opacity:1;transform:translateY(0) translateZ(0);} }
+
+    .sec-label { font-family:'Cinzel',serif; font-size:0.85rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--blu-2); display:flex; align-items:center; gap:16px; margin-bottom:50px; text-shadow: 0 0 15px rgba(58,143,224,0.6); }
+    .sec-label::before { content:''; width:40px; height:2px; background:linear-gradient(90deg, var(--blu-3), transparent); }
+
+    .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .data-panel {
+      position: relative; padding: 50px; border-radius: 16px;
+      background: linear-gradient(135deg, rgba(14,37,74,0.4), rgba(5,13,26,0.8));
+      border: 1px solid rgba(58,143,224,0.2);
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.8), 0 20px 40px rgba(0,0,0,0.5);
+      transform-style: preserve-3d; transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .data-panel::before {
+      content: ''; position: absolute; top: -1px; left: -1px; right: -1px; bottom: -1px;
+      background: linear-gradient(45deg, var(--blu-4), transparent, var(--gold));
+      z-index: -1; border-radius: 17px; opacity: 0; transition: opacity 0.5s;
+    }
+    .data-panel:hover { transform: translateY(-10px) rotateX(5deg); border-color: transparent; }
+    .data-panel:hover::before { opacity: 0.5; }
+    
+    .dp-bg-num { position: absolute; top: 10px; right: 20px; font-family: 'Bebas Neue', serif; font-size: 8rem; color: rgba(255,255,255,0.02); line-height: 1; transform: translateZ(-20px); pointer-events: none; }
+    .dp-icon { display: inline-flex; align-items: center; justify-content: center; width: 60px; height: 60px; border-radius: 12px; background: rgba(58,143,224,0.1); border: 1px solid var(--blu-3); color: var(--blu-2); font-size: 1.8rem; margin-bottom: 24px; transform: translateZ(40px); box-shadow: 0 0 20px rgba(58,143,224,0.3); }
+    .dp-title { font-family: 'Cinzel', serif; font-size: 2rem; color: #fff; margin-bottom: 20px; font-weight: 700; transform: translateZ(50px); text-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+    .dp-text { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: rgba(185,215,255,0.8); line-height: 1.8; transform: translateZ(30px); font-style: italic; }
+
+    .stats-hub { display: flex; justify-content: space-around; padding: 80px 0; position: relative; }
+    .stats-hub::after { content: ''; position: absolute; top: 50%; left: 10%; right: 10%; height: 1px; background: linear-gradient(90deg, transparent, rgba(58,143,224,0.3), transparent); z-index: 0; }
+    .stat-cylinder {
+      position: relative; z-index: 1; text-align: center; width: 220px; height: 220px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: radial-gradient(circle at center, rgba(14,37,74,0.8), rgba(5,13,26,1));
+      border: 2px solid rgba(58,143,224,0.2); border-radius: 50%;
+      box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 30px rgba(58,143,224,0.1);
+      transition: all 0.4s ease; transform-style: preserve-3d;
+    }
+    .stat-cylinder::before {
+      content: ''; position: absolute; inset: -10px; border: 1px dashed var(--gold); border-radius: 50%; opacity: 0.3; animation: spin 20s linear infinite;
+    }
+    .stat-cylinder:hover { transform: scale(1.1) translateZ(40px); box-shadow: 0 20px 50px rgba(0,0,0,0.9), inset 0 0 50px rgba(58,143,224,0.3); border-color: var(--blu-3); }
+    .sc-num { font-family: 'Bebas Neue', serif; font-size: 4.5rem; color: #fff; line-height: 1; text-shadow: 0 0 20px var(--blu-2); transform: translateZ(30px); margin-bottom: 5px; }
+    .sc-lbl { font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; transform: translateZ(20px); }
+
+    .matrix-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .matrix-card {
+      position: relative; height: 280px; overflow: hidden; border-radius: 12px;
+      background: rgba(10,25,49,0.6); border: 1px solid rgba(255,255,255,0.05);
+      display: flex; flex-direction: column; justify-content: flex-end; padding: 30px;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d;
+    }
+    .matrix-card::after {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(180deg, transparent, rgba(58,143,224,0.4)); opacity: 0; transition: opacity 0.4s;
+    }
+    .matrix-card:hover { transform: translateY(-15px) rotateX(10deg); border-color: var(--blu-3); box-shadow: 0 25px 40px rgba(0,0,0,0.7), 0 0 20px rgba(58,143,224,0.3); }
+    .matrix-card:hover::after { opacity: 1; }
+    .mc-icon { font-size: 3rem; position: absolute; top: 30px; right: 30px; opacity: 0.2; transition: all 0.4s; transform: translateZ(20px); }
+    .matrix-card:hover .mc-icon { opacity: 1; color: var(--gold); transform: translateZ(50px) scale(1.2); text-shadow: 0 0 20px var(--gold); }
+    .mc-title { font-family: 'Cinzel', serif; font-size: 1.4rem; color: #fff; margin-bottom: 10px; font-weight: 700; transform: translateZ(40px); position: relative; z-index: 2; }
+    .mc-desc { font-family: 'Rajdhani', sans-serif; font-size: 1rem; color: rgba(185,215,255,0.7); line-height: 1.5; transform: translateZ(30px); position: relative; z-index: 2; opacity: 0; transition: opacity 0.4s; }
+    .matrix-card:hover .mc-desc { opacity: 1; }
+
+    .staff-section-wrap {
+      position: relative; z-index: 1; padding: 120px 40px; max-width: 1200px; margin: 0 auto;
+      background: radial-gradient(ellipse at center, rgba(18, 72, 168, 0.1) 0%, transparent 70%);
+      border-radius: 20px;
+    }
+    
+    .staff-hero-title {
+      text-align: center;
+      font-family: 'Bebas Neue', serif;
+      font-size: clamp(4.5rem, 15vw, 12rem);
+      letter-spacing: 0.08em;
+      line-height: 0.85;
+      margin: 0 0 60px 0;
+      background: linear-gradient(180deg, #ffffff 0%, #8ec5f7 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 15px 40px rgba(201,168,76,0.3));
+    }
+
+    .holo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+    
+    .holo-card {
+      position: relative; height: 480px; border-radius: 20px;
+      background: rgba(5,13,26,0.9); border: 1px solid rgba(58,143,224,0.3);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center; cursor: pointer;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.8);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .holo-card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(0,0,0,0.9), inset 0 0 40px rgba(58,143,224,0.2); border-color: var(--blu-2); }
+    
+    .holo-glare-wrap { position: absolute; inset: 0; border-radius: 20px; overflow: hidden; pointer-events: none; z-index: 10; }
+    .holo-glare {
+      position: absolute; width: 100%; height: 100%; top: 0; left: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
+      opacity: 0; transition: opacity 0.4s; pointer-events: none;
+    }
+    .holo-card:hover .holo-glare { opacity: 1; }
+
+    .holo-frame {
+      position: absolute; inset: 15px; border: 1px solid rgba(201,168,76,0.2); border-radius: 12px;
+      pointer-events: none; transition: border-color 0.4s;
+    }
+    .holo-card:hover .holo-frame { border-color: rgba(201,168,76,0.5); }
+    .holo-frame::before, .holo-frame::after { content: ''; position: absolute; width: 30px; height: 30px; border: 2px solid var(--gold); }
+    .holo-frame::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+    .holo-frame::after { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+
+    .holo-img-container {
+      width: 160px; height: 160px; border-radius: 50%; position: relative;
+      margin-bottom: 30px; transition: transform 0.4s ease;
+    }
+    .holo-card:hover .holo-img-container { transform: scale(1.05); }
+    .holo-img-container::before {
+      content: ''; position: absolute; inset: -10px; border-radius: 50%;
+      border: 2px solid rgba(58,143,224,0.5); border-left-color: transparent; border-right-color: transparent;
+      animation: spin 6s linear infinite; box-shadow: 0 0 20px rgba(58,143,224,0.4);
+    }
+    .holo-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid var(--navy); box-shadow: 0 15px 35px rgba(0,0,0,0.9); }
+    
+    .holo-lock { font-size: 3.5rem; color: rgba(58,143,224,0.5); line-height: 160px; filter: drop-shadow(0 0 15px rgba(58,143,224,0.8)); }
+
+    .holo-badge {
+      font-family: 'Bebas Neue', serif; font-size: 1rem; letter-spacing: 0.3em;
+      color: #000; background: var(--gold); padding: 6px 20px; border-radius: 4px;
+      box-shadow: 0 5px 15px rgba(201,168,76,0.3); margin-bottom: 15px;
+    }
+    .holo-name {
+      font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 900; color: #fff; margin-bottom: 10px;
+    }
+    .holo-hint {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(58,143,224,0.8); display: flex; align-items: center; gap: 8px;
+    }
+    .holo-hint::before { content: ''; width: 8px; height: 8px; background: var(--blu-3); border-radius: 50%; box-shadow: 0 0 10px var(--blu-3); animation: dPulse 1.5s infinite; }
+
+    .methodology-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 20px; }
+    .meth-card {
+      padding: 40px; background: rgba(10,25,49,0.3); border-top: 1px solid rgba(58,143,224,0.2);
+      transition: all 0.4s ease;
+    }
+    .meth-card:hover { border-top-color: var(--gold); background: rgba(10,25,49,0.6); transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
+    .meth-num { font-family: 'Bebas Neue', serif; font-size: 3rem; color: rgba(255,255,255,0.05); margin-bottom: 15px; line-height: 1; transition: color 0.4s; }
+    .meth-card:hover .meth-num { color: rgba(201,168,76,0.2); }
+    .meth-title { font-family: 'Cinzel', serif; font-size: 1.3rem; margin-bottom: 15px; color: #fff; letter-spacing: 0.05em; }
+    .meth-text { font-family: 'Rajdhani', sans-serif; font-size: 1rem; color: rgba(185,215,255,0.7); line-height: 1.7; }
+
+    .timeline { position: relative; max-width: 1000px; margin: 60px auto 0; padding: 40px 0; }
+    .timeline::before { content: ''; position: absolute; width: 2px; height: 100%; top: 0; left: 50%; transform: translateX(-50%); background: linear-gradient(180deg, transparent, var(--blu-3), var(--gold), transparent); box-shadow: 0 0 15px var(--blu-3); }
+    .tl-item { position: relative; width: 50%; padding: 0 40px 60px; clear: both; }
+    .tl-item:nth-child(odd) { float: left; text-align: right; }
+    .tl-item:nth-child(even) { float: right; text-align: left; }
+    .tl-dot { position: absolute; top: 0; width: 20px; height: 20px; border-radius: 50%; background: var(--navy); border: 2px solid var(--gold); box-shadow: 0 0 10px var(--gold); z-index: 2; }
+    .tl-item:nth-child(odd) .tl-dot { right: -10px; }
+    .tl-item:nth-child(even) .tl-dot { left: -10px; }
+    .tl-content { position: relative; background: rgba(10,25,49,0.6); border: 1px solid rgba(58,143,224,0.3); border-radius: 12px; padding: 20px; transition: transform 0.4s; }
+    .tl-content:hover { transform: translateY(-5px); border-color: var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(201,168,76,0.1); }
+    .tl-year { font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--gold); font-weight: 700; display: block; margin-bottom: 10px; letter-spacing: 0.1em; }
+    .tl-img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); filter: grayscale(80%) contrast(1.2); transition: filter 0.4s ease; }
+    .tl-content:hover .tl-img { filter: grayscale(0%) contrast(1); }
+    .tl-desc { font-family: 'Rajdhani', sans-serif; font-size: 1rem; color: rgba(185,215,255,0.8); line-height: 1.5; }
+    .timeline::after { content: ''; display: table; clear: both; }
+
+    @media (max-width: 768px) {
+      .timeline::before { left: 20px; }
+      .tl-item { width: 100%; padding: 0 0 40px 50px; text-align: left !important; float: none !important; }
+      .tl-item:nth-child(odd) .tl-dot, .tl-item:nth-child(even) .tl-dot { left: 10px; right: auto; }
+    }
+
+    .cta-elegant-wrap {
+      margin-top: 80px; padding: 100px 40px; text-align: center; position: relative;
+      background: linear-gradient(180deg, rgba(10,25,49,0.1) 0%, rgba(5,13,26,0.6) 100%);
+      border-top: 1px solid rgba(58,143,224,0.15); border-bottom: 1px solid rgba(58,143,224,0.15);
+    }
+    .cta-elegant-wrap::before {
+      content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(58,143,224,0.05) 1px, transparent 1px); background-size: 20px 20px; pointer-events: none;
+    }
+    .cta-title { font-family: 'Cinzel', serif; font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 400; color: #fff; margin-bottom: 20px; letter-spacing: 0.1em; }
+    .cta-sub { font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; color: rgba(185,215,255,0.6); margin-bottom: 40px; font-weight: 300; letter-spacing: 0.15em; text-transform: uppercase; }
+    
+    .btn-elegant {
+      display: inline-flex; align-items: center; justify-content: center; gap: 15px;
+      padding: 18px 45px; background: transparent; border: 1px solid var(--gold);
+      font-family: 'Cinzel', serif; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.25em;
+      color: var(--gold); text-transform: uppercase; text-decoration: none;
+      position: relative; z-index: 2; transition: all 0.4s ease; overflow: hidden;
+    }
+    .btn-elegant:hover { background: var(--gold); color: var(--navy); box-shadow: 0 0 25px rgba(201,168,76,0.2); }
+    .btn-arrow { transition: transform 0.4s ease; }
+    .btn-elegant:hover .btn-arrow { transform: translateX(5px); }
+
+    #team-modal { position: fixed; inset: 0; z-index: 9000; background: rgba(2,5,12,0.9); backdrop-filter: blur(20px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s; padding: 24px; perspective: 1500px; }
+    #team-modal.active { opacity: 1; pointer-events: all; }
+    .modal-box { background: linear-gradient(145deg, rgba(14,37,74,0.95), rgba(5,13,26,0.98)); border: 1px solid rgba(58,143,224,0.4); border-radius: 24px; width: 100%; max-width: 550px; position: relative; overflow: hidden; transform: rotateX(20deg) translateY(50px) translateZ(-100px) scale(0.9); transition: transform 0.6s cubic-bezier(0.34,1.5,0.64,1); box-shadow: 0 40px 80px rgba(0,0,0,0.8), inset 2px 2px 5px rgba(255,255,255,0.1); }
+    #team-modal.active .modal-box { transform: rotateX(0deg) translateY(0) translateZ(0) scale(1); }
+    .modal-content-scroll { max-height: 85vh; overflow-y: auto; padding: 0 40px 40px 40px; }
+    .modal-content-scroll::-webkit-scrollbar { width: 6px; }
+    .modal-content-scroll::-webkit-scrollbar-thumb { background: rgba(58,143,224,0.5); border-radius: 4px; }
+    .modal-close { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.3); color: #fff; width: 40px; height: 40px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+    .modal-close:hover { background: var(--gold); border-color: var(--gold); color: #000; transform: translateZ(20px) scale(1.1); }
+    
+    .scf-banner { height: 130px; width: 100%; background: linear-gradient(135deg, var(--blu-4), var(--navy-mid)); position: relative; border-bottom: 3px solid var(--gold); }
+    .scf-banner::after { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px); background-size: 12px 12px; }
+    .scf-header-vert { display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: -70px; margin-bottom: 30px; position: relative; z-index: 10; }
+    .scf-photo-wrap-v { width: 140px; height: 140px; margin-bottom: 20px; border-radius: 50%; border: 4px solid var(--navy); box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 0 3px var(--gold); background: var(--navy); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .scf-photo-v { width: 100%; height: 100%; object-fit: cover; }
+    .scf-badge-v { display: inline-flex; align-items: center; gap: 8px; font-family: 'Bebas Neue', serif; font-size: 0.9rem; letter-spacing: 0.25em; color: var(--gold); background: rgba(0,0,0,0.6); border: 1px solid rgba(201,168,76,0.4); border-radius: 20px; padding: 6px 20px; margin-bottom: 12px; }
+    .scf-name-v { font-family: 'Cinzel', serif; font-size: 2.4rem; font-weight: 900; color: #fff; margin-bottom: 6px; letter-spacing: 0.05em; line-height: 1; }
+    .scf-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; background: rgba(0,0,0,0.4); border-radius: 16px; padding: 20px; border: 1px solid rgba(58,143,224,0.2); }
+    .scf-stat-item { text-align: center; border-right: 1px solid rgba(255,255,255,0.1); }
+    .scf-stat-item:last-child { border-right: none; }
+    .scf-stat-val { font-family: 'Bebas Neue', serif; font-size: 1.8rem; color: var(--blu-2); line-height: 1; }
+    .scf-stat-lbl { font-size: 0.65rem; text-transform: uppercase; color: rgba(255,255,255,0.6); letter-spacing: 0.1em; margin-top: 6px; }
+    .scf-category-v { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); border-bottom: 1px solid rgba(201,168,76,0.3); padding-bottom: 8px; margin-bottom: 20px; margin-top: 36px; display: flex; align-items: center; gap: 10px; }
+    .scf-awards-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+    .award-row { display: flex; align-items: center; gap: 14px; padding: 14px 20px; background: linear-gradient(90deg, rgba(14,37,74,0.8), rgba(5,13,26,0.5)); border: 1px solid rgba(58,143,224,0.15); border-left: 4px solid rgba(58,143,224,0.6); border-radius: 8px; font-size: 0.85rem; color: rgba(255,255,255,0.9); }
+    .award-row.gold { border-left-color: var(--gold); background: linear-gradient(90deg, rgba(201,168,76,0.1), rgba(5,13,26,0.5)); }
+    .award-icon { font-size: 1.3rem; }
+    .award-text strong { color: var(--gold-lt); font-family: 'Cinzel', serif; font-size: 0.95rem; }
+
+    footer { position:relative; z-index:1; border-top:1px solid rgba(58,143,224,0.14); padding:32px 40px; display:flex; align-items:center; justify-content:space-between; max-width:1200px; margin:0 auto; }
+    .f-brand { font-family:'Cinzel',serif; font-size:0.85rem; font-weight:900; letter-spacing:0.2em; color:rgba(142,197,247,0.4); }
+    .f-copy  { font-size:0.7rem; letter-spacing:0.1em; color:rgba(142,197,247,0.4); }
+
+    @media (max-width: 768px) {
+      #orbs, #bg, #nav-bar, #nav-overlay, .section-wrap, .staff-section-wrap, .cta-elegant-wrap, footer { display: none !important; }
+      #mobile-shell { display: flex !important; }
+    }
+
+    #mobile-shell {
+      display: none; flex-direction: column; min-height: 100vh;
+      background: #030812; color: #fff; font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden; padding-bottom: 72px; 
+    }
+    
+    #mob-topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500; height: 52px;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
+      background: rgba(3,8,18,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+    .mob-brand { display: flex; align-items: center; gap: 10px; }
+    .mob-brand img { width: 22px; height: 22px; object-fit: contain; filter: brightness(0) invert(1); }
+    .mob-brand-name { font-family: 'Cinzel', serif; font-weight: 900; font-size: 0.85rem; letter-spacing: 0.2em; color: #fff; }
+    .mob-topbar-badge { font-size: 0.55rem; letter-spacing: 0.18em; color: var(--gold); border: 1px solid rgba(201,168,76,0.3); border-radius: 20px; padding: 3px 10px; text-transform: uppercase; }
+
+    .mob-nos-hero {
+      position: relative; padding: 100px 24px 40px; background: #030812;
+      border-bottom: 1px solid rgba(58,143,224,0.15); overflow: hidden;
+    }
+    .mob-nos-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at top right, rgba(18,72,168,0.4) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .mob-eyebrow { font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold-lt); display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .mob-eyebrow::before { content: ''; width: 20px; height: 1px; background: var(--gold); }
+    .mob-h1 { font-family: 'Bebas Neue', serif; font-size: 4.5rem; line-height: 0.9; letter-spacing: 0.05em; background: linear-gradient(160deg, #fff 0%, #b8d8f8 50%, var(--blu-4) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .mob-tagline { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-style: italic; color: rgba(185,215,255,0.75); line-height: 1.6; margin-top: 16px; }
+
+    .mob-section { padding: 40px 24px; }
+    .mob-sec-label { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--blu-2); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+    .mob-sec-label::before { content: ''; width: 20px; height: 1px; background: var(--blu-3); }
+    
+    .mob-card { background: rgba(14,37,74,0.4); border: 1px solid rgba(58,143,224,0.2); border-radius: 12px; padding: 24px; margin-bottom: 16px; position: relative; overflow: hidden; }
+    .mob-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: linear-gradient(180deg, var(--blu-3), var(--gold)); }
+    .mob-card-icon { font-size: 1.8rem; margin-bottom: 12px; }
+    .mob-card-title { font-family: 'Cinzel', serif; font-size: 1.2rem; color: #fff; margin-bottom: 8px; font-weight: 700; }
+    .mob-card-text { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: rgba(185,215,255,0.8); line-height: 1.6; font-style: italic; }
+
+    .mob-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+    .mob-stat-box { text-align: center; background: rgba(5,13,26,0.8); border: 1px solid rgba(58,143,224,0.15); border-radius: 12px; padding: 20px 10px; }
+    .mob-stat-num { font-family: 'Bebas Neue', serif; font-size: 2.2rem; color: #fff; line-height: 1; text-shadow: 0 0 10px var(--blu-2); }
+    .mob-stat-lbl { font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 0.15em; color: var(--gold); text-transform: uppercase; margin-top: 6px; }
+
+    .mob-scroll-row { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 16px; scroll-snap-type: x mandatory; }
+    .mob-scroll-row::-webkit-scrollbar { display: none; }
+    .mob-staff-card { flex-shrink: 0; width: 220px; scroll-snap-align: start; background: rgba(5,13,26,0.9); border: 1px solid rgba(58,143,224,0.3); border-radius: 16px; padding: 20px; text-align: center; cursor: pointer; }
+    .mob-staff-img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--gold); margin: 0 auto 16px; object-fit: cover; }
+    .mob-staff-badge { font-family: 'Bebas Neue', serif; font-size: 0.8rem; letter-spacing: 0.2em; color: #000; background: var(--gold); padding: 4px 12px; border-radius: 4px; display: inline-block; margin-bottom: 10px; }
+    .mob-staff-name { font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 700; color: #fff; }
+
+    #mob-bottomnav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; height: 64px;
+      background: rgba(3,8,18,0.96); backdrop-filter: blur(24px); border-top: 1px solid rgba(201,168,76,0.12);
+      display: flex; align-items: stretch;
+    }
+    .mob-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; position: relative; text-decoration: none; }
+    .mob-nav-icon { font-size: 1.2rem; color: rgba(142,197,247,0.4); }
+    .mob-nav-label { font-family: 'Cinzel', serif; font-size: 0.48rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(142,197,247,0.4); }
+    .mob-nav-item.active .mob-nav-icon, .mob-nav-item.active .mob-nav-label { color: var(--gold-lt); }
+
+    /* Botón cerrar del modal en footer */
+    .modal-close-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 40px; background: transparent;
+      border: 1px solid var(--gold); color: var(--gold);
+      font-family: 'Cinzel', serif; font-size: 0.85rem;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      cursor: pointer; border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    .modal-close-btn:hover { background: var(--gold); color: #000; box-shadow: 0 0 20px rgba(201,168,76,0.3); }
+  </style>
+</head>
+<body>
+
+<div id="new-loader">
+  <div class="ld-terminal">SYS.INIT() <br>PROTOCOLO MUN_2026<br>LOC: 10.0658° N, 69.3490° W <br>NET: SECURE OVERRIDE<br>STATUS: ONLINE</div>
+  <div class="ld-ring-container">
+    <div class="ld-ring ld-ring-1"></div><div class="ld-ring ld-ring-2"></div><div class="ld-ring ld-ring-3"></div>
+    <div class="ld-flags-orbit">
+      <div class="ld-flag-wrap"><img class="ld-flag-img" src="https://upload.wikimedia.org/wikipedia/commons/0/06/Flag_of_Venezuela.svg" alt="VE"></div>
+      <div class="ld-flag-wrap"><img class="ld-flag-img" src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Colombia.svg" alt="CO"></div>
+      <div class="ld-flag-wrap"><img class="ld-flag-img" src="https://upload.wikimedia.org/wikipedia/en/0/05/Flag_of_Brazil.svg" alt="BR"></div>
+      <div class="ld-flag-wrap"><img class="ld-flag-img" src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_Argentina.svg" alt="AR"></div>
+      <div class="ld-flag-wrap"><img class="ld-flag-img" src="https://upload.wikimedia.org/wikipedia/commons/f/fc/Flag_of_Mexico.svg" alt="MX"></div>
+      <div class="ld-flag-wrap"><img class="ld-flag-img" src="https://upload.wikimedia.org/wikipedia/commons/7/78/Flag_of_Chile.svg" alt="CL"></div>
+      <div class="ld-flag-wrap"><img class="ld-flag-img" src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Peru.svg" alt="PE"></div>
+      <div class="ld-flag-wrap"><img class="ld-flag-img" src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Flag_of_Ecuador.svg" alt="EC"></div>
+    </div>
+    <div class="ld-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="ONU" class="ld-logo"></div>
+  </div>
+  <div class="ld-giant-text">SVPMUN</div><div class="ld-status"></div>
+</div>
+
+<div id="bg"></div>
+<div id="orbs"><div class="orb orb-a"></div><div class="orb orb-b"></div><div class="orb orb-c"></div></div>
+
+<header id="nav-bar">
+  <a class="nb-brand" href="/">
+    <img class="nb-emblem" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="ONU">
+    <span class="nb-word">SVPMUN</span>
+  </a>
+  <nav class="nb-center" aria-label="Acceso rápido">
+    <a class="nb-quick-link" href="/galeria">Galería</a>
+    <a class="nb-quick-link" href="/inscripciones">Inscripciones</a>
+    <a class="nb-quick-link" href="/drills">Drills</a>
+  </nav>
+  <button class="nb-trigger" id="nbTrigger" onclick="toggleNav()" aria-label="Menú">
+    <span class="nb-trigger-label">Menú</span>
+    <div class="nb-icon" id="nbIcon">
+      <span></span><span></span><span></span>
+    </div>
+  </button>
+</header>
+
+<div id="nav-overlay" role="navigation" aria-label="Menú principal">
+  <div class="nvo-deco-panel">
+    <img class="nvo-deco-emblem" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="">
+    <div class="nvo-deco-top">
+      <div class="nvo-deco-brand">SVPMUN · Delegación Oficial</div>
+      <div class="nvo-deco-title">"Nuestra<br>historia,<br>nuestra<br>misión."</div>
+      <div class="nvo-deco-line"></div>
+      <div class="nvo-deco-sub">Model United Nations<br>Delegación Activa · 2026</div>
+    </div>
+    <div class="nvo-deco-bottom">
+      <div class="nvo-deco-year">2026</div>
+      <div class="nvo-deco-copy">© 2026 SVPMUN · Model United Nations</div>
+    </div>
+  </div>
+  <div class="nvo-list-panel">
+    <div class="nvo-item" onclick="window.location.href='/nosotros'">
+      <div class="nvo-num">01</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Conoce más de nosotros</div>
+        <div class="nvo-subs-inline">Historia · Misión · Logros</div>
+      </div>
+      <div class="nvo-arrow">›</div>
+    </div>
+    <div class="nvo-item">
+      <div class="nvo-num">02</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Matrices</div>
+        <div class="nvo-subs-inline">Posiciones · Guías · Documentos</div>
+      </div>
+      <div class="nvo-arrow">›</div>
+    </div>
+    <div class="nvo-item">
+      <div class="nvo-num">03</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Comités</div>
+        <div class="nvo-subs-inline">Seguridad · Asamblea · Especiales</div>
+      </div>
+      <div class="nvo-arrow">›</div>
+    </div>
+    <div class="nvo-item" onclick="window.location.href='/galeria'">
+      <div class="nvo-num">04</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Galería</div>
+        <div class="nvo-subs-inline">Ediciones anteriores · Momentos destacados</div>
+      </div>
+      <div class="nvo-arrow">›</div>
+    </div>
+    <div class="nvo-item">
+      <div class="nvo-num">05</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Reglamento</div>
+        <div class="nvo-subs-inline">Debate · Conducta · Procedimiento MUN</div>
+      </div>
+      <div class="nvo-arrow">›</div>
+    </div>
+    <div class="nvo-item" onclick="window.location.href='/inscripciones'">
+      <div class="nvo-num">06</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Inscripciones</div>
+        <div class="nvo-subs-inline">Registro · Costos · Fechas límite</div>
+      </div>
+      <div class="nvo-badge-live">
+        <div class="nvo-badge-dot"></div>
+        <span>Abiertas</span>
+      </div>
+    </div>
+    <div class="nvo-item" onclick="window.location.href='/drills'">
+      <div class="nvo-num">07</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Central de Drills</div>
+        <div class="nvo-subs-inline">Simulaciones · Próximo evento · Historial</div>
+      </div>
+      <div class="nvo-arrow">›</div>
+    </div>
+  </div>
+</div>
+
+<section class="section-wrap" style="padding-top: 140px;">
+  <div class="hero">
+    <div class="hero-eye">Base de Datos · SVPMUN</div>
+    <h1 class="hero-title">CONOCE NUESTRO<br>LEGADO</h1>
+    <div class="hero-line"></div>
+    <p class="hero-sub">Una delegación forjada en el compromiso absoluto con la diplomacia, la estrategia global y la excelencia académica. Este es nuestro expediente.</p>
+  </div>
+</section>
+
+<section class="section-wrap">
+  <div class="sec-label rv">01 // Protocolo Operativo</div>
+  <div class="data-grid">
+    <div class="data-panel rv d1 tilt-element">
+      <div class="dp-bg-num">M1</div>
+      <div class="dp-icon">🌐</div>
+      <h3 class="dp-title">Misión Primaria</h3>
+      <p class="dp-text">Forjar los líderes del mañana a través de simulaciones de alta presión. Desarrollamos oratoria táctica, resolución de crisis y negociación avanzada para preparar delegados capaces de reestructurar el panorama global.</p>
+    </div>
+    <div class="data-panel rv d2 tilt-element">
+      <div class="dp-bg-num">V2</div>
+      <div class="dp-icon">🔭</div>
+      <h3 class="dp-title">Visión Estratégica</h3>
+      <p class="dp-text">Consolidar a SVPMUN como el centro de mando de debate más prestigioso a nivel nacional, exportando mentes brillantes hacia las cumbres diplomáticas más exigentes del mundo.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section-wrap">
+  <div class="stats-hub rv">
+    <div class="stat-cylinder tilt-element"><div class="sc-num">4+</div><div class="sc-lbl">Ediciones Globales</div></div>
+    <div class="stat-cylinder tilt-element"><div class="sc-num">100+</div><div class="sc-lbl">Agentes Formados</div></div>
+    <div class="stat-cylinder tilt-element"><div class="sc-num">12+</div><div class="sc-lbl">Comités Activos</div></div>
+  </div>
+</section>
+
+<section class="section-wrap">
+  <div class="sec-label rv">02 // Ejes Fundamentales</div>
+  <div class="matrix-grid">
+    <div class="matrix-card rv d1 tilt-element"><div class="mc-icon">⚖️</div><h4 class="mc-title">Integridad</h4><p class="mc-desc">Ética inquebrantable y honor en cada tratado firmado.</p></div>
+    <div class="matrix-card rv d2 tilt-element"><div class="mc-icon">💎</div><h4 class="mc-title">Excelencia</h4><p class="mc-desc">El estándar más alto, no aceptamos puntos medios.</p></div>
+    <div class="matrix-card rv d3 tilt-element"><div class="mc-icon">🤝</div><h4 class="mc-title">Sinergia</h4><p class="mc-desc">Operaciones conjuntas para neutralizar crisis inminentes.</p></div>
+    <div class="matrix-card rv d4 tilt-element"><div class="mc-icon">♟️</div><h4 class="mc-title">Estrategia</h4><p class="mc-desc">Cálculo frío y visión global en el tablero diplomático.</p></div>
+  </div>
+</section>
+
+<section class="staff-section-wrap">
+  <h2 class="staff-hero-title rv">STAFF</h2>
+  <div class="holo-grid">
+    <div class="holo-card rv d1" onclick="openModal('rafael')">
+      <div class="holo-glare-wrap"><div class="holo-glare"></div></div>
+      <div class="holo-frame"></div>
+      <div class="holo-img-container"><img src="/static/Rafael.jpeg" alt="Rafael Mujica" class="holo-img" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'"></div>
+      <div class="holo-badge">Asesor General</div>
+      <h3 class="holo-name">Rafael Mujica</h3>
+      <div class="holo-hint">Toca para desencriptar</div>
+    </div>
+    <div class="holo-card rv d2" onclick="openModal('anabella')">
+      <div class="holo-glare-wrap"><div class="holo-glare"></div></div>
+      <div class="holo-frame"></div>
+      <div class="holo-img-container"><img src="/static/Anabella.jpeg" alt="Anabella" class="holo-img" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'"></div>
+      <div class="holo-badge">Secretaria de Logística</div>
+      <h3 class="holo-name">Anabella</h3>
+      <div class="holo-hint">Toca para desencriptar</div>
+    </div>
+    <div class="holo-card rv d3" onclick="openModal('sarah')">
+      <div class="holo-glare-wrap"><div class="holo-glare"></div></div>
+      <div class="holo-frame"></div>
+      <div class="holo-img-container"><img src="/static/Sarah.jpeg" alt="Sarah" class="holo-img" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'"></div>
+      <div class="holo-badge">Faculty Advisor</div>
+      <h3 class="holo-name">Sarah</h3>
+      <div class="holo-hint">Toca para desencriptar</div>
+    </div>
+  </div>
+</section>
+
+<section class="section-wrap">
+  <div class="sec-label rv">04 // Metodología y Desarrollo</div>
+  <div class="methodology-grid">
+    <div class="meth-card rv"><div class="meth-num">01</div><h4 class="meth-title">Investigación Táctica</h4><p class="meth-text">Análisis profundo de coyunturas internacionales. Proveemos las herramientas analíticas para dominar la política exterior y los intereses de cualquier nación asignada.</p></div>
+    <div class="meth-card rv"><div class="meth-num">02</div><h4 class="meth-title">Oratoria de Alto Impacto</h4><p class="meth-text">Técnicas de persuasión y estructuración del discurso bajo alta presión. Hablar no es suficiente; enseñamos a convencer, mediar y liderar la sala.</p></div>
+    <div class="meth-card rv"><div class="meth-num">03</div><h4 class="meth-title">Resolución en Tiempo Real</h4><p class="meth-text">Simulaciones de escenarios imprevistos (Midnight Crisis). Forjamos la capacidad de adaptación estratégica y redacción de directivas inmediatas.</p></div>
+  </div>
+</section>
+
+<section class="section-wrap">
+  <div class="sec-label rv">05 // Archivo Histórico</div>
+  <div class="timeline">
+    <div class="tl-item rv"><div class="tl-dot"></div><div class="tl-content"><span class="tl-year">2023</span><img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&q=80&w=800" alt="Evento 2023" class="tl-img"><h4 class="meth-title">Operación Alfa</h4><p class="tl-desc">Nuestra primera incursión oficial en el circuito. Se establecieron los protocolos fundacionales y obtuvimos nuestros primeros reconocimientos en crisis de alto riesgo.</p></div></div>
+    <div class="tl-item rv"><div class="tl-dot"></div><div class="tl-content"><span class="tl-year">2024</span><img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800" alt="Evento 2024" class="tl-img"><h4 class="meth-title">Expansión Diplomática</h4><p class="tl-desc">Aumento exponencial del cuerpo de delegados. Dominamos las asambleas generales e implementamos nuevas tácticas de bloque que redefinieron nuestra forma de negociar.</p></div></div>
+    <div class="tl-item rv"><div class="tl-dot"></div><div class="tl-content"><span class="tl-year">2025</span><img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=800" alt="Evento 2025" class="tl-img"><h4 class="meth-title">Consolidación Táctica</h4><p class="tl-desc">El año en que nos volvimos el estándar a vencer. Múltiples premios a mejor delegación y una presencia inquebrantable en comités especializados y cortes internacionales.</p></div></div>
+  </div>
+</section>
+
+<section class="cta-elegant-wrap rv">
+  <h2 class="cta-title">INICIA TU OPERACIÓN</h2>
+  <p class="cta-sub">El tablero está listo. ¿Tienes lo necesario para gobernar el debate?</p>
+  <a href="/inscripciones" class="btn-elegant">Acceder al Registro <span class="btn-arrow">→</span></a>
+</section>
+
+<footer>
+  <div class="f-brand">SVPMUN · Delegación Oficial</div>
+  <div class="f-copy">© 2026 SVPMUN · Base de Datos Segura</div>
+</footer>
+
+<div id="team-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<template id="tpl-rafael">
+  <div class="scf-banner"></div>
+  <div class="modal-content-scroll">
+    <div class="scf-header-vert">
+      <div class="scf-photo-wrap-v">
+        <img src="/static/Rafael.jpeg" alt="Rafael Mujica" class="scf-photo-v"
+             onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'">
+      </div>
+      <div class="scf-badge-v">⭐ Asesor General</div>
+      <div class="scf-name-v">Rafael Mujica</div>
+    </div>
+
+    <div class="scf-stats-grid">
+      <div class="scf-stat-item"><div class="scf-stat-val">16</div><div class="scf-stat-lbl">Años de Edad</div></div>
+      <div class="scf-stat-item"><div class="scf-stat-val">4</div><div class="scf-stat-lbl">Años en MUN</div></div>
+      <div class="scf-stat-item"><div class="scf-stat-val">C1</div><div class="scf-stat-lbl">Inglés EF</div></div>
+    </div>
+
+    <div class="scf-category-v">🏆 Mejor Delegación</div>
+    <div class="scf-awards-list">
+      <div class="award-row gold"><span class="award-icon">🥇</span><div class="award-text"><strong>Mejor Delegación · Corte · UFTMUN 2023</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Rol: Jurado</span></div></div>
+      <div class="award-row gold"><span class="award-icon">🥇</span><div class="award-text"><strong>Mejor Delegación · Crisis · MASMUN 2024</strong></div></div>
+      <div class="award-row gold"><span class="award-icon">🥇</span><div class="award-text"><strong>Mejor Delegación · Corte · CAMIMUN 2024</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Rol: Defensa</span></div></div>
+      <div class="award-row gold"><span class="award-icon">🥇</span><div class="award-text"><strong>Mejor Delegación · Corte · SPMUN 2025</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Rol: Defensa</span></div></div>
+      <div class="award-row gold"><span class="award-icon">🥇</span><div class="award-text"><strong>Mejor Delegación · Crisis Inteligencia · CLFMUN DRILL 2025</strong></div></div>
+      <div class="award-row gold"><span class="award-icon">🥇</span><div class="award-text"><strong>Mejor Delegación · Crisis · KAMEMUN DRILL 2025</strong></div></div>
+      <div class="award-row gold"><span class="award-icon">🥇</span><div class="award-text"><strong>Mejor Delegación · Corte · CAMIMUN 2025</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Rol: Defensa</span></div></div>
+      <div class="award-row gold"><span class="award-icon">🥇</span><div class="award-text"><strong>Mejor Delegación · Crisis · SPMUN 2026</strong></div></div>
+      <div class="award-row" style="border-left-color:var(--gold-lt);"><span class="award-icon">🏅</span><div class="award-text"><strong>Mejor Mesa Directiva · Corte · SVPMUN 2024</strong></div></div>
+    </div>
+
+    <div class="scf-category-v">🎖️ Menciones Honoríficas</div>
+    <div class="scf-awards-list">
+      <div class="award-row"><span class="award-icon">🥈</span><div class="award-text"><strong>2da Mención Honorífica · FBI · UFTMUN 2024</strong></div></div>
+      <div class="award-row"><span class="award-icon">🥇</span><div class="award-text"><strong>1era Mención Honorífica · Corte · CAMIMUN 2023</strong></div></div>
+      <div class="award-row"><span class="award-icon">🥇</span><div class="award-text"><strong>1era Mención Honorífica · Crisis · KAMEMUN 2024</strong></div></div>
+      <div class="award-row"><span class="award-icon">🥇</span><div class="award-text"><strong>1era Mención Honorífica · Crisis · MASMUN 2026</strong></div></div>
+      <div class="award-row"><span class="award-icon">🥇</span><div class="award-text"><strong>1era Mención Honorífica · Crisis · SIMUN Caracas 2025</strong></div></div>
+      <div class="award-row gold"><span class="award-icon">⭐</span><div class="award-text"><strong>1era Mención Sobresaliente · Corte · SAIMUN Maracaibo 2024</strong></div></div>
+    </div>
+
+    <div class="scf-category-v">📜 Certificados</div>
+    <div class="scf-awards-list">
+      <div class="award-row"><span class="award-icon">🤖</span><div class="award-text"><strong>Taller de IA — Superpoderes Digitales</strong></div></div>
+      <div class="award-row gold"><span class="award-icon">🌐</span><div class="award-text"><strong>Certificado C1 en Inglés — Education First (EF)</strong></div></div>
+    </div>
+
+    <div class="scf-category-v">🎵 Perfil Personal</div>
+    <div class="scf-awards-list">
+      <div class="award-row"><span class="award-icon">🎤</span><div class="award-text"><strong>Cantante del Grupo Gaitero CSVP</strong></div></div>
+      <div class="award-row"><span class="award-icon">🎸</span><div class="award-text"><strong>Cantante de la Banda Musical CSVP</strong></div></div>
+      <div class="award-row gold"><span class="award-icon">🏀</span><div class="award-text"><strong>Campeón de Baloncesto Municipal Palavecino 2025</strong></div></div>
+    </div>
+
+    <div style="margin-top:30px; text-align:center; padding-bottom: 10px;">
+      <button class="modal-close-btn" onclick="closeModal()">Cerrar Expediente &nbsp;✕</button>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-anabella">
+  <div class="scf-banner"></div>
+  <div class="modal-content-scroll">
+    <div class="scf-header-vert">
+      <div class="scf-photo-wrap-v">
+        <img src="/static/Anabella.jpeg" alt="Anabella" class="scf-photo-v"
+             onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'">
+      </div>
+      <div class="scf-badge-v">⚙️ Secretaria de Logística</div>
+      <div class="scf-name-v">Anabella</div>
+    </div>
+
+    <div class="scf-stats-grid">
+      <div class="scf-stat-item"><div class="scf-stat-val">19.3</div><div class="scf-stat-lbl">Índice Acad.</div></div>
+      <div class="scf-stat-item"><div class="scf-stat-val">8</div><div class="scf-stat-lbl">Modelos</div></div>
+      <div class="scf-stat-item"><div class="scf-stat-val">2+</div><div class="scf-stat-lbl">Años MUN</div></div>
+    </div>
+
+    <div class="scf-category-v">🏆 Logros Destacados</div>
+    <div class="scf-awards-list">
+      <div class="award-row gold"><span class="award-icon">🥇</span><div class="award-text"><strong>Mejor Delegación</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">SPMUN</span></div></div>
+      <div class="award-row gold"><span class="award-icon">📝</span><div class="award-text"><strong>Mejor Documento de Posición Oficial</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">SPMUN</span></div></div>
+      <div class="award-row"><span class="award-icon">🎖️</span><div class="award-text"><strong>Mención Verbal</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">MASMUN</span></div></div>
+    </div>
+
+    <div class="scf-category-v">📜 Perfil y Capacidades</div>
+    <div class="scf-awards-list">
+      <div class="award-row"><span class="award-icon">🗣️</span><div class="award-text"><strong>Altas capacidades</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Redacción, Academia y Oratoria</span></div></div>
+      <div class="award-row gold"><span class="award-icon">🌐</span><div class="award-text"><strong>Inglés Upper Intermediate B2</strong></div></div>
+      <div class="award-row"><span class="award-icon">🎨</span><div class="award-text"><strong>Experiencia en Diseño e Ilustración</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Academia DOTS y Academia Trazados</span></div></div>
+    </div>
+
+    <div style="margin-top:30px; text-align:center; padding-bottom: 10px;">
+      <button class="modal-close-btn" onclick="closeModal()">Cerrar Expediente &nbsp;✕</button>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-sarah">
+  <div class="scf-banner"></div>
+  <div class="modal-content-scroll">
+    <div class="scf-header-vert">
+      <div class="scf-photo-wrap-v">
+        <img src="/static/Sarah.jpeg" alt="Sarah" class="scf-photo-v"
+             onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'">
+      </div>
+      <div class="scf-badge-v">⭐ Faculty Advisor</div>
+      <div class="scf-name-v">Sarah</div>
+    </div>
+
+    <div class="scf-stats-grid">
+      <div class="scf-stat-item"><div class="scf-stat-val">2022</div><div class="scf-stat-lbl">Inicio MUN</div></div>
+      <div class="scf-stat-item"><div class="scf-stat-val">3</div><div class="scf-stat-lbl">Cargos Ofic.</div></div>
+      <div class="scf-stat-item"><div class="scf-stat-val">4</div><div class="scf-stat-lbl">Años Exp.</div></div>
+    </div>
+
+    <div class="scf-category-v">🏆 Mejor Delegación y Mesa</div>
+    <div class="scf-awards-list">
+      <div class="award-row gold"><span class="award-icon">🏅</span><div class="award-text"><strong>Mejor Mesa Directiva</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">MASMUN</span></div></div>
+      <div class="award-row gold"><span class="award-icon">🥇</span><div class="award-text"><strong>Mejor Delegación en Prensa</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">SPMUN, UFTMUN, CAMIMUN, MASMUN</span></div></div>
+    </div>
+
+    <div class="scf-category-v">🎖️ Menciones y Reconocimientos</div>
+    <div class="scf-awards-list">
+      <div class="award-row"><span class="award-icon">🥈</span><div class="award-text"><strong>1era Mención Honorífica</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">UFTMUN, SPMUN</span></div></div>
+      <div class="award-row"><span class="award-icon">🥉</span><div class="award-text"><strong>2da Mención Honorífica</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">MASMUN</span></div></div>
+      <div class="award-row"><span class="award-icon">🎖️</span><div class="award-text"><strong>Mención Verbal</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">SAIMUN</span></div></div>
+      <div class="award-row"><span class="award-icon">✍️</span><div class="award-text"><strong>Mérito a la Mejor Redacción</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">RCMUN</span></div></div>
+      <div class="award-row"><span class="award-icon">✈️</span><div class="award-text"><strong>Participación Nacional</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">SIMUN (Caracas)</span></div></div>
+    </div>
+
+    <div class="scf-category-v">📜 Perfil y Certificaciones</div>
+    <div class="scf-awards-list">
+      <div class="award-row gold"><span class="award-icon">📱</span><div class="award-text"><strong>Certificación Social Media Manager</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Inntalent</span></div></div>
+      <div class="award-row"><span class="award-icon">🖋️</span><div class="award-text"><strong>Especialización en Redacción y Manejo de Medios</strong></div></div>
+      <div class="award-row"><span class="award-icon">💼</span><div class="award-text"><strong>Cargos Asumidos</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Secretaria de Logística, Secretaria General, Faculty Advisor, Delegada ONU/Prensa</span></div></div>
+    </div>
+
+    <div style="margin-top:30px; text-align:center; padding-bottom: 10px;">
+      <button class="modal-close-btn" onclick="closeModal()">Cerrar Expediente &nbsp;✕</button>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-mystery">
+  <div class="scf-banner" style="background: linear-gradient(135deg, #0a0a1a, #0a1931);"></div>
+  <div class="modal-content-scroll" style="text-align:center; padding: 40px;">
+    <div style="font-size:4rem; margin: 20px 0;">🔒</div>
+    <div class="scf-name-v" style="color: rgba(255,0,0,0.6); font-size:1.6rem;">ACCESO DENEGADO</div>
+    <p style="color: rgba(185,215,255,0.5); margin: 20px 0; font-family:'Rajdhani',sans-serif; line-height:1.6;">
+      Este expediente requiere un nivel de autorización superior.<br>
+      Contacta con la Mesa Directiva para solicitar acceso.
+    </p>
+    <div style="margin-top: 30px;">
+      <button class="modal-close-btn" onclick="closeModal()">Cerrar ✕</button>
+    </div>
+  </div>
+</template>
+
+<div id="mobile-shell">
+  <div id="mob-topbar">
+    <div class="mob-brand">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="ONU">
+      <span class="mob-brand-name">SVPMUN</span>
+    </div>
+    <div class="mob-topbar-badge">2026</div>
+  </div>
+  <div class="mob-nos-hero">
+    <div class="mob-eyebrow">Base de Datos</div>
+    <div class="mob-h1">CONOCE<br>NUESTRO<br>LEGADO</div>
+    <p class="mob-tagline">Una delegación forjada en el compromiso absoluto con la diplomacia, la estrategia global y la excelencia académica.</p>
+  </div>
+  <div class="mob-section">
+    <div class="mob-sec-label">Protocolo Operativo</div>
+    <div class="mob-card">
+      <div class="mob-card-icon">🌐</div>
+      <div class="mob-card-title">Misión Primaria</div>
+      <div class="mob-card-text">Forjar líderes a través de simulaciones de alta presión, desarrollando oratoria táctica y resolución de crisis.</div>
+    </div>
+    <div class="mob-card">
+      <div class="mob-card-icon">🔭</div>
+      <div class="mob-card-title">Visión Estratégica</div>
+      <div class="mob-card-text">Consolidar a SVPMUN como el centro de mando de debate más prestigioso a nivel nacional.</div>
+    </div>
+  </div>
+  <div class="mob-section" style="padding-top:0;">
+    <div class="mob-stats-grid">
+      <div class="mob-stat-box"><div class="mob-stat-num">4+</div><div class="mob-stat-lbl">Ediciones</div></div>
+      <div class="mob-stat-box"><div class="mob-stat-num">100+</div><div class="mob-stat-lbl">Agentes</div></div>
+      <div class="mob-stat-box"><div class="mob-stat-num">12+</div><div class="mob-stat-lbl">Comités</div></div>
+    </div>
+  </div>
+  <div class="mob-section">
+    <div class="mob-sec-label">Archivos del Staff</div>
+    <div class="mob-scroll-row">
+      <div class="mob-staff-card" onclick="openModal('rafael')">
+        <img src="/static/Rafael.jpeg" alt="Rafael Mujica" class="mob-staff-img" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'">
+        <div class="mob-staff-badge">Asesor General</div>
+        <div class="mob-staff-name">Rafael Mujica</div>
+      </div>
+      <div class="mob-staff-card" onclick="openModal('anabella')">
+        <img src="/static/Anabella.jpeg" alt="Anabella" class="mob-staff-img" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'">
+        <div class="mob-staff-badge" style="background:#8ec5f7;">Secretaria Logística</div>
+        <div class="mob-staff-name">Anabella</div>
+      </div>
+      <div class="mob-staff-card" onclick="openModal('sarah')">
+        <img src="/static/Sarah.jpeg" alt="Sarah" class="mob-staff-img" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'">
+        <div class="mob-staff-badge" style="background:#8ec5f7;">Faculty Advisor</div>
+        <div class="mob-staff-name">Sarah</div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center; padding: 40px 20px;">
+    <p style="color: rgba(142,197,247,0.5); font-size: 0.8rem; margin-bottom: 20px;">FIN DEL REPORTE</p>
+    <a href="/inscripciones" style="display:inline-block; background: var(--gold); color: #000; padding: 12px 24px; text-decoration: none; font-family: 'Cinzel', serif; font-weight: 700; border-radius: 4px;">Inicia tu operación</a>
+  </div>
+  <div id="mob-bottomnav">
+    <a href="/" class="mob-nav-item"><div class="mob-nav-icon">🏛️</div><div class="mob-nav-label">Inicio</div></a>
+    <a href="/nosotros" class="mob-nav-item active"><div class="mob-nav-icon">🌐</div><div class="mob-nav-label">Nosotros</div></a>
+    <a href="/inscripciones" class="mob-nav-item"><div class="mob-nav-icon">✍️</div><div class="mob-nav-label">Inscrip</div></a>
+  </div>
+</div>
+
+<script>
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var loader = document.getElementById('new-loader');
+    if(loader) { loader.classList.add('exit'); setTimeout(function(){ loader.remove(); }, 1000); }
+  }, 8000); 
+});
+
+var navOpen = false;
+function toggleNav() {
+  navOpen = !navOpen;
+  document.getElementById('nav-bar').classList.toggle('menu-open', navOpen);
+  document.getElementById('nav-overlay').classList.toggle('open', navOpen);
+  document.getElementById('nbIcon').classList.toggle('open', navOpen);
+  document.body.style.overflow = navOpen ? 'hidden' : '';
+}
+
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) { if(e.isIntersecting) { e.target.classList.add('on'); observer.unobserve(e.target); } });
+}, {threshold: 0.1});
+document.querySelectorAll('.rv').forEach(function(el) { observer.observe(el); });
+
+function openModal(personId) {
+  var modal = document.getElementById('team-modal');
+  var content = document.getElementById('modal-content');
+  if (personId === 'rafael') {
+    content.innerHTML = document.getElementById('tpl-rafael').innerHTML;
+  } else if (personId === 'anabella') {
+    content.innerHTML = document.getElementById('tpl-anabella').innerHTML;
+  } else if (personId === 'sarah') {
+    content.innerHTML = document.getElementById('tpl-sarah').innerHTML;
+  } else {
+    content.innerHTML = document.getElementById('tpl-mystery').innerHTML;
+  }
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('team-modal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+const tilts = document.querySelectorAll('.tilt-element');
+tilts.forEach(el => {
+  el.addEventListener('mousemove', e => {
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+    const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -8;
+    const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 8;
+    el.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    el.style.transition = 'none';
+  });
+  el.addEventListener('mouseleave', () => {
+    el.style.transform = `rotateX(0deg) rotateY(0deg)`;
+    el.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
+  });
+});
+</script>
+</body>
+</html>
