@@ -1796,23 +1796,19 @@
   <div class="orb orb-d"></div>
 </div>
 
-<!-- ══ TOP BAR ══ -->
 <header id="nav-bar">
 
-  <!-- Brand -->
   <a class="nb-brand" href="#">
     <img class="nb-emblem" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="ONU">
     <span class="nb-word">SVPMUN</span>
   </a>
 
-  <!-- Quick-access links (center, hidden on mobile) -->
   <nav class="nb-center" aria-label="Acceso rápido">
     <a class="nb-quick-link" href="/galeria" onclick="event.preventDefault();navigateTo('/galeria')">Galería</a>
     <a class="nb-quick-link" href="/inscripciones" onclick="event.preventDefault();navigateTo('/inscripciones')">Inscripciones</a>
     <a class="nb-quick-link" href="/drills" onclick="event.preventDefault();navigateTo('/drills')">Drills</a>
   </nav>
 
-  <!-- Trigger -->
   <button class="nb-trigger" id="nbTrigger" onclick="toggleNav()" aria-label="Menú">
     <span class="nb-trigger-label">Menú</span>
     <div class="nb-icon" id="nbIcon">
@@ -1822,10 +1818,8 @@
 
 </header>
 
-<!-- ══ FULLSCREEN OVERLAY — Embassy Split ══ -->
 <div id="nav-overlay" role="navigation" aria-label="Menú principal">
 
-  <!-- Left decorative panel -->
   <div class="nvo-deco-panel">
     <img class="nvo-deco-emblem" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="">
     <div class="nvo-deco-top">
@@ -1840,10 +1834,8 @@
     </div>
   </div>
 
-  <!-- Right vertical nav list -->
   <div class="nvo-list-panel">
 
-    <!-- 1. Nosotros -->
     <div class="nvo-item" onclick="navigateTo('/nosotros')" style="cursor:pointer;">
       <div class="nvo-num">01</div>
       <div class="nvo-body">
@@ -1853,7 +1845,6 @@
       <div class="nvo-arrow">›</div>
     </div>
 
-    <!-- 2. Matrices -->
     <div class="nvo-item">
       <div class="nvo-num">02</div>
       <div class="nvo-body">
@@ -1863,7 +1854,6 @@
       <div class="nvo-arrow">›</div>
     </div>
 
-    <!-- 3. Comités -->
     <div class="nvo-item">
       <div class="nvo-num">03</div>
       <div class="nvo-body">
@@ -1873,7 +1863,6 @@
       <div class="nvo-arrow">›</div>
     </div>
 
-    <!-- 4. Galería -->
     <div class="nvo-item" onclick="navigateTo('/galeria')" style="cursor:pointer;">
       <div class="nvo-num">04</div>
       <div class="nvo-body">
@@ -1883,7 +1872,6 @@
       <div class="nvo-arrow">›</div>
     </div>
 
-    <!-- 5. Reglamento -->
     <div class="nvo-item">
       <div class="nvo-num">05</div>
       <div class="nvo-body">
@@ -1893,7 +1881,6 @@
       <div class="nvo-arrow">›</div>
     </div>
 
-    <!-- 6. Inscripciones -->
     <div class="nvo-item" onclick="navigateTo('/inscripciones')" style="cursor:pointer;">
       <div class="nvo-num">06</div>
       <div class="nvo-body">
@@ -1906,7 +1893,6 @@
       </div>
     </div>
 
-    <!-- 7. Central de Drills -->
     <div class="nvo-item" onclick="navigateTo('/drills')" style="cursor:pointer;">
       <div class="nvo-num">07</div>
       <div class="nvo-body">
@@ -1916,11 +1902,7 @@
       <div class="nvo-arrow">›</div>
     </div>
 
-  </div><!-- /nvo-list-panel -->
-
-</div><!-- /nav-overlay -->
-
-<section id="hero">
+  </div></div><section id="hero">
   <div class="hero-video-wrap">
     <video id="bg-video" autoplay muted loop playsinline src="/static/onu-debate.mp4"></video>
   </div>
@@ -1939,19 +1921,15 @@
   </div>
 </section>
 
-<!-- ════════════════════════════════════════
-     COUNTDOWN — Sistema Orbital Diplomático
-════════════════════════════════════════ -->
 <section id="countdown">
   <div class="cd-inner">
     <div class="cd-label rv">Próxima edición</div>
     <h2 class="cd-title rv d1">SVPMUN 2026</h2>
-    <p class="cd-subtitle rv d2">La cumbre se acerca · ? de ?, 2026</p>
+    <p class="cd-subtitle rv d2">La cumbre se acerca · 2 de mayo de 2026</p>
 
     <div class="orbit-scene rv d3">
       <div class="orbit-scene-inner" id="orbitInner">
 
-        <!-- Nucleus -->
         <div class="orbit-nucleus">
           <div class="nucleus-ring ring-1"></div>
           <div class="nucleus-ring ring-2"></div>
@@ -1962,7 +1940,6 @@
           </div>
         </div>
 
-        <!-- DAYS — outermost orbit -->
         <div class="orbit-track track-days">
           <div class="orbit-satellite sat-days">
             <div class="sat-glow"></div>
@@ -1973,7 +1950,6 @@
           </div>
         </div>
 
-        <!-- HOURS -->
         <div class="orbit-track track-hours">
           <div class="orbit-satellite sat-hours">
             <div class="sat-glow"></div>
@@ -1984,7 +1960,6 @@
           </div>
         </div>
 
-        <!-- MINUTES -->
         <div class="orbit-track track-mins">
           <div class="orbit-satellite sat-mins">
             <div class="sat-glow"></div>
@@ -1995,7 +1970,6 @@
           </div>
         </div>
 
-        <!-- SECONDS — innermost, gold -->
         <div class="orbit-track track-secs">
           <div class="orbit-satellite sat-secs">
             <div class="sat-glow"></div>
@@ -2006,18 +1980,14 @@
           </div>
         </div>
 
-      </div><!-- /orbit-scene-inner -->
-    </div><!-- /orbit-scene -->
-
-    <!-- Legend -->
-    <div class="cd-legend rv d4">
+      </div></div><div class="cd-legend rv d4">
       <div class="cd-legend-item"><div class="cd-legend-dot"></div>Días</div>
       <div class="cd-legend-item"><div class="cd-legend-dot"></div>Horas</div>
       <div class="cd-legend-item"><div class="cd-legend-dot"></div>Minutos</div>
       <div class="cd-legend-item" style="color:rgba(201,168,76,0.6)"><div class="cd-legend-dot"></div>Segundos</div>
     </div>
 
-    <p class="cd-date-note rv d4">Fecha objetivo: <strong>? de ?, 2026</strong> — Reserva tu lugar hoy.</p>
+    <p class="cd-date-note rv d4">Fecha objetivo: <strong>2 de mayo de 2026</strong> — Reserva tu lugar hoy.</p>
   </div>
 </section>
 
@@ -2199,7 +2169,7 @@
   document.querySelectorAll('.rv').forEach(el => io.observe(el));
 
   /* ══ ORBITAL COUNTDOWN ══ */
-  const TARGET = new Date('2026-01-01T09:00:00');
+  const TARGET = new Date('2026-05-02T00:00:00');
   function pad(n) { return String(n).padStart(2, '0'); }
 
   function popDigit(el) {
@@ -2285,12 +2255,8 @@
     })();
   })();
 </script>
-<!-- ══════════════════════════════════════════════════════════════
-     MOBILE SHELL — Solo visible en ≤768px
-══════════════════════════════════════════════════════════════ -->
 <div id="mobile-shell">
 
-  <!-- MOBILE INTRO -->
   <div id="mob-intro">
     <div class="mi-glitch-bar"></div>
     <div class="mi-corner tl"></div>
@@ -2312,7 +2278,6 @@
     </div>
   </div>
 
-  <!-- TOP BAR -->
   <div id="mob-topbar">
     <div class="mob-brand">
       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="ONU">
@@ -2321,10 +2286,8 @@
     <div class="mob-topbar-badge">2026</div>
   </div>
 
-  <!-- ══ PAGE: INICIO ══ -->
   <div class="mob-page active" id="mob-home">
 
-    <!-- Hero -->
     <div class="mob-hero">
       <div class="mob-hero-bg"></div>
       <div class="mob-hero-grid"></div>
@@ -2347,7 +2310,6 @@
       </div>
     </div>
 
-    <!-- Countdown -->
     <div class="mob-countdown">
       <div class="mob-cd-label">· Cuenta regresiva · SVPMUN 2026 ·</div>
       <div class="mob-cd-grid">
@@ -2368,10 +2330,9 @@
           <div class="mob-cd-lbl">Seg</div>
         </div>
       </div>
-      <div class="mob-cd-date">Objetivo: <strong>? de ?, 2026</strong></div>
+      <div class="mob-cd-date">Objetivo: <strong>2 de mayo de 2026</strong></div>
     </div>
 
-    <!-- Why cards horizontal -->
     <div class="mob-why">
       <div class="mob-section-head">
         <div class="mob-sec-label">¿Por qué SVPMUN?</div>
@@ -2405,7 +2366,6 @@
       </div>
     </div>
 
-    <!-- CTA -->
     <div class="mob-cta">
       <div class="mob-cta-eye">Únete a nosotros</div>
       <div class="mob-cta-title">Tu voz merece un<br><span>escenario global.</span></div>
@@ -2420,10 +2380,7 @@
       <div class="mob-footer-brand">SVPMUN</div>
       <div class="mob-footer-copy">© 2026 SVPMUN · Delegación Oficial · Model United Nations</div>
     </div>
-  </div><!-- /mob-home -->
-
-  <!-- ══ PAGE: GALERÍA ══ -->
-  <div class="mob-page" id="mob-galeria">
+  </div><div class="mob-page" id="mob-galeria">
 
     <div class="mob-gal-hero">
       <div class="mob-sec-label" style="margin-bottom:10px;">Archivo visual</div>
@@ -2474,7 +2431,6 @@
       </div>
     </div>
 
-    <!-- Stats -->
     <div class="mob-stats">
       <div class="mob-sec-label" style="padding:0;margin-bottom:16px;">En números</div>
       <div class="mob-stats-grid">
@@ -2484,7 +2440,6 @@
       </div>
     </div>
 
-    <!-- Timeline -->
     <div class="mob-timeline">
       <div class="mob-sec-label" style="margin-bottom:20px;">Historia</div>
       <div class="mob-tl-item">
@@ -2492,7 +2447,7 @@
         <div class="mob-tl-content">
           <div class="mob-tl-year">2026</div>
           <div class="mob-tl-title">SVPMUN 2026 — Próxima edición</div>
-          <div class="mob-tl-desc">La delegación se prepara para el ? de ?. Nueva generación, mismo compromiso.</div>
+          <div class="mob-tl-desc">La delegación se prepara para el 2 de mayo. Nueva generación, mismo compromiso.</div>
         </div>
       </div>
       <div class="mob-tl-item">
@@ -2521,7 +2476,6 @@
       </div>
     </div>
 
-    <!-- Drive CTA -->
     <div class="mob-drive-cta">
       <div class="mob-drive-title">Álbum oficial completo</div>
       <div class="mob-drive-sub">Cientos de fotos de cada edición esperan por ti en Google Drive.</div>
@@ -2535,10 +2489,7 @@
       <div class="mob-footer-brand">SVPMUN</div>
       <div class="mob-footer-copy">© 2026 SVPMUN · Galería Oficial</div>
     </div>
-  </div><!-- /mob-galeria -->
-
-  <!-- ══ PAGE: EQUIPO ══ -->
-  <div class="mob-page" id="mob-equipo">
+  </div><div class="mob-page" id="mob-equipo">
 
     <div style="padding:24px 20px 0;">
       <div class="mob-sec-label" style="margin-bottom:10px;">Mesa directiva</div>
@@ -2607,7 +2558,6 @@
       </div>
     </div>
 
-    <!-- Tips accordion -->
     <div class="mob-tips">
       <div class="mob-sec-label" style="margin-bottom:6px;">Para nuevos delegados</div>
       <div class="mob-sec-title" style="margin-bottom:20px;">Consejos<br>esenciales</div>
@@ -2672,10 +2622,7 @@
       <div class="mob-footer-brand">SVPMUN</div>
       <div class="mob-footer-copy">© 2026 SVPMUN · Model United Nations</div>
     </div>
-  </div><!-- /mob-equipo -->
-
-  <!-- ══ PAGE: INFO / MENÚ ══ -->
-  <div class="mob-page" id="mob-info">
+  </div><div class="mob-page" id="mob-info">
     <div class="mob-info-hero">
       <div class="mob-sec-label" style="margin-bottom:10px;">Navegación</div>
       <div class="mob-info-big">MENÚ</div>
@@ -2731,16 +2678,21 @@
         </div>
         <div class="mob-mi-arrow">›</div>
       </div>
+      <div class="mob-menu-item" onclick="window.location.href='/drills'">
+        <div class="mob-mi-num">07</div>
+        <div class="mob-mi-content">
+          <div class="mob-mi-title">Central de Drills</div>
+          <div class="mob-mi-subs">Simulaciones · Próximo evento · Historial</div>
+        </div>
+        <div class="mob-mi-arrow">›</div>
+      </div>
     </div>
 
     <div class="mob-footer" style="margin-top:24px;">
       <div class="mob-footer-brand">SVPMUN · Delegación Oficial</div>
       <div class="mob-footer-copy">© 2026 SVPMUN · Model United Nations</div>
     </div>
-  </div><!-- /mob-info -->
-
-  <!-- BOTTOM NAV -->
-  <div id="mob-bottomnav">
+  </div><div id="mob-bottomnav">
     <div class="mob-nav-item active" id="nav-home" onclick="mobNav('home')">
       <div class="mob-nav-icon">🏛️</div>
       <div class="mob-nav-label">Inicio</div>
@@ -2759,9 +2711,7 @@
     </div>
   </div>
 
-</div><!-- /mobile-shell -->
-
-<script>
+</div><script>
 /* ══ PAGE TRANSITIONS for index.html ══ */
 
 (function() {
@@ -2829,7 +2779,7 @@ if (isMobile) {
 }
 
 /* ══ MOBILE COUNTDOWN ══ */
-const MOB_TARGET = new Date('2026-01-01T09:00:00');
+const MOB_TARGET = new Date('2026-05-02T00:00:00');
 function padM(n) { return String(n).padStart(2, '0'); }
 let mPD='', mPH='', mPM='', mPS='';
 
