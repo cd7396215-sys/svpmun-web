@@ -418,12 +418,29 @@
        MOBILE EXPERIENCE (≤768px)
     ══════════════════════════════════════════════════════════════ */
     @media (max-width: 768px) {
-      /* Ocultar el layout desktop */
-      #nav-bar, #nav-overlay, #hero, #stats, #dinamica, #countdown, #formato, #why, #cta, footer, #orbs { display: none !important; }
+      /* Ocultar el layout desktop (excepto elementos necesarios para navbar overlay en móvil) */
+      #hero, #stats, #dinamica, #countdown, #formato, #why, #cta, footer, #orbs { display: none !important; }
+      
+      #nav-bar { display: none !important; }
+      #nav-bar.menu-open { display: flex !important; padding: 0 20px; z-index: 9001; }
+      #nav-bar.menu-open .nb-brand, #nav-bar.menu-open .nb-center { display: none !important; }
+      #nav-bar.menu-open .nb-trigger { margin-left: auto; }
+
+      #nav-overlay { z-index: 9000; }
+      .nvo-deco-panel { display: none; }
+      .nvo-list-panel { padding-top: 60px; }
+      .nvo-item { padding: 16px 20px; grid-template-columns: 42px 1fr auto; gap: 0 12px; }
+      .nvo-sub-item { padding: 12px 20px 12px 74px; gap: 12px; }
+      .nvo-title { font-size: 1rem; }
+      .nvo-subs-inline { display: none; }
       
       /* Mostrar el shell móvil */
       #mobile-shell { display: flex !important; }
       body { background: #030812; overflow-x: hidden; color: #fff; }
+    }
+    @media (max-width: 480px) {
+      .nvo-item { padding: 14px 16px; grid-template-columns: 36px 1fr auto; gap: 0 10px; }
+      .nvo-sub-item { padding-left: 62px; }
     }
 
     #mobile-shell {
@@ -675,7 +692,7 @@
         <div class="cd-unit"><div class="cd-box"><div class="cd-num" id="cd-m">00</div><div class="cd-lbl-u">Minutos</div></div></div>
         <div class="cd-unit cd-secs"><div class="cd-box"><div class="cd-num" id="cd-s">00</div><div class="cd-lbl-u">Segundos</div></div></div>
       </div>
-      <p class="cd-note rv d4">Fecha objetivo: <strong>? de ?, 2026</strong> — Las inscripciones cierran 5 días antes.</p>
+      <p class="cd-note rv d4">Fecha objetivo: <strong>2 de mayo de 2026</strong> — Las inscripciones cierran 5 días antes.</p>
     </div>
   </section>
 
@@ -791,7 +808,7 @@
         <div class="mob-cd-unit"><div class="mob-cd-num" id="m-cd-m">00</div><div class="mob-cd-lbl">Min</div></div>
         <div class="mob-cd-unit" style="border-color:rgba(201,168,76,0.3);"><div class="mob-cd-num" id="m-cd-s" style="color:var(--gold-lt);">00</div><div class="mob-cd-lbl" style="color:var(--gold);">Seg</div></div>
       </div>
-      <div class="mob-cd-date">Objetivo: <strong>? de ?, 2026</strong></div>
+      <div class="mob-cd-date">Objetivo: <strong>2 de mayo de 2026</strong></div>
     </div>
 
     <div class="mob-section">
@@ -858,7 +875,10 @@
       <a href="/" class="mob-nav-item"><div class="mob-nav-icon">🏛️</div><div class="mob-nav-label">Inicio</div></a>
       <a href="/nosotros" class="mob-nav-item"><div class="mob-nav-icon">🌐</div><div class="mob-nav-label">Nosotros</div></a>
       <a href="/drills" class="mob-nav-item active"><div class="mob-nav-icon">⚡</div><div class="mob-nav-label">Drills</div></a>
-      <a href="/inscripciones" class="mob-nav-item"><div class="mob-nav-icon">✍️</div><div class="mob-nav-label">Inscrip</div></a>
+      <div class="mob-nav-item" onclick="toggleNav()">
+        <div class="mob-nav-icon">☰</div>
+        <div class="mob-nav-label">Menú</div>
+      </div>
     </div>
   </div>
 
@@ -938,8 +958,7 @@
   window.addEventListener('scroll',()=>document.getElementById('nav-bar').classList.toggle('scrolled',window.scrollY>40));
 
   /* ══ COUNTDOWN (Desktop & Mobile) ══ */
-  // Se establece una fecha futura para que el script funcione correctamente.
-  const TARGET = new Date('2026-05-01T00:00:00');
+  const TARGET = new Date('2026-05-02T00:00:00');
   function pad(n){return String(n).padStart(2,'0');}
   let pD='',pH='',pM='',pS='';
   function tick(){
