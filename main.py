@@ -58,3 +58,7 @@ async def health():
 
 # ssh -R 80:127.0.0.1:8000 nokey@localhost.run
 # python -m uvicorn main:app --host 127.0.0.1 --port 8000
+
+#git add .
+#git commit -m "aquí escribes lo que hiciste1"
+#git push origin main

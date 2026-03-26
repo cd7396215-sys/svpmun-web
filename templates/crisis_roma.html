@@ -1211,6 +1211,317 @@
     
   border-radius: 1px;
 }
+
+    /* ══════════════════════════════════════
+       MOBILE SHELL — Media Query
+    ══════════════════════════════════════ */
+    @media (max-width: 768px) {
+      #loader, #ash-canvas, #nav-bar,
+      #hero, #intro, #faction-toggle,
+      #section-caesar, #section-pompey, footer { display: none !important; }
+
+      #nav-bar.menu-open { display: flex !important; padding: 0 20px; z-index: 9001; }
+      #nav-bar.menu-open .nb-brand,
+      #nav-bar.menu-open .nb-center { display: none !important; }
+      #nav-bar.menu-open .nb-trigger { margin-left: auto; }
+
+      #nav-overlay { z-index: 9000; }
+      .nvo-deco-panel { display: none; }
+      .nvo-list-panel { padding-top: 60px; }
+      .nvo-item { padding: 16px 20px; grid-template-columns: 42px 1fr auto; gap: 0 12px; }
+      .nvo-sub-item { padding: 12px 20px 12px 74px; gap: 12px; }
+      .nvo-title { font-size: 1rem; }
+      .nvo-subs-inline { display: none; }
+
+      #mobile-shell { display: flex !important; }
+      body { background: #0d0a06; overflow-x: hidden; }
+    }
+    @media (max-width: 480px) {
+      .nvo-item { padding: 14px 16px; grid-template-columns: 36px 1fr auto; gap: 0 10px; }
+      .nvo-sub-item { padding-left: 62px; }
+    }
+
+    /* ══════════════════════════════════════
+       MOBILE SHELL — Base
+    ══════════════════════════════════════ */
+    #mobile-shell {
+      display: none;
+      flex-direction: column;
+      min-height: 100vh;
+      background: var(--dark);
+      color: var(--silver-lt);
+      font-family: 'Cormorant Garamond', serif;
+      overflow-x: hidden;
+      padding-bottom: 68px;
+    }
+
+    /* Mobile Top Bar */
+    #mob-topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500; height: 52px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px;
+      background: rgba(13,10,6,0.93); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(212,175,55,0.2);
+    }
+    .mob-brand { display: flex; align-items: center; gap: 10px; }
+    .mob-brand img { width: 20px; height: 20px; object-fit: contain; filter: brightness(0) invert(1); }
+    .mob-brand-name { font-family: 'Cinzel', serif; font-weight: 900; font-size: 0.78rem; letter-spacing: 0.22em; color: #fff; }
+    .mob-brand-sep { color: var(--gold); margin: 0 2px; }
+    .mob-topbar-badge {
+      font-family: 'Uncial Antiqua', serif; font-size: 0.62rem; letter-spacing: 0.16em;
+      color: var(--gold); border: 1px solid rgba(212,175,55,0.3);
+      border-radius: 20px; padding: 3px 10px;
+    }
+
+    /* Mobile Hero */
+    .mob-crisis-hero {
+      position: relative; padding: 88px 22px 36px;
+      text-align: center; overflow: hidden;
+      background: linear-gradient(180deg, #0d0604 0%, #150e06 60%, #0d0a06 100%);
+      border-bottom: 1px solid rgba(180,115,51,0.18);
+    }
+    .mob-crisis-hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Forum_romanum_6k_%285765477647%29.jpg/1280px-Forum_romanum_6k_%285765477647%29.jpg');
+      background-size: cover; background-position: center;
+      filter: sepia(0.9) brightness(0.12) contrast(1.2);
+      z-index: 0;
+    }
+    .mob-crisis-hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background:
+        radial-gradient(ellipse 90% 70% at 50% 100%, rgba(90,0,0,0.5) 0%, transparent 65%),
+        linear-gradient(180deg, rgba(13,10,6,0.55) 0%, rgba(13,10,6,0.1) 50%, rgba(13,10,6,0.8) 100%);
+    }
+    .mob-crisis-eyebrow {
+      position: relative; z-index: 2;
+      font-family: 'Cinzel', serif; font-size: 0.5rem; letter-spacing: 0.5em;
+      text-transform: uppercase; color: var(--copper); margin-bottom: 12px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .mob-crisis-eyebrow::before, .mob-crisis-eyebrow::after {
+      content: ''; width: 16px; height: 1px; background: var(--copper);
+    }
+    .mob-crisis-h1 {
+      position: relative; z-index: 2;
+      font-family: 'Cinzel', serif; font-weight: 900;
+      font-size: 2.35rem; line-height: 1.05; letter-spacing: 0.03em;
+      color: transparent;
+      background: linear-gradient(160deg, #e8e4dc 0%, #c0bfbb 30%, #d4af37 55%, #8b6914 80%);
+      -webkit-background-clip: text; background-clip: text;
+      margin-bottom: 8px;
+    }
+    .mob-crisis-sub {
+      position: relative; z-index: 2;
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: 0.92rem; color: rgba(200,169,122,0.7);
+      letter-spacing: 0.08em; margin-bottom: 22px; line-height: 1.5;
+    }
+
+    /* Mobile Countdown */
+    .mob-crisis-cd-wrap {
+      position: relative; z-index: 2;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(212,175,55,0.18);
+      border-radius: 8px; padding: 14px 16px 12px;
+      backdrop-filter: blur(10px);
+    }
+    .mob-crisis-cd-label {
+      font-family: 'Cinzel', serif; font-size: 0.48rem; letter-spacing: 0.35em;
+      text-transform: uppercase; color: var(--silver); opacity: 0.65;
+      margin-bottom: 10px; text-align: center;
+    }
+    .mob-crisis-cd-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+    }
+    .mob-crisis-cd-unit {
+      background: rgba(212,175,55,0.04); border: 1px solid rgba(212,175,55,0.12);
+      border-radius: 6px; padding: 10px 4px 8px; text-align: center;
+    }
+    .mob-crisis-cd-num {
+      font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.85rem;
+      color: var(--gold-lt); line-height: 1;
+      text-shadow: 0 0 10px rgba(255,69,0,0.45), 0 0 20px rgba(212,175,55,0.25);
+    }
+    .mob-crisis-cd-lbl {
+      font-family: 'Cinzel', serif; font-size: 0.4rem; letter-spacing: 0.16em;
+      text-transform: uppercase; color: rgba(192,191,187,0.4); margin-top: 5px;
+    }
+    .mob-crisis-cd-date {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: 0.78rem; color: rgba(200,169,122,0.38); margin-top: 10px; text-align: center;
+    }
+    .mob-crisis-cd-date strong { color: var(--gold-lt); font-style: normal; }
+
+    /* General Section */
+    .mob-crisis-section { padding: 32px 20px; }
+    .mob-crisis-sec-label {
+      font-family: 'Cinzel', serif; font-size: 0.52rem; letter-spacing: 0.4em;
+      text-transform: uppercase; color: var(--copper); margin-bottom: 18px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .mob-crisis-sec-label::before { content: ''; width: 16px; height: 1px; background: var(--copper); }
+
+    /* Stats Grid */
+    .mob-crisis-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .mob-crisis-stat {
+      background: rgba(255,255,255,0.02); border: 1px solid rgba(180,115,51,0.14);
+      border-radius: 10px; padding: 18px 10px; text-align: center; position: relative; overflow: hidden;
+    }
+    .mob-crisis-stat::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--red-lt), transparent);
+    }
+    .mob-crisis-stat-num {
+      font-family: 'Cinzel', serif; font-size: 1.7rem; font-weight: 700;
+      color: var(--gold); line-height: 1; margin-bottom: 5px;
+    }
+    .mob-crisis-stat-lbl {
+      font-family: 'Cinzel', serif; font-size: 0.48rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--grey);
+    }
+
+    /* Faction Tabs */
+    .mob-faction-header { padding: 0 20px 18px; }
+    .mob-faction-title {
+      font-family: 'Cinzel', serif; font-size: 0.52rem; letter-spacing: 0.42em;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 14px; text-align: center;
+    }
+    .mob-faction-tabs {
+      display: flex; gap: 0; border: 1px solid rgba(180,115,51,0.18); overflow: hidden; border-radius: 4px;
+    }
+    .mob-faction-tab {
+      flex: 1; padding: 14px 6px; cursor: pointer;
+      font-family: 'Cinzel', serif; font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase; text-align: center;
+      border: none; transition: all 0.35s ease;
+    }
+    .mob-faction-tab.caesar-tab {
+      background: rgba(60,16,16,0.55); color: rgba(200,169,122,0.45);
+      border-right: 1px solid rgba(139,26,26,0.25);
+    }
+    .mob-faction-tab.caesar-tab.active {
+      background: rgba(100,20,20,0.75); color: var(--gold-lt);
+      box-shadow: inset 0 -3px 0 var(--red-lt);
+    }
+    .mob-faction-tab.pompey-tab {
+      background: rgba(12,16,28,0.55); color: rgba(170,185,220,0.45);
+    }
+    .mob-faction-tab.pompey-tab.active {
+      background: rgba(30,38,65,0.75); color: rgba(200,215,255,0.9);
+      box-shadow: inset 0 -3px 0 rgba(140,155,210,0.7);
+    }
+
+    .mob-faction-panel { display: none; padding-bottom: 8px; }
+    .mob-faction-panel.active { display: block; }
+
+    /* Faction Content Cards */
+    .mob-faction-card {
+      margin: 0 20px 12px;
+      background: rgba(255,255,255,0.015);
+      border: 1px solid rgba(180,115,51,0.1);
+      border-radius: 10px; padding: 20px 16px;
+      position: relative; overflow: hidden;
+    }
+    .mob-faction-card.caesar-card { border-color: rgba(139,26,26,0.18); }
+    .mob-faction-card.caesar-card::before {
+      content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+      background: linear-gradient(180deg, transparent, var(--red-lt), transparent);
+    }
+    .mob-faction-card.pompey-card { border-color: rgba(90,100,160,0.18); }
+    .mob-faction-card.pompey-card::before {
+      content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+      background: linear-gradient(180deg, transparent, rgba(140,155,210,0.8), transparent);
+    }
+    .mob-faction-card-icon { font-size: 1.5rem; margin-bottom: 10px; }
+    .mob-faction-card-title {
+      font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700;
+      letter-spacing: 0.06em; color: var(--silver-lt); margin-bottom: 8px;
+    }
+    .mob-faction-card-text {
+      font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; font-style: italic;
+      color: rgba(192,191,187,0.62); line-height: 1.7;
+    }
+
+    /* Alto Mando Cards */
+    .mob-am-card {
+      margin: 0 20px 10px;
+      background: rgba(255,255,255,0.018);
+      border: 1px solid rgba(212,175,55,0.1);
+      border-radius: 10px; padding: 18px 16px;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .mob-am-num {
+      font-family: 'Uncial Antiqua', serif; font-size: 1.3rem;
+      color: rgba(212,175,55,0.2); flex-shrink: 0; line-height: 1; padding-top: 2px;
+    }
+    .mob-am-role {
+      font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 3px;
+    }
+    .mob-am-name {
+      font-family: 'Cinzel', serif; font-size: 0.9rem; font-weight: 700;
+      color: var(--silver-lt); margin-bottom: 5px;
+    }
+    .mob-am-desc {
+      font-family: 'Cormorant Garamond', serif; font-size: 0.88rem; font-style: italic;
+      color: rgba(192,191,187,0.48); line-height: 1.55;
+    }
+
+    /* CTA Box */
+    .mob-crisis-cta {
+      margin: 10px 20px 24px;
+      background: linear-gradient(135deg, rgba(50,14,14,0.8), rgba(13,10,6,0.96));
+      border: 1px solid rgba(139,26,26,0.22);
+      border-radius: 12px; padding: 28px 20px; text-align: center;
+    }
+    .mob-crisis-cta h2 {
+      font-family: 'Uncial Antiqua', serif; font-size: 1.4rem;
+      color: var(--gold-lt); margin-bottom: 10px; letter-spacing: 0.06em;
+    }
+    .mob-crisis-cta p {
+      font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; font-style: italic;
+      color: rgba(200,169,122,0.58); line-height: 1.65; margin-bottom: 18px;
+    }
+    .mob-crisis-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: linear-gradient(135deg, var(--red), var(--blood));
+      color: var(--gold-lt); font-family: 'Cinzel', serif; font-size: 0.68rem;
+      font-weight: 700; text-transform: uppercase; text-decoration: none;
+      letter-spacing: 0.2em; border: 1px solid rgba(139,26,26,0.6);
+      border-radius: 6px; padding: 15px 20px; width: 100%;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+
+    /* Mobile Footer */
+    .mob-crisis-footer { padding: 22px 20px; text-align: center; border-top: 1px solid rgba(180,115,51,0.14); }
+    .mob-crisis-footer-spqr {
+      font-family: 'Uncial Antiqua', serif; font-size: 0.85rem;
+      color: rgba(212,175,55,0.18); letter-spacing: 0.35em; margin-bottom: 6px;
+    }
+    .mob-crisis-footer-copy {
+      font-family: 'Cinzel', serif; font-size: 0.5rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: rgba(122,116,112,0.28);
+    }
+
+    /* Bottom Nav */
+    #mob-crisis-bottomnav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; height: 60px;
+      display: flex; align-items: center;
+      background: rgba(13,10,6,0.96); backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(212,175,55,0.14);
+    }
+    .mob-crisis-nav-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 3px; cursor: pointer; text-decoration: none;
+    }
+    .mob-crisis-nav-icon { font-size: 1.1rem; color: rgba(180,115,51,0.32); }
+    .mob-crisis-nav-label {
+      font-family: 'Cinzel', serif; font-size: 0.42rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: rgba(180,115,51,0.32);
+    }
+    .mob-crisis-nav-item.active .mob-crisis-nav-icon,
+    .mob-crisis-nav-item.active .mob-crisis-nav-label { color: var(--gold-lt); }
   </style>
 </head>
 <body>
@@ -2007,6 +2318,184 @@
   <div class="foot-copy">© 2026 SVPMUN · Comité de Crisis · Segunda Guerra Civil Romana</div>
 </footer>
 
+
+<div id="mobile-shell">
+
+  <div id="mob-topbar">
+    <div class="mob-brand">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="ONU">
+      <span class="mob-brand-name">SVPMUN <span class="mob-brand-sep">·</span> CRISIS</span>
+    </div>
+    <div class="mob-topbar-badge">XLIX A.C.</div>
+  </div>
+
+  <!-- Hero -->
+  <div class="mob-crisis-hero">
+    <div class="mob-crisis-hero-bg"></div>
+    <div class="mob-crisis-hero-overlay"></div>
+    <div class="mob-crisis-eyebrow">Comité de Crisis · SVPMUN 2026</div>
+    <div class="mob-crisis-h1">Segunda<br>Guerra Civil<br>Romana</div>
+    <div class="mob-crisis-sub">César contra Pompeyo · La República en llamas</div>
+    <div class="mob-crisis-cd-wrap">
+      <div class="mob-crisis-cd-label">Tiempo hasta la Sesión</div>
+      <div class="mob-crisis-cd-grid">
+        <div class="mob-crisis-cd-unit">
+          <div class="mob-crisis-cd-num" id="mc-d">00</div>
+          <div class="mob-crisis-cd-lbl">Días</div>
+        </div>
+        <div class="mob-crisis-cd-unit">
+          <div class="mob-crisis-cd-num" id="mc-h">00</div>
+          <div class="mob-crisis-cd-lbl">Horas</div>
+        </div>
+        <div class="mob-crisis-cd-unit">
+          <div class="mob-crisis-cd-num" id="mc-m">00</div>
+          <div class="mob-crisis-cd-lbl">Min</div>
+        </div>
+        <div class="mob-crisis-cd-unit">
+          <div class="mob-crisis-cd-num" id="mc-s">00</div>
+          <div class="mob-crisis-cd-lbl">Seg</div>
+        </div>
+      </div>
+      <div class="mob-crisis-cd-date">Sesión: <strong>2 de mayo de 2026</strong></div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="mob-crisis-section" style="padding-top:28px; padding-bottom:10px;">
+    <div class="mob-crisis-sec-label">Contexto de la Crisis</div>
+    <div class="mob-crisis-stats">
+      <div class="mob-crisis-stat">
+        <div class="mob-crisis-stat-num">XIII</div>
+        <div class="mob-crisis-stat-lbl">Legión de César</div>
+      </div>
+      <div class="mob-crisis-stat">
+        <div class="mob-crisis-stat-num">49 A.C.</div>
+        <div class="mob-crisis-stat-lbl">Año de la Crisis</div>
+      </div>
+      <div class="mob-crisis-stat">
+        <div class="mob-crisis-stat-num">II</div>
+        <div class="mob-crisis-stat-lbl">Facciones en Guerra</div>
+      </div>
+      <div class="mob-crisis-stat">
+        <div class="mob-crisis-stat-num">Roma</div>
+        <div class="mob-crisis-stat-lbl">En Juego</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Faction Toggle -->
+  <div class="mob-faction-header">
+    <div class="mob-faction-title">Selecciona tu Facción</div>
+    <div class="mob-faction-tabs">
+      <button class="mob-faction-tab caesar-tab active" id="mob-btn-caesar" onclick="mobSwitchFaction('caesar')" type="button">
+        CAESAR
+      </button>
+      <button class="mob-faction-tab pompey-tab" id="mob-btn-pompey" onclick="mobSwitchFaction('pompey')" type="button">
+        POMPEIVS
+      </button>
+    </div>
+  </div>
+
+  <!-- Caesar Panel -->
+  <div class="mob-faction-panel active" id="mob-panel-caesar">
+    <div class="mob-faction-card caesar-card">
+      <div class="mob-faction-card-icon">⚔️</div>
+      <div class="mob-faction-card-title">Cayo Julio César — Populares</div>
+      <div class="mob-faction-card-text">El Rubicón ha sido cruzado. La ley se ha roto, pero la justicia exige que marches sobre Roma. Tus veteranos de la <strong style="color:var(--gold);">XIII Legión Gemina</strong> te son leales a ti, no a políticos corruptos.</div>
+    </div>
+    <div class="mob-faction-card caesar-card">
+      <div class="mob-faction-card-icon">🗡️</div>
+      <div class="mob-faction-card-title">Situación Táctica</div>
+      <div class="mob-faction-card-text">La XIII Legión avanza sin oposición seria. Pompeyo ha abandonado Roma y se retira hacia Brindisi. Si cortas su escape, esta guerra acaba antes de comenzar en serio.</div>
+    </div>
+    <div class="mob-faction-card caesar-card">
+      <div class="mob-faction-card-icon">🏛️</div>
+      <div class="mob-faction-card-title">Recursos y Ventajas</div>
+      <div class="mob-faction-card-text"><strong style="color:var(--gold);">XI legiones bajo mando</strong> · Oro de la Galia · Apoyo de la plebe romana · Objetivo inmediato: Roma.</div>
+    </div>
+  </div>
+
+  <!-- Pompey Panel -->
+  <div class="mob-faction-panel" id="mob-panel-pompey">
+    <div class="mob-faction-card pompey-card">
+      <div class="mob-faction-card-icon">🏛️</div>
+      <div class="mob-faction-card-title">Cneo Pompeyo Magno — Optimates</div>
+      <div class="mob-faction-card-text">El Senado te ha otorgado poderes extraordinarios. César ha traicionado las instituciones sagradas de Roma. <strong style="color:rgba(200,210,240,0.9);">La ley y los dioses exigen la cabeza del tirano.</strong></div>
+    </div>
+    <div class="mob-faction-card pompey-card">
+      <div class="mob-faction-card-icon">⚓</div>
+      <div class="mob-faction-card-title">Estrategia de Retirada</div>
+      <div class="mob-faction-card-text">La retirada a Grecia no es cobardía: es estrategia. Cuando regreses con tus legiones orientales y la flota del Mediterráneo, aplastarás la aventura de César.</div>
+    </div>
+    <div class="mob-faction-card pompey-card">
+      <div class="mob-faction-card-icon">🌊</div>
+      <div class="mob-faction-card-title">Poder y Legitimidad</div>
+      <div class="mob-faction-card-text"><strong style="color:rgba(200,210,240,0.9);">IX legiones en Oriente</strong> · Señor del Mediterráneo · Apoyo de reyes clientes · Legitimidad del Senado.</div>
+    </div>
+  </div>
+
+  <!-- Alto Mando -->
+  <div class="mob-crisis-section" style="padding-bottom:10px;">
+    <div class="mob-crisis-sec-label">Alto Mando del Comité</div>
+    <div class="mob-am-card">
+      <div class="mob-am-num">I</div>
+      <div>
+        <div class="mob-am-role">Presidente de Mesa</div>
+        <div class="mob-am-name">Por Confirmar</div>
+        <div class="mob-am-desc">Magistrado supremo de la deliberación. Preside el comité con la autoridad del Senado.</div>
+      </div>
+    </div>
+    <div class="mob-am-card">
+      <div class="mob-am-num">II</div>
+      <div>
+        <div class="mob-am-role">Vicepresidente de Mesa</div>
+        <div class="mob-am-name">Por Confirmar</div>
+        <div class="mob-am-desc">Auxilia al Presidente. Gestiona el protocolo y el flujo de la deliberación.</div>
+      </div>
+    </div>
+    <div class="mob-am-card">
+      <div class="mob-am-num">III</div>
+      <div>
+        <div class="mob-am-role">Crisis Staff</div>
+        <div class="mob-am-name">Por Confirmar</div>
+        <div class="mob-am-desc">Los arquitectos de la crisis. Inyectan noticias y giros que cambian el rumbo del comité en tiempo real.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="mob-crisis-cta">
+    <h2>Alea Iacta Est</h2>
+    <p>La suerte está echada. Inscríbete antes de que cierren los cupos y forma parte del Comité de Crisis de SVPMUN 2026.</p>
+    <a href="/inscripciones" onclick="event.preventDefault();navigateTo('/inscripciones')" class="mob-crisis-btn">Inscribirme al Comité</a>
+  </div>
+
+  <div class="mob-crisis-footer">
+    <div class="mob-crisis-footer-spqr">SPQR · SVPMUN MMXXVI</div>
+    <div class="mob-crisis-footer-copy">© 2026 SVPMUN · Comité de Crisis · Segunda Guerra Civil Romana</div>
+  </div>
+
+  <div id="mob-crisis-bottomnav">
+    <a href="/" onclick="event.preventDefault();navigateTo('/')" class="mob-crisis-nav-item">
+      <div class="mob-crisis-nav-icon">🏛️</div>
+      <div class="mob-crisis-nav-label">Inicio</div>
+    </a>
+    <a href="/drills" onclick="event.preventDefault();navigateTo('/drills')" class="mob-crisis-nav-item">
+      <div class="mob-crisis-nav-icon">⚡</div>
+      <div class="mob-crisis-nav-label">Drills</div>
+    </a>
+    <a href="/crisis-roma" class="mob-crisis-nav-item active">
+      <div class="mob-crisis-nav-icon">⚔️</div>
+      <div class="mob-crisis-nav-label">Crisis</div>
+    </a>
+    <div class="mob-crisis-nav-item" onclick="toggleNav()">
+      <div class="mob-crisis-nav-icon">☰</div>
+      <div class="mob-crisis-nav-label">Menú</div>
+    </div>
+  </div>
+
+</div>
+
 <script>
 /* ══════════════════════════════════════
    LOADER
@@ -2126,7 +2615,7 @@
 ══════════════════════════════════════ */
 (function() {
   // Establece la fecha de la simulación: 1 de Junio de 2026 (Puedes cambiarla)
-  const countDownDate = new Date("Jun 1, 2026 09:00:00").getTime();
+  const countDownDate = new Date("May 2, 2026 00:00:00").getTime();
 
   const timer = setInterval(function() {
     const now = new Date().getTime();
@@ -2252,6 +2741,53 @@ const revealObserver = new IntersectionObserver(entries=>{
   entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('on'); });
 },{threshold:0.08});
 document.querySelectorAll('.rv').forEach(el=>revealObserver.observe(el));
+
+/* ══════════════════════════════════════
+   MOBILE FACTION SWITCH
+══════════════════════════════════════ */
+function mobSwitchFaction(faction) {
+  document.querySelectorAll('.mob-faction-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.mob-faction-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('mob-panel-' + faction).classList.add('active');
+  document.getElementById('mob-btn-' + faction).classList.add('active');
+}
+
+/* ══════════════════════════════════════
+   MOBILE CRISIS COUNTDOWN
+══════════════════════════════════════ */
+(function() {
+  const target = new Date("May 2, 2026 00:00:00").getTime();
+  function pad(n) { return n < 10 ? "0" + n : String(n); }
+
+  const mobTimer = setInterval(function() {
+    const now = new Date().getTime();
+    const distance = target - now;
+
+    if (distance < 0) {
+      clearInterval(mobTimer);
+      ['mc-d','mc-h','mc-m','mc-s'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = '00';
+      });
+      return;
+    }
+
+    const d = Math.floor(distance / 86400000);
+    const h = Math.floor((distance % 86400000) / 3600000);
+    const m = Math.floor((distance % 3600000) / 60000);
+    const s = Math.floor((distance % 60000) / 1000);
+
+    var dEl = document.getElementById('mc-d');
+    var hEl = document.getElementById('mc-h');
+    var mEl = document.getElementById('mc-m');
+    var sEl = document.getElementById('mc-s');
+
+    if (dEl) dEl.textContent = pad(d);
+    if (hEl) hEl.textContent = pad(h);
+    if (mEl) mEl.textContent = pad(m);
+    if (sEl) sEl.textContent = pad(s);
+  }, 1000);
+})();
 </script>
 </body>
 </html>
