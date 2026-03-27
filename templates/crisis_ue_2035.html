@@ -744,6 +744,29 @@
     }
     .mob-crisis-nav-item.active .mob-crisis-nav-icon { color: var(--alert); }
     .mob-crisis-nav-item.active .mob-crisis-nav-label { color: var(--alert); }
+    /* --- AJUSTE MENÚ MÓVIL 5 ÍTEMS --- */
+#mob-bottomnav, 
+#mob-crisis-bottomnav {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important; /* Obliga a que no salten de línea */
+  justify-content: space-between !important;
+}
+
+.mob-nav-item, 
+.mob-crisis-nav-item {
+  flex: 1 1 20% !important; /* Fuerza a que cada uno ocupe el 20% */
+  min-width: 0 !important; /* Ignora anchos mínimos anteriores */
+  padding: 0.5rem 0 !important;
+}
+
+.mob-nav-label, 
+.mob-crisis-nav-label {
+  font-size: 0.65rem !important; /* Achicamos ligeramente la letra para que quepan palabras largas */
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
   </style>
 </head>
 <body class="flicker">
