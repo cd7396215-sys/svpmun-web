@@ -24,28 +24,79 @@
     html { scroll-behavior:smooth; }
     body { font-family:'Rajdhani',sans-serif; background:var(--navy); color:var(--white); overflow-x:hidden; }
 
-    /* ═══════════════════════ MATRIX LOADER ═══════════════════════ */
+    /* ═══════════════════════ NUEVO MATRIX LOADER (ESTILO 'NOSOTROS' ADAPTADO) ═══════════════════════ */
     #matrix-loader {
       position: fixed; inset: 0; z-index: 9999;
-      background: #030812;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      overflow: hidden;
+      background: var(--navy);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-direction: column;
     }
-    #matrix-loader.exit { animation: mlExit 1s cubic-bezier(0.77,0,0.18,1) forwards; }
-    @keyframes mlExit { 0% { opacity: 1; filter: blur(0px); } 100% { opacity: 0; filter: blur(20px); visibility: hidden; } }
+    #matrix-loader::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at center, rgba(201,168,76,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    #matrix-loader.exit { animation: mxExit 1s cubic-bezier(0.77,0,0.18,1) forwards; }
+    @keyframes mxExit { 0% { opacity: 1; transform: scale(1); filter: blur(0px); } 100% { opacity: 0; transform: scale(1.1); filter: blur(15px); visibility: hidden; } }
 
-    .ml-center {
-      position: absolute; inset: 0; z-index: 2;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    .mx-terminal { 
+      position: absolute; top: 40px; left: 40px; 
+      font-family: 'Rajdhani', monospace; font-size: 0.85rem; 
+      color: var(--blu-2); text-transform: uppercase; letter-spacing: 0.2em; 
+      line-height: 1.6; opacity: 0; animation: mxTermFade 7.5s linear forwards; 
     }
-    .ml-visual-render {
-      width: 100%; height: 100%;
-      background-image: url('image_0.png');
-      background-size: cover; background-position: center;
-      filter: drop-shadow(0 0 15px var(--blu-3));
+    @keyframes mxTermFade { 0%{opacity:0} 10%{opacity:1} 85%{opacity:1} 100%{opacity:0} }
+
+    .mx-ring-container { 
+      position: relative; width: 420px; height: 420px; 
+      display: flex; align-items: center; justify-content: center; 
     }
-    /* Eliminar elementos de loader viejos */
-    .ml-icon, .ml-title, .ml-bar-wrap, .ml-status { display: none !important; }
+    .mx-ring { 
+      position: absolute; border-radius: 50%; 
+      border: 1px solid rgba(201,168,76,0.1); 
+      animation: mxSpin 2s linear infinite; 
+    }
+    .mx-ring-1 { width: 320px; height: 320px; border-width: 2px; border-top-color: var(--gold); border-style: dashed; animation-duration: 6s; }
+    .mx-ring-2 { width: 260px; height: 260px; border-width: 1px; border-right-color: var(--blu-3); animation-duration: 3s; animation-direction: reverse; }
+    .mx-ring-3 { width: 200px; height: 200px; border-width: 3px; border-left-color: var(--blu-2); border-bottom-color: var(--blu-4); border-style: dotted; animation-duration: 4.5s; }
+    
+    @keyframes mxSpin { 100% { transform: rotate(360deg); } }
+
+    .mx-dna-core { 
+      position: absolute; z-index: 5; font-size: 3.5rem; 
+      opacity: 0; transform: scale(0.5); 
+      animation: mxLogoReveal 4s cubic-bezier(0.16,1,0.3,1) 3s forwards; 
+      filter: drop-shadow(0 0 15px rgba(201,168,76,0.6)); 
+    }
+    @keyframes mxLogoReveal { 0%{opacity:0; transform:scale(0.5);} 15%{opacity:1; transform:scale(1);} 85%{opacity:1; transform:scale(1);} 100%{opacity:0; transform:scale(1.2) blur(5px);} }
+
+    .mx-giant-text { 
+      position: absolute; font-family: 'Bebas Neue', serif; 
+      font-size: clamp(4rem, 16vw, 13rem); 
+      background: linear-gradient(135deg, #fff 0%, var(--gold) 100%); 
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; 
+      filter: drop-shadow(0 0 30px rgba(201,168,76,0.3)); 
+      opacity: 0; transform: scale(1.5) blur(15px); 
+      animation: mxTextSlam 2.5s cubic-bezier(0.16,1,0.3,1) 5.8s forwards; 
+      z-index: 10; pointer-events: none; 
+    }
+    @keyframes mxTextSlam { 0%{opacity:0; transform:scale(1.5) blur(20px);} 20%{opacity:1; transform:scale(1) blur(0px);} 90%{opacity:1; transform:scale(1) blur(0px);} 100%{opacity:0; transform:scale(0.9) blur(10px);} }
+
+    .mx-status { 
+      position: absolute; bottom: 60px; font-family: 'Cinzel', serif; 
+      font-size: 0.9rem; letter-spacing: 0.4em; color: rgba(201,168,76,0.7); 
+      text-transform: uppercase; text-align: center; opacity: 0; 
+      animation: mxFadeStatus 7s ease 0.5s forwards; 
+    }
+    .mx-status::after { content: 'INICIALIZANDO MATRIZ...'; animation: mxStatusChange 7.5s steps(1) forwards; }
+    @keyframes mxFadeStatus { 0%{opacity:0} 5%{opacity:1} 95%{opacity:1} 100%{opacity:0} }
+    @keyframes mxStatusChange { 
+      0% { content: 'ACCEDIENDO A LA BASE DE DATOS...'; } 
+      20% { content: 'SINTETIZANDO ADN ESTRUCTURAL...'; } 
+      40% { content: 'COMPILANDO LÍNEAS ROJAS...'; } 
+      60% { content: 'VERIFICANDO ALIANZAS ESTRATÉGICAS...'; } 
+      80% { content: 'MATRIZ LISTA. ACCESO TÁCTICO CONCEDIDO.'; color: var(--blu-2); } 
+    }
 
     /* ═══════════════════════ ORBS & BG ═══════════════════════ */
     #orbs { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
@@ -343,9 +394,15 @@
 <body>
 
   <div id="matrix-loader">
-    <div class="ml-center">
-      <div class="ml-visual-render"></div>
+    <div class="mx-terminal">DB.INIT() <br>QUERY: MATRICES_GLOBALES<br>HASH: 0x8F9A2C <br>ENCRYPTION: ON<br>STATUS: EXTRACTING</div>
+    <div class="mx-ring-container">
+      <div class="mx-ring mx-ring-1"></div>
+      <div class="mx-ring mx-ring-2"></div>
+      <div class="mx-ring mx-ring-3"></div>
+      <div class="mx-dna-core">🧬</div>
     </div>
+    <div class="mx-giant-text">MATRICES</div>
+    <div class="mx-status"></div>
   </div>
 
   <div id="orbs"><div class="orb orb-a"></div><div class="orb orb-b"></div></div>
@@ -560,15 +617,18 @@
   </div>
 
   <script>
-    /* ══ SIMPLIFIED MATRIX LOADER ══ */
-    // Solo un retraso fijo y desvanecimiento para el nuevo loader cinematográfico.
+    /* ══ MATRIX LOADER (Sincronizado a 8 segundos como en "nosotros") ══ */
     window.addEventListener('load', () => {
       setTimeout(() => {
         const loader = document.getElementById('matrix-loader');
-        if(loader) loader.classList.add('exit');
-        // Restaurar el scroll después del loader
-        setTimeout(() => document.body.style.overflow = '', 1000);
-      }, 2500); // Retraso fijo de carga simulado
+        if(loader) {
+          loader.classList.add('exit');
+          setTimeout(() => {
+            loader.remove();
+            document.body.style.overflow = '';
+          }, 1000);
+        }
+      }, 8000);
     });
 
     /* ══ SCROLL REVEAL ══ */
