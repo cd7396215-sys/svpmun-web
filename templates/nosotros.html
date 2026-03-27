@@ -406,13 +406,13 @@
     #team-modal.active { opacity: 1; pointer-events: all; }
     .modal-box { background: linear-gradient(145deg, rgba(14,37,74,0.95), rgba(5,13,26,0.98)); border: 1px solid rgba(58,143,224,0.4); border-radius: 24px; width: 100%; max-width: 550px; position: relative; overflow: hidden; transform: rotateX(20deg) translateY(50px) translateZ(-100px) scale(0.9); transition: transform 0.6s cubic-bezier(0.34,1.5,0.64,1); box-shadow: 0 40px 80px rgba(0,0,0,0.8), inset 2px 2px 5px rgba(255,255,255,0.1); }
     #team-modal.active .modal-box { transform: rotateX(0deg) translateY(0) translateZ(0) scale(1); }
-    .modal-content-scroll { max-height: 85vh; overflow-y: auto; padding: 0 40px 40px 40px; }
+    .modal-content-scroll { max-height: 85vh; overflow-y: auto; overflow-x: hidden; padding: 0 40px 40px 40px; }
     .modal-content-scroll::-webkit-scrollbar { width: 6px; }
     .modal-content-scroll::-webkit-scrollbar-thumb { background: rgba(58,143,224,0.5); border-radius: 4px; }
     .modal-close { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.3); color: #fff; width: 40px; height: 40px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
     .modal-close:hover { background: var(--gold); border-color: var(--gold); color: #000; transform: translateZ(20px) scale(1.1); }
     
-    .scf-banner { height: 130px; width: 100%; background: linear-gradient(135deg, var(--blu-4), var(--navy-mid)); position: relative; border-bottom: 3px solid var(--gold); }
+    .scf-banner { height: 130px; margin: 0 -40px; background: linear-gradient(135deg, var(--blu-4), var(--navy-mid)); position: relative; border-bottom: 3px solid var(--gold); }
     .scf-banner::after { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px); background-size: 12px 12px; }
     .scf-header-vert { display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: -70px; margin-bottom: 30px; position: relative; z-index: 10; }
     .scf-photo-wrap-v { width: 140px; height: 140px; margin-bottom: 20px; border-radius: 50%; border: 4px solid var(--navy); box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 0 3px var(--gold); background: var(--navy); display: flex; align-items: center; justify-content: center; overflow: hidden; }
@@ -690,7 +690,7 @@
       <h3 class="holo-name">Rafael Mujica</h3>
       <div class="holo-hint">Toca para desencriptar</div>
     </div>
-    <div class="holo-card rv d2" onclick="openModal('Anabella Bravo')">
+    <div class="holo-card rv d2" onclick="openModal('anabella')">
       <div class="holo-glare-wrap"><div class="holo-glare"></div></div>
       <div class="holo-frame"></div>
       <div class="holo-img-container"><img src="/static/Anabella.jpeg" alt="Anabella" class="holo-img" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'"></div>
@@ -698,12 +698,28 @@
       <h3 class="holo-name">Anabella Bravo</h3>
       <div class="holo-hint">Toca para desencriptar</div>
     </div>
-    <div class="holo-card rv d3" onclick="openModal('Sara Riera')">
+    <div class="holo-card rv d3" onclick="openModal('sarah')">
       <div class="holo-glare-wrap"><div class="holo-glare"></div></div>
       <div class="holo-frame"></div>
       <div class="holo-img-container"><img src="/static/Sarah.jpeg" alt="Sarah" class="holo-img" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'"></div>
       <div class="holo-badge">Faculty Advisor</div>
       <h3 class="holo-name">Sara Riera</h3>
+      <div class="holo-hint">Toca para desencriptar</div>
+    </div>
+    <div class="holo-card rv d4" onclick="openModal('mariapaula')">
+      <div class="holo-glare-wrap"><div class="holo-glare"></div></div>
+      <div class="holo-frame"></div>
+      <div class="holo-img-container"><img src="/static/Maria.jpeg" alt="Maria Paula" class="holo-img" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'"></div>
+      <div class="holo-badge">Secretaria Académica</div>
+      <h3 class="holo-name">Maria Paula</h3>
+      <div class="holo-hint">Toca para desencriptar</div>
+    </div>
+    <div class="holo-card rv d5" onclick="openModal('gabriela')">
+      <div class="holo-glare-wrap"><div class="holo-glare"></div></div>
+      <div class="holo-frame"></div>
+      <div class="holo-img-container"><img src="/static/Gabriela.jpeg" alt="Gabriela Requena" class="holo-img" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'"></div>
+      <div class="holo-badge">Secretaria de Publicidad</div>
+      <h3 class="holo-name">Gabriela Requena</h3>
       <div class="holo-hint">Toca para desencriptar</div>
     </div>
   </div>
@@ -746,8 +762,8 @@
 </div>
 
 <template id="tpl-rafael">
-  <div class="scf-banner"></div>
   <div class="modal-content-scroll">
+    <div class="scf-banner"></div>
     <div class="scf-header-vert">
       <div class="scf-photo-wrap-v">
         <img src="/static/Rafael.jpeg" alt="Rafael Mujica" class="scf-photo-v"
@@ -806,8 +822,8 @@
 </template>
 
 <template id="tpl-anabella">
-  <div class="scf-banner"></div>
   <div class="modal-content-scroll">
+    <div class="scf-banner"></div>
     <div class="scf-header-vert">
       <div class="scf-photo-wrap-v">
         <img src="/static/Anabella.jpeg" alt="Anabella" class="scf-photo-v"
@@ -844,8 +860,8 @@
 </template>
 
 <template id="tpl-sarah">
-  <div class="scf-banner"></div>
   <div class="modal-content-scroll">
+    <div class="scf-banner"></div>
     <div class="scf-header-vert">
       <div class="scf-photo-wrap-v">
         <img src="/static/Sarah.jpeg" alt="Sarah" class="scf-photo-v"
@@ -889,9 +905,88 @@
   </div>
 </template>
 
+<template id="tpl-mariapaula">
+  <div class="modal-content-scroll">
+    <div class="scf-banner"></div>
+    <div class="scf-header-vert">
+      <div class="scf-photo-wrap-v">
+        <img src="/static/Maria.jpeg" alt="Maria Paula" class="scf-photo-v"
+             onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'">
+      </div>
+      <div class="scf-badge-v">📚 Secretaria Académica</div>
+      <div class="scf-name-v">Maria Paula</div>
+    </div>
+
+    <div class="scf-stats-grid">
+      <div class="scf-stat-item"><div class="scf-stat-val">1</div><div class="scf-stat-lbl">Año en MUN</div></div>
+      <div class="scf-stat-item"><div class="scf-stat-val">5</div><div class="scf-stat-lbl">Modelos</div></div>
+      <div class="scf-stat-item"><div class="scf-stat-val">Top</div><div class="scf-stat-lbl">Liderazgo</div></div>
+    </div>
+
+    <div class="scf-category-v">🏆 Galardones de Trayectoria</div>
+    <div class="scf-awards-list">
+      <div class="award-row gold"><span class="award-icon">🥇</span><div class="award-text"><strong>Mejor Delegación</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">MASMUN</span></div></div>
+      <div class="award-row"><span class="award-icon">🥈</span><div class="award-text"><strong>Primera Mención Honorífica</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">CAMIMUN</span></div></div>
+      <div class="award-row"><span class="award-icon">🎖️</span><div class="award-text"><strong>Segunda Mención Verbal</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">SVPMUN</span></div></div>
+    </div>
+
+    <div class="scf-category-v">🌟 Perfil de Operaciones</div>
+    <div class="scf-awards-list">
+      <div class="award-row gold"><span class="award-icon">🗣️</span><div class="award-text"><strong>Especialización Activa</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Oratoria, liderazgo imponente y habilidades de diplomacia avanzada.</span></div></div>
+    </div>
+
+    <div style="margin-top:30px; text-align:center; padding-bottom: 10px;">
+      <button class="modal-close-btn" onclick="closeModal()">Cerrar Expediente &nbsp;✕</button>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-gabriela">
+  <div class="modal-content-scroll">
+    <div class="scf-banner"></div>
+    <div class="scf-header-vert">
+      <div class="scf-photo-wrap-v">
+        <img src="/static/Gabriela.jpeg" alt="Gabriela Requena" class="scf-photo-v"
+             onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'">
+      </div>
+      <div class="scf-badge-v">📱 Secretaria de Publicidad</div>
+      <div class="scf-name-v">Gabriela Requena</div>
+    </div>
+
+    <div class="scf-stats-grid">
+      <div class="scf-stat-item"><div class="scf-stat-val">3</div><div class="scf-stat-lbl">Años MUN</div></div>
+      <div class="scf-stat-item"><div class="scf-stat-val">5</div><div class="scf-stat-lbl">Años Exc. Acad.</div></div>
+      <div class="scf-stat-item"><div class="scf-stat-val">4to</div><div class="scf-stat-lbl">Kyu Karate</div></div>
+    </div>
+
+    <div class="scf-category-v">🏆 Mejor Delegación</div>
+    <div class="scf-awards-list">
+      <div class="award-row gold"><span class="award-icon">🥇</span><div class="award-text"><strong>Mejor Delegación</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">PAVIMUN 2026</span></div></div>
+    </div>
+
+    <div class="scf-category-v">🎖️ Menciones de Excelencia</div>
+    <div class="scf-awards-list">
+      <div class="award-row"><span class="award-icon">🥈</span><div class="award-text"><strong>Mención Honorífica</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">RCMUN 2025</span></div></div>
+      <div class="award-row"><span class="award-icon">🎖️</span><div class="award-text"><strong>Mención Verbal</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">CAMIMUN 2025</span></div></div>
+      <div class="award-row"><span class="award-icon">🎖️</span><div class="award-text"><strong>Mención Verbal</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">SVPMUN 2024</span></div></div>
+    </div>
+
+    <div class="scf-category-v">📜 Formación y Habilidades Duras</div>
+    <div class="scf-awards-list">
+      <div class="award-row gold"><span class="award-icon">🎓</span><div class="award-text"><strong>Excelencia Académica Continua</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Galardonada al Mejor Promedio en el salón durante 5 años consecutivos.</span></div></div>
+      <div class="award-row gold"><span class="award-icon">📱</span><div class="award-text"><strong>Diplomado Corporativo RRSS</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Diplomado Oficial en gerencia de redes sociales y community management.</span></div></div>
+      <div class="award-row"><span class="award-icon">🥋</span><div class="award-text"><strong>Seminario de Artes Marciales</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Participante destacada en seminarios de Karate Do, Jōjutsu y acreditación de 4to kyu en Shotokan.</span></div></div>
+    </div>
+
+    <div style="margin-top:30px; text-align:center; padding-bottom: 10px;">
+      <button class="modal-close-btn" onclick="closeModal()">Cerrar Expediente &nbsp;✕</button>
+    </div>
+  </div>
+</template>
+
 <template id="tpl-mystery">
-  <div class="scf-banner" style="background: linear-gradient(135deg, #0a0a1a, #0a1931);"></div>
-  <div class="modal-content-scroll" style="text-align:center; padding: 40px;">
+  <div class="modal-content-scroll" style="text-align:center; padding-top: 40px;">
+    <div class="scf-banner" style="background: linear-gradient(135deg, #0a0a1a, #0a1931); margin: -40px -40px 40px -40px;"></div>
     <div style="font-size:4rem; margin: 20px 0;">🔒</div>
     <div class="scf-name-v" style="color: rgba(255,0,0,0.6); font-size:1.6rem;">ACCESO DENEGADO</div>
     <p style="color: rgba(185,215,255,0.5); margin: 20px 0; font-family:'Rajdhani',sans-serif; line-height:1.6;">
@@ -945,7 +1040,7 @@
         <div class="mob-staff-badge">Asesor General</div>
         <div class="mob-staff-name">Rafael Mujica</div>
       </div>
-      <div class="mob-staff-card" onclick="openModal('Anabella Bravo')">
+      <div class="mob-staff-card" onclick="openModal('anabella')">
         <img src="/static/Anabella.jpeg" alt="Anabella" class="mob-staff-img" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'">
         <div class="mob-staff-badge" style="background:#8ec5f7;">Secretaria Logística</div>
         <div class="mob-staff-name">Anabella Bravo</div>
@@ -953,7 +1048,17 @@
       <div class="mob-staff-card" onclick="openModal('sarah')">
         <img src="/static/Sarah.jpeg" alt="Sarah" class="mob-staff-img" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'">
         <div class="mob-staff-badge" style="background:#8ec5f7;">Faculty Advisor</div>
-        <div class="mob-staff-name">Sarah</div>
+        <div class="mob-staff-name">Sara Riera</div>
+      </div>
+      <div class="mob-staff-card" onclick="openModal('mariapaula')">
+        <img src="/static/Maria.jpeg" alt="Maria Paula" class="mob-staff-img" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'">
+        <div class="mob-staff-badge" style="background:#8ec5f7;">Secretaria Académica</div>
+        <div class="mob-staff-name">Maria Paula</div>
+      </div>
+      <div class="mob-staff-card" onclick="openModal('gabriela')">
+        <img src="/static/Gabriela.jpeg" alt="Gabriela" class="mob-staff-img" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'">
+        <div class="mob-staff-badge" style="background:#8ec5f7;">Sec. de Publicidad</div>
+        <div class="mob-staff-name">Gabriela Requena</div>
       </div>
     </div>
   </div>
@@ -999,6 +1104,10 @@ function openModal(personId) {
     content.innerHTML = document.getElementById('tpl-anabella').innerHTML;
   } else if (personId === 'sarah') {
     content.innerHTML = document.getElementById('tpl-sarah').innerHTML;
+  } else if (personId === 'mariapaula') {
+    content.innerHTML = document.getElementById('tpl-mariapaula').innerHTML;
+  } else if (personId === 'gabriela') {
+    content.innerHTML = document.getElementById('tpl-gabriela').innerHTML;
   } else {
     content.innerHTML = document.getElementById('tpl-mystery').innerHTML;
   }
