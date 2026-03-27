@@ -1726,16 +1726,19 @@
       </div>
       <div class="nvo-arrow">›</div>
     </div>
-  </div>
-  <div class="nvo-item" onclick="navigateTo('/Matrices')" style="cursor:pointer;">
-  <div class="nvo-num">04</div>
-  <div class="nvo-body">
-    <div class="nvo-title">Matrices</div>
-    <div class="nvo-subs-inline">Base de Datos Estratégica</div>
-  </div>
-  <div class="nvo-arrow">›</div>
-</div>
-</div>
+
+    <!-- AQUÍ ESTÁ LA SOLUCIÓN: El ítem 04 ahora está DENTRO del nvo-list-panel -->
+    <div class="nvo-item" onclick="navigateTo('/Matrices')" style="cursor:pointer;">
+      <div class="nvo-num">04</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Matrices</div>
+        <div class="nvo-subs-inline">Base de Datos Estratégica</div>
+      </div>
+      <div class="nvo-arrow">›</div>
+    </div>
+
+  </div> <!-- ESTE es el cierre correcto de nvo-list-panel -->
+</div> <!-- ESTE es el cierre de nav-overlay -->
 
 <section id="hero">
   <div class="hero-bg"></div>

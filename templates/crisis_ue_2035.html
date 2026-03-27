@@ -858,24 +858,27 @@
           <div class="nvo-sub-name">Unión Europea</div>
         </div>
       </div>
-      <div class="nvo-item" onclick="navigateTo('/inscripciones-drills')" style="cursor:pointer;">
-        <div class="nvo-num">03</div>
-        <div class="nvo-body">
-          <div class="nvo-title">Inscripciones</div>
-          <div class="nvo-subs-inline">Registro · Costos · Fechas</div>
-        </div>
-        <div class="nvo-arrow">›</div>
+     <div class="nvo-item" onclick="navigateTo('/inscripciones-drills')" style="cursor:pointer;">
+      <div class="nvo-num">03</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Inscripciones</div>
+        <div class="nvo-subs-inline">Registro · Costos · Fechas</div>
       </div>
+      <div class="nvo-arrow">›</div>
     </div>
+
+    <!-- AQUÍ ESTÁ LA SOLUCIÓN: El ítem 04 ahora está DENTRO del nvo-list-panel -->
     <div class="nvo-item" onclick="navigateTo('/Matrices')" style="cursor:pointer;">
-  <div class="nvo-num">04</div>
-  <div class="nvo-body">
-    <div class="nvo-title">Matrices</div>
-    <div class="nvo-subs-inline">Base de Datos Estratégica</div>
-  </div>
-  <div class="nvo-arrow">›</div>
-</div>
-  </div>
+      <div class="nvo-num">04</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Matrices</div>
+        <div class="nvo-subs-inline">Base de Datos Estratégica</div>
+      </div>
+      <div class="nvo-arrow">›</div>
+    </div>
+
+  </div> <!-- ESTE es el cierre correcto de nvo-list-panel -->
+</div> <!-- ESTE es el cierre de nav-overlay -->
 
   <div id="gatekeeper">
     <h2 class="glitch" data-text="[ ADVERTENCIA DE SEGURIDAD GLOBAL ]">[ ADVERTENCIA DE SEGURIDAD GLOBAL ]</h2>
