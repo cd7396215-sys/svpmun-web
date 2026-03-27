@@ -43,44 +43,70 @@
       flex-direction: column;
     }
 
-    /* =========================================
-       PANTALLA DE CARGA TECNOLÓGICA
-       ========================================= */
-    #tech-loader {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background-color: #000; z-index: 9999;
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      font-family: 'Space Mono', monospace; color: var(--cyan);
-      transition: opacity 0.8s ease, visibility 0.8s ease;
-      overflow: hidden;
-    }
-    #tech-loader::before {
-      content: ""; position: absolute; top: 50%; left: 50%; width: 200vw; height: 200vw;
-      background: linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
-      background-size: 40px 40px; transform: translate(-50%, -50%) perspective(500px) rotateX(60deg);
-      animation: gridMove 10s linear infinite; z-index: 1;
-    }
-    @keyframes gridMove {
-      0% { transform: translate(-50%, -50%) perspective(500px) rotateX(60deg) translateY(0); }
-      100% { transform: translate(-50%, -50%) perspective(500px) rotateX(60deg) translateY(40px); }
-    }
-    .loader-content { position: relative; z-index: 2; width: 80%; max-width: 600px; text-align: center; }
-    .glitch-title {
-      font-size: 2.5rem; font-weight: 700; text-transform: uppercase;
-      position: relative; display: inline-block; margin-bottom: 20px;
-      text-shadow: 0 0 10px var(--cyan-glow);
-    }
-    .glitch-title::before, .glitch-title::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; }
-    .glitch-title::before { left: 2px; text-shadow: -2px 0 red; clip: rect(24px, 550px, 90px, 0); animation: glitch-anim-2 3s infinite linear alternate-reverse; }
-    .glitch-title::after { left: -2px; text-shadow: -2px 0 blue; clip: rect(85px, 550px, 140px, 0); animation: glitch-anim 2.5s infinite linear alternate-reverse; }
-    @keyframes glitch-anim { 0% { clip: rect(13px, 9999px, 89px, 0); } 20% { clip: rect(65px, 9999px, 32px, 0); } 40% { clip: rect(42px, 9999px, 12px, 0); } 60% { clip: rect(89px, 9999px, 93px, 0); } 80% { clip: rect(12px, 9999px, 4px, 0); } 100% { clip: rect(74px, 9999px, 54px, 0); } }
-    @keyframes glitch-anim-2 { 0% { clip: rect(34px, 9999px, 12px, 0); } 20% { clip: rect(83px, 9999px, 94px, 0); } 40% { clip: rect(12px, 9999px, 44px, 0); } 60% { clip: rect(54px, 9999px, 23px, 0); } 80% { clip: rect(93px, 9999px, 83px, 0); } 100% { clip: rect(23px, 9999px, 34px, 0); } }
-    .progress-box { width: 100%; height: 4px; background: #111; border: 1px solid var(--cyan); margin: 20px 0; position: relative; box-shadow: 0 0 15px var(--cyan-glow); }
-    .progress-bar { height: 100%; width: 0%; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); transition: width 0.1s; }
-    .terminal-text { font-size: 0.9rem; text-align: left; min-height: 80px; margin-top: 20px; line-height: 1.5; }
-    .cursor { display: inline-block; width: 10px; height: 15px; background: var(--cyan); animation: blink 1s step-end infinite; vertical-align: middle; }
-    @keyframes blink { 50% { opacity: 0; } }
+   /* =========================================
+   PANTALLA DE CARGA NOBLE (ANTIGÜEDAD)
+   ========================================= */
+#ancient-loader {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background-color: #010408; z-index: 9999;
+  display: flex; justify-content: center; align-items: center;
+  transition: opacity 1.2s ease, visibility 1.2s ease;
+  overflow: hidden;
+}
+#ancient-loader::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at center, rgba(3,9,20,0.6) 0%, #010408 100%);
+  pointer-events: none;
+}
+.loader-vessel { position: relative; z-index: 2; width: 90%; max-width: 900px; text-align: center; }
+.marble-slab { 
+  background: #0d0f13; border-radius: 4px; padding: 60px 20px; 
+  box-shadow: inset 0 0 120px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.5); 
+  border: 1px solid rgba(201, 168, 76, 0.1); position: relative; overflow: hidden;
+  transition: transform 1.2s ease;
+}
+.marble-slab::before {
+  content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(-45deg, transparent, transparent 1px, rgba(201, 168, 76, 0.03) 1px, rgba(201, 168, 76, 0.03) 3px);
+  pointer-events: none; opacity: 0; transition: opacity 2s ease;
+}
+#ancient-loader.revelation-complete .marble-slab::before { opacity: 1; }
+#ancient-loader.revelation-complete .marble-slab { transform: scale(1.05); }
 
+.temple-framework { position: absolute; top: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between; gap: 30px; }
+.pillar { width: 3px; height: 30px; background: rgba(201, 168, 76, 0.1); border-radius: 4px; }
+.pillar:first-child::before, .pillar:last-child::after { content: "🏛️"; position: absolute; top: -10px; color: rgba(201, 168, 76, 0.1); font-size: 1.2rem; }
+
+.revelation-text { display: inline-block; position: relative; margin-bottom: 20px; text-shadow: 0 0 30px rgba(0,0,0,0.8); }
+.ancient-title {
+  font-family: 'Cinzel', serif; font-size: 3rem; font-weight: 700; text-transform: uppercase;
+  color: transparent; position: relative; letter-spacing: 0.1em;
+}
+.ancient-title::after {
+  content: attr(data-text); position: absolute; top: 0; left: 0; 
+  width: 100%; height: 100%; 
+  color: var(--gold-lt); opacity: 0;
+  background: linear-gradient(160deg, var(--gold-lt) 0%, #fff 20%, #ffdf94 40%, #ffbb54 60%, var(--gold-lt) 100%);
+  -webkit-background-clip: text; background-clip: text;
+  text-shadow: 0 0 5px rgba(255, 230, 160, 0.5);
+  animation: none;
+}
+#ancient-loader.revelation-complete .ancient-title::after { animation: revealText 1.5s ease forwards; }
+
+.molten-gold-pool { 
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%); 
+  width: 150%; height: 40px; border-radius: 50%; 
+  background: linear-gradient(180deg, #ffc400 0%, #ffbb54 30%, #ffdf94 60%, #fff 100%);
+  filter: blur(10px); opacity: 0; transition: all 1.5s ease;
+}
+#ancient-loader.revelation-complete .molten-gold-pool { transform: translateX(-50%) translateY(50%); opacity: 0.8; }
+
+@keyframes revealText { 
+  0% { opacity: 0; clip-path: circle(0% at center); } 
+  20% { opacity: 0.3; clip-path: circle(20% at center); }
+  50% { opacity: 1; clip-path: circle(60% at center); }
+  100% { opacity: 1; clip-path: circle(120% at center); }
+}
     /* =========================================
        NAVBAR ESCRITORIO & OVERLAY (WEB UNIVERSAL)
        ========================================= */
@@ -329,17 +355,21 @@
 </head>
 <body>
 
-  <div id="tech-loader">
-    <div class="loader-content">
-      <div class="glitch-title" data-text="SISTEMA_DRILLS_SVPMUN">SISTEMA_DRILLS_SVPMUN</div>
-      <div class="progress-box">
-        <div class="progress-bar" id="p-bar"></div>
+ <div id="ancient-loader">
+  <div class="loader-vessel">
+    <div class="marble-slab">
+      <div class="temple-framework">
+        <span class="pillar"></span>
+        <span class="pillar"></span>
+        <span class="pillar"></span>
       </div>
-      <div class="terminal-text">
-        <span id="term-lines"></span><span class="cursor"></span>
+      <div class="revelation-text">
+        <h1 class="ancient-title" data-text="FORJA TU ORATORIA">FORJA TU ORATORIA</h1>
       </div>
+      <div class="molten-gold-pool"></div>
     </div>
   </div>
+</div>
 
   <div id="mob-topbar">
     <div class="mob-brand">
@@ -609,55 +639,36 @@
     /* =========================================
        LÓGICA DEL LOADER & GSAP
        ========================================= */
-    const lines = [
-      "ESTABLECIENDO CONEXIÓN CON SERVIDORES SVPMUN...",
-      "DESENCRIPTANDO PROTOCOLOS DE INSCRIPCIÓN...",
-      "CARGANDO PARÁMETROS DE DEBATE [████████░░]",
-      "VERIFICANDO IDENTIDAD DE DELEGADO...",
-      "BYPASS DE SEGURIDAD EXITOSO.",
-      "ACCESO CONCEDIDO. PREPÁRATE."
-    ];
+    /* =========================================
+   LÓGICA DEL LOADER & REVELACIÓN NOBLE (GSAP)
+   ========================================= */
+const loader = document.getElementById("ancient-loader");
+const mainContent = document.getElementById("main-content");
 
-    const termSpan = document.getElementById("term-lines");
-    const pBar = document.getElementById("p-bar");
-    const loader = document.getElementById("tech-loader");
-    const mainContent = document.getElementById("main-content");
+window.onload = () => { 
+  // Iniciamos la revelación GSAP directly en window.onload
+  const tl = gsap.timeline();
+  
+  tl.to(".pillar", { duration: 1.5, height: "100%", ease: "power4.out", stagger: 0.3 })
+    .to(".ancient-title::after", { duration: 1.5, opacity: 1, ease: "power4.out", clipPath: "circle(120% at center)" }, "-=0.8")
+    .to(".molten-gold-pool", { duration: 1.5, translateY: "50%", opacity: 0.8, ease: "power3.out" }, "-=1.2")
+    .call(() => {
+      // Marcamos el final de la revelación para los efectos CSS
+      loader.classList.add('revelation-complete');
+    });
 
-    let lineIndex = 0;
-    let charIndex = 0;
-    let progress = 0;
-
-    function typeLine() {
-      if (lineIndex < lines.length) {
-        if (charIndex < lines[lineIndex].length) {
-          termSpan.innerHTML += lines[lineIndex].charAt(charIndex);
-          charIndex++;
-          progress += (100 / (lines.length * 30)); 
-          if(progress > 100) progress = 100;
-          pBar.style.width = progress + "%";
-          setTimeout(typeLine, Math.random() * 30 + 10);
-        } else {
-          termSpan.innerHTML += "<br>";
-          charIndex = 0;
-          lineIndex++;
-          setTimeout(typeLine, 300); 
-        }
-      } else {
-        pBar.style.width = "100%";
-        setTimeout(() => {
-          loader.style.opacity = "0";
-          setTimeout(() => {
-            loader.style.visibility = "hidden";
-            mainContent.style.display = "flex";
-            window.scrollTo(0, 0);
-            initLightning(); // Inicia los rayos del hero
-            initGSAP();      // Iniciar animaciones de scroll
-          }, 800);
-        }, 800);
-      }
-    }
-
-    window.onload = () => { setTimeout(typeLine, 500); };
+  // Programamos la transición final al contenido principal
+  setTimeout(() => {
+    loader.style.opacity = "0";
+    setTimeout(() => {
+      loader.style.visibility = "hidden";
+      mainContent.style.display = "flex";
+      window.scrollTo(0, 0);
+      initLightning(); // Inicia los rayos del hero
+      initGSAP();      // Iniciar animaciones de scroll
+    }, 800);
+  }, 4500); // Duración total de la revelación y espera
+};
 
     /* =========================================
        EFECTO DE RELÁMPAGOS (GSAP)
