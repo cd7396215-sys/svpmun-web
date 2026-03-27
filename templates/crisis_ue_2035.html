@@ -259,7 +259,6 @@
     .nvo-item-back:hover .nvo-title { color:var(--gold-lt-nav); }
     .nvo-back-arr { font-size:1.1rem; color:rgba(255,255,255,0.15); transition:color 0.3s,transform 0.3s; }
     .nvo-item-back:hover .nvo-back-arr { color:var(--gold-nav); transform:translateX(-4px); }
-    @media(max-width:860px) { #nav-bar { padding:0 20px; }.nb-center{display:none;}.nvo-deco-panel{display:none;}.nvo-item{padding:22px 24px 22px 20px;}.nvo-sub-item{padding:14px 24px 14px 56px;}}
 
 
     /* ══════════════════════════════════════
@@ -504,6 +503,247 @@
       padding: 5px; margin-top: 15px;
       text-align: center;
     }
+
+    /* ══════════════════════════════════════
+       MOBILE EXPERIENCE (≤768px)
+    ══════════════════════════════════════ */
+    @media (max-width: 768px) {
+      /* Ocultar layout desktop */
+      #main-content { display: none !important; }
+
+      /* Navbar desktop: oculto, excepto cuando menú abierto */
+      #nav-bar { display: none !important; }
+      #nav-bar.menu-open { display: flex !important; padding: 0 20px; z-index: 10001; }
+      #nav-bar.menu-open .nb-brand,
+      #nav-bar.menu-open .nb-center { display: none !important; }
+      #nav-bar.menu-open .nb-trigger { margin-left: auto; }
+
+      #nav-overlay { z-index: 9990; }
+      .nvo-deco-panel { display: none; }
+      .nvo-list-panel { padding-top: 60px; }
+      .nvo-item { padding: 16px 20px; grid-template-columns: 42px 1fr auto; gap: 0 12px; }
+      .nvo-sub-item { padding: 12px 20px 12px 74px; gap: 12px; }
+      .nvo-title { font-size: 1rem; }
+      .nvo-subs-inline { display: none; }
+
+      /* Mostrar el shell móvil */
+      #mobile-crisis-shell { display: flex !important; }
+    }
+
+    @media (max-width: 480px) {
+      .nvo-item { padding: 14px 16px; grid-template-columns: 36px 1fr auto; gap: 0 10px; }
+      .nvo-sub-item { padding-left: 52px; }
+    }
+
+    /* ── Mobile Shell Base ── */
+    #mobile-crisis-shell {
+      display: none;
+      flex-direction: column;
+      min-height: 100vh;
+      background: #050505;
+      color: var(--text);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      padding-bottom: 72px;
+    }
+
+    /* ── Mobile Top Bar ── */
+    #mob-crisis-topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500; height: 52px;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 18px;
+      background: rgba(5,5,5,0.95); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,0,51,0.25);
+    }
+    .mob-crisis-brand { display: flex; align-items: center; gap: 10px; }
+    .mob-crisis-brand img { width: 22px; height: 22px; object-fit: contain; filter: brightness(0) invert(1); }
+    .mob-crisis-brand-name { font-family: 'Cinzel', serif; font-weight: 900; font-size: 0.82rem; letter-spacing: 0.2em; color: #fff; }
+    .mob-crisis-topbar-badge {
+      font-size: 0.52rem; letter-spacing: 0.16em; color: var(--alert);
+      border: 1px solid rgba(255,0,51,0.35); border-radius: 20px;
+      padding: 3px 10px; text-transform: uppercase;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .mob-crisis-topbar-badge::before {
+      content: ''; width: 5px; height: 5px; background: var(--alert);
+      border-radius: 50%; animation: blink 1s infinite;
+    }
+
+    /* ── Mobile Hero ── */
+    .mob-crisis-hero {
+      position: relative; padding: 88px 20px 36px;
+      border-bottom: 2px solid var(--alert); overflow: hidden; text-align: center;
+      background: #000;
+    }
+    .mob-crisis-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, rgba(255,0,51,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .mob-crisis-date {
+      display: inline-block; font-family: var(--font-body); font-size: 0.65rem;
+      color: var(--tech); border: 1px solid var(--tech);
+      background: rgba(255,179,0,0.08); padding: 4px 12px;
+      letter-spacing: 0.1em; margin-bottom: 14px;
+    }
+    .mob-crisis-h1 {
+      font-family: var(--font-head); font-size: clamp(2.4rem, 11vw, 3.8rem);
+      line-height: 0.88; text-transform: uppercase; color: var(--text);
+      text-shadow: 3px 3px 0px var(--alert); margin-bottom: 14px;
+    }
+    .mob-crisis-sub {
+      font-size: 0.8rem; color: #aaa; line-height: 1.6;
+      max-width: 320px; margin: 0 auto 24px;
+    }
+
+    /* ── Mobile Countdown ── */
+    .mob-crisis-cd-wrap {
+      background: rgba(0,0,0,0.8); border-left: 5px solid var(--alert);
+      padding: 16px 18px; margin: 0 0 0; text-align: left;
+    }
+    .mob-crisis-cd-label {
+      font-family: var(--font-body); font-size: 0.6rem; color: var(--alert);
+      letter-spacing: 0.2em; margin-bottom: 10px; font-weight: bold;
+    }
+    .mob-crisis-cd-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+    }
+    .mob-crisis-cd-unit {
+      background: rgba(255,0,51,0.06); border: 1px solid rgba(255,0,51,0.25);
+      border-radius: 6px; padding: 10px 6px 8px; text-align: center;
+    }
+    .mob-crisis-cd-num {
+      font-family: var(--font-title); font-size: 1.8rem; color: var(--text);
+      line-height: 1;
+    }
+    .mob-crisis-cd-lbl {
+      font-family: var(--font-body); font-size: 0.42rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--alert); margin-top: 4px; opacity: 0.7;
+    }
+    .mob-crisis-cd-target {
+      font-family: var(--font-body); font-size: 0.6rem; color: rgba(207,255,244,0.35);
+      margin-top: 10px; letter-spacing: 0.08em;
+    }
+    .mob-crisis-cd-target strong { color: var(--ghost); }
+
+    /* ── Mobile Ticker ── */
+    .mob-crisis-ticker {
+      background: var(--alert); color: #000; padding: 10px 0;
+      overflow: hidden; white-space: nowrap; font-weight: bold;
+      font-size: 0.75rem; letter-spacing: 0.05em;
+      border-top: 1px solid #000; border-bottom: 1px solid #000;
+    }
+    .mob-crisis-ticker .ticker { animation: ticker 20s linear infinite; }
+
+    /* ── Mobile Section ── */
+    .mob-crisis-section { padding: 28px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .mob-crisis-sec-label {
+      font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--ghost); margin-bottom: 18px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .mob-crisis-sec-label::before { content: ''; width: 16px; height: 1px; background: var(--ghost); }
+
+    /* ── Mobile Cards ── */
+    .mob-crisis-card {
+      background: var(--bg-panel); border: 1px solid var(--border);
+      border-radius: 8px; padding: 20px; margin-bottom: 12px;
+      position: relative; overflow: hidden;
+    }
+    .mob-crisis-card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: linear-gradient(180deg, var(--ghost), var(--alert));
+    }
+    .mob-crisis-card-tag {
+      font-family: var(--font-body); font-size: 0.52rem; color: var(--tech);
+      letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px;
+    }
+    .mob-crisis-card-title {
+      font-family: var(--font-title); font-size: 1.5rem; color: var(--ghost);
+      margin-bottom: 8px; line-height: 1;
+    }
+    .mob-crisis-card.danger .mob-crisis-card-title { color: var(--alert); }
+    .mob-crisis-card-text { font-size: 0.78rem; color: #999; line-height: 1.6; }
+
+    /* ── Mobile Debt Widget ── */
+    .mob-crisis-widget {
+      background: var(--bg-panel); border: 2px solid rgba(255,0,51,0.4);
+      border-radius: 8px; padding: 20px; margin-bottom: 12px;
+      box-shadow: inset 0 0 30px rgba(255,0,51,0.06);
+    }
+    .mob-crisis-widget-hd {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px; font-size: 0.72rem; font-weight: bold; color: var(--ghost);
+    }
+    .mob-crisis-widget-hd span:last-child { color: var(--alert); animation: blink 1s infinite; font-size: 0.6rem; }
+    .mob-debt-num { font-family: var(--font-title); font-size: 2.5rem; color: var(--alert); line-height: 1; margin-bottom: 12px; }
+    .mob-progress-wrap { width: 100%; height: 28px; background: #000; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; position: relative; }
+    .mob-progress-fill {
+      height: 100%; width: 100%;
+      background: repeating-linear-gradient(45deg, var(--alert), var(--alert) 8px, #b30000 8px, #b30000 16px);
+      animation: shake 0.3s infinite;
+    }
+    .mob-crisis-widget-note { font-size: 0.72rem; color: #777; line-height: 1.5; margin-top: 12px; }
+
+    /* ── Mobile Radar ── */
+    .mob-crisis-radar {
+      width: 100%; height: 180px; background: #050505;
+      border: 1px solid var(--border); border-radius: 8px;
+      position: relative; overflow: hidden; margin-bottom: 12px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .mob-crisis-radar .radar-grid { background-size: 20px 20px; }
+    .mob-crisis-radar .radar-sweep {/* TODO: Agregar estilos de la crisis */ color: "" }
+    .mob-radar-label {
+      position: absolute; font-size: 0.6rem; color: #fff;
+      background: rgba(0,0,0,0.8); padding: 2px 5px;
+      border: 1px solid #444; border-radius: 2px;
+    }
+
+    /* ── Mobile Questions ── */
+    .mob-crisis-q-card {
+      background: var(--bg-panel); border: 1px solid var(--border);
+      border-radius: 8px; padding: 20px; margin-bottom: 12px;
+      position: relative;
+    }
+    .mob-crisis-q-card::before {
+      content: 'TOP SECRET // ART.26';
+      font-size: 0.48rem; color: var(--tech); letter-spacing: 0.12em;
+      font-family: var(--font-body); font-weight: bold;
+      display: block; margin-bottom: 10px;
+    }
+    .mob-crisis-q-card.danger::before { content: 'CRITICAL THREAT //'; color: var(--alert); }
+    .mob-crisis-q-title {
+      font-family: var(--font-title); color: var(--ghost); font-size: 1.6rem;
+      line-height: 1; margin-bottom: 8px;
+    }
+    .mob-crisis-q-card.danger .mob-crisis-q-title { color: var(--alert); }
+    .mob-crisis-q-text { font-size: 0.78rem; color: #aaa; line-height: 1.6; }
+
+    /* ── Mobile Footer ── */
+    .mob-crisis-footer { padding: 22px 20px; text-align: center; border-top: 1px solid rgba(255,0,51,0.1); }
+    .mob-crisis-footer-brand { font-family: 'Cinzel', serif; font-size: 0.72rem; font-weight: 900; letter-spacing: 0.2em; color: rgba(255,255,255,0.15); margin-bottom: 4px; }
+    .mob-crisis-footer-copy { font-size: 0.58rem; letter-spacing: 0.1em; color: rgba(255,0,51,0.2); }
+
+    /* ── Mobile Bottom Nav ── */
+    #mob-crisis-bottomnav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; height: 64px;
+      background: rgba(5,5,5,0.97); backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(255,0,51,0.15);
+      display: flex; align-items: stretch;
+    }
+    .mob-crisis-nav-item {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 3px;
+      cursor: pointer; text-decoration: none;
+    }
+    .mob-crisis-nav-icon { font-size: 1.1rem; color: rgba(224,224,224,0.3); }
+    .mob-crisis-nav-label {
+      font-family: 'Cinzel', serif; font-size: 0.44rem;
+      letter-spacing: 0.18em; text-transform: uppercase; color: rgba(224,224,224,0.3);
+    }
+    .mob-crisis-nav-item.active .mob-crisis-nav-icon { color: var(--alert); }
+    .mob-crisis-nav-item.active .mob-crisis-nav-label { color: var(--alert); }
   </style>
 </head>
 <body class="flicker">
@@ -516,9 +756,9 @@
       <span class="nb-word">SVPMUN <span class="nb-sep">·</span> CRISIS</span>
     </a>
     <nav class="nb-center" aria-label="Acceso rápido">
-      <a class="nb-quick-link" href="/" onclick="event.preventDefault();navigateTo('/')">Inicio</a>
       <a class="nb-quick-link" href="/drills" onclick="event.preventDefault();navigateTo('/drills')">Drills</a>
-      <a class="nb-quick-link" href="/inscripciones" onclick="event.preventDefault();navigateTo('/inscripciones')">Inscripciones</a>
+      <a class="nb-quick-link" href="/crisis-roma" onclick="event.preventDefault();navigateTo('/crisis-roma')">Crisis en Roma</a>
+      <a class="nb-quick-link" href="/oms" onclick="event.preventDefault();navigateTo('/oms')">OMS</a>
     </nav>
     <button class="nb-trigger" id="nbTrigger" onclick="toggleNav()" aria-label="Menú">
       <span class="nb-trigger-label">Menú</span>
@@ -607,6 +847,7 @@
     <div id="loader-text" class="glitch" data-text="INICIANDO PROTOCOLO...">INICIANDO PROTOCOLO...</div>
   </div>
 
+  <!-- ════════════ DESKTOP CONTENT ════════════ -->
   <main id="main-content">
     
     <div class="hero-container">
@@ -626,7 +867,7 @@
       
       <div class="countdown-wrapper reveal">
         <div class="countdown-label">BCE EMERGENCY MEETING IN:</div>
-        <div class="countdown" id="countdown-timer">48:00:00:00</div>
+        <div class="countdown" id="countdown-timer">00:00:00:00</div>
       </div>
     </div>
 
@@ -643,7 +884,7 @@
       <div class="grid-2">
         <div class="text-block reveal">
           <p>La UE se encuentra fracturada desde adentro. El flujo migratorio desde el Sahel y el norte de África, que se triplicó entre 2025 y 2033 por el colapso climático, transformó la demografía de las ciudades europeas a una velocidad que ningún gobierno supo gestionar.</p>
-          <p>En Francia, Alemania e Italia, el debate sobre identidad, cultura y el lugar del islam en Europa dejó de ser académico y se convirtió en la grieta política más profunda del continente. A raíz de eso, los partidos políticos nacionalistas se consolidaron bajo una misma agenda: <span class="highlight-red">“menos Bruselas, más capital nacional”</span>.</p>
+          <p>En Francia, Alemania e Italia, el debate sobre identidad, cultura y el lugar del islam en Europa dejó de ser académico y se convirtió en la grieta política más profunda del continente. A raíz de eso, los partidos políticos nacionalistas se consolidaron bajo una misma agenda: <span class="highlight-red">"menos Bruselas, más capital nacional"</span>.</p>
           
           <div class="drone-feed">
             <video autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover; filter: sepia(1) hue-rotate(180deg) saturate(3) brightness(0.4);" src="/static/drill.mp4"></video>
@@ -763,6 +1004,171 @@
     </section>
   </main>
 
+  <!-- ════════════ MOBILE SHELL ════════════ -->
+  <div id="mobile-crisis-shell">
+
+    <div id="mob-crisis-topbar">
+      <div class="mob-crisis-brand">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="ONU">
+        <span class="mob-crisis-brand-name">SVPMUN · CRISIS</span>
+      </div>
+      <div class="mob-crisis-topbar-badge">LIVE · 2035</div>
+    </div>
+
+    <!-- Hero -->
+    <div class="mob-crisis-hero">
+      <div class="mob-crisis-date">FECHA DE CRISIS: 6 DE MARZO DE 2035</div>
+      <div class="mob-crisis-h1">EUROPE'S<br>LAST STAND</div>
+      <p class="mob-crisis-sub">
+        El flujo migratorio colapsó la demografía. La política se fracturó. El tratado es letra muerta.
+      </p>
+
+      <!-- Mobile Countdown -->
+      <div class="mob-crisis-cd-wrap">
+        <div class="mob-crisis-cd-label">BCE EMERGENCY MEETING IN:</div>
+        <div class="mob-crisis-cd-grid">
+          <div class="mob-crisis-cd-unit">
+            <div class="mob-crisis-cd-num" id="m-cd-d">00</div>
+            <div class="mob-crisis-cd-lbl">Días</div>
+          </div>
+          <div class="mob-crisis-cd-unit">
+            <div class="mob-crisis-cd-num" id="m-cd-h">00</div>
+            <div class="mob-crisis-cd-lbl">Horas</div>
+          </div>
+          <div class="mob-crisis-cd-unit">
+            <div class="mob-crisis-cd-num" id="m-cd-m">00</div>
+            <div class="mob-crisis-cd-lbl">Min</div>
+          </div>
+          <div class="mob-crisis-cd-unit" style="border-color:rgba(255,0,51,0.5);">
+            <div class="mob-crisis-cd-num" id="m-cd-s" style="color:var(--alert);">00</div>
+            <div class="mob-crisis-cd-lbl" style="color:var(--alert);">Seg</div>
+          </div>
+        </div>
+        <div class="mob-crisis-cd-target">Objetivo: <strong>2 de mayo de 2026</strong></div>
+      </div>
+    </div>
+
+    <!-- Ticker -->
+    <div class="mob-crisis-ticker">
+      <div class="ticker">
+        ITALIA RECHAZA EL PRESUPUESTO DE BRUSELAS... /// SPREAD ALEMÁN-ITALIANO EN 500 PUNTOS BÁSICOS... /// DISTURBIOS EN PARÍS... /// MALTA: ESTADO DE EMERGENCIA MIGRATORIA... /// EL BCE CONVOCA REUNIÓN DE URGENCIA... /// POLONIA Y HUNGRÍA CIERRAN FRONTERAS... ///
+      </div>
+    </div>
+
+    <!-- Archivo 01 -->
+    <div class="mob-crisis-section">
+      <div class="mob-crisis-sec-label">Archivo 01 — La Fractura Interna</div>
+
+      <div class="mob-crisis-card">
+        <div class="mob-crisis-card-tag">// UE · DEMOGRAFÍA · 2035</div>
+        <div class="mob-crisis-card-title">FRAGMENTACIÓN POLÍTICA</div>
+        <div class="mob-crisis-card-text">El flujo migratorio desde el Sahel y el norte de África, triplicado entre 2025 y 2033, transformó la demografía europea a una velocidad que ningún gobierno supo gestionar. Los partidos nacionalistas se consolidan bajo una agenda: <span style="color:var(--alert);">"menos Bruselas, más capital nacional."</span></div>
+      </div>
+
+      <!-- Debt widget mobile -->
+      <div class="mob-crisis-widget">
+        <div class="mob-crisis-widget-hd">
+          <span>DEBT MONITOR: ITALY</span>
+          <span>CRITICAL FAILURE</span>
+        </div>
+        <div class="mob-debt-num">&gt;160%</div>
+        <div style="font-size:0.65rem; color:#888; margin-bottom:8px;">DEUDA PÚBLICA VS PIB</div>
+        <div class="mob-progress-wrap">
+          <div class="mob-progress-fill"></div>
+        </div>
+        <div class="mob-crisis-widget-note">
+          El euro lleva tres semanas bajo ataque especulativo. El diferencial con el bono alemán roza los <strong style="color:var(--text);">500 puntos básicos</strong>. El BCE convoca reunión de urgencia.
+        </div>
+      </div>
+    </div>
+
+    <!-- Archivo 02 -->
+    <div class="mob-crisis-section">
+      <div class="mob-crisis-sec-label">Archivo 02 — Estado de Excepción</div>
+
+      <!-- Mini radar -->
+      <div class="mob-crisis-radar">
+        <div class="radar-grid"></div>
+        <div class="radar-sweep"></div>
+        <div class="crisis-point cp-sicily" style="top:65%;left:42%;width:12px;height:12px;"></div>
+        <div class="mob-radar-label" style="top:68%;left:24%;">SICILIA</div>
+        <div class="crisis-point cp-malta" style="top:78%;left:44%;width:10px;height:10px;"></div>
+        <div class="mob-radar-label" style="top:81%;left:47%;">MALTA</div>
+        <div class="crisis-point cp-poland" style="top:28%;left:68%;width:12px;height:12px;"></div>
+        <div class="mob-radar-label" style="top:18%;left:52%;color:var(--tech);border-color:var(--tech);">BLOQUE ESTE</div>
+      </div>
+
+      <div class="mob-crisis-card">
+        <div class="mob-crisis-card-tag">// MIGRACIÓN · COLAPSO · 2035</div>
+        <div class="mob-crisis-card-title">OLEADA SIN RESPUESTA</div>
+        <div class="mob-crisis-card-text">Italia rechaza la autoridad del Tribunal de Justicia de la UE. Polonia y Hungría cierran fronteras con el ejército. El mecanismo de crisis migratoria de 2024 <span style="color:var(--alert);">no se está aplicando.</span></div>
+      </div>
+    </div>
+
+    <!-- Directiva Suprema -->
+    <div class="mob-crisis-section">
+      <div class="mob-crisis-sec-label">Directiva Suprema — Artículo 26</div>
+
+      <p style="font-size:0.78rem; color:#bbb; line-height:1.6; margin-bottom:18px;">
+        El presidente del Consejo Europeo invocó el Artículo 26. Tres preguntas definen esta sesión:
+      </p>
+
+      <div class="mob-crisis-q-card">
+        <div class="mob-crisis-q-title">¿QUÉ ES LA UE?</div>
+        <div class="mob-crisis-q-text">¿Qué significa la Unión cuando sus miembros deciden qué leyes obedecen según conveniencia política nacional?</div>
+      </div>
+      <div class="mob-crisis-q-card">
+        <div class="mob-crisis-q-title">LA DEUDA</div>
+        <div class="mob-crisis-q-text">¿Quién paga la deuda astronómica del sur, y bajo qué condiciones impuestas por los países del norte?</div>
+      </div>
+      <div class="mob-crisis-q-card danger">
+        <div class="mob-crisis-q-title">¿UNIÓN O CAOS?</div>
+        <div class="mob-crisis-q-text">¿Tiene Europa la voluntad real de actuar unida, o acepta que cada nación resuelva por su cuenta lo que todos produjeron juntos?</div>
+      </div>
+    </div>
+
+    <!-- Mesa Directiva mobile -->
+    <div class="mob-crisis-section">
+      <div class="mob-crisis-sec-label">Security Protocol — Mesa Directiva</div>
+      <div class="mob-crisis-card" style="text-align:center;">
+        <div class="mob-crisis-card-tag" style="color:var(--alert);">REF: EU-REDACTED-01 · UNAUTHORIZED ACCESS</div>
+        <div style="font-size:0.75rem; color:#555; line-height:1.6; margin-top:8px;">[DATOS ELIMINADOS POR PROTOCOLO DE CRISIS 2035. ESPERE A LA REVELACIÓN OFICIAL].</div>
+        <div style="color:var(--alert); font-size:0.65rem; border:1px solid var(--alert); padding:5px; margin-top:12px; font-family:var(--font-body);">NIVEL DE ACCESO INSUFICIENTE</div>
+      </div>
+      <div class="mob-crisis-card" style="text-align:center;">
+        <div class="mob-crisis-card-tag" style="color:var(--alert);">REF: EU-REDACTED-02 · UNAUTHORIZED ACCESS</div>
+        <div style="font-size:0.75rem; color:#555; line-height:1.6; margin-top:8px;">[DATOS ELIMINADOS POR PROTOCOLO DE CRISIS 2035. ESPERE A LA REVELACIÓN OFICIAL].</div>
+        <div style="color:var(--alert); font-size:0.65rem; border:1px solid var(--alert); padding:5px; margin-top:12px; font-family:var(--font-body);">NIVEL DE ACCESO INSUFICIENTE</div>
+      </div>
+    </div>
+
+    <div class="mob-crisis-footer">
+      <div class="mob-crisis-footer-brand">SVPMUN · CRISIS UE 2035</div>
+      <div class="mob-crisis-footer-copy">© 2026 SVPMUN · Model United Nations</div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <div id="mob-crisis-bottomnav">
+      <a href="/" class="mob-crisis-nav-item" onclick="event.preventDefault();navigateTo('/')">
+        <div class="mob-crisis-nav-icon">🏛️</div>
+        <div class="mob-crisis-nav-label">Inicio</div>
+      </a>
+      <a href="/drills" class="mob-crisis-nav-item" onclick="event.preventDefault();navigateTo('/drills')">
+        <div class="mob-crisis-nav-icon">⚡</div>
+        <div class="mob-crisis-nav-label">Drills</div>
+      </a>
+      <div class="mob-crisis-nav-item active">
+        <div class="mob-crisis-nav-icon">🇪🇺</div>
+        <div class="mob-crisis-nav-label">Crisis UE</div>
+      </div>
+      <div class="mob-crisis-nav-item" onclick="toggleNav()">
+        <div class="mob-crisis-nav-icon">☰</div>
+        <div class="mob-crisis-nav-label">Menú</div>
+      </div>
+    </div>
+
+  </div><!-- /mobile-crisis-shell -->
+
   <script>
     /* =================================================================
        LÓGICA DEL GATEKEEPER Y LOADER
@@ -780,6 +1186,10 @@
       "ACCESO CONCEDIDO"
     ];
 
+    function isMobile() {
+      return window.innerWidth <= 768;
+    }
+
     function initProtocol() {
       gatekeeper.style.display = 'none';
       loaderScreen.style.display = 'flex';
@@ -795,9 +1205,14 @@
       // Fin del loader y muestra del contenido
       setTimeout(() => {
         loaderScreen.style.display = 'none';
-        mainContent.style.display = 'block';
-        initCharts();
-        initScrollReveal();
+        if (isMobile()) {
+          document.getElementById('mobile-crisis-shell').style.display = 'flex';
+          startMobileCountdown();
+        } else {
+          mainContent.style.display = 'block';
+          initCharts();
+          initScrollReveal();
+        }
         startCountdown();
       }, 6000);
     }
@@ -885,8 +1300,6 @@
         entries.forEach(entry => {
           if(entry.isIntersecting) {
             entry.target.classList.add('active');
-            // Opcional: dejar de observar una vez revelado
-            // observer.unobserve(entry.target);
           }
         });
       }, { threshold: 0.15 });
@@ -895,27 +1308,59 @@
     }
 
     /* =================================================================
-       CUENTA REGRESIVA MILISEGUNDOS
+       CUENTA REGRESIVA — HASTA EL 2 DE MAYO DE 2026
     ================================================================= */
     function startCountdown() {
       const el = document.getElementById('countdown-timer');
-      let ms = 48 * 60 * 60 * 1000; // 48h
-      
-      setInterval(() => {
-        ms -= 47; // Restar número primo para que los ms se vean rápidos e irregulares
-        if(ms < 0) ms = 0;
-        
-        let h = Math.floor(ms / (1000 * 60 * 60));
+      const target = new Date('2026-05-02T00:00:00').getTime();
+
+      function tick() {
+        const now = Date.now();
+        let ms = target - now;
+        if (ms < 0) ms = 0;
+
+        let d  = Math.floor(ms / (1000 * 60 * 60 * 24));
+        let h  = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let m  = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+        let s  = Math.floor((ms % (1000 * 60)) / 1000);
+
+        el.innerText =
+          String(d).padStart(2, '0') + ':' +
+          String(h).padStart(2, '0') + ':' +
+          String(m).padStart(2, '0') + ':' +
+          String(s).padStart(2, '0');
+      }
+      tick();
+      setInterval(tick, 1000);
+    }
+
+    /* =================================================================
+       CUENTA REGRESIVA MOBILE — HASTA EL 2 DE MAYO DE 2026
+    ================================================================= */
+    function startMobileCountdown() {
+      const target = new Date('2026-05-02T00:00:00').getTime();
+      const elD = document.getElementById('m-cd-d');
+      const elH = document.getElementById('m-cd-h');
+      const elM = document.getElementById('m-cd-m');
+      const elS = document.getElementById('m-cd-s');
+
+      function tick() {
+        const now = Date.now();
+        let ms = target - now;
+        if (ms < 0) ms = 0;
+
+        let d = Math.floor(ms / (1000 * 60 * 60 * 24));
+        let h = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         let m = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
         let s = Math.floor((ms % (1000 * 60)) / 1000);
-        let mil = Math.floor((ms % 1000) / 10);
-        
-        el.innerText = 
-          String(h).padStart(2, '0') + ":" + 
-          String(m).padStart(2, '0') + ":" + 
-          String(s).padStart(2, '0') + ":" + 
-          String(mil).padStart(2, '0');
-      }, 47);
+
+        if (elD) elD.innerText = String(d).padStart(2, '0');
+        if (elH) elH.innerText = String(h).padStart(2, '0');
+        if (elM) elM.innerText = String(m).padStart(2, '0');
+        if (elS) elS.innerText = String(s).padStart(2, '0');
+      }
+      tick();
+      setInterval(tick, 1000);
     }
 
     /* ══════════════════════════════════════
