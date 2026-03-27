@@ -3,395 +3,631 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SVPMUN — Matrices de Delegación</title>
-  
+  <title>SVPMUN — Matrices</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
   <style>
-    /* ══════════════════════════════════════
-       VARIABLES Y RESET (Heredado de Drills)
-    ══════════════════════════════════════ */
     :root {
       --navy:      #071630;
       --navy-mid:  #0e254a;
       --gold:      #c9a84c;
       --gold-lt:   #edd98a;
       --white:     #ffffff;
-      --off-white: #f4f9ff;
       --blu-2:     #8ec5f7;
       --blu-3:     #3a8fe0;
-      --glass-bg:  rgba(7, 22, 48, 0.6);
-      --glass-border: rgba(142, 197, 247, 0.2);
+      --blu-4:     #1248a8;
+      --txt-mid:   #2d4a72;
+      --txt-soft:  #7a9bbf;
+      --glow:      rgba(60,145,240,0.45);
     }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Rajdhani',sans-serif; background:var(--navy); color:var(--white); overflow-x:hidden; }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Rajdhani', sans-serif;
-      background: var(--navy);
-      color: var(--white);
-      overflow-x: hidden;
-      overflow-y: hidden; /* Oculto hasta que cargue */
-    }
-
-    /* ══════════════════════════════════════
-       NUEVO LOADER: QUANTUM DATA RING
-    ══════════════════════════════════════ */
-    #quantum-loader {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(7, 22, 48, 0.95);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      transition: opacity 1.2s cubic-bezier(0.77, 0, 0.18, 1), visibility 1.2s;
-    }
-
-    .q-ring-container {
-      position: relative;
-      width: 150px; height: 150px;
-    }
-
-    .q-ring {
-      position: absolute;
-      width: 100%; height: 100%;
-      border-radius: 50%;
-      border: 2px solid transparent;
-      border-top-color: var(--gold);
-      border-bottom-color: var(--blu-3);
-      animation: spin 1.5s linear infinite;
-    }
-
-    .q-ring::before {
-      content: '';
-      position: absolute;
-      top: 10px; left: 10px; right: 10px; bottom: 10px;
-      border-radius: 50%;
-      border: 2px solid transparent;
-      border-left-color: var(--blu-2);
-      border-right-color: var(--gold-lt);
-      animation: spin-reverse 2s linear infinite;
-    }
-
-    .q-text {
-      margin-top: 30px;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.9rem;
-      color: var(--blu-2);
-      letter-spacing: 4px;
-      text-transform: uppercase;
-    }
-
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-    @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
-
-    /* ══════════════════════════════════════
-       NAVBAR (Idéntico a Drills)
-    ══════════════════════════════════════ */
-    nav {
-      position: fixed; top: 0; width: 100%;
-      padding: 1.5rem 3rem;
-      display: flex; justify-content: space-between; align-items: center;
-      background: transparent;
-      z-index: 1000;
-      transition: background 0.4s ease, padding 0.4s ease;
-    }
-    nav.scrolled {
-      background: rgba(7, 22, 48, 0.9);
-      backdrop-filter: blur(10px);
-      padding: 1rem 3rem;
-      border-bottom: 1px solid var(--glass-border);
-    }
-    .nav-logo {
-      font-family: 'Cinzel', serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--gold);
-      text-decoration: none;
-      letter-spacing: 2px;
-    }
-    .nav-links { display: flex; gap: 2rem; }
-    .nav-links a {
-      color: var(--white);
-      text-decoration: none;
-      font-size: 1.1rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: color 0.3s ease;
-    }
-    .nav-links a:hover { color: var(--gold-lt); }
-
-    /* ══════════════════════════════════════
-       HERO SECTION (Glassmorphism & Aurora)
-    ══════════════════════════════════════ */
-    .hero {
-      position: relative;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 0 2rem;
-      background: radial-gradient(circle at 50% 50%, var(--navy-mid) 0%, var(--navy) 100%);
-    }
-
-    /* Aurora Glow Effect */
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 30%; left: 50%;
-      width: 60vw; height: 60vw;
-      background: radial-gradient(circle, rgba(58, 143, 224, 0.15) 0%, transparent 70%);
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      filter: blur(50px);
-    }
-
-    .hero-glass {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      padding: 4rem;
-      border-radius: 20px;
-      max-width: 800px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      transform: translateY(30px);
-      opacity: 0;
-    }
-
-    .hero h1 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 5rem;
-      letter-spacing: 4px;
-      color: var(--gold);
-      margin-bottom: 1rem;
-      line-height: 1;
-    }
-
-    .hero p {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem;
-      color: var(--blu-1);
-      font-style: italic;
-    }
-
-    /* ══════════════════════════════════════
-       CONTENIDO DE LA PÁGINA
-    ══════════════════════════════════════ */
-    .content-section {
-      padding: 8rem 2rem;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .content-block {
-      margin-bottom: 6rem;
-      opacity: 0;
-      transform: translateY(40px);
-    }
-
-    .content-block h2 {
-      font-family: 'Cinzel', serif;
-      font-size: 2.5rem;
-      color: var(--gold-lt);
-      margin-bottom: 2rem;
-      border-bottom: 1px solid var(--glass-border);
-      padding-bottom: 1rem;
-    }
-
-    .content-block p {
-      font-size: 1.25rem;
-      line-height: 1.8;
-      color: var(--off-white);
-      margin-bottom: 1.5rem;
-      text-align: justify;
-    }
-
-    .content-block ul {
-      list-style: none;
-      margin-left: 1rem;
-    }
-
-    .content-block ul li {
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-      position: relative;
-      padding-left: 2rem;
-    }
-
-    .content-block ul li::before {
-      content: '▹';
-      position: absolute;
-      left: 0;
-      color: var(--blu-3);
-      font-size: 1.5rem;
-      top: -4px;
-    }
-
-    /* ══════════════════════════════════════
-       CTA FINAL
-    ══════════════════════════════════════ */
-    .cta-container {
-      text-align: center;
-      padding: 6rem 2rem 10rem 2rem;
-      background: linear-gradient(to top, #000000, var(--navy));
-    }
-
-    .cta-btn {
-      display: inline-block;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2rem;
-      letter-spacing: 3px;
-      color: var(--navy);
-      background: var(--gold);
-      padding: 1.2rem 4rem;
-      text-decoration: none;
-      border-radius: 4px;
-      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      position: relative;
+    /* ═══════════════════════ MATRIX LOADER ═══════════════════════ */
+    #matrix-loader {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #030812;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
       overflow: hidden;
-      z-index: 1;
+    }
+    #matrix-loader::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: 
+        linear-gradient(rgba(58,143,224,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(58,143,224,0.08) 1px, transparent 1px);
+      background-size: 30px 30px;
+      transform: perspective(500px) rotateX(60deg) translateY(-100px);
+      animation: matrixGridMove 4s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes matrixGridMove { from { transform: perspective(500px) rotateX(60deg) translateY(0); } to { transform: perspective(500px) rotateX(60deg) translateY(30px); } }
+    
+    #matrix-loader.exit { animation: mlExit 1s cubic-bezier(0.77,0,0.18,1) forwards; }
+    @keyframes mlExit { 0% { opacity: 1; filter: blur(0px); } 100% { opacity: 0; filter: blur(20px); visibility: hidden; } }
+
+    .ml-center { position: relative; z-index: 2; text-align: center; }
+    .ml-icon { 
+      font-size: 3rem; color: var(--blu-3); margin-bottom: 20px;
+      filter: drop-shadow(0 0 15px var(--blu-3));
+      animation: pulseGlow 2s infinite alternate;
+    }
+    .ml-title {
+      font-family: 'Cinzel', serif; font-size: 1.2rem; letter-spacing: 0.5em;
+      color: #fff; text-transform: uppercase; margin-bottom: 15px;
+    }
+    .ml-bar-wrap {
+      width: 280px; height: 2px; background: rgba(58,143,224,0.2);
+      margin: 0 auto 15px; position: relative; overflow: hidden;
+    }
+    .ml-fill {
+      position: absolute; top: 0; left: 0; height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--blu-3), var(--gold));
+    }
+    .ml-status {
+      font-family: 'Rajdhani', monospace; font-size: 0.75rem; letter-spacing: 0.2em;
+      color: var(--gold-lt); text-transform: uppercase;
+    }
+    @keyframes pulseGlow { from { opacity: 0.6; transform: scale(0.95); } to { opacity: 1; transform: scale(1.05); } }
+
+    /* ═══════════════════════ ORBS & BG ═══════════════════════ */
+    #orbs { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+    .orb { position:absolute; border-radius:50%; filter:blur(90px); opacity:0.15; }
+    .orb-a { width:600px; height:600px; background:#1248a8; top:-100px; left:-100px; animation:of1 20s ease-in-out infinite alternate; }
+    .orb-b { width:500px; height:500px; background:#c9a84c; bottom:10%; right:-100px; animation:of2 25s ease-in-out infinite alternate; opacity: 0.08;}
+    @keyframes of1 { to{transform:translate(50px,70px);} }
+    @keyframes of2 { to{transform:translate(-55px,-65px);} }
+
+    /* ═══════════════════════ SCROLL REVEAL ═══════════════════════ */
+    .rv { opacity:0; transform:translateY(30px); transition:opacity 0.85s ease, transform 0.85s ease; }
+    .rv.on { opacity:1; transform:translateY(0); }
+    .d1{transition-delay:.1s;} .d2{transition-delay:.2s;} .d3{transition-delay:.3s;}
+
+    /* ══════════════════════════════════════════
+       NAVBAR — EXACTO DE DRILLS
+    ══════════════════════════════════════════ */
+    #nav-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 800;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 52px; height: 76px;
+    }
+    #nav-bar::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(7,22,48,0.75) 0%, rgba(7,22,48,0) 100%);
+      backdrop-filter: blur(0px); transition: background 0.6s, backdrop-filter 0.6s;
+      pointer-events: none;
+    }
+    #nav-bar.scrolled::before { background: rgba(7,22,48,0.90); backdrop-filter: blur(26px) saturate(1.9); }
+    #nav-bar.menu-open::before { background: transparent; backdrop-filter: none; }
+    #nav-bar::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.0) 10%, rgba(201,168,76,0.55) 35%, rgba(237,217,138,1.0) 50%, rgba(201,168,76,0.55) 65%, rgba(201,168,76,0.0) 90%, transparent 100%);
+      opacity: 1; transition: opacity 0.4s;
+    }
+    #nav-bar.menu-open::after { opacity: 0; }
+
+    .nb-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; position: relative; z-index: 1; }
+    .nb-emblem { width: 34px; height: 34px; object-fit: contain; filter: brightness(0) invert(1) drop-shadow(0 0 12px rgba(142,197,247,0.65)); transition: filter 0.4s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+    .nb-brand:hover .nb-emblem { transform: rotate(-12deg) scale(1.1); }
+    .nb-word { font-family: 'Cinzel', serif; font-weight: 900; font-size: 1.08rem; letter-spacing: 0.32em; color: #fff; position: relative; }
+    .nb-word .nb-sep { color: var(--gold); margin: 0 4px; }
+    .nb-word::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); transform: scaleX(0); transform-origin: left; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); }
+    .nb-brand:hover .nb-word::after { transform: scaleX(1); }
+
+    .nb-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; pointer-events: all; z-index: 1; transition: opacity 0.35s, transform 0.35s; }
+    .nb-quick-link { font-family: 'Cinzel', serif; font-size: 0.56rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.3); padding: 6px 18px; position: relative; cursor: pointer; transition: color 0.3s; text-decoration: none; }
+    .nb-quick-link::after { content: '·'; position: absolute; right: -1px; top: 50%; transform: translateY(-50%); color: rgba(201,168,76,0.2); pointer-events: none; }
+    .nb-quick-link:last-child::after { display: none; }
+    .nb-quick-link:hover { color: rgba(237,217,138,0.9); }
+    #nav-bar.menu-open .nb-center { opacity: 0; transform: translateX(-50%) scale(0.9); pointer-events: none; }
+
+    .nb-trigger { position: relative; z-index: 1; display: flex; align-items: center; gap: 16px; background: none; border: none; cursor: pointer; padding: 8px 0; }
+    .nb-trigger-label { font-family: 'Cinzel', serif; font-size: 0.56rem; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(255,255,255,0.4); transition: color 0.3s, opacity 0.3s; }
+    .nb-trigger:hover .nb-trigger-label { color: rgba(201,168,76,0.85); }
+    #nav-bar.menu-open .nb-trigger-label { opacity: 0; }
+
+    .nb-icon { display: flex; flex-direction: column; gap: 5px; width: 28px; cursor: pointer; }
+    .nb-icon span { display: block; height: 1.5px; border-radius: 2px; background: rgba(255,255,255,0.85); transform-origin: center; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease, width 0.4s ease, background 0.3s; }
+    .nb-icon span:nth-child(1) { width: 28px; }
+    .nb-icon span:nth-child(2) { width: 18px; margin-left: 10px; }
+    .nb-icon span:nth-child(3) { width: 28px; }
+    .nb-icon.open span:nth-child(1) { transform: translateY(6.75px) rotate(45deg); width: 28px; margin-left: 0; background: var(--gold-lt); }
+    .nb-icon.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nb-icon.open span:nth-child(3) { transform: translateY(-6.75px) rotate(-45deg); background: var(--gold-lt); }
+
+    /* FULLSCREEN OVERLAY */
+    #nav-overlay { position: fixed; inset: 0; z-index: 790; background: var(--navy); display: flex; clip-path: circle(0% at calc(100% - 72px) 38px); transition: clip-path 0.85s cubic-bezier(0.77,0,0.18,1); pointer-events: none; overflow: hidden; }
+    #nav-overlay.open { clip-path: circle(150% at calc(100% - 72px) 38px); pointer-events: all; }
+    .nvo-deco-panel { width: 36%; flex-shrink: 0; position: relative; overflow: hidden; border-right: 1px solid rgba(58,143,224,0.1); display: flex; flex-direction: column; justify-content: space-between; padding: 110px 52px 52px; }
+    .nvo-deco-panel::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 80% 55% at 30% 15%, rgba(18,72,168,0.55) 0%, transparent 60%), radial-gradient(ellipse 55% 70% at 75% 85%, rgba(58,143,224,0.1) 0%, transparent 60%); }
+    .nvo-deco-panel::after { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(58,143,224,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(58,143,224,0.04) 1px, transparent 1px); background-size: 48px 48px; }
+    .nvo-deco-emblem { position: absolute; right: -40px; top: 50%; transform: translateY(-50%); width: 300px; height: 300px; object-fit: contain; opacity: 0.035; filter: brightness(0) invert(1); pointer-events: none; }
+    .nvo-deco-top { position: relative; z-index: 2; }
+    .nvo-deco-brand { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.42em; text-transform: uppercase; color: rgba(201,168,76,0.55); margin-bottom: 22px; }
+    .nvo-deco-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.7rem, 3.2vw, 2.6rem); font-style: italic; color: rgba(255,255,255,0.82); line-height: 1.28; margin-bottom: 24px; }
+    .nvo-deco-line { width: 38px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin-bottom: 22px; }
+    .nvo-deco-sub { font-family: 'Rajdhani', sans-serif; font-size: 0.78rem; letter-spacing: 0.16em; color: rgba(142,197,247,0.3); text-transform: uppercase; line-height: 1.9; }
+    .nvo-deco-bottom { position: relative; z-index: 2; }
+    .nvo-deco-year { font-family: 'Bebas Neue', serif; font-size: 4.5rem; line-height: 1; letter-spacing: 0.06em; color: rgba(255,255,255,0.04); }
+    .nvo-deco-copy { font-size: 0.58rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(142,197,247,0.18); margin-top: 8px; }
+
+    .nvo-list-panel { flex: 1; position: relative; overflow-y: auto; display: flex; flex-direction: column; padding-top: 76px; }
+    .nvo-list-panel::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0; background-image: linear-gradient(rgba(58,143,224,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(58,143,224,0.025) 1px, transparent 1px); background-size: 60px 60px; }
+    .nvo-item { display: grid; grid-template-columns: 72px 1fr auto; align-items: center; gap: 0 24px; padding: 26px 52px 26px 40px; border-bottom: 1px solid rgba(58,143,224,0.07); cursor: pointer; position: relative; overflow: hidden; z-index: 1; opacity: 0; transform: translateX(28px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .nvo-item:last-child { border-bottom: none; }
+    #nav-overlay.open .nvo-item { opacity: 1; transform: translateX(0); }
+    #nav-overlay.open .nvo-item:nth-child(1) { transition-delay: 0.22s; }
+    #nav-overlay.open .nvo-item:nth-child(2) { transition-delay: 0.28s; }
+    #nav-overlay.open .nvo-item:nth-child(3) { transition-delay: 0.34s; }
+    #nav-overlay.open .nvo-item:nth-child(4) { transition-delay: 0.40s; }
+    .nvo-item::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(58,143,224,0.0) 0%, rgba(58,143,224,0.05) 50%, rgba(58,143,224,0.0) 100%); opacity: 0; transition: opacity 0.4s; }
+    .nvo-item:hover::before { opacity: 1; }
+    .nvo-item::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, transparent, var(--gold) 50%, transparent); transform: scaleY(0); transform-origin: center; transition: transform 0.42s cubic-bezier(0.4,0,0.2,1); }
+    .nvo-item:hover::after { transform: scaleY(1); }
+    .nvo-num { font-family: 'Bebas Neue', serif; font-size: 0.68rem; letter-spacing: 0.32em; color: var(--gold); opacity: 0.45; text-align: right; padding-right: 10px; border-right: 1px solid rgba(201,168,76,0.1); transition: opacity 0.3s; line-height: 1; }
+    .nvo-item:hover .nvo-num { opacity: 1; text-shadow: 0 0 14px rgba(201,168,76,0.5); }
+    .nvo-body { display: flex; flex-direction: column; gap: 5px; }
+    .nvo-title { font-family: 'Cinzel', serif; font-size: clamp(1rem, 1.8vw, 1.4rem); font-weight: 700; letter-spacing: 0.06em; color: rgba(255,255,255,0.82); transition: color 0.3s, letter-spacing 0.4s; }
+    .nvo-item:hover .nvo-title { color: var(--gold-lt); letter-spacing: 0.1em; }
+    .nvo-subs-inline { font-family: 'Rajdhani', sans-serif; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(142,197,247,0.28); transition: color 0.3s; }
+    .nvo-item:hover .nvo-subs-inline { color: rgba(142,197,247,0.55); }
+    .nvo-arrow { font-size: 1.3rem; color: rgba(255,255,255,0.15); transition: color 0.3s, transform 0.3s; }
+    .nvo-item:hover .nvo-arrow { color: var(--gold); transform: translateX(4px); }
+    .nvo-arrow-expand { font-size: 1.2rem; color: rgba(255,255,255,0.15); transition: color 0.3s, transform 0.45s cubic-bezier(0.4,0,0.2,1); line-height: 1; }
+    .nvo-item:hover .nvo-arrow-expand { color: var(--gold); }
+    .nvo-item.sub-open .nvo-arrow-expand { transform: rotate(90deg); color: var(--gold); }
+    .nvo-sub-list { max-height: 0; overflow: hidden; transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1); background: rgba(255,255,255,0.015); border-bottom: 1px solid rgba(58,143,224,0.07); }
+    .nvo-sub-list.open { max-height: 260px; }
+    .nvo-sub-item { display: flex; align-items: center; gap: 20px; padding: 16px 52px 16px 130px; cursor: pointer; border-top: 1px solid rgba(58,143,224,0.05); transition: background 0.3s; }
+    .nvo-sub-item:hover { background: rgba(58,143,224,0.04); }
+    .nvo-sub-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(201,168,76,0.35); flex-shrink: 0; transition: background 0.3s; }
+    .nvo-sub-item:hover .nvo-sub-dot { background: var(--gold); }
+    .nvo-sub-name { font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.18em; color: rgba(255,255,255,0.45); text-transform: uppercase; transition: color 0.3s; }
+    .nvo-sub-item:hover .nvo-sub-name { color: rgba(237,217,138,0.85); }
+    .nvo-item-back .nvo-title { font-size: clamp(0.85rem, 1.4vw, 1.1rem); color: rgba(255,255,255,0.45); }
+    .nvo-item-back:hover .nvo-title { color: var(--gold-lt); }
+    .nvo-item-back .nvo-num { color: rgba(201,168,76,0.3); }
+    .nvo-back-arr { font-size: 1.1rem; color: rgba(255,255,255,0.15); transition: color 0.3s, transform 0.3s; }
+    .nvo-item-back:hover .nvo-back-arr { color: var(--gold); transform: translateX(-4px); }
+
+
+    /* ═══════════════════════ PAGE STRUCTURE ═══════════════════════ */
+    .section-wrap { position: relative; z-index: 1; padding: 120px 10%; max-width: 1400px; margin: 0 auto; }
+    
+    /* HERO */
+    .hero-head { text-align: center; margin-bottom: 60px; padding-top: 60px;}
+    .hero-eye {
+      font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--gold-lt); display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 20px;
+    }
+    .hero-eye::before, .hero-eye::after { content: ''; width: 40px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); }
+    .hero-eye::after { background: linear-gradient(90deg, var(--gold), transparent); }
+    .hero-title {
+      font-family: 'Bebas Neue', serif; font-size: clamp(4rem, 10vw, 8rem);
+      line-height: 0.9; letter-spacing: 0.05em; margin-bottom: 24px;
+      background: linear-gradient(160deg, #fff 0%, #8ec5f7 50%, var(--gold) 100%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 30px rgba(58,143,224,0.3));
+    }
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-style: italic;
+      color: rgba(185,215,255,0.7); max-width: 650px; margin: 0 auto; line-height: 1.7;
     }
 
-    .cta-btn::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: var(--gold-lt);
-      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      z-index: -1;
+    /* GRID SECTIONS */
+    .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 80px; align-items: center; }
+    .text-block h3 { font-family: 'Cinzel', serif; font-size: 2rem; color: #fff; margin-bottom: 20px; font-weight: 700; }
+    .text-block p { font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; color: rgba(185,215,255,0.75); line-height: 1.7; margin-bottom: 20px; }
+    
+    .visual-card {
+      background: linear-gradient(145deg, rgba(14,37,74,0.6), rgba(5,13,26,0.9));
+      border: 1px solid rgba(58,143,224,0.2); border-radius: 16px; padding: 40px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5); position: relative; overflow: hidden;
+      transform-style: preserve-3d; transition: transform 0.5s, border-color 0.5s;
+    }
+    .visual-card:hover { transform: translateY(-10px) rotateX(5deg); border-color: var(--blu-3); }
+    .visual-card::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(58,143,224,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(58,143,224,0.05) 1px, transparent 1px);
+      background-size: 20px 20px; pointer-events: none;
+    }
+    .vc-icon { font-size: 3.5rem; margin-bottom: 20px; transform: translateZ(30px); }
+    .vc-title { font-family: 'Cinzel', serif; font-size: 1.4rem; color: var(--gold-lt); margin-bottom: 15px; transform: translateZ(20px); }
+    .vc-text { font-size: 1rem; color: rgba(255,255,255,0.7); line-height: 1.6; transform: translateZ(10px); }
+
+    /* STEPS (CÓMO USARLA) */
+    .steps-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 60px; }
+    .step-box {
+      background: rgba(10,25,49,0.5); border-top: 2px solid rgba(58,143,224,0.3);
+      padding: 35px 25px; text-align: center; border-radius: 8px; transition: all 0.4s;
+    }
+    .step-box:hover { background: rgba(14,37,74,0.8); border-top-color: var(--gold); transform: translateY(-5px); }
+    .step-num { font-family: 'Bebas Neue', serif; font-size: 4rem; color: rgba(255,255,255,0.05); line-height: 1; margin-bottom: 15px; transition: color 0.4s; }
+    .step-box:hover .step-num { color: rgba(201,168,76,0.2); }
+    .step-title { font-family: 'Cinzel', serif; font-size: 1.1rem; color: #fff; margin-bottom: 15px; text-transform: uppercase; }
+    .step-text { font-size: 0.95rem; color: rgba(185,215,255,0.6); line-height: 1.6; }
+
+    /* CTA SECTION */
+    .cta-matrix {
+      margin-top: 100px; padding: 80px 40px; text-align: center;
+      background: linear-gradient(135deg, rgba(18,72,168,0.2), rgba(7,22,48,0.8));
+      border: 1px solid rgba(201,168,76,0.3); border-radius: 20px; position: relative; overflow: hidden;
+    }
+    .cta-matrix::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 180deg at 50% 50%, transparent 0deg, rgba(201,168,76,0.1) 360deg); animation: spin 10s linear infinite; z-index: 0; pointer-events: none;}
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .cta-m-content { position: relative; z-index: 1; }
+    .cta-m-title { font-family: 'Cinzel', serif; font-size: 2.5rem; color: #fff; margin-bottom: 20px; font-weight: 700; }
+    .cta-m-sub { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: rgba(185,215,255,0.8); margin-bottom: 40px; font-style: italic; }
+    .btn-pdf {
+      display: inline-flex; align-items: center; gap: 15px; padding: 18px 45px;
+      background: var(--gold); color: #000; font-family: 'Cinzel', serif; font-size: 0.9rem; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; border-radius: 4px;
+      transition: all 0.3s; box-shadow: 0 10px 30px rgba(201,168,76,0.3);
+    }
+    .btn-pdf:hover { background: #fff; transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255,255,255,0.4); }
+
+    .incite-text { font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 0.15em; color: var(--blu-2); text-align: center; margin-top: 30px; text-transform: uppercase; cursor: pointer; text-decoration: none; transition: color 0.3s; display: block;}
+    .incite-text:hover { color: #fff; }
+
+    /* FOOTER */
+    footer { background:var(--navy); padding:36px 52px; display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(58,143,224,0.08); position:relative; z-index:1; }
+    .foot-brand { font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:.3em; color:rgba(255,255,255,0.2); }
+    .foot-copy { font-size:.62rem; letter-spacing:.16em; color:rgba(142,197,247,0.16); }
+
+    /* ══════════════════════════════════════════════════════════════
+       MOBILE EXPERIENCE (≤768px)
+    ══════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .section-wrap, footer, #orbs, #nav-bar { display: none !important; }
+      
+      #nav-bar.menu-open { display: flex !important; padding: 0 20px; z-index: 9001; }
+      #nav-bar.menu-open .nb-brand, #nav-bar.menu-open .nb-center { display: none !important; }
+      #nav-bar.menu-open .nb-trigger { margin-left: auto; }
+
+      #nav-overlay { z-index: 9000; }
+      .nvo-deco-panel { display: none; }
+      .nvo-list-panel { padding-top: 60px; }
+      .nvo-item { padding: 16px 20px; grid-template-columns: 42px 1fr auto; gap: 0 12px; }
+      .nvo-sub-item { padding: 12px 20px 12px 74px; gap: 12px; }
+      .nvo-title { font-size: 1rem; }
+      .nvo-subs-inline { display: none; }
+
+      #mobile-shell { display: flex !important; }
+      body { background: #030812; overflow-x: hidden; color: #fff; }
     }
 
-    .cta-btn:hover::before { left: 0; }
-    .cta-btn:hover {
-      box-shadow: 0 0 30px rgba(201, 168, 76, 0.6);
-      transform: translateY(-5px);
+    #mobile-shell {
+      display: none; flex-direction: column; min-height: 100vh;
+      background: #030812; color: #fff; font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden; padding-bottom: 72px;
     }
 
+    #mob-topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500; height: 52px;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
+      background: rgba(3,8,18,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+    .mob-brand { display: flex; align-items: center; gap: 10px; }
+    .mob-brand img { width: 22px; height: 22px; object-fit: contain; filter: brightness(0) invert(1); }
+    .mob-brand-name { font-family: 'Cinzel', serif; font-weight: 900; font-size: 0.85rem; letter-spacing: 0.2em; color: #fff; }
+    .mob-topbar-badge { font-size: 0.55rem; letter-spacing: 0.18em; color: var(--gold); border: 1px solid rgba(201,168,76,0.3); border-radius: 20px; padding: 3px 10px; text-transform: uppercase; }
+
+    .mob-hero {
+      position: relative; padding: 100px 24px 40px; background: #030812;
+      border-bottom: 1px solid rgba(58,143,224,0.15); overflow: hidden; text-align: center;
+    }
+    .mob-eyebrow { font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold-lt); display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 16px; }
+    .mob-eyebrow::before, .mob-eyebrow::after { content: ''; width: 20px; height: 1px; background: var(--gold); }
+    .mob-h1 { font-family: 'Bebas Neue', serif; font-size: 3.5rem; line-height: 0.9; letter-spacing: 0.05em; background: linear-gradient(160deg, #fff 0%, #b8d8f8 50%, var(--gold) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .mob-tagline { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-style: italic; color: rgba(185,215,255,0.75); line-height: 1.6; margin-top: 16px; }
+
+    .mob-section { padding: 40px 24px; }
+    .mob-sec-label { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; border-bottom: 1px solid rgba(58,143,224,0.3); padding-bottom: 10px; }
+    .mob-text { font-size: 1rem; color: rgba(185,215,255,0.8); line-height: 1.6; margin-bottom: 20px; }
+
+    .mob-card { background: rgba(14,37,74,0.4); border: 1px solid rgba(58,143,224,0.2); border-radius: 12px; padding: 24px; margin-bottom: 16px; position: relative; }
+    .mob-card-icon { font-size: 1.8rem; margin-bottom: 10px; color: var(--gold); }
+    .mob-card-title { font-family: 'Cinzel', serif; font-size: 1.1rem; color: #fff; margin-bottom: 8px; font-weight: 700; }
+    
+    .mob-step { background: rgba(5,13,26,0.8); border-left: 3px solid var(--blu-3); padding: 20px; margin-bottom: 15px; border-radius: 0 8px 8px 0; }
+    .mob-step-num { font-family: 'Bebas Neue', serif; font-size: 2rem; color: rgba(201,168,76,0.5); margin-bottom: 5px; line-height: 1;}
+    .mob-step-title { font-family: 'Cinzel', serif; font-size: 1rem; color: #fff; margin-bottom: 5px; text-transform: uppercase; }
+
+    .mob-cta-box { background: linear-gradient(135deg, rgba(14,37,74,0.8), rgba(7,22,48,0.95)); border: 1px solid rgba(201,168,76,0.25); border-radius: 16px; padding: 30px 20px; text-align: center; margin: 20px 24px 40px; }
+    .mob-cta-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: var(--gold); color: #000; font-family: 'Cinzel', serif; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; text-decoration: none; border-radius: 8px; padding: 16px; width: 100%; box-shadow: 0 10px 20px rgba(0,0,0,0.3); margin-top: 15px; }
+
+    #mob-bottomnav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; height: 64px;
+      background: rgba(3,8,18,0.96); backdrop-filter: blur(24px); border-top: 1px solid rgba(201,168,76,0.12);
+      display: flex; align-items: stretch;
+    }
+    .mob-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; text-decoration: none; }
+    .mob-nav-icon { font-size: 1.2rem; color: rgba(142,197,247,0.4); }
+    .mob-nav-label { font-family: 'Cinzel', serif; font-size: 0.48rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(142,197,247,0.4); }
+    .mob-nav-item.active .mob-nav-icon, .mob-nav-item.active .mob-nav-label { color: var(--gold-lt); }
   </style>
 </head>
 <body>
 
-  <div id="quantum-loader">
-    <div class="q-ring-container">
-      <div class="q-ring"></div>
+  <div id="matrix-loader">
+    <div class="ml-center">
+      <div class="ml-icon">⎔</div>
+      <div class="ml-title">Decodificando Matrices</div>
+      <div class="ml-bar-wrap"><div class="ml-fill" id="ml-fill"></div></div>
+      <div class="ml-status" id="ml-status">Analizando política exterior...</div>
     </div>
-    <div class="q-text" id="loading-text">Sincronizando Datos...</div>
   </div>
 
-  <nav id="nav-bar">
-    <a href="index.html" class="nav-logo">SVPMUN</a>
-    <div class="nav-links">
-      <a href="nosotros.html">Nosotros</a>
-      <a href="drills.html">Drills</a>
-      <a href="inscripciones.html">Inscripciones</a>
-    </div>
-  </nav>
+  <div id="orbs"><div class="orb orb-a"></div><div class="orb orb-b"></div></div>
 
-  <header class="hero">
-    <div class="hero-glass" id="hero-content">
-      <h1>Arquitectura de Política Exterior</h1>
-      <p>El núcleo estratégico de toda delegación. Define, proyecta y ejecuta.</p>
-    </div>
+  <header id="nav-bar">
+    <a class="nb-brand" href="/Matrices">
+      <img class="nb-emblem" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="ONU">
+      <span class="nb-word">SVPMUN <span class="nb-sep">·</span> MATRICES</span>
+    </a>
+    <nav class="nb-center" aria-label="Acceso rápido">
+      <a class="nb-quick-link" href="/" onclick="event.preventDefault();navigateTo('/')">Inicio</a>
+      <a class="nb-quick-link" href="/inscripciones-drills" onclick="event.preventDefault();navigateTo('/inscripciones-drills')">Inscripciones</a>
+      <a class="nb-quick-link" href="/nosotros" onclick="event.preventDefault();navigateTo('/nosotros')">Nosotros</a>
+      <a class="nb-quick-link" href="/drills" onclick="event.preventDefault();navigateTo('/drills')">Drills</a>
+    </nav>
+    <button class="nb-trigger" id="nbTrigger" onclick="toggleNav()" aria-label="Menú">
+      <span class="nb-trigger-label">Menú</span>
+      <div class="nb-icon" id="nbIcon"><span></span><span></span><span></span></div>
+    </button>
   </header>
 
-  <section class="content-section">
+  <div id="nav-overlay" role="navigation" aria-label="Menú Principal">
+    <div class="nvo-deco-panel">
+      <img class="nvo-deco-emblem" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="">
+      <div class="nvo-deco-top">
+        <div class="nvo-deco-brand">SVPMUN · Central de Drills</div>
+        <div class="nvo-deco-title">"El debate<br>constante<br>forja al<br>diplomático."</div>
+        <div class="nvo-deco-line"></div>
+        <div class="nvo-deco-sub">Simulaciones Continuas<br>Drills · Comités · 2026</div>
+      </div>
+      <div class="nvo-deco-bottom">
+        <div class="nvo-deco-year">2026</div>
+        <div class="nvo-deco-copy">© 2026 SVPMUN · Model United Nations</div>
+      </div>
+    </div>
+    <div class="nvo-list-panel">
+      <div class="nvo-item nvo-item-back" onclick="navigateTo('/')" style="cursor:pointer;">
+        <div class="nvo-num">←</div>
+        <div class="nvo-body"><div class="nvo-title">Volver al Inicio</div><div class="nvo-subs-inline">Página principal · SVPMUN</div></div>
+        <div class="nvo-back-arr">‹</div>
+      </div>
+      <div class="nvo-item" onclick="navigateTo('/nosotros')" style="cursor:pointer;">
+        <div class="nvo-num">01</div>
+        <div class="nvo-body"><div class="nvo-title">Conoce a Nuestro Equipo</div><div class="nvo-subs-inline">Directiva · Secretariado · Mesa</div></div>
+        <div class="nvo-arrow">›</div>
+      </div>
+      <div class="nvo-item" id="nvo-comites-trigger" onclick="toggleComites()" style="cursor:pointer;">
+        <div class="nvo-num">02</div>
+        <div class="nvo-body"><div class="nvo-title">Comités</div><div class="nvo-subs-inline">Crisis · OMS · Unión Europea</div></div>
+        <div class="nvo-arrow-expand">›</div>
+      </div>
+      <div class="nvo-sub-list" id="nvo-comites-sub">
+        <div class="nvo-sub-item" onclick="navigateTo('/crisis-roma')"><div class="nvo-sub-dot"></div><div class="nvo-sub-name">Crisis — Segunda Guerra Civil Romana</div></div>
+        <div class="nvo-sub-item" onclick="navigateTo('/oms')"><div class="nvo-sub-dot"></div><div class="nvo-sub-name">OMS — Organización Mundial de la Salud</div></div>
+        <div class="nvo-sub-item"  onclick="navigateTo('/crisis_ue_2035')"><div class="nvo-sub-dot"></div><div class="nvo-sub-name">Unión Europea</div></div>
+      </div>
+      <div class="nvo-item" onclick="navigateTo('/inscripciones-drills')" style="cursor:pointer;">
+        <div class="nvo-num">03</div>
+        <div class="nvo-body"><div class="nvo-title">Inscripciones</div><div class="nvo-subs-inline">Registro · Costos · Fechas</div></div>
+        <div class="nvo-arrow">›</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="section-wrap">
     
-    <div class="content-block gsap-fade">
-      <h2>¿Qué es una Matriz en MUN?</h2>
-      <p>En el contexto del Modelo de Naciones Unidas, una matriz no es un simple documento; es la radiografía política, económica y social de la nación o personaje que representas. Es el marco lógico sobre el cual se construyen los discursos, se forjan las alianzas y se trazan las líneas rojas que una delegación jamás debe cruzar.</p>
-      <p>Entrar a un comité sin una matriz interiorizada es equivalente a navegar a ciegas. La matriz condensa el "Policy Statement" y las posturas históricas en una estructura fácil de consultar en momentos de alta presión parlamentaria o crisis inminente.</p>
+    <div class="hero-head">
+      <div class="hero-eye rv">Base de Datos Estratégica</div>
+      <h1 class="hero-title rv d1">MATRICES GLOBALES</h1>
+      <p class="hero-sub rv d2">La información es poder. Tu matriz es el arma principal para dominar el debate y asegurar tus intereses en el comité.</p>
+      <a href="/inscripciones-drills" class="incite-text rv d3">¿Listo para poner a prueba tu estrategia? Inscríbete en el próximo Drill →</a>
     </div>
 
-    <div class="content-block gsap-fade">
-      <h2>¿Para qué sirven realmente?</h2>
-      <ul>
-        <li><strong>Coherencia Diplomática:</strong> Evita que un delegado tome decisiones impulsivas que contradigan la política exterior real de su estado.</li>
-        <li><strong>Resolución de Crisis:</strong> En comités dinámicos, la matriz dicta los recursos disponibles (militares, económicos, de inteligencia) y cómo deben desplegarse mediante directivas.</li>
-        <li><strong>Mapeo de Alianzas (Bloc Building):</strong> Identifica rápidamente aliados naturales, socios comerciales estratégicos y rivales geopolíticos.</li>
-        <li><strong>Límites de Negociación:</strong> Establece hasta dónde puede ceder tu delegación en un anteproyecto de resolución sin vulnerar su soberanía o intereses nacionales.</li>
-      </ul>
+    <div class="content-grid">
+      <div class="text-block rv">
+        <h3>¿Qué es una Matriz en MUN?</h3>
+        <p>Una Matriz en Model United Nations no es solo un resumen de datos. Es el <strong>ADN estructural</strong> de tu país frente a la comunidad internacional. Contiene la postura oficial, los aliados estratégicos, las líneas rojas inquebrantables y los intereses económicos, políticos y sociales desglosados en datos procesables.</p>
+        <p>Es el documento maestro que consultas antes de levantar la plaqueta, asegurando que cada argumento pronunciado esté blindado por tu política exterior.</p>
+      </div>
+      <div class="visual-card rv d1">
+        <div class="vc-icon">🧬</div>
+        <div class="vc-title">El Código de tu Nación</div>
+        <div class="vc-text">Mientras el Background Guide te da el contexto del problema, tu matriz te dice exactamente cómo tu país debe reaccionar ante él.</div>
+      </div>
     </div>
 
-    <div class="content-block gsap-fade">
-      <h2>¿Cómo guiarte para escoger y usar tu matriz?</h2>
-      <p>La elección y adaptación de una matriz depende estrictamente del tipo de comité al que te enfrentas:</p>
-      <ul>
-        <li><strong>Para Comités Generales (AG, ECOSOC, OMS):</strong> Prioriza matrices que detallen indicadores económicos, tratados internacionales ratificados y políticas públicas vigentes. El enfoque es el "Soft Power".</li>
-        <li><strong>Para Comités de Seguridad (CSNU):</strong> Tu matriz debe ser un inventario táctico. Capacidades militares, derecho a veto, despliegue de tropas y alianzas de defensa (como la OTAN).</li>
-        <li><strong>Para Comités de Crisis o Ficción:</strong> Aquí la matriz es tu hoja de personaje. Debe detallar tus poderes fácticos, recursos clandestinos, debilidades públicas y objetivos ocultos.</li>
-      </ul>
-      <p>El diseño de la matriz que elijas debe permitirte encontrar un dato crítico en menos de 5 segundos mientras otro delegado tiene la palabra. Menos prosa, más datos estructurados.</p>
+    <div class="content-grid" style="direction: rtl;">
+      <div class="text-block rv d1" style="direction: ltr;">
+        <h3>¿Para qué sirven realmente?</h3>
+        <p>En el caos de un debate no moderado o ante una crisis inminente, la memoria falla, pero la matriz no. Sirven para:</p>
+        <ul style="color: rgba(185,215,255,0.75); margin-left: 20px; line-height: 1.8; font-size: 1.1rem; margin-bottom: 20px;">
+          <li><strong>Navegación Táctica:</strong> Mantener tu discurso alineado sin desviarte del carácter.</li>
+          <li><strong>Blindaje Diplomático:</strong> Identificar qué resoluciones firmar y cuáles vetar de inmediato.</li>
+          <li><strong>Alianzas Inmediatas:</strong> Reconocer en segundos qué delegaciones comparten tus intereses.</li>
+        </ul>
+        <a href="/inscripciones-drills" class="incite-text" style="text-align: left; margin-top: 10px;">La teoría no sirve sin práctica. Aplica tu matriz en SVPMUN →</a>
+      </div>
+      <div class="visual-card rv" style="direction: ltr;">
+        <div class="vc-icon">🛡️</div>
+        <div class="vc-title">Defensa Estratégica</div>
+        <div class="vc-text">Una matriz bien elaborada evita contradicciones y te permite atacar las debilidades en los discursos de delegaciones opositoras.</div>
+      </div>
     </div>
 
-  </section>
+    <div class="hero-head" style="margin-bottom: 20px; padding-top: 40px;">
+      <h3 class="hero-title rv" style="font-size: 3rem;">¿Cómo usar tu matriz?</h3>
+    </div>
+    <div class="steps-container">
+      <div class="step-box rv">
+        <div class="step-num">01</div>
+        <div class="step-title">Mapeo del Tópico</div>
+        <div class="step-text">Identifica los puntos clave del comité. Cruza esta información con los antecedentes históricos de tu nación documentados en la matriz.</div>
+      </div>
+      <div class="step-box rv d1">
+        <div class="step-num">02</div>
+        <div class="step-title">Líneas Rojas</div>
+        <div class="step-text">Define con exactitud qué estás dispuesto a negociar para lograr un consenso y qué ceder sería considerado traición a tu soberanía.</div>
+      </div>
+      <div class="step-box rv d2">
+        <div class="step-num">03</div>
+        <div class="step-title">Ejecución en Sala</div>
+        <div class="step-text">Transforma los "intereses" escritos en tu matriz en cláusulas operativas reales al momento de redactar el papel de trabajo.</div>
+      </div>
+    </div>
 
-  <section class="cta-container">
-    <a href="static/Matrices.pdf" class="cta-btn" target="_blank">VER MATRICES</a>
-  </section>
+    <div class="cta-matrix rv d1">
+      <div class="cta-m-content">
+        <div class="cta-m-title">ACCEDE AL ARCHIVO OFICIAL</div>
+        <div class="cta-m-sub">Revisa las matrices elaboradas por el Secretariado para estudiar su estructura y formato óptimo.</div>
+        <a href="/static/Matrices.pdf" target="_blank" class="btn-pdf">
+          Ver Matrices <span>📄</span>
+        </a>
+        <a href="/inscripciones-drills" class="incite-text" style="color: rgba(255,255,255,0.5); font-size: 0.7rem; margin-top: 40px;">Domina tu comité. Inscríbete ahora.</a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="foot-brand">SVPMUN · MATRICES</div>
+    <div class="foot-copy">© 2026 SVPMUN · Model United Nations</div>
+  </footer>
+
+  <div id="mobile-shell">
+    <div id="mob-topbar">
+      <div class="mob-brand">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="ONU">
+        <span class="mob-brand-name">SVPMUN</span>
+      </div>
+      <div class="mob-topbar-badge">2026</div>
+    </div>
+
+    <div class="mob-hero">
+      <div class="mob-eyebrow">Base de Datos</div>
+      <div class="mob-h1">MATRICES<br>GLOBALES</div>
+      <p class="mob-tagline">El mapa estratégico para dominar tu comité y asegurar tus intereses.</p>
+    </div>
+
+    <div class="mob-section">
+      <div class="mob-sec-label">¿Qué es una Matriz?</div>
+      <p class="mob-text">Es el <strong>ADN estructural</strong> de tu país frente a la comunidad internacional. Contiene la postura oficial, aliados, líneas rojas e intereses desglosados.</p>
+      
+      <div class="mob-sec-label" style="margin-top: 30px;">¿Para qué sirven?</div>
+      <div class="mob-card">
+        <div class="mob-card-icon">🧭</div>
+        <div class="mob-card-title">Navegación Táctica</div>
+        <p style="font-size:0.9rem; color: rgba(185,215,255,0.7);">Mantiene tu discurso alineado sin desviarte del carácter nacional.</p>
+      </div>
+      <div class="mob-card">
+        <div class="mob-card-icon">🛡️</div>
+        <div class="mob-card-title">Blindaje Diplomático</div>
+        <p style="font-size:0.9rem; color: rgba(185,215,255,0.7);">Te permite identificar rápidamente qué resoluciones vetar.</p>
+      </div>
+    </div>
+
+    <div class="mob-section" style="padding-top: 0;">
+      <div class="mob-sec-label">Guía de Uso</div>
+      <div class="mob-step">
+        <div class="mob-step-num">01</div>
+        <div class="mob-step-title">Mapeo del Tópico</div>
+        <div style="font-size:0.9rem; color:rgba(255,255,255,0.6);">Cruza los datos del problema con tu historial.</div>
+      </div>
+      <div class="mob-step">
+        <div class="mob-step-num">02</div>
+        <div class="mob-step-title">Líneas Rojas</div>
+        <div style="font-size:0.9rem; color:rgba(255,255,255,0.6);">Define qué estás dispuesto a negociar y qué no.</div>
+      </div>
+      <div class="mob-step">
+        <div class="mob-step-num">03</div>
+        <div class="mob-step-title">Ejecución</div>
+        <div style="font-size:0.9rem; color:rgba(255,255,255,0.6);">Transforma datos en cláusulas operativas reales.</div>
+      </div>
+    </div>
+
+    <div class="mob-cta-box">
+      <h2 style="font-family:'Cinzel', serif; font-size:1.4rem; color:#fff; margin-bottom:10px;">Archivo Oficial</h2>
+      <p style="font-size: 0.9rem; color: rgba(185,215,255,0.7); line-height:1.5;">Revisa las matrices elaboradas por el Secretariado.</p>
+      <a href="/static/Matrices.pdf" target="_blank" class="mob-cta-btn">VER MATRICES 📄</a>
+      <a href="/inscripciones-drills" style="display:block; margin-top: 20px; font-family: 'Cinzel',serif; font-size:0.7rem; color:var(--blu-2); text-decoration:none;">INSCRIBIRME AHORA →</a>
+    </div>
+
+    <div style="text-align: center; padding: 20px; border-top: 1px solid rgba(58,143,224,0.1);">
+      <div style="font-family: 'Cinzel', serif; font-size: 0.7rem; color: rgba(255,255,255,0.2); margin-bottom: 5px;">SVPMUN MATRICES</div>
+    </div>
+
+    <div id="mob-bottomnav">
+      <a href="/" class="mob-nav-item"><div class="mob-nav-icon">🏛️</div><div class="mob-nav-label">Inicio</div></a>
+      <a href="/inscripciones-drills" class="mob-nav-item"><div class="mob-nav-icon">✍️</div><div class="mob-nav-label">Inscrip.</div></a>
+      <a href="/drills" class="mob-nav-item"><div class="mob-nav-icon">⚡</div><div class="mob-nav-label">Drills</div></a>
+      <div class="mob-nav-item" onclick="toggleNav()"><div class="mob-nav-icon">☰</div><div class="mob-nav-label">Menú</div></div>
+    </div>
+  </div>
 
   <script>
-    /* LÓGICA DEL LOADER */
+    /* ══ LOADER ══ */
+    const MSGS = ['Conectando a base de datos...', 'Extrayendo políticas exteriores...', 'Calculando alianzas...', 'Decodificación completa.'];
     window.addEventListener('load', () => {
-      const loader = document.getElementById('quantum-loader');
-      const loadingText = document.getElementById('loading-text');
-      
-      // Simular decodificación de datos en el texto
-      setTimeout(() => { loadingText.innerText = "Acceso Concedido"; }, 1000);
-
-      // Desvanecer loader
-      setTimeout(() => {
-        loader.style.opacity = '0';
-        loader.style.visibility = 'hidden';
-        document.body.style.overflowY = 'auto'; // Permitir scroll
-        
-        // Disparar animación del Hero justo después de que el loader desaparece
-        gsap.to("#hero-content", {
-          duration: 1.5,
-          y: 0,
-          opacity: 1,
-          ease: "power4.out"
-        });
-      }, 1500);
+      let p=0, si=0;
+      const fill=document.getElementById('ml-fill'), status=document.getElementById('ml-status');
+      const iv = setInterval(() => {
+        p += Math.random()*15+5; if(p>=100) p=100;
+        fill.style.width = p+'%';
+        const ni = p<30?0 : p<60?1 : p<90?2 : 3;
+        if(ni!==si){
+          si=ni; status.style.opacity='0';
+          setTimeout(() => { status.innerText=MSGS[si]; status.style.opacity='1'; }, 150);
+        }
+        if(p>=100){
+          clearInterval(iv);
+          setTimeout(() => document.getElementById('matrix-loader').classList.add('exit'), 600);
+        }
+      }, 200);
     });
 
-    /* EFECTO SCROLL NAVBAR */
-    window.addEventListener('scroll', () => {
-      const nav = document.getElementById('nav-bar');
-      if (window.scrollY > 50) {
-        nav.classList.add('scrolled');
-      } else {
-        nav.classList.remove('scrolled');
+    /* ══ SCROLL REVEAL ══ */
+    const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('on'); }), {threshold:0.1});
+    document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+    /* ══ NAV TOGGLE (Desktop & Mobile Menu) ══ */
+    let navOpen = false;
+    function toggleNav() {
+      navOpen = !navOpen;
+      const bar = document.getElementById('nav-bar');
+      const overlay = document.getElementById('nav-overlay');
+      const icon = document.getElementById('nbIcon');
+      if(bar) bar.classList.toggle('menu-open', navOpen);
+      if(overlay) overlay.classList.toggle('open', navOpen);
+      if(icon) icon.classList.toggle('open', navOpen);
+      document.body.style.overflow = navOpen ? 'hidden' : '';
+      if (!navOpen) {
+        const sub = document.getElementById('nvo-comites-sub');
+        const trigger = document.getElementById('nvo-comites-trigger');
+        if(sub) sub.classList.remove('open');
+        if(trigger) trigger.classList.remove('sub-open');
       }
+    }
+
+    function toggleComites() {
+      const sub = document.getElementById('nvo-comites-sub');
+      const trigger = document.getElementById('nvo-comites-trigger');
+      if(sub) sub.classList.toggle('open');
+      if(trigger) trigger.classList.toggle('sub-open');
+    }
+
+    window.addEventListener('scroll', () => {
+      const bar = document.getElementById('nav-bar');
+      if(bar) bar.classList.toggle('scrolled', window.scrollY > 40);
     });
 
-    /* GSAP SCROLL REVEAL PARA EL CONTENIDO */
-    gsap.registerPlugin(ScrollTrigger);
-    
-    gsap.utils.toArray('.gsap-fade').forEach(block => {
-      gsap.to(block, {
-        scrollTrigger: {
-          trigger: block,
-          start: "top 80%", // La animación empieza cuando el tope del elemento llega al 80% del viewport
-        },
-        y: 0,
-        opacity: 1,
-        duration: 1.2,
-        ease: "power3.out"
-      });
-    });
+    function navigateTo(url) {
+      window.location.href = url;
+    }
   </script>
 </body>
 </html>
