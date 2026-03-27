@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SVPMUN — Matrices</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  
+  <style>
+    /* =========================================
+       VARIABLES Y RESET
+       ========================================= */
+    :root {
+      --bg-dark: #050505;
+      --aurora-1: #1a0b2e;
+      --aurora-2: #0f2027;
+      --aurora-3: #203a43;
+      --gold: #c9a84c;
+      --text-main: #ffffff;
+      --text-muted: #a0aab5;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* =========================================
+       PANTALLA DE CARGA (MATRIX GRID)
+       ========================================= */
+    #loader-wrapper {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: var(--bg-dark);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    .matrix-loader {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      width: 60px;
+      height: 60px;
+      margin-bottom: 20px;
+    }
+
+    .matrix-loader div {
+      background-color: var(--gold);
+      border-radius: 2px;
+      animation: matrixPulse 1.2s infinite ease-in-out;
+    }
+
+    /* Retrasos para simular cálculo de matriz */
+    .matrix-loader div:nth-child(1) { animation-delay: 0.1s; }
+    .matrix-loader div:nth-child(2) { animation-delay: 0.2s; }
+    .matrix-loader div:nth-child(3) { animation-delay: 0.3s; }
+    .matrix-loader div:nth-child(4) { animation-delay: 0.4s; }
+    .matrix-loader div:nth-child(5) { animation-delay: 0.5s; }
+    .matrix-loader div:nth-child(6) { animation-delay: 0.6s; }
+    .matrix-loader div:nth-child(7) { animation-delay: 0.7s; }
+    .matrix-loader div:nth-child(8) { animation-delay: 0.8s; }
+    .matrix-loader div:nth-child(9) { animation-delay: 0.9s; }
+
+    @keyframes matrixPulse {
+      0%, 100% { transform: scale(0.3); opacity: 0.2; }
+      50% { transform: scale(1); opacity: 1; }
+    }
+
+    .loader-text {
+      font-family: 'Space Mono', monospace; /* Si usas otra monospace, cámbiala */
+      color: var(--gold);
+      letter-spacing: 3px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+    }
+
+    /* =========================================
+       FONDO AURORA GRADIENT
+       ========================================= */
+    .aurora-bg {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: -1;
+      background: linear-gradient(45deg, var(--aurora-1), var(--aurora-2), var(--aurora-3));
+      background-size: 400% 400%;
+      animation: auroraFlow 15s ease infinite;
+    }
+
+    @keyframes auroraFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* =========================================
+       CONTENEDOR GLASSMORPHISM
+       ========================================= */
+    .content-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 80px); /* Ajusta según el alto de tu navbar */
+      padding: 2rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease 0.5s;
+    }
+
+    .content-wrapper.loaded {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 24px;
+      padding: 4rem;
+      max-width: 800px;
+      text-align: center;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .glass-card h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 3.5rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      letter-spacing: 2px;
+    }
+
+    .glass-card p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      color: var(--text-muted);
+      margin-bottom: 3rem;
+      line-height: 1.6;
+    }
+
+    /* =========================================
+       BOTÓN CTA
+       ========================================= */
+    .cta-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      color: var(--bg-dark);
+      background: var(--gold);
+      text-decoration: none;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-btn:hover {
+      background: #fff;
+      box-shadow: 0 0 20px rgba(201, 168, 76, 0.6);
+      transform: translateY(-2px);
+    }
+
+  </style>
+</head>
+<body>
+
+  <div id="loader-wrapper">
+    <div class="matrix-loader">
+      <div></div><div></div><div></div>
+      <div></div><div></div><div></div>
+      <div></div><div></div><div></div>
+    </div>
+    <div class="loader-text">Calculando Matrices...</div>
+  </div>
+
+  <div class="aurora-bg"></div>
+
+  <header id="nav-bar">
+    </header>
+  <main class="content-wrapper" id="main-content">
+    <div class="glass-card">
+      <h1>Sistemas Matriciales</h1>
+      <p>Accede al documento oficial de matrices. Toda la estructura, cálculo y datos operativos necesarios para la resolución del comité se encuentran en el siguiente archivo clasificado.</p>
+      
+      <a href="static/Matrices.pdf" class="cta-btn" target="_blank">Ver Matrices</a>
+    </div>
+  </main>
+
+  <script>
+    window.addEventListener('load', () => {
+      // Simula un ligero tiempo de carga para que se aprecie la animación (2 segundos)
+      setTimeout(() => {
+        const loader = document.getElementById('loader-wrapper');
+        const content = document.getElementById('main-content');
+        
+        loader.style.opacity = '0';
+        loader.style.visibility = 'hidden';
+        
+        // Activa la animación de entrada de la tarjeta Glassmorphism
+        content.classList.add('loaded');
+      }, 2000);
+    });
+  </script>
+
+</body>
+</html>
