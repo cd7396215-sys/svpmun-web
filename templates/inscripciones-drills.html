@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscripciones Drills | SVPMUN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600;700&family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <style>
+    /* =========================================
+       VARIABLES & BASE
+       ========================================= */
+    :root {
+      --navy:      #071630;
+      --navy-mid:  #0e254a;
+      --gold:      #c9a84c;
+      --gold-lt:   #edd98a;
+      --gold-glow: rgba(201, 168, 76, 0.4);
+      --white:     #ffffff;
+      --off-white: #f4f9ff;
+      --cyan:      #00f3ff;
+      --cyan-glow: rgba(0, 243, 255, 0.5);
+      --black:     #030914;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background-color: var(--navy);
+      color: var(--off-white);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* =========================================
+       PANTALLA DE CARGA TECNOLÓGICA (EL LOCURÓN)
+       ========================================= */
+    #tech-loader {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background-color: #000;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Space Mono', monospace;
+      color: var(--cyan);
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+      overflow: hidden;
+    }
+
+    /* Grid de fondo tipo radar */
+    #tech-loader::before {
+      content: "";
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 200vw; height: 200vw;
+      background: 
+        linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      transform: translate(-50%, -50%) perspective(500px) rotateX(60deg);
+      animation: gridMove 10s linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes gridMove {
+      0% { transform: translate(-50%, -50%) perspective(500px) rotateX(60deg) translateY(0); }
+      100% { transform: translate(-50%, -50%) perspective(500px) rotateX(60deg) translateY(40px); }
+    }
+
+    .loader-content {
+      position: relative;
+      z-index: 2;
+      width: 80%;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    .glitch-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      position: relative;
+      display: inline-block;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px var(--cyan-glow);
+    }
+    
+    .glitch-title::before, .glitch-title::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: #000;
+    }
+    
+    .glitch-title::before {
+      left: 2px;
+      text-shadow: -2px 0 red;
+      clip: rect(24px, 550px, 90px, 0);
+      animation: glitch-anim-2 3s infinite linear alternate-reverse;
+    }
+    
+    .glitch-title::after {
+      left: -2px;
+      text-shadow: -2px 0 blue;
+      clip: rect(85px, 550px, 140px, 0);
+      animation: glitch-anim 2.5s infinite linear alternate-reverse;
+    }
+
+    @keyframes glitch-anim {
+      0% { clip: rect(13px, 9999px, 89px, 0); }
+      20% { clip: rect(65px, 9999px, 32px, 0); }
+      40% { clip: rect(42px, 9999px, 12px, 0); }
+      60% { clip: rect(89px, 9999px, 93px, 0); }
+      80% { clip: rect(12px, 9999px, 4px, 0); }
+      100% { clip: rect(74px, 9999px, 54px, 0); }
+    }
+    @keyframes glitch-anim-2 {
+      0% { clip: rect(34px, 9999px, 12px, 0); }
+      20% { clip: rect(83px, 9999px, 94px, 0); }
+      40% { clip: rect(12px, 9999px, 44px, 0); }
+      60% { clip: rect(54px, 9999px, 23px, 0); }
+      80% { clip: rect(93px, 9999px, 83px, 0); }
+      100% { clip: rect(23px, 9999px, 34px, 0); }
+    }
+
+    .progress-box {
+      width: 100%;
+      height: 4px;
+      background: #111;
+      border: 1px solid var(--cyan);
+      margin: 20px 0;
+      position: relative;
+      box-shadow: 0 0 15px var(--cyan-glow);
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan);
+      transition: width 0.1s;
+    }
+
+    .terminal-text {
+      font-size: 0.9rem;
+      text-align: left;
+      min-height: 80px;
+      margin-top: 20px;
+      line-height: 1.5;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 15px;
+      background: var(--cyan);
+      animation: blink 1s step-end infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* =========================================
+       CONTENIDO PRINCIPAL
+       ========================================= */
+    #main-content {
+      display: none; /* Se activa con JS tras la carga */
+      flex: 1;
+      opacity: 0;
+      animation: fadeIn 1.5s forwards;
+    }
+
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    /* Nav (Estilo SVPMUN) */
+    nav {
+      position: relative;
+      width: 100%;
+      padding: 20px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to bottom, rgba(3,9,20,0.9), transparent);
+      z-index: 10;
+    }
+
+    .logo {
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      text-align: center;
+      padding: 100px 20px 50px;
+      background: radial-gradient(circle at center, var(--navy-mid) 0%, var(--black) 100%);
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 5rem;
+      letter-spacing: 4px;
+      color: var(--white);
+      margin-bottom: 10px;
+      text-shadow: 0px 4px 15px rgba(0,0,0,0.5);
+    }
+
+    .hero h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-style: italic;
+      color: var(--gold);
+      margin-bottom: 30px;
+    }
+
+    /* Sección de Persuasión */
+    .persuasion-section {
+      max-width: 900px;
+      margin: -20px auto 50px;
+      padding: 40px;
+      background: rgba(14, 37, 74, 0.4);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      position: relative;
+      z-index: 5;
+    }
+
+    .persuasion-section p {
+      font-size: 1.25rem;
+      line-height: 1.8;
+      margin-bottom: 25px;
+      color: var(--off-white);
+    }
+
+    .persuasion-section p.highlight {
+      font-weight: 600;
+      color: var(--gold-lt);
+      font-size: 1.4rem;
+      text-align: center;
+      border-left: 4px solid var(--gold);
+      border-right: 4px solid var(--gold);
+      padding: 10px 20px;
+      background: rgba(201, 168, 76, 0.05);
+    }
+
+    .grid-benefits {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .benefit-card {
+      background: rgba(3, 9, 20, 0.6);
+      padding: 25px;
+      border-top: 3px solid var(--gold);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .benefit-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 20px var(--gold-glow);
+    }
+
+    .benefit-card h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.3rem;
+      color: var(--gold);
+      margin-bottom: 15px;
+    }
+
+    .benefit-card p {
+      font-size: 1rem;
+      margin-bottom: 0;
+      color: #b0c4de;
+    }
+
+    /* Call To Action (Formulario) */
+    .cta-container {
+      text-align: center;
+      padding: 40px 20px 80px;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      color: var(--navy);
+      background: linear-gradient(45deg, var(--gold), #fff0b3, var(--gold));
+      background-size: 200% auto;
+      padding: 15px 50px;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: all 0.4s ease;
+      box-shadow: 0 0 20px var(--gold-glow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-btn:hover {
+      background-position: right center;
+      transform: scale(1.05);
+      box-shadow: 0 0 35px rgba(201, 168, 76, 0.8);
+      color: var(--black);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: var(--black);
+      color: #555;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      margin-top: auto;
+    }
+
+    /* =========================================
+       RESPONSIVE (MÓVIL)
+       ========================================= */
+    @media (max-width: 768px) {
+      .glitch-title { font-size: 1.5rem; }
+      nav { padding: 15px 20px; justify-content: center; }
+      .hero h1 { font-size: 3.5rem; }
+      .hero h2 { font-size: 1.4rem; }
+      .persuasion-section { margin: -20px 15px 30px; padding: 25px 15px; }
+      .persuasion-section p { font-size: 1.1rem; }
+      .persuasion-section p.highlight { font-size: 1.2rem; border: none; border-top: 2px solid var(--gold); border-bottom: 2px solid var(--gold); }
+      .cta-btn { font-size: 1.6rem; padding: 12px 30px; width: 90%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="tech-loader">
+    <div class="loader-content">
+      <div class="glitch-title" data-text="SISTEMA_DRILLS_SVPMUN">SISTEMA_DRILLS_SVPMUN</div>
+      <div class="progress-box">
+        <div class="progress-bar" id="p-bar"></div>
+      </div>
+      <div class="terminal-text">
+        <span id="term-lines"></span><span class="cursor"></span>
+      </div>
+    </div>
+  </div>
+
+  <div id="main-content">
+    <nav>
+      <div class="logo">SVPMUN</div>
+    </nav>
+
+    <section class="hero">
+      <h1>FORJA TU ORATORIA</h1>
+      <h2>El verdadero debate no se planea, se improvisa.</h2>
+    </section>
+
+    <section class="persuasion-section">
+      <p>Leer una guía no te hace un buen delegado. Conocer el protocolo de memoria no te garantiza el éxito frente a una crisis inminente. La diplomacia real y el liderazgo absoluto se demuestran bajo presión, cuando los discursos prefabricados ya no sirven y solo queda tu ingenio.</p>
+      
+      <p class="highlight">¿Por qué deberías inscribirte en los Drills? Porque aquí es donde se separan los delegados promedio de los verdaderos líderes.</p>
+      
+      <p>Los drills no son simples simulaciones; son la arena de entrenamiento donde pondremos a prueba tu capacidad de respuesta. Te expondremos a escenarios imprevistos, resoluciones de última hora y ataques dialécticos directos. Tantea el terreno, mide a tus oponentes y descubre hasta dónde puedes llevar tu retórica.</p>
+
+      <div class="grid-benefits">
+        <div class="benefit-card">
+          <h3>Agilidad Mental</h3>
+          <p>Aprende a formular argumentos sólidos en segundos. Cuando la crisis estalle, serás el único en la sala con un plan de acción coherente.</p>
+        </div>
+        <div class="benefit-card">
+          <h3>Dominio Escénico</h3>
+          <p>Pierde el miedo al atril. Los drills te obligan a tomar la palabra constantemente, forjando una presencia que intimidará y persuadirá por igual.</p>
+        </div>
+        <div class="benefit-card">
+          <h3>Estrategia Pura</h3>
+          <p>Convence, negocia y manipula el flujo del debate a tu favor. Descubre los puntos ciegos de tus oponentes antes de llegar a los comités oficiales.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-container">
+      <a href="https://forms.gle/RKXdU2uhfBLk215N9" target="_blank" class="cta-btn">INICIAR INSCRIPCIÓN AHORA</a>
+    </div>
+
+    <footer>
+      > SVPMUN SYSTEM V.2.0.26 // AUTHORIZED PERSONNEL ONLY
+    </footer>
+  </div>
+
+  <script>
+    /* =========================================
+       LÓGICA DEL LOADER TECNOLÓGICO
+       ========================================= */
+    const lines = [
+      "ESTABLECIENDO CONEXIÓN CON SERVIDORES SVPMUN...",
+      "DESENCRIPTANDO PROTOCOLOS DE CRISIS...",
+      "CARGANDO PARÁMETROS DE DEBATE [████████░░]",
+      "VERIFICANDO IDENTIDAD DE DELEGADO...",
+      "BYPASS DE SEGURIDAD EXITOSO.",
+      "ACCESO CONCEDIDO. BIENVENIDO A LOS DRILLS."
+    ];
+
+    const termSpan = document.getElementById("term-lines");
+    const pBar = document.getElementById("p-bar");
+    const loader = document.getElementById("tech-loader");
+    const mainContent = document.getElementById("main-content");
+
+    let lineIndex = 0;
+    let charIndex = 0;
+    let progress = 0;
+
+    function typeLine() {
+      if (lineIndex < lines.length) {
+        if (charIndex < lines[lineIndex].length) {
+          termSpan.innerHTML += lines[lineIndex].charAt(charIndex);
+          charIndex++;
+          progress += (100 / (lines.length * 30)); // Llenar barra progresivamente
+          if(progress > 100) progress = 100;
+          pBar.style.width = progress + "%";
+          
+          let speed = Math.random() * 30 + 10; // Velocidad de tipeo aleatoria tipo hacker
+          setTimeout(typeLine, speed);
+        } else {
+          termSpan.innerHTML += "<br>";
+          charIndex = 0;
+          lineIndex++;
+          setTimeout(typeLine, 300); // Pausa entre líneas
+        }
+      } else {
+        // Carga completada
+        pBar.style.width = "100%";
+        setTimeout(() => {
+          loader.style.opacity = "0";
+          setTimeout(() => {
+            loader.style.visibility = "hidden";
+            mainContent.style.display = "flex";
+            window.scrollTo(0, 0);
+          }, 800);
+        }, 800);
+      }
+    }
+
+    // Iniciar la secuencia al cargar la página
+    window.onload = () => {
+      setTimeout(typeLine, 500);
+    };
+  </script>
+
+</body>
+</html>
