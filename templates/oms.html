@@ -98,7 +98,7 @@
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
         /* ---------------------------------------------------
-           NAVBAR Y OVERLAY - EXACTAMENTE IGUAL A DRILLS
+           NAVBAR Y OVERLAY - ESCRITORIO
            --------------------------------------------------- */
         #nav-bar {
             position: fixed; top: 0; left: 0; right: 0; z-index: 8000;
@@ -224,7 +224,7 @@
         .nvo-back-arr { font-size: 1.1rem; color: rgba(255,255,255,0.15); transition: color 0.3s, transform 0.3s; }
         .nvo-item-back:hover .nvo-back-arr { color: var(--gold); transform: translateX(-4px); }
 
-        /* Mobile Bars */
+        /* Mobile Bars Inicialmente Ocultos */
         #mob-topbar, #mob-bottomnav { display: none; }
 
 
@@ -285,7 +285,7 @@
         .speech { flex: 1; }
         .speech.action { font-style: italic; color: var(--text-muted); }
 
-        /* MAPA ANATÓMICO INTERACTIVO (IMAGEN REEMPLAZADA) */
+        /* MAPA ANATÓMICO INTERACTIVO */
         .brain-interactive-section { display: flex; border: 1px solid var(--text-ink); margin: 30px 0; height: 450px; }
         .brain-svg-container { flex: 1.5; background: #fff; padding: 10px; display: flex; align-items: center; justify-content: center; border-right: 1px solid var(--text-ink); position: relative; }
         .brain-info-panel { width: 350px; background: var(--bg-archive); padding: 30px; display: flex; flex-direction: column; justify-content: center; }
@@ -330,16 +330,29 @@
         }
         
         @media (max-width: 768px) {
-            /* Ocultar el Navbar de Escritorio */
-            #nav-bar, #nav-overlay { display: none !important; }
+            /* Ocultar el Navbar de Escritorio EXCEPTO cuando está abierto */
+            #nav-bar { display: none !important; }
+            #nav-bar.menu-open { display: flex !important; padding: 0 20px; z-index: 9001; }
+            #nav-bar.menu-open .nb-brand, #nav-bar.menu-open .nb-center { display: none !important; }
+            #nav-bar.menu-open .nb-trigger { margin-left: auto; }
+
+            /* Ajustar Overlay para móvil */
+            #nav-overlay { z-index: 9000; }
+            .nvo-deco-panel { display: none; }
+            .nvo-list-panel { padding-top: 60px; }
+            .nvo-item { padding: 16px 20px; grid-template-columns: 42px 1fr auto; gap: 0 12px; }
+            .nvo-sub-item { padding: 12px 20px 12px 74px; gap: 12px; }
+            .nvo-title { font-size: 1rem; }
+            .nvo-subs-inline { display: none; }
             
             /* Ajustar el espaciado principal para que encaje entre las barras móviles */
             #dossier-container { margin-top: 70px !important; padding: 0 20px !important; margin-bottom: 90px !important; }
             
             /* Modificar Navbar Superior Móvil */
             #mob-topbar {
+                display: flex !important;
                 position: fixed; top: 0; left: 0; right: 0; z-index: 8000; height: 52px;
-                display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
+                align-items: center; justify-content: space-between; padding: 0 20px;
                 background: rgba(3,8,18,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(201,168,76,0.15);
             }
             .mob-brand { display: flex; align-items: center; gap: 10px; }
@@ -349,18 +362,31 @@
 
             /* Modificar Navbar Inferior Móvil */
             #mob-bottomnav {
+                display: flex !important;
                 position: fixed; bottom: 0; left: 0; right: 0; z-index: 8000; height: 64px;
                 background: rgba(3,8,18,0.96); backdrop-filter: blur(24px); border-top: 1px solid rgba(201,168,76,0.12);
-                display: flex; align-items: stretch;
+                align-items: stretch;
             }
-            .mob-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; text-decoration: none; }
-            .mob-nav-icon { font-size: 1.2rem; color: rgba(142,197,247,0.4); }
-            .mob-nav-label { font-family: 'Cinzel', serif; font-size: 0.48rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(142,197,247,0.4); }
-            .mob-nav-item.active .mob-nav-icon, .mob-nav-item.active .mob-nav-label { color: var(--gold-lt); }
+            .mob-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; text-decoration: none; position: relative; transition: background 0.2s; }
+            .mob-nav-item::before {
+                content: ''; position: absolute; top: 0; left: 20%; right: 20%; height: 2px;
+                background: linear-gradient(90deg, var(--blu-3), var(--gold));
+                transform: scaleX(0); transition: transform 0.3s ease;
+            }
+            .mob-nav-item.active::before { transform: scaleX(1); }
+            .mob-nav-icon { font-size: 1.2rem; color: rgba(142,197,247,0.4); transition: transform 0.3s; }
+            .mob-nav-item.active .mob-nav-icon { transform: scale(1.15); color: var(--gold-lt); }
+            .mob-nav-label { font-family: 'Cinzel', serif; font-size: 0.48rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(142,197,247,0.4); transition: color 0.3s; }
+            .mob-nav-item.active .mob-nav-label { color: var(--gold-lt); }
 
             /* Transcripts en móvil */
             .transcript-grid { grid-template-columns: 1fr !important; display: flex; flex-direction: column; }
             .grid-col { margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 15px; }
+        }
+
+        @media (max-width: 480px) {
+            .nvo-item { padding: 14px 16px; grid-template-columns: 36px 1fr auto; gap: 0 10px; }
+            .nvo-sub-item { padding-left: 62px; }
         }
     </style>
 </head>
@@ -383,9 +409,9 @@
           <span class="nb-word">SVPMUN <span class="nb-sep">·</span> DRILLS</span>
         </a>
         <nav class="nb-center" aria-label="Acceso rápido">
-          <a class="nb-quick-link" href="/" onclick="event.preventDefault();navigateTo('/')">Inicio</a>
-          <a class="nb-quick-link" href="/inscripciones" onclick="event.preventDefault();navigateTo('/inscripciones')">Inscripciones</a>
-          <a class="nb-quick-link" href="/nosotros" onclick="event.preventDefault();navigateTo('/nosotros')">Nosotros</a>
+          <a class="nb-quick-link" href="/drills" onclick="event.preventDefault();navigateTo('/drills')">Drills</a>
+          <a class="nb-quick-link" href="/crisis-roma" onclick="event.preventDefault();navigateTo('/crisis-roma')">Crisis Roma</a>
+          <a class="nb-quick-link" href="/oms" onclick="event.preventDefault();navigateTo('/oms')">OMS</a>
         </nav>
         <button class="nb-trigger" id="nbTrigger" onclick="toggleNav()" aria-label="Menú">
           <span class="nb-trigger-label">Menú</span>
@@ -707,10 +733,22 @@
     </div>
 
     <div id="mob-bottomnav">
-      <a href="/" class="mob-nav-item"><div class="mob-nav-icon">🏛️</div><div class="mob-nav-label">Inicio</div></a>
-      <a href="/nosotros" class="mob-nav-item"><div class="mob-nav-icon">🌐</div><div class="mob-nav-label">Nosotros</div></a>
-      <a href="/drills" class="mob-nav-item"><div class="mob-nav-icon">⚡</div><div class="mob-nav-label">Drills</div></a>
-      <a href="/inscripciones" class="mob-nav-item"><div class="mob-nav-icon">✍️</div><div class="mob-nav-label">Inscrip</div></a>
+      <a href="/drills" class="mob-nav-item" onclick="event.preventDefault();navigateTo('/drills')">
+        <div class="mob-nav-icon">⚡</div>
+        <div class="mob-nav-label">Drills</div>
+      </a>
+      <a href="/crisis-roma" class="mob-nav-item" onclick="event.preventDefault();navigateTo('/crisis-roma')">
+        <div class="mob-nav-icon">🏛️</div>
+        <div class="mob-nav-label">Roma</div>
+      </a>
+      <a href="/oms" class="mob-nav-item active" onclick="event.preventDefault();navigateTo('/oms')">
+        <div class="mob-nav-icon">⚕️</div>
+        <div class="mob-nav-label">OMS</div>
+      </a>
+      <div class="mob-nav-item" onclick="toggleNav()">
+        <div class="mob-nav-icon">☰</div>
+        <div class="mob-nav-label">Menú</div>
+      </div>
     </div>
 
     <script>
