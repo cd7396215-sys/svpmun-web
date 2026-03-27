@@ -173,18 +173,43 @@
     .mob-nav-item.active .mob-nav-icon, .mob-nav-item.active .mob-nav-label { color: var(--gold-lt); }
 
     /* =========================================
-       HERO SECTION
+       HERO SECTION (CON EFECTO DE NUBES Y RAYOS)
        ========================================= */
     #hero {
       position: relative; min-height: 100vh; z-index: 3;
       display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
       padding: 120px 24px 80px; overflow: hidden;
-      background: radial-gradient(circle at center, var(--navy-mid) 0%, var(--black) 100%);
+      background-color: var(--navy);
     }
-    .hero-bg-img {
+    
+    .hero-clouds {
       position: absolute; inset: 0; z-index: 0;
-      background-image: repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(0, 243, 255, 0.03) 2px, rgba(0, 243, 255, 0.03) 4px);
+      background-image: url('https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+      background-size: cover; background-position: center;
+      opacity: 0.4; mix-blend-mode: multiply;
+      pointer-events: none;
     }
+
+    .hero-gradient-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: radial-gradient(circle at center, rgba(14,37,74,0.7) 0%, rgba(3,9,20,0.95) 100%);
+      pointer-events: none;
+    }
+
+    .hero-lightning {
+      position: absolute; inset: 0; z-index: 2;
+      background: #ffffff;
+      opacity: 0;
+      pointer-events: none;
+      mix-blend-mode: overlay;
+    }
+
+    .hero-bg-img {
+      position: absolute; inset: 0; z-index: 3;
+      background-image: repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(0, 243, 255, 0.02) 2px, rgba(0, 243, 255, 0.02) 4px);
+      pointer-events: none;
+    }
+    
     .hero-content { position: relative; z-index: 5; }
     .hero-topic { font-family: 'Cinzel', serif; font-size: clamp(0.8rem, 1.5vw, 1rem); letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin-bottom: 15px; }
     .hero-title {
@@ -207,22 +232,43 @@
       background: linear-gradient(180deg, #030914 0%, #0a172e 50%, #030914 100%);
       border-top: 1px solid rgba(201, 168, 76, 0.15); text-align: center;
     }
-    .section-label { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.5em; text-transform: uppercase; color: var(--cyan); margin-bottom: 20px; }
+    .section-label { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold-lt); margin-bottom: 20px; }
     .am-title { font-family: 'Uncial Antiqua', serif; font-size: clamp(2rem, 4vw, 3.5rem); color: var(--silver-lt); letter-spacing: 0.08em; margin-bottom: 40px; text-shadow: 0 2px 20px rgba(0,0,0,0.5); }
     
     /* El Reto */
     .persuasion-body { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.1rem, 2vw, 1.4rem); color: var(--silver-lt); max-width: 900px; margin: 0 auto 40px; line-height: 1.9; }
     .persuasion-highlight { font-family: 'Cinzel', serif; font-size: clamp(1.2rem, 2.2vw, 1.6rem); color: var(--gold-lt); border-left: 3px solid var(--gold); border-right: 3px solid var(--gold); padding: 15px 30px; display: inline-block; background: rgba(201, 168, 76, 0.05); margin-bottom: 40px; }
 
-    /* Perfil (Nueva Sección) */
+    /* Perfil (Rediseño Imponente) */
     .perfil-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1100px; margin: 0 auto; }
-    .perfil-card { background: rgba(14, 37, 74, 0.3); border: 1px solid rgba(0, 243, 255, 0.2); padding: 30px; border-radius: 8px; text-align: left; position: relative; overflow: hidden; }
-    .perfil-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
-    .pc-icon { font-size: 2rem; color: var(--cyan); margin-bottom: 15px; }
+    .perfil-card { 
+      background: rgba(3, 9, 20, 0.6); 
+      border: 1px solid rgba(201, 168, 76, 0.15); 
+      padding: 30px; 
+      border-radius: 2px; 
+      text-align: left; 
+      position: relative; 
+      overflow: hidden; 
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+      transition: all 0.4s ease;
+    }
+    .perfil-card::before { 
+      content: ''; 
+      position: absolute; 
+      top: 0; left: 0; right: 0; 
+      height: 2px; 
+      background: linear-gradient(90deg, transparent, var(--gold), transparent); 
+    }
+    .perfil-card:hover {
+      border-color: rgba(201, 168, 76, 0.4);
+      transform: translateY(-5px);
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 10px 20px rgba(0,0,0,0.5);
+    }
+    .pc-icon { font-size: 2rem; color: var(--gold-lt); margin-bottom: 15px; }
     .pc-title { font-family: 'Cinzel', serif; font-weight: 700; color: var(--off-white); margin-bottom: 10px; font-size: 1.1rem; letter-spacing: 0.1em; text-transform: uppercase; }
-    .pc-desc { font-family: 'Rajdhani', sans-serif; color: rgba(255,255,255,0.7); line-height: 1.6; }
+    .pc-desc { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: rgba(255,255,255,0.7); line-height: 1.6; }
 
-    /* Pasos (Nueva Sección) */
+    /* Pasos */
     .pasos-container { display: flex; flex-direction: column; gap: 40px; max-width: 800px; margin: 0 auto; text-align: left; }
     .paso-item { display: flex; gap: 20px; align-items: flex-start; }
     .paso-num { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--gold); line-height: 1; text-shadow: 0 0 15px var(--gold-glow); width: 50px; flex-shrink: 0;}
@@ -238,7 +284,7 @@
     .flip-face { position: absolute; inset: 0; backface-visibility: hidden; border: 1px solid rgba(201, 168, 76, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; background: rgba(14, 37, 74, 0.4); backdrop-filter: blur(5px); }
     .flip-back { transform: rotateY(180deg); background: linear-gradient(160deg, #0e254a 0%, #030914 100%); }
     .flip-face::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
-    .flip-icon { font-family: 'Cinzel', serif; font-size: 3rem; color: var(--cyan); margin-bottom: 15px; text-shadow: 0 0 15px var(--cyan-glow); }
+    .flip-icon { font-family: 'Cinzel', serif; font-size: 3rem; color: var(--gold-lt); margin-bottom: 15px; text-shadow: 0 0 15px var(--gold-glow); }
     .flip-role { font-family: 'Cinzel', serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.15em; color: var(--gold); margin-bottom: 10px; text-transform: uppercase; }
     .flip-desc { font-family: 'Rajdhani', sans-serif; font-size: 1rem; color: rgba(255,255,255,0.7); line-height: 1.6; }
     .flip-back .flip-name { font-family: 'Cinzel', serif; font-size: 1.3rem; font-weight: 700; color: var(--gold-lt); margin-bottom: 15px; text-transform: uppercase;}
@@ -255,7 +301,7 @@
     .cta-btn:hover { background-position: right center; transform: scale(1.05); box-shadow: 0 0 40px rgba(201, 168, 76, 0.8); }
 
     footer { background: linear-gradient(to top, #02050a, #030914); padding: 40px 20px; border-top: 1px solid rgba(201, 168, 76, 0.2); text-align: center; z-index: 3; }
-    .foot-spqr { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: rgba(0, 243, 255, 0.5); letter-spacing: 0.2em; }
+    .foot-spqr { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: rgba(201, 168, 76, 0.5); letter-spacing: 0.2em; }
 
     /* =========================================
        RESPONSIVE (MÓVIL)
@@ -386,6 +432,9 @@
     </div>
 
     <section id="hero">
+      <div class="hero-clouds"></div>
+      <div class="hero-gradient-overlay"></div>
+      <div class="hero-lightning"></div>
       <div class="hero-bg-img"></div>
       <div class="hero-content">
         <div class="hero-topic">Sistema Activo | V Edición</div>
@@ -443,13 +492,6 @@
           <div class="paso-content">
             <div class="paso-title">Validación del Sistema</div>
             <div class="pc-desc">Nuestro equipo de logística revisará tu solicitud y emitirá una credencial digital confirmando tu participación en el circuito.</div>
-          </div>
-        </div>
-        <div class="paso-item paso-anim">
-          <div class="paso-num">03</div>
-          <div class="paso-content">
-            <div class="paso-title">Asignación Clasificada</div>
-            <div class="pc-desc">48 horas antes del Drill, recibirás acceso a tu Matriz de Posición y la identidad del rol/país que deberás defender con tu vida.</div>
           </div>
         </div>
       </div>
@@ -608,7 +650,8 @@
             loader.style.visibility = "hidden";
             mainContent.style.display = "flex";
             window.scrollTo(0, 0);
-            initGSAP(); // Iniciar animaciones de escritorio al terminar la carga
+            initLightning(); // Inicia los rayos del hero
+            initGSAP();      // Iniciar animaciones de scroll
           }, 800);
         }, 800);
       }
@@ -617,49 +660,60 @@
     window.onload = () => { setTimeout(typeLine, 500); };
 
     /* =========================================
-       ANIMACIONES GSAP (SOLO ESCRITORIO)
+       EFECTO DE RELÁMPAGOS (GSAP)
+       ========================================= */
+    function initLightning() {
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: Math.random() * 5 + 3 });
+      
+      tl.to(".hero-lightning", { opacity: 0.3, duration: 0.05 })
+        .to(".hero-lightning", { opacity: 0, duration: 0.05 })
+        .to(".hero-lightning", { opacity: 0.7, duration: 0.05, delay: 0.15 })
+        .to(".hero-lightning", { opacity: 0, duration: 0.3 })
+        .call(() => {
+          // Cambia el tiempo de espera para el próximo rayo para que se vea más orgánico
+          tl.repeatDelay(Math.random() * 8 + 3);
+        });
+    }
+
+    /* =========================================
+       ANIMACIONES GSAP (SCROLL)
        ========================================= */
     function initGSAP() {
-      // Solo en resoluciones mayores a 768px (Escritorio)
-      let mm = gsap.matchMedia();
+      // Configuradas para verse fluidas tanto en PC como en Móvil
+      
+      // Hero Animations
+      gsap.from(".hero-topic", { duration: 1, y: -20, opacity: 0, ease: "power3.out" });
+      gsap.from(".hero-title", { duration: 1.5, y: 50, opacity: 0, ease: "power4.out", delay: 0.3 });
+      gsap.from(".hero-sub", { duration: 1.5, y: 20, opacity: 0, ease: "power3.out", delay: 0.6 });
 
-      mm.add("(min-width: 769px)", () => {
-        
-        // Hero Animations
-        gsap.from(".hero-topic", { duration: 1, y: -20, opacity: 0, ease: "power3.out" });
-        gsap.from(".hero-title", { duration: 1.5, y: 50, opacity: 0, ease: "power4.out", delay: 0.3 });
-        gsap.from(".hero-sub", { duration: 1.5, y: 20, opacity: 0, ease: "power3.out", delay: 0.6 });
+      // Persuasión Text Lines
+      gsap.from(".p-line", {
+        scrollTrigger: { trigger: "#persuasion", start: "top 80%" },
+        y: 40, opacity: 0, duration: 1, stagger: 0.3, ease: "power3.out"
+      });
 
-        // Persuasión Text Lines
-        gsap.from(".p-line", {
-          scrollTrigger: { trigger: "#persuasion", start: "top 80%" },
-          y: 40, opacity: 0, duration: 1, stagger: 0.3, ease: "power3.out"
-        });
+      // Perfil Grid Cards
+      gsap.from(".perfil-anim", {
+        scrollTrigger: { trigger: "#perfil", start: "top 75%" },
+        y: 40, opacity: 0, duration: 0.8, stagger: 0.2, ease: "power3.out"
+      });
 
-        // Perfil Grid Cards
-        gsap.from(".perfil-anim", {
-          scrollTrigger: { trigger: "#perfil", start: "top 75%" },
-          x: -50, opacity: 0, duration: 0.8, stagger: 0.2, ease: "back.out(1.7)"
-        });
+      // Pasos Timeline
+      gsap.from(".paso-anim", {
+        scrollTrigger: { trigger: "#pasos", start: "top 75%" },
+        x: -30, opacity: 0, duration: 0.8, stagger: 0.3, ease: "power2.out"
+      });
 
-        // Pasos Timeline
-        gsap.from(".paso-anim", {
-          scrollTrigger: { trigger: "#pasos", start: "top 75%" },
-          y: 50, opacity: 0, duration: 0.8, stagger: 0.3, ease: "power2.out"
-        });
+      // Comités Flip Cards
+      gsap.from(".card-anim", {
+        scrollTrigger: { trigger: "#comites", start: "top 75%" },
+        y: 60, opacity: 0, duration: 1, stagger: 0.2, ease: "power4.out"
+      });
 
-        // Comités Flip Cards
-        gsap.from(".card-anim", {
-          scrollTrigger: { trigger: "#comites", start: "top 75%" },
-          y: 80, opacity: 0, duration: 1, stagger: 0.2, ease: "power4.out"
-        });
-
-        // CTA Button
-        gsap.from(".cta-btn", {
-          scrollTrigger: { trigger: ".cta-container", start: "top 90%" },
-          scale: 0.8, opacity: 0, duration: 1, ease: "elastic.out(1, 0.5)"
-        });
-
+      // CTA Button
+      gsap.from(".cta-btn", {
+        scrollTrigger: { trigger: ".cta-container", start: "top 90%" },
+        scale: 0.8, opacity: 0, duration: 1, ease: "elastic.out(1, 0.5)"
       });
     }
   </script>
