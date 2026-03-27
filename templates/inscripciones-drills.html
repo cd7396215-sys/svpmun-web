@@ -43,70 +43,242 @@
       flex-direction: column;
     }
 
-   /* =========================================
-   PANTALLA DE CARGA NOBLE (ANTIGÜEDAD)
-   ========================================= */
-#ancient-loader {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background-color: #010408; z-index: 9999;
-  display: flex; justify-content: center; align-items: center;
-  transition: opacity 1.2s ease, visibility 1.2s ease;
-  overflow: hidden;
-}
-#ancient-loader::before {
-  content: ""; position: absolute; inset: 0;
-  background: radial-gradient(ellipse 70% 50% at center, rgba(3,9,20,0.6) 0%, #010408 100%);
-  pointer-events: none;
-}
-.loader-vessel { position: relative; z-index: 2; width: 90%; max-width: 900px; text-align: center; }
-.marble-slab { 
-  background: #0d0f13; border-radius: 4px; padding: 60px 20px; 
-  box-shadow: inset 0 0 120px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.5); 
-  border: 1px solid rgba(201, 168, 76, 0.1); position: relative; overflow: hidden;
-  transition: transform 1.2s ease;
-}
-.marble-slab::before {
-  content: ""; position: absolute; inset: 0;
-  background: repeating-linear-gradient(-45deg, transparent, transparent 1px, rgba(201, 168, 76, 0.03) 1px, rgba(201, 168, 76, 0.03) 3px);
-  pointer-events: none; opacity: 0; transition: opacity 2s ease;
-}
-#ancient-loader.revelation-complete .marble-slab::before { opacity: 1; }
-#ancient-loader.revelation-complete .marble-slab { transform: scale(1.05); }
+    /* =========================================================
+       ✦  GATES OF OLYMPUS — PANTALLA DE ENTRADA ÉPICA  ✦
+       ========================================================= */
+    #olympus-gate {
+      position: fixed; top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 9999; overflow: hidden;
+      transition: opacity 0.9s ease;
+    }
 
-.temple-framework { position: absolute; top: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between; gap: 30px; }
-.pillar { width: 3px; height: 30px; background: rgba(201, 168, 76, 0.1); border-radius: 4px; }
-.pillar:first-child::before, .pillar:last-child::after { content: "🏛️"; position: absolute; top: -10px; color: rgba(201, 168, 76, 0.1); font-size: 1.2rem; }
+    /* — Star field — */
+    #gate-stars {
+      position: absolute; inset: 0; z-index: 0;
+      pointer-events: none;
+    }
+    .star-dot {
+      position: absolute; border-radius: 50%; background: #ffffff;
+      animation: starPulse var(--sdur, 3s) ease-in-out infinite alternate;
+      animation-delay: var(--sdelay, 0s);
+    }
+    @keyframes starPulse {
+      from { opacity: var(--smin, 0.05); }
+      to   { opacity: var(--smax, 0.45); }
+    }
 
-.revelation-text { display: inline-block; position: relative; margin-bottom: 20px; text-shadow: 0 0 30px rgba(0,0,0,0.8); }
-.ancient-title {
-  font-family: 'Cinzel', serif; font-size: 3rem; font-weight: 700; text-transform: uppercase;
-  color: transparent; position: relative; letter-spacing: 0.1em;
-}
-.ancient-title::after {
-  content: attr(data-text); position: absolute; top: 0; left: 0; 
-  width: 100%; height: 100%; 
-  color: var(--gold-lt); opacity: 0;
-  background: linear-gradient(160deg, var(--gold-lt) 0%, #fff 20%, #ffdf94 40%, #ffbb54 60%, var(--gold-lt) 100%);
-  -webkit-background-clip: text; background-clip: text;
-  text-shadow: 0 0 5px rgba(255, 230, 160, 0.5);
-  animation: none;
-}
-#ancient-loader.revelation-complete .ancient-title::after { animation: revealText 1.5s ease forwards; }
+    /* — Stone panels — */
+    .gate-panel {
+      position: absolute; top: 0; height: 100%; width: 50%;
+      background-color: #03060c;
+      background-image:
+        radial-gradient(ellipse 100% 80% at center, rgba(201,168,76,0.055) 0%, transparent 70%),
+        repeating-linear-gradient(
+          0deg,
+          transparent 0px, transparent 47px,
+          rgba(201,168,76,0.03) 48px, rgba(201,168,76,0.03) 49px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent 0px, transparent 71px,
+          rgba(255,255,255,0.012) 72px, rgba(255,255,255,0.012) 73px
+        );
+      z-index: 1;
+      will-change: transform;
+      transition: transform 1.05s cubic-bezier(0.86, 0, 0.07, 1);
+    }
 
-.molten-gold-pool { 
-  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%); 
-  width: 150%; height: 40px; border-radius: 50%; 
-  background: linear-gradient(180deg, #ffc400 0%, #ffbb54 30%, #ffdf94 60%, #fff 100%);
-  filter: blur(10px); opacity: 0; transition: all 1.5s ease;
-}
-#ancient-loader.revelation-complete .molten-gold-pool { transform: translateX(-50%) translateY(50%); opacity: 0.8; }
+    /* Column capital edge glow */
+    .gate-left {
+      left: 0;
+      border-right: 1px solid rgba(201,168,76,0.22);
+      box-shadow:
+        inset -3px 0 0 rgba(201,168,76,0.12),
+        inset -60px 0 120px rgba(201,168,76,0.025);
+    }
+    .gate-right {
+      right: 0;
+      border-left: 1px solid rgba(201,168,76,0.22);
+      box-shadow:
+        inset 3px 0 0 rgba(201,168,76,0.12),
+        inset 60px 0 120px rgba(201,168,76,0.025);
+    }
 
-@keyframes revealText { 
-  0% { opacity: 0; clip-path: circle(0% at center); } 
-  20% { opacity: 0.3; clip-path: circle(20% at center); }
-  50% { opacity: 1; clip-path: circle(60% at center); }
-  100% { opacity: 1; clip-path: circle(120% at center); }
-}
+    /* Column fluting marks (decorative vertical lines on inner edge) */
+    .gate-left::after, .gate-right::after {
+      content: '';
+      position: absolute; top: 0; height: 100%; width: 80px;
+      background-image: repeating-linear-gradient(
+        90deg,
+        transparent 0px, transparent 8px,
+        rgba(201,168,76,0.05) 9px, rgba(201,168,76,0.05) 10px
+      );
+    }
+    .gate-left::after  { right: 0; }
+    .gate-right::after { left: 0; }
+
+    /* Top & bottom panel decorative bars */
+    .gate-left::before, .gate-right::before {
+      content: '';
+      position: absolute; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.25), transparent);
+      z-index: 2;
+    }
+    .gate-left::before, .gate-right::before { top: 0; }
+
+    /* Opening animation */
+    #olympus-gate.opening .gate-left  { transform: translateX(-101%); }
+    #olympus-gate.opening .gate-right { transform: translateX(101%); }
+
+    /* — Gold dust particles — */
+    .particles-container {
+      position: absolute; inset: 0; z-index: 1;
+      overflow: hidden; pointer-events: none;
+    }
+    .gold-particle {
+      position: absolute; border-radius: 50%;
+      background: radial-gradient(circle, rgba(237,217,138,0.95) 0%, rgba(201,168,76,0.5) 70%, transparent 100%);
+      bottom: -4px;
+      animation: particleFloat linear infinite;
+    }
+    @keyframes particleFloat {
+      0%   { transform: translateY(0) translateX(0);          opacity: 0; }
+      8%   { opacity: 1; }
+      80%  { opacity: 0.6; }
+      100% { transform: translateY(-108vh) translateX(var(--pdrift, 0px)); opacity: 0; }
+    }
+
+    /* — Center content — */
+    .gate-center-content {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2; text-align: center; pointer-events: none;
+      width: 100%; display: flex; flex-direction: column; align-items: center;
+      padding: 20px;
+      transition: opacity 0.35s ease;
+    }
+    #olympus-gate.opening .gate-center-content { opacity: 0; }
+
+    /* — The Sacred Seal SVG — */
+    .seal-svg {
+      width: min(290px, 56vw);
+      height: min(290px, 56vw);
+      overflow: visible;
+      margin-bottom: 28px;
+      filter: drop-shadow(0 0 30px rgba(201,168,76,0.25));
+    }
+
+    /* SVG element animations */
+    .draw-main-circle {
+      stroke-dasharray: 785.4;
+      stroke-dashoffset: 785.4;
+      animation: drawCircle 1.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+    }
+    @keyframes drawCircle { to { stroke-dashoffset: 0; } }
+
+    .seal-ring { opacity: 0; animation: sealFadeIn 0.5s ease forwards; }
+    .seal-ring-1     { animation-delay: 0.15s; }
+    .seal-ring-2     { animation-delay: 0.19s; }
+    .seal-ring-inner { animation-delay: 1.5s; }
+    @keyframes sealFadeIn { to { opacity: 1; } }
+
+    .seal-leaf { opacity: 0; animation: leafBlossom 0.4s ease forwards; }
+    @keyframes leafBlossom {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .omega-text {
+      opacity: 0;
+      animation: omegaAwaken 1s ease 1.6s forwards;
+    }
+    @keyframes omegaAwaken {
+      0%   { opacity: 0; filter: blur(14px); transform: scale(0.7); }
+      60%  { opacity: 1; filter: blur(0); }
+      100% { opacity: 1; transform: scale(1); filter: blur(0); }
+    }
+
+    .arc-label {
+      opacity: 0;
+      animation: sealFadeIn 0.8s ease 2.05s forwards;
+    }
+
+    /* — Title block — */
+    .gate-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.52rem, 1.1vw, 0.72rem);
+      letter-spacing: 0.55em;
+      color: rgba(201,168,76,0.65);
+      text-transform: uppercase;
+      opacity: 0;
+      animation: sealFadeIn 0.8s ease 2.05s forwards;
+      margin-bottom: 12px;
+    }
+
+    .gate-main-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5.8vw, 5rem);
+      letter-spacing: 0.07em;
+      color: transparent;
+      background: linear-gradient(160deg, #ffffff 0%, #d8d4cc 25%, #d4af37 55%, #8b6914 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      line-height: 1;
+      display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+      gap: 0;
+    }
+
+    .gt-char {
+      display: inline-block;
+      opacity: 0;
+      animation: chiselIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation-delay: calc(2.15s + var(--i) * 0.058s);
+    }
+    @keyframes chiselIn {
+      from { opacity: 0; transform: scale(1.8) translateY(-10px); filter: blur(8px); }
+      55%  { opacity: 1; filter: blur(0); }
+      to   { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+    }
+    .gt-space { display: inline-block; width: 0.22em; }
+
+    /* — Vertical crack of golden light — */
+    .gate-crack-light {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 2px; height: 0%;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(255,248,180,0.8) 15%,
+        rgba(255,255,255,1) 50%,
+        rgba(255,248,180,0.8) 85%,
+        transparent 100%
+      );
+      box-shadow:
+        0 0 10px 3px rgba(255,230,100,0.5),
+        0 0 35px 12px rgba(255,200,50,0.3),
+        0 0 80px 30px rgba(255,180,30,0.15);
+      z-index: 3; opacity: 0;
+      transition: height 0.45s ease-out, opacity 0.25s ease;
+    }
+    #olympus-gate.cracking .gate-crack-light {
+      height: 100%; opacity: 1;
+    }
+    #olympus-gate.blazing .gate-crack-light {
+      box-shadow:
+        0 0 25px 10px rgba(255,240,120,0.9),
+        0 0 80px 40px rgba(255,210,60,0.7),
+        0 0 180px 80px rgba(255,180,30,0.5);
+      width: 4px;
+    }
+    #olympus-gate.opening .gate-crack-light {
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
     /* =========================================
        NAVBAR ESCRITORIO & OVERLAY (WEB UNIVERSAL)
        ========================================= */
@@ -182,8 +354,7 @@
     /* =========================================
        CONTENIDO PRINCIPAL & NAVBAR MOBILE
        ========================================= */
-    #main-content { display: none; flex-direction: column; flex: 1; opacity: 0; animation: fadeIn 1.5s forwards; }
-    @keyframes fadeIn { to { opacity: 1; } }
+    #main-content { display: none; flex-direction: column; flex: 1; }
 
     /* Navbar Mobile */
     #mob-topbar { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 500; height: 52px; align-items: center; justify-content: space-between; padding: 0 20px; background: rgba(3,8,18,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(201,168,76,0.15); }
@@ -199,7 +370,7 @@
     .mob-nav-item.active .mob-nav-icon, .mob-nav-item.active .mob-nav-label { color: var(--gold-lt); }
 
     /* =========================================
-       HERO SECTION (CON EFECTO DE NUBES Y RAYOS)
+       HERO SECTION
        ========================================= */
     #hero {
       position: relative; min-height: 100vh; z-index: 3;
@@ -207,7 +378,6 @@
       padding: 120px 24px 80px; overflow: hidden;
       background-color: var(--navy);
     }
-    
     .hero-clouds {
       position: absolute; inset: 0; z-index: 0;
       background-image: url('https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
@@ -215,27 +385,20 @@
       opacity: 0.4; mix-blend-mode: multiply;
       pointer-events: none;
     }
-
     .hero-gradient-overlay {
       position: absolute; inset: 0; z-index: 1;
       background: radial-gradient(circle at center, rgba(14,37,74,0.7) 0%, rgba(3,9,20,0.95) 100%);
       pointer-events: none;
     }
-
     .hero-lightning {
       position: absolute; inset: 0; z-index: 2;
-      background: #ffffff;
-      opacity: 0;
-      pointer-events: none;
-      mix-blend-mode: overlay;
+      background: #ffffff; opacity: 0; pointer-events: none; mix-blend-mode: overlay;
     }
-
     .hero-bg-img {
       position: absolute; inset: 0; z-index: 3;
       background-image: repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(0, 243, 255, 0.02) 2px, rgba(0, 243, 255, 0.02) 4px);
       pointer-events: none;
     }
-    
     .hero-content { position: relative; z-index: 5; }
     .hero-topic { font-family: 'Cinzel', serif; font-size: clamp(0.8rem, 1.5vw, 1rem); letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin-bottom: 15px; }
     .hero-title {
@@ -251,7 +414,7 @@
     }
 
     /* =========================================
-       SECCIONES GENERALES (GSAP TARGETS)
+       SECCIONES GENERALES
        ========================================= */
     .gsap-section {
       position: relative; z-index: 3; padding: 100px 8%;
@@ -261,47 +424,32 @@
     .section-label { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold-lt); margin-bottom: 20px; }
     .am-title { font-family: 'Uncial Antiqua', serif; font-size: clamp(2rem, 4vw, 3.5rem); color: var(--silver-lt); letter-spacing: 0.08em; margin-bottom: 40px; text-shadow: 0 2px 20px rgba(0,0,0,0.5); }
     
-    /* El Reto */
     .persuasion-body { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.1rem, 2vw, 1.4rem); color: var(--silver-lt); max-width: 900px; margin: 0 auto 40px; line-height: 1.9; }
     .persuasion-highlight { font-family: 'Cinzel', serif; font-size: clamp(1.2rem, 2.2vw, 1.6rem); color: var(--gold-lt); border-left: 3px solid var(--gold); border-right: 3px solid var(--gold); padding: 15px 30px; display: inline-block; background: rgba(201, 168, 76, 0.05); margin-bottom: 40px; }
 
-    /* Perfil (Rediseño Imponente) */
     .perfil-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1100px; margin: 0 auto; }
     .perfil-card { 
-      background: rgba(3, 9, 20, 0.6); 
-      border: 1px solid rgba(201, 168, 76, 0.15); 
-      padding: 30px; 
-      border-radius: 2px; 
-      text-align: left; 
-      position: relative; 
-      overflow: hidden; 
+      background: rgba(3, 9, 20, 0.6); border: 1px solid rgba(201, 168, 76, 0.15); 
+      padding: 30px; border-radius: 2px; text-align: left; 
+      position: relative; overflow: hidden; 
       box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
       transition: all 0.4s ease;
     }
     .perfil-card::before { 
-      content: ''; 
-      position: absolute; 
-      top: 0; left: 0; right: 0; 
-      height: 2px; 
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; 
       background: linear-gradient(90deg, transparent, var(--gold), transparent); 
     }
-    .perfil-card:hover {
-      border-color: rgba(201, 168, 76, 0.4);
-      transform: translateY(-5px);
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 10px 20px rgba(0,0,0,0.5);
-    }
+    .perfil-card:hover { border-color: rgba(201, 168, 76, 0.4); transform: translateY(-5px); box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 10px 20px rgba(0,0,0,0.5); }
     .pc-icon { font-size: 2rem; color: var(--gold-lt); margin-bottom: 15px; }
     .pc-title { font-family: 'Cinzel', serif; font-weight: 700; color: var(--off-white); margin-bottom: 10px; font-size: 1.1rem; letter-spacing: 0.1em; text-transform: uppercase; }
     .pc-desc { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: rgba(255,255,255,0.7); line-height: 1.6; }
 
-    /* Pasos */
     .pasos-container { display: flex; flex-direction: column; gap: 40px; max-width: 800px; margin: 0 auto; text-align: left; }
     .paso-item { display: flex; gap: 20px; align-items: flex-start; }
     .paso-num { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--gold); line-height: 1; text-shadow: 0 0 15px var(--gold-glow); width: 50px; flex-shrink: 0;}
     .paso-content { background: rgba(255,255,255,0.02); border: 1px solid rgba(201, 168, 76, 0.2); padding: 20px; border-radius: 8px; flex: 1; }
     .paso-title { font-family: 'Cinzel', serif; font-weight: 700; color: var(--gold-lt); margin-bottom: 8px; }
 
-    /* Comités (Flip cards) */
     #comites { background: var(--black); }
     .am-cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1100px; margin: 0 auto; }
     .flip-card { height: 320px; perspective: 1200px; cursor: pointer; }
@@ -316,7 +464,6 @@
     .flip-back .flip-name { font-family: 'Cinzel', serif; font-size: 1.3rem; font-weight: 700; color: var(--gold-lt); margin-bottom: 15px; text-transform: uppercase;}
     .flip-back .flip-back-desc { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.1rem; color: var(--silver-lt); line-height: 1.6; }
 
-    /* Call to Action */
     .cta-container { text-align: center; padding: 60px 20px 100px; background: var(--black); }
     .cta-btn {
       display: inline-block; font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: 3px;
@@ -333,15 +480,9 @@
        RESPONSIVE (MÓVIL)
        ========================================= */
     @media (max-width: 768px) {
-      /* Ocultar elementos de escritorio */
       #nav-bar { display: none !important; }
-      
-      /* Mostrar navbar móvil */
       #mob-topbar, #mob-bottomnav { display: flex; }
-      
-      /* Ajustes de espacio para no quedar detrás de las barras */
       #main-content { padding-top: 52px; padding-bottom: 64px; }
-      
       .hero-title { font-size: 3.5rem; }
       .persuasion-body { font-size: 1rem; text-align: justify; }
       .persuasion-highlight { font-size: 1.1rem; padding: 15px; border: none; border-top: 2px solid var(--gold); border-bottom: 2px solid var(--gold); }
@@ -349,28 +490,133 @@
       .gsap-section { padding: 60px 20px; }
       .paso-item { flex-direction: column; gap: 10px;}
       .cta-btn { font-size: 1.8rem; padding: 15px 30px; width: 90%; }
-      .glitch-title { font-size: 1.5rem; }
     }
   </style>
 </head>
 <body>
 
- <div id="ancient-loader">
-  <div class="loader-vessel">
-    <div class="marble-slab">
-      <div class="temple-framework">
-        <span class="pillar"></span>
-        <span class="pillar"></span>
-        <span class="pillar"></span>
-      </div>
-      <div class="revelation-text">
-        <h1 class="ancient-title" data-text="FORJA TU ORATORIA">FORJA TU ORATORIA</h1>
-      </div>
-      <div class="molten-gold-pool"></div>
-    </div>
-  </div>
-</div>
+  <!-- ═══════════════════════════════════════════════════════════
+       ✦  GATES OF OLYMPUS — LOADER ÉPICO GRIEGO ANTIGUO  ✦
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="olympus-gate">
 
+    <!-- Campo de estrellas (generado por JS) -->
+    <div id="gate-stars"></div>
+
+    <!-- Panel izquierdo de piedra -->
+    <div class="gate-panel gate-left"></div>
+    <!-- Panel derecho de piedra -->
+    <div class="gate-panel gate-right"></div>
+
+    <!-- Contenido central: Sello Sagrado + Título -->
+    <div class="gate-center-content">
+
+      <!-- Partículas de polvo dorado (generadas por JS) -->
+      <div class="particles-container" id="particles-container"></div>
+
+      <!-- ✦ SELLO SAGRADO — SVG laurel + omega ✦ -->
+      <svg class="seal-svg" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="gGold" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%"   stop-color="#edd98a"/>
+            <stop offset="40%"  stop-color="#c9a84c"/>
+            <stop offset="70%"  stop-color="#edd98a"/>
+            <stop offset="100%" stop-color="#8b6914"/>
+          </linearGradient>
+          <linearGradient id="gGoldArc" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"   stop-color="rgba(201,168,76,0)"/>
+            <stop offset="30%"  stop-color="rgba(201,168,76,0.7)"/>
+            <stop offset="70%"  stop-color="rgba(201,168,76,0.7)"/>
+            <stop offset="100%" stop-color="rgba(201,168,76,0)"/>
+          </linearGradient>
+          <radialGradient id="gCore" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="rgba(237,217,138,0.18)"/>
+            <stop offset="60%"  stop-color="rgba(201,168,76,0.07)"/>
+            <stop offset="100%" stop-color="rgba(201,168,76,0)"/>
+          </radialGradient>
+          <filter id="fGlow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="4" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="fSoftGlow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="8" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- Halo de fondo -->
+        <circle cx="150" cy="150" r="148" fill="url(#gCore)"/>
+
+        <!-- Anillos decorativos exteriores -->
+        <circle cx="150" cy="150" r="143" fill="none" stroke="rgba(201,168,76,0.12)" stroke-width="0.5" class="seal-ring seal-ring-1"/>
+        <circle cx="150" cy="150" r="137" fill="none" stroke="rgba(201,168,76,0.20)" stroke-width="1"   class="seal-ring seal-ring-2"/>
+
+        <!-- Círculo principal que se dibuja a sí mismo -->
+        <g transform="rotate(-90, 150, 150)">
+          <circle cx="150" cy="150" r="125" fill="none"
+            stroke="url(#gGold)" stroke-width="1.8"
+            class="draw-main-circle" filter="url(#fGlow)"/>
+        </g>
+
+        <!-- ✦ Hojas de laurel — 12 hojas radiales ✦ -->
+        <!-- Cada <g> tiene la rotación fija; la animación controla opacity -->
+        <g transform="rotate(90,250,150)"   class="seal-leaf" style="animation-delay:0.25s"><ellipse cx="250" cy="150" rx="4.5" ry="12" fill="rgba(201,168,76,0.18)" stroke="#c9a84c" stroke-width="0.8"/></g>
+        <g transform="rotate(120,236.6,200)" class="seal-leaf" style="animation-delay:0.38s"><ellipse cx="236.6" cy="200" rx="4.5" ry="12" fill="rgba(201,168,76,0.18)" stroke="#c9a84c" stroke-width="0.8"/></g>
+        <g transform="rotate(150,200,236.6)" class="seal-leaf" style="animation-delay:0.51s"><ellipse cx="200" cy="236.6" rx="4.5" ry="12" fill="rgba(201,168,76,0.18)" stroke="#c9a84c" stroke-width="0.8"/></g>
+        <g transform="rotate(180,150,250)"   class="seal-leaf" style="animation-delay:0.64s"><ellipse cx="150" cy="250" rx="4.5" ry="12" fill="rgba(201,168,76,0.18)" stroke="#c9a84c" stroke-width="0.8"/></g>
+        <g transform="rotate(210,100,236.6)" class="seal-leaf" style="animation-delay:0.77s"><ellipse cx="100" cy="236.6" rx="4.5" ry="12" fill="rgba(201,168,76,0.18)" stroke="#c9a84c" stroke-width="0.8"/></g>
+        <g transform="rotate(240,63.4,200)"  class="seal-leaf" style="animation-delay:0.90s"><ellipse cx="63.4" cy="200" rx="4.5" ry="12" fill="rgba(201,168,76,0.18)" stroke="#c9a84c" stroke-width="0.8"/></g>
+        <g transform="rotate(270,50,150)"    class="seal-leaf" style="animation-delay:1.03s"><ellipse cx="50" cy="150" rx="4.5" ry="12" fill="rgba(201,168,76,0.18)" stroke="#c9a84c" stroke-width="0.8"/></g>
+        <g transform="rotate(300,63.4,100)"  class="seal-leaf" style="animation-delay:1.16s"><ellipse cx="63.4" cy="100" rx="4.5" ry="12" fill="rgba(201,168,76,0.18)" stroke="#c9a84c" stroke-width="0.8"/></g>
+        <g transform="rotate(330,100,63.4)"  class="seal-leaf" style="animation-delay:1.29s"><ellipse cx="100" cy="63.4" rx="4.5" ry="12" fill="rgba(201,168,76,0.18)" stroke="#c9a84c" stroke-width="0.8"/></g>
+        <g transform="rotate(0,150,50)"      class="seal-leaf" style="animation-delay:1.42s"><ellipse cx="150" cy="50" rx="4.5" ry="12" fill="rgba(201,168,76,0.18)" stroke="#c9a84c" stroke-width="0.8"/></g>
+        <g transform="rotate(30,200,63.4)"   class="seal-leaf" style="animation-delay:1.55s"><ellipse cx="200" cy="63.4" rx="4.5" ry="12" fill="rgba(201,168,76,0.18)" stroke="#c9a84c" stroke-width="0.8"/></g>
+        <g transform="rotate(60,236.6,100)"  class="seal-leaf" style="animation-delay:1.68s"><ellipse cx="236.6" cy="100" rx="4.5" ry="12" fill="rgba(201,168,76,0.18)" stroke="#c9a84c" stroke-width="0.8"/></g>
+
+        <!-- Anillo interior punteado -->
+        <circle cx="150" cy="150" r="100" fill="none"
+          stroke="rgba(201,168,76,0.22)" stroke-width="0.6"
+          stroke-dasharray="5 9" class="seal-ring seal-ring-inner"/>
+
+        <!-- Símbolo OMEGA central -->
+        <text x="150" y="180"
+          text-anchor="middle"
+          font-family="Cinzel, serif" font-size="74" font-weight="700"
+          fill="url(#gGold)" filter="url(#fSoftGlow)"
+          class="omega-text">Ω</text>
+
+        <!-- Texto en arco inferior — SVPMUN -->
+        <path id="arcBottom" d="M 35,150 A 115,115 0 0,0 265,150" fill="none"/>
+        <text font-family="Cinzel, serif" font-size="9.5" letter-spacing="5" class="arc-label">
+          <textPath href="#arcBottom" startOffset="50%" text-anchor="middle"
+            fill="rgba(201,168,76,0.55)">SVPMUN · SISTEMA DRILLS · V EDICIÓN</textPath>
+        </text>
+
+        <!-- Adornos de los cuatro puntos cardinales (puntos de oro) -->
+        <g class="seal-ring seal-ring-1">
+          <circle cx="150" cy="23"  r="3" fill="none" stroke="rgba(201,168,76,0.5)" stroke-width="1"/>
+          <circle cx="277" cy="150" r="3" fill="none" stroke="rgba(201,168,76,0.5)" stroke-width="1"/>
+          <circle cx="150" cy="277" r="3" fill="none" stroke="rgba(201,168,76,0.5)" stroke-width="1"/>
+          <circle cx="23"  cy="150" r="3" fill="none" stroke="rgba(201,168,76,0.5)" stroke-width="1"/>
+        </g>
+      </svg>
+
+      <!-- ✦ Bloque de título ✦ -->
+      <div class="gate-eyebrow">Sistema Activo &nbsp;·&nbsp; V Edición</div>
+      <div class="gate-main-title">
+        <span class="gt-char" style="--i:0">F</span><span class="gt-char" style="--i:1">O</span><span class="gt-char" style="--i:2">R</span><span class="gt-char" style="--i:3">J</span><span class="gt-char" style="--i:4">A</span><span class="gt-space"> </span><span class="gt-char" style="--i:5">T</span><span class="gt-char" style="--i:6">U</span><span class="gt-space"> </span><span class="gt-char" style="--i:7">O</span><span class="gt-char" style="--i:8">R</span><span class="gt-char" style="--i:9">A</span><span class="gt-char" style="--i:10">T</span><span class="gt-char" style="--i:11">O</span><span class="gt-char" style="--i:12">R</span><span class="gt-char" style="--i:13">I</span><span class="gt-char" style="--i:14">A</span>
+      </div>
+
+    </div><!-- /gate-center-content -->
+
+    <!-- Grieta de luz dorada -->
+    <div class="gate-crack-light" id="gate-crack"></div>
+
+  </div><!-- /olympus-gate -->
+
+  <!-- ═══════════════════════════════════════════════════
+       NAVBAR MÓVIL (TOPBAR)
+       ═══════════════════════════════════════════════════ -->
   <div id="mob-topbar">
     <div class="mob-brand">
       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="ONU">
@@ -379,6 +625,9 @@
     <div class="mob-topbar-badge">DRILLS</div>
   </div>
 
+  <!-- ═══════════════════════════════════════════════════
+       CONTENIDO PRINCIPAL
+       ═══════════════════════════════════════════════════ -->
   <div id="main-content">
     
     <header id="nav-bar">
@@ -614,121 +863,156 @@
       const bar = document.getElementById('nav-bar');
       const overlay = document.getElementById('nav-overlay');
       const icon = document.getElementById('menu-icon');
-      
       if(bar) bar.classList.toggle('menu-open', navOpen);
       overlay.classList.toggle('open', navOpen);
       if(icon) icon.classList.toggle('open', navOpen);
-      
       document.body.style.overflow = navOpen ? 'hidden' : '';
       if (!navOpen) {
         document.getElementById('nvo-comites-sub').classList.remove('open');
         document.getElementById('nvo-comites-trigger').classList.remove('sub-open');
       }
     }
-    
     function toggleComites() {
       document.getElementById('nvo-comites-sub').classList.toggle('open');
       document.getElementById('nvo-comites-trigger').classList.toggle('sub-open');
     }
-
     window.addEventListener('scroll', () => {
       const nav = document.getElementById('nav-bar');
       if(nav) nav.classList.toggle('scrolled', window.scrollY > 40);
     });
 
     /* =========================================
-       LÓGICA DEL LOADER & GSAP
+       ✦ GATES OF OLYMPUS — LÓGICA DE ENTRADA ✦
        ========================================= */
-    /* =========================================
-   LÓGICA DEL LOADER & REVELACIÓN NOBLE (GSAP)
-   ========================================= */
-const loader = document.getElementById("ancient-loader");
-const mainContent = document.getElementById("main-content");
 
-window.onload = () => { 
-  // Iniciamos la revelación GSAP directly en window.onload
-  const tl = gsap.timeline();
-  
-  tl.to(".pillar", { duration: 1.5, height: "100%", ease: "power4.out", stagger: 0.3 })
-    .to(".ancient-title::after", { duration: 1.5, opacity: 1, ease: "power4.out", clipPath: "circle(120% at center)" }, "-=0.8")
-    .to(".molten-gold-pool", { duration: 1.5, translateY: "50%", opacity: 0.8, ease: "power3.out" }, "-=1.2")
-    .call(() => {
-      // Marcamos el final de la revelación para los efectos CSS
-      loader.classList.add('revelation-complete');
-    });
+    // — Crear campo de estrellas —
+    (function createStars() {
+      const container = document.getElementById('gate-stars');
+      const count = 80;
+      for (let i = 0; i < count; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star-dot');
+        const size = 0.5 + Math.random() * 1.5;
+        const minOp = 0.03 + Math.random() * 0.12;
+        const maxOp = 0.15 + Math.random() * 0.45;
+        star.style.cssText = [
+          `left:${Math.random()*100}%`,
+          `top:${Math.random()*100}%`,
+          `width:${size}px`,
+          `height:${size}px`,
+          `--sdur:${2 + Math.random()*4}s`,
+          `--sdelay:${Math.random()*4}s`,
+          `--smin:${minOp}`,
+          `--smax:${maxOp}`
+        ].join(';');
+        container.appendChild(star);
+      }
+    })();
 
-  // Programamos la transición final al contenido principal
-  setTimeout(() => {
-    loader.style.opacity = "0";
-    setTimeout(() => {
-      loader.style.visibility = "hidden";
-      mainContent.style.display = "flex";
-      window.scrollTo(0, 0);
-      initLightning(); // Inicia los rayos del hero
-      initGSAP();      // Iniciar animaciones de scroll
-    }, 800);
-  }, 4500); // Duración total de la revelación y espera
-};
+    // — Crear partículas de polvo dorado —
+    (function createParticles() {
+      const container = document.getElementById('particles-container');
+      const count = 35;
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.classList.add('gold-particle');
+        const size  = 1 + Math.random() * 3;
+        const drift = (Math.random() - 0.5) * 80;
+        const delay = Math.random() * 4;
+        const dur   = 3.5 + Math.random() * 4;
+        p.style.cssText = [
+          `left:${5 + Math.random()*90}%`,
+          `width:${size}px`,
+          `height:${size}px`,
+          `--pdrift:${drift}px`,
+          `animation-delay:${delay}s`,
+          `animation-duration:${dur}s`
+        ].join(';');
+        container.appendChild(p);
+      }
+    })();
+
+    // — Secuencia de apertura de las puertas —
+    window.onload = () => {
+      const gate  = document.getElementById('olympus-gate');
+      const crack = document.getElementById('gate-crack');
+      const main  = document.getElementById('main-content');
+
+      // 2900ms → aparece la grieta de luz
+      setTimeout(() => {
+        gate.classList.add('cracking');
+      }, 2900);
+
+      // 3350ms → la grieta se vuelve cegadora
+      setTimeout(() => {
+        gate.classList.add('blazing');
+      }, 3350);
+
+      // 3600ms → el contenido principal aparece detrás de las puertas
+      setTimeout(() => {
+        main.style.display = 'flex';
+      }, 3600);
+
+      // 3700ms → las puertas se abren de golpe
+      setTimeout(() => {
+        gate.classList.add('opening');
+      }, 3700);
+
+      // 4600ms → el loader desaparece
+      setTimeout(() => {
+        gate.style.opacity = '0';
+        setTimeout(() => {
+          gate.style.display = 'none';
+          window.scrollTo(0, 0);
+          initLightning();
+          initGSAP();
+        }, 900);
+      }, 4600);
+    };
 
     /* =========================================
        EFECTO DE RELÁMPAGOS (GSAP)
        ========================================= */
     function initLightning() {
       const tl = gsap.timeline({ repeat: -1, repeatDelay: Math.random() * 5 + 3 });
-      
       tl.to(".hero-lightning", { opacity: 0.3, duration: 0.05 })
         .to(".hero-lightning", { opacity: 0, duration: 0.05 })
         .to(".hero-lightning", { opacity: 0.7, duration: 0.05, delay: 0.15 })
         .to(".hero-lightning", { opacity: 0, duration: 0.3 })
-        .call(() => {
-          // Cambia el tiempo de espera para el próximo rayo para que se vea más orgánico
-          tl.repeatDelay(Math.random() * 8 + 3);
-        });
+        .call(() => { tl.repeatDelay(Math.random() * 8 + 3); });
     }
 
     /* =========================================
        ANIMACIONES GSAP (SCROLL)
        ========================================= */
     function initGSAP() {
-      gsap.registerPlugin(ScrollTrigger); // <-- Agregamos el registro del plugin
-      
-      // Configuradas para verse fluidas tanto en PC como en Móvil
-      
-      // Hero Animations
-      gsap.from(".hero-topic", { duration: 1, y: -20, opacity: 0, ease: "power3.out" });
-      gsap.from(".hero-title", { duration: 1.5, y: 50, opacity: 0, ease: "power4.out", delay: 0.3 });
-      gsap.from(".hero-sub", { duration: 1.5, y: 20, opacity: 0, ease: "power3.out", delay: 0.6 });
+      gsap.registerPlugin(ScrollTrigger);
 
-      // Persuasión Text Lines
+      gsap.from(".hero-topic",  { duration: 1,   y: -20, opacity: 0, ease: "power3.out" });
+      gsap.from(".hero-title",  { duration: 1.5, y: 50,  opacity: 0, ease: "power4.out", delay: 0.3 });
+      gsap.from(".hero-sub",    { duration: 1.5, y: 20,  opacity: 0, ease: "power3.out", delay: 0.6 });
+
       gsap.from(".p-line", {
         scrollTrigger: { trigger: "#persuasion", start: "top 80%" },
         y: 40, opacity: 0, duration: 1, stagger: 0.3, ease: "power3.out"
       });
 
-     
-
-      // Pasos Timeline
       gsap.from(".paso-anim", {
         scrollTrigger: { trigger: "#pasos", start: "top 75%" },
         x: -30, opacity: 0, duration: 0.8, stagger: 0.3, ease: "power2.out"
       });
 
-      // Comités Flip Cards
       gsap.from(".card-anim", {
         scrollTrigger: { trigger: "#comites", start: "top 75%" },
         y: 60, opacity: 0, duration: 1, stagger: 0.2, ease: "power4.out"
       });
 
-      // CTA Button
       gsap.from(".cta-btn", {
         scrollTrigger: { trigger: ".cta-container", start: "top 90%" },
         scale: 0.8, opacity: 0, duration: 1, ease: "elastic.out(1, 0.5)"
       });
 
-      // <-- Forzamos a ScrollTrigger a recalcular las posiciones ahora que la pantalla de carga desapareció
-      setTimeout(() => {
-        ScrollTrigger.refresh();
-      }, 100);
+      setTimeout(() => { ScrollTrigger.refresh(); }, 100);
     }
   </script>
 
