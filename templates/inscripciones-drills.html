@@ -1,722 +1,354 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inscripciones Drills V | SVPMUN</title>
-  
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SPMUN — Inscripciones 2026</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Bebas+Neue&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
   <style>
-    /* =========================================
-       VARIABLES & BASE
-       ========================================= */
     :root {
+      /* Tus variables originales */
+      --white:     #ffffff;
+      --blu-1:     #d6eaff;
+      --blu-2:     #8ec5f7;
+      --blu-3:     #3a8fe0;
+      --blu-4:     #1248a8;
       --navy:      #071630;
       --navy-mid:  #0e254a;
-      --gold:      #c9a84c;
-      --gold-lt:   #edd98a;
-      --gold-glow: rgba(201, 168, 76, 0.4);
-      --white:     #ffffff;
-      --off-white: #f4f9ff;
-      --cyan:      #00f3ff;
-      --cyan-glow: rgba(0, 243, 255, 0.5);
-      --black:     #030914;
-      --silver-lt: #e8e4dc;
-      --copper:    #b87333;
+      --txt-mid:   #2d4a72;
+      --gold:      #FFD700;
+      --gold-glow: rgba(255, 215, 0, 0.8);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Cormorant Garamond', serif;
-      background-color: var(--black);
-      color: var(--silver-lt);
+      background-color: var(--navy);
+      color: var(--white);
+      font-family: 'Rajdhani', sans-serif;
       overflow-x: hidden;
+    }
+
+    /* --- LOADER --- */
+    #loader {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100vh;
+      background: var(--navy);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    #loader.exit {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .ld-bar {
+      width: 300px;
+      height: 4px;
+      background: var(--navy-mid);
+      margin-top: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    #ldProgress {
+      height: 100%;
+      width: 0%;
+      background: var(--blu-3);
+      transition: width 0.2s ease;
+    }
+    #ldPct {
+      margin-top: 10px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.2rem;
+      color: var(--blu-2);
+    }
+    #access-granted {
+      opacity: 0;
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      margin-top: 15px;
+      transition: opacity 0.5s ease;
+    }
+    #access-granted.show {
+      opacity: 1;
+    }
+
+    /* --- HERO SECTION (DONDE OCURRE LA MAGIA DEL RAYO) --- */
+    .hero {
+      position: relative;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-    }
-
-    /* =========================================
-       PANTALLA DE CARGA TECNOLÓGICA
-       ========================================= */
-    #tech-loader {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background-color: #000; z-index: 9999;
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      font-family: 'Space Mono', monospace; color: var(--cyan);
-      transition: opacity 0.8s ease, visibility 0.8s ease;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
       overflow: hidden;
-    }
-    #tech-loader::before {
-      content: ""; position: absolute; top: 50%; left: 50%; width: 200vw; height: 200vw;
-      background: linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
-      background-size: 40px 40px; transform: translate(-50%, -50%) perspective(500px) rotateX(60deg);
-      animation: gridMove 10s linear infinite; z-index: 1;
-    }
-    @keyframes gridMove {
-      0% { transform: translate(-50%, -50%) perspective(500px) rotateX(60deg) translateY(0); }
-      100% { transform: translate(-50%, -50%) perspective(500px) rotateX(60deg) translateY(40px); }
-    }
-    .loader-content { position: relative; z-index: 2; width: 80%; max-width: 600px; text-align: center; }
-    .glitch-title {
-      font-size: 2.5rem; font-weight: 700; text-transform: uppercase;
-      position: relative; display: inline-block; margin-bottom: 20px;
-      text-shadow: 0 0 10px var(--cyan-glow);
-    }
-    .glitch-title::before, .glitch-title::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; }
-    .glitch-title::before { left: 2px; text-shadow: -2px 0 red; clip: rect(24px, 550px, 90px, 0); animation: glitch-anim-2 3s infinite linear alternate-reverse; }
-    .glitch-title::after { left: -2px; text-shadow: -2px 0 blue; clip: rect(85px, 550px, 140px, 0); animation: glitch-anim 2.5s infinite linear alternate-reverse; }
-    @keyframes glitch-anim { 0% { clip: rect(13px, 9999px, 89px, 0); } 20% { clip: rect(65px, 9999px, 32px, 0); } 40% { clip: rect(42px, 9999px, 12px, 0); } 60% { clip: rect(89px, 9999px, 93px, 0); } 80% { clip: rect(12px, 9999px, 4px, 0); } 100% { clip: rect(74px, 9999px, 54px, 0); } }
-    @keyframes glitch-anim-2 { 0% { clip: rect(34px, 9999px, 12px, 0); } 20% { clip: rect(83px, 9999px, 94px, 0); } 40% { clip: rect(12px, 9999px, 44px, 0); } 60% { clip: rect(54px, 9999px, 23px, 0); } 80% { clip: rect(93px, 9999px, 83px, 0); } 100% { clip: rect(23px, 9999px, 34px, 0); } }
-    .progress-box { width: 100%; height: 4px; background: #111; border: 1px solid var(--cyan); margin: 20px 0; position: relative; box-shadow: 0 0 15px var(--cyan-glow); }
-    .progress-bar { height: 100%; width: 0%; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); transition: width 0.1s; }
-    .terminal-text { font-size: 0.9rem; text-align: left; min-height: 80px; margin-top: 20px; line-height: 1.5; }
-    .cursor { display: inline-block; width: 10px; height: 15px; background: var(--cyan); animation: blink 1s step-end infinite; vertical-align: middle; }
-    @keyframes blink { 50% { opacity: 0; } }
-
-    /* =========================================
-       NAVBAR ESCRITORIO & OVERLAY (WEB UNIVERSAL)
-       ========================================= */
-    #nav-bar {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 800;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 52px; height: 76px;
-    }
-    #nav-bar::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(7,22,48,0.95) 0%, rgba(7,22,48,0) 100%);
-      pointer-events: none;
-    }
-    #nav-bar.scrolled::before { background: rgba(7,22,48,0.95); backdrop-filter: blur(26px); }
-    #nav-bar.menu-open::before { background: transparent; backdrop-filter: none; }
-    #nav-bar::after {
-      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.0) 10%, rgba(201,168,76,0.55) 35%, rgba(237,217,138,1.0) 50%, rgba(201,168,76,0.55) 65%, transparent 100%);
-      transition: opacity 0.4s;
-    }
-    #nav-bar.menu-open::after { opacity: 0; }
-    .nb-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; position: relative; z-index: 1; }
-    .nb-emblem { width: 34px; height: 34px; object-fit: contain; filter: brightness(0) invert(1) drop-shadow(0 0 12px rgba(142,197,247,0.65)); transition: transform 0.5s; }
-    .nb-brand:hover .nb-emblem { transform: rotate(-12deg) scale(1.1); }
-    .nb-word { font-family: 'Cinzel', serif; font-weight: 900; font-size: 1.08rem; letter-spacing: 0.32em; color: #fff; position: relative; }
-    .nb-word .nb-sep { color: var(--gold); margin: 0 4px; }
-    .nb-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; z-index: 1; transition: opacity 0.35s; }
-    .nb-quick-link { font-family: 'Cinzel', serif; font-size: 0.56rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.4); padding: 6px 18px; text-decoration: none; transition: color 0.3s; position: relative;}
-    .nb-quick-link::after { content: '·'; position: absolute; right: -1px; color: rgba(201,168,76,0.3); pointer-events: none; }
-    .nb-quick-link:last-child::after { display: none; }
-    .nb-quick-link:hover { color: var(--gold-lt); }
-    #nav-bar.menu-open .nb-center { opacity: 0; pointer-events: none; }
-    
-    .nb-trigger { position: relative; z-index: 1; display: flex; align-items: center; gap: 16px; background: none; border: none; cursor: pointer; padding: 8px 0; }
-    .nb-trigger-label { font-family: 'Cinzel', serif; font-size: 0.56rem; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(255,255,255,0.6); transition: color 0.3s; }
-    .nb-trigger:hover .nb-trigger-label { color: var(--gold); }
-    #nav-bar.menu-open .nb-trigger-label { opacity: 0; }
-    .nb-icon { display: flex; flex-direction: column; gap: 5px; width: 28px; }
-    .nb-icon span { display: block; height: 1.5px; border-radius: 2px; background: rgba(255,255,255,0.85); transition: transform 0.5s, opacity 0.35s; }
-    .nb-icon.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); background: var(--gold-lt); }
-    .nb-icon.open span:nth-child(2) { opacity: 0; }
-    .nb-icon.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); background: var(--gold-lt); }
-
-    /* Overlay Menú (Universal) */
-    #nav-overlay {
-      position: fixed; inset: 0; z-index: 790; background: var(--navy); display: flex;
-      clip-path: circle(0% at calc(100% - 72px) 38px); transition: clip-path 0.85s cubic-bezier(0.77,0,0.18,1); pointer-events: none;
-    }
-    #nav-overlay.open { clip-path: circle(150% at calc(100% - 72px) 38px); pointer-events: all; }
-    .nvo-deco-panel { width: 36%; flex-shrink: 0; position: relative; overflow: hidden; border-right: 1px solid rgba(58,143,224,0.1); display: flex; flex-direction: column; justify-content: space-between; padding: 110px 52px 52px; }
-    .nvo-deco-panel::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 55% at 30% 15%, rgba(18,72,168,0.55) 0%, transparent 60%); pointer-events: none;}
-    .nvo-deco-emblem { position: absolute; right: -40px; top: 50%; transform: translateY(-50%); width: 300px; height: 300px; opacity: 0.035; filter: brightness(0) invert(1); }
-    .nvo-deco-brand { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.42em; color: rgba(201,168,76,0.55); margin-bottom: 22px; text-transform: uppercase;}
-    .nvo-deco-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.7rem, 3.2vw, 2.6rem); font-style: italic; color: rgba(255,255,255,0.82); line-height: 1.28; margin-bottom: 24px; }
-    .nvo-deco-line { width: 38px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin-bottom: 22px; }
-    .nvo-deco-sub { font-family: 'Rajdhani', sans-serif; font-size: 0.78rem; letter-spacing: 0.16em; color: rgba(142,197,247,0.3); text-transform: uppercase; }
-    .nvo-deco-year { font-family: 'Bebas Neue', serif; font-size: 4.5rem; color: rgba(255,255,255,0.04); }
-    .nvo-list-panel { flex: 1; overflow-y: auto; padding-top: 76px; background-image: linear-gradient(rgba(58,143,224,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(58,143,224,0.025) 1px, transparent 1px); background-size: 60px 60px; }
-    .nvo-item { display: grid; grid-template-columns: 72px 1fr auto; align-items: center; padding: 26px 40px; border-bottom: 1px solid rgba(58,143,224,0.07); cursor: pointer; text-decoration: none;}
-    .nvo-item:hover { background: linear-gradient(90deg, rgba(58,143,224,0.05) 50%, transparent); border-left: 2px solid var(--gold); }
-    .nvo-num { font-family: 'Bebas Neue', serif; font-size: 0.68rem; letter-spacing: 0.32em; color: var(--gold); opacity: 0.45; text-align: right; padding-right: 10px; border-right: 1px solid rgba(201,168,76,0.1); }
-    .nvo-body { display: flex; flex-direction: column; gap: 5px; }
-    .nvo-title { font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 700; color: rgba(255,255,255,0.82); text-transform: uppercase;}
-    .nvo-item:hover .nvo-title { color: var(--gold-lt); }
-    .nvo-subs-inline { font-family: 'Rajdhani', sans-serif; font-size: 0.7rem; letter-spacing: 0.16em; color: rgba(142,197,247,0.28); text-transform: uppercase;}
-    .nvo-arrow { font-family: 'Cinzel', serif; font-size: 1.2rem; color: rgba(255,255,255,0.15); }
-    .nvo-sub-list { max-height: 0; overflow: hidden; transition: max-height 0.45s; background: rgba(255,255,255,0.015); }
-    .nvo-sub-list.open { max-height: 320px; }
-    .nvo-sub-item { display: flex; align-items: center; gap: 20px; padding: 16px 52px 16px 130px; text-decoration: none; border-top: 1px solid rgba(58,143,224,0.05);}
-    .nvo-sub-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(201,168,76,0.35); }
-    .nvo-sub-name { font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.18em; color: rgba(255,255,255,0.45); text-transform: uppercase; }
-
-    /* =========================================
-       CONTENIDO PRINCIPAL & NAVBAR MOBILE
-       ========================================= */
-    #main-content { display: none; flex-direction: column; flex: 1; opacity: 0; animation: fadeIn 1.5s forwards; }
-    @keyframes fadeIn { to { opacity: 1; } }
-
-    /* Navbar Mobile */
-    #mob-topbar { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 500; height: 52px; align-items: center; justify-content: space-between; padding: 0 20px; background: rgba(3,8,18,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(201,168,76,0.15); }
-    .mob-brand { display: flex; align-items: center; gap: 10px; }
-    .mob-brand img { width: 22px; height: 22px; object-fit: contain; filter: brightness(0) invert(1); }
-    .mob-brand-name { font-family: 'Cinzel', serif; font-weight: 900; font-size: 0.85rem; letter-spacing: 0.2em; color: #fff; }
-    .mob-topbar-badge { font-size: 0.55rem; letter-spacing: 0.18em; color: var(--gold); border: 1px solid rgba(201,168,76,0.3); border-radius: 20px; padding: 3px 10px; text-transform: uppercase; }
-
-    #mob-bottomnav { display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; height: 64px; background: rgba(3,8,18,0.96); backdrop-filter: blur(24px); border-top: 1px solid rgba(201,168,76,0.12); align-items: stretch; }
-    .mob-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; text-decoration: none; }
-    .mob-nav-icon { font-size: 1.2rem; color: rgba(142,197,247,0.4); }
-    .mob-nav-label { font-family: 'Cinzel', serif; font-size: 0.48rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(142,197,247,0.4); }
-    .mob-nav-item.active .mob-nav-icon, .mob-nav-item.active .mob-nav-label { color: var(--gold-lt); }
-
-    /* =========================================
-       HERO SECTION (CON EFECTO DE NUBES Y RAYOS)
-       ========================================= */
-    #hero {
-      position: relative; min-height: 100vh; z-index: 3;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-      padding: 120px 24px 80px; overflow: hidden;
-      background-color: var(--navy);
-    }
-    
-    .hero-clouds {
-      position: absolute; inset: 0; z-index: 0;
-      background-image: url('https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
-      background-size: cover; background-position: center;
-      opacity: 0.4; mix-blend-mode: multiply;
-      pointer-events: none;
+      background: radial-gradient(circle at center, var(--navy-mid) 0%, var(--navy) 100%);
     }
 
-    .hero-gradient-overlay {
-      position: absolute; inset: 0; z-index: 1;
-      background: radial-gradient(circle at center, rgba(14,37,74,0.7) 0%, rgba(3,9,20,0.95) 100%);
-      pointer-events: none;
+    /* Contenedor exclusivo para los rayos detrás del título */
+    #lightning-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1; /* Detrás del texto */
+      pointer-events: none; /* Para que no estorbe al hacer clic */
     }
 
-    .hero-lightning {
-      position: absolute; inset: 0; z-index: 2;
-      background: #ffffff;
-      opacity: 0;
-      pointer-events: none;
-      mix-blend-mode: overlay;
+    .hero-content {
+      position: relative;
+      z-index: 10; /* Por encima de los rayos */
+      padding: 2rem;
     }
 
-    .hero-bg-img {
-      position: absolute; inset: 0; z-index: 3;
-      background-image: repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(0, 243, 255, 0.02) 2px, rgba(0, 243, 255, 0.02) 4px);
-      pointer-events: none;
-    }
-    
-    .hero-content { position: relative; z-index: 5; }
-    .hero-topic { font-family: 'Cinzel', serif; font-size: clamp(0.8rem, 1.5vw, 1rem); letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin-bottom: 15px; }
     .hero-title {
-      font-family: 'Bebas Neue', sans-serif; font-size: clamp(4rem, 10vw, 8rem);
-      line-height: 1; letter-spacing: 0.05em; color: transparent;
-      background: linear-gradient(160deg, #ffffff 0%, #c0bfbb 30%, #d4af37 55%, #8b6914 100%);
-      -webkit-background-clip: text; background-clip: text;
-      margin-bottom: 10px; text-shadow: 0 10px 30px rgba(0,0,0,0.8);
-    }
-    .hero-sub {
-      font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-      color: rgba(200,169,122,0.8); letter-spacing: 0.1em; max-width: 800px; margin: 0 auto;
+      font-family: 'Cinzel', serif;
+      font-size: 6rem;
+      font-weight: 900;
+      color: var(--white);
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+      margin-bottom: 10px;
+      letter-spacing: 5px;
     }
 
-    /* =========================================
-       SECCIONES GENERALES (GSAP TARGETS)
-       ========================================= */
-    .gsap-section {
-      position: relative; z-index: 3; padding: 100px 8%;
-      background: linear-gradient(180deg, #030914 0%, #0a172e 50%, #030914 100%);
-      border-top: 1px solid rgba(201, 168, 76, 0.15); text-align: center;
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      color: var(--blu-2);
+      font-style: italic;
     }
-    .section-label { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold-lt); margin-bottom: 20px; }
-    .am-title { font-family: 'Uncial Antiqua', serif; font-size: clamp(2rem, 4vw, 3.5rem); color: var(--silver-lt); letter-spacing: 0.08em; margin-bottom: 40px; text-shadow: 0 2px 20px rgba(0,0,0,0.5); }
-    
-    /* El Reto */
-    .persuasion-body { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.1rem, 2vw, 1.4rem); color: var(--silver-lt); max-width: 900px; margin: 0 auto 40px; line-height: 1.9; }
-    .persuasion-highlight { font-family: 'Cinzel', serif; font-size: clamp(1.2rem, 2.2vw, 1.6rem); color: var(--gold-lt); border-left: 3px solid var(--gold); border-right: 3px solid var(--gold); padding: 15px 30px; display: inline-block; background: rgba(201, 168, 76, 0.05); margin-bottom: 40px; }
 
-    /* Perfil (Rediseño Imponente) */
-    .perfil-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1100px; margin: 0 auto; }
-    .perfil-card { 
-      background: rgba(3, 9, 20, 0.6); 
-      border: 1px solid rgba(201, 168, 76, 0.15); 
-      padding: 30px; 
-      border-radius: 2px; 
-      text-align: left; 
-      position: relative; 
-      overflow: hidden; 
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-      transition: all 0.4s ease;
+    /* Animación y estilos de la figura geométrica del rayo */
+    .lightning-bolt {
+      position: absolute;
+      width: 150px; /* Tamaño base del rayo */
+      height: auto;
+      opacity: 0;
+      filter: drop-shadow(0 0 25px var(--gold-glow)) drop-shadow(0 0 50px var(--gold-glow));
     }
-    .perfil-card::before { 
-      content: ''; 
-      position: absolute; 
-      top: 0; left: 0; right: 0; 
-      height: 2px; 
-      background: linear-gradient(90deg, transparent, var(--gold), transparent); 
+
+    /* La animación épica de destello */
+    @keyframes thunderStrike {
+      0%   { opacity: 0; transform: translateY(-50px) scale(1) rotate(0deg); }
+      10%  { opacity: 1; transform: translateY(0) scale(1.1) rotate(0deg); }
+      15%  { opacity: 0; }
+      20%  { opacity: 1; }
+      30%  { opacity: 0; }
+      100% { opacity: 0; }
     }
-    .perfil-card:hover {
-      border-color: rgba(201, 168, 76, 0.4);
-      transform: translateY(-5px);
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 10px 20px rgba(0,0,0,0.5);
+
+    /* --- INSCRIPTION SECTION (RESOLVIENDO EL ESPACIO VACÍO) --- */
+    .inscription-section {
+      min-height: 100vh;
+      padding: 5rem 2rem;
+      background-color: var(--navy);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    .pc-icon { font-size: 2rem; color: var(--gold-lt); margin-bottom: 15px; }
-    .pc-title { font-family: 'Cinzel', serif; font-weight: 700; color: var(--off-white); margin-bottom: 10px; font-size: 1.1rem; letter-spacing: 0.1em; text-transform: uppercase; }
-    .pc-desc { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: rgba(255,255,255,0.7); line-height: 1.6; }
 
-    /* Pasos */
-    .pasos-container { display: flex; flex-direction: column; gap: 40px; max-width: 800px; margin: 0 auto; text-align: left; }
-    .paso-item { display: flex; gap: 20px; align-items: flex-start; }
-    .paso-num { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--gold); line-height: 1; text-shadow: 0 0 15px var(--gold-glow); width: 50px; flex-shrink: 0;}
-    .paso-content { background: rgba(255,255,255,0.02); border: 1px solid rgba(201, 168, 76, 0.2); padding: 20px; border-radius: 8px; flex: 1; }
-    .paso-title { font-family: 'Cinzel', serif; font-weight: 700; color: var(--gold-lt); margin-bottom: 8px; }
-
-    /* Comités (Flip cards) */
-    #comites { background: var(--black); }
-    .am-cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1100px; margin: 0 auto; }
-    .flip-card { height: 320px; perspective: 1200px; cursor: pointer; }
-    .flip-card-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.75s cubic-bezier(0.4,0,0.2,1); }
-    .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
-    .flip-face { position: absolute; inset: 0; backface-visibility: hidden; border: 1px solid rgba(201, 168, 76, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; background: rgba(14, 37, 74, 0.4); backdrop-filter: blur(5px); }
-    .flip-back { transform: rotateY(180deg); background: linear-gradient(160deg, #0e254a 0%, #030914 100%); }
-    .flip-face::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
-    .flip-icon { font-family: 'Cinzel', serif; font-size: 3rem; color: var(--gold-lt); margin-bottom: 15px; text-shadow: 0 0 15px var(--gold-glow); }
-    .flip-role { font-family: 'Cinzel', serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.15em; color: var(--gold); margin-bottom: 10px; text-transform: uppercase; }
-    .flip-desc { font-family: 'Rajdhani', sans-serif; font-size: 1rem; color: rgba(255,255,255,0.7); line-height: 1.6; }
-    .flip-back .flip-name { font-family: 'Cinzel', serif; font-size: 1.3rem; font-weight: 700; color: var(--gold-lt); margin-bottom: 15px; text-transform: uppercase;}
-    .flip-back .flip-back-desc { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.1rem; color: var(--silver-lt); line-height: 1.6; }
-
-    /* Call to Action */
-    .cta-container { text-align: center; padding: 60px 20px 100px; background: var(--black); }
-    .cta-btn {
-      display: inline-block; font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: 3px;
-      color: var(--navy); background: linear-gradient(45deg, var(--gold), #fff0b3, var(--gold));
-      background-size: 200% auto; padding: 18px 60px; text-decoration: none; border-radius: 4px;
-      transition: all 0.4s ease; box-shadow: 0 0 20px var(--gold-glow);
+    .form-container {
+      background: var(--navy-mid);
+      border: 1px solid var(--blu-4);
+      padding: 3rem;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 800px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
-    .cta-btn:hover { background-position: right center; transform: scale(1.05); box-shadow: 0 0 40px rgba(201, 168, 76, 0.8); }
 
-    footer { background: linear-gradient(to top, #02050a, #030914); padding: 40px 20px; border-top: 1px solid rgba(201, 168, 76, 0.2); text-align: center; z-index: 3; }
-    .foot-spqr { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: rgba(201, 168, 76, 0.5); letter-spacing: 0.2em; }
-
-    /* =========================================
-       RESPONSIVE (MÓVIL)
-       ========================================= */
-    @media (max-width: 768px) {
-      /* Ocultar elementos de escritorio */
-      #nav-bar { display: none !important; }
-      
-      /* Mostrar navbar móvil */
-      #mob-topbar, #mob-bottomnav { display: flex; }
-      
-      /* Ajustes de espacio para no quedar detrás de las barras */
-      #main-content { padding-top: 52px; padding-bottom: 64px; }
-      
-      .hero-title { font-size: 3.5rem; }
-      .persuasion-body { font-size: 1rem; text-align: justify; }
-      .persuasion-highlight { font-size: 1.1rem; padding: 15px; border: none; border-top: 2px solid var(--gold); border-bottom: 2px solid var(--gold); }
-      .am-title { font-size: 2rem; }
-      .gsap-section { padding: 60px 20px; }
-      .paso-item { flex-direction: column; gap: 10px;}
-      .cta-btn { font-size: 1.8rem; padding: 15px 30px; width: 90%; }
-      .glitch-title { font-size: 1.5rem; }
+    .form-container h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--gold);
     }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+      color: var(--blu-2);
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 1rem;
+      background: var(--navy);
+      border: 1px solid var(--blu-4);
+      color: var(--white);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.1rem;
+      border-radius: 5px;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 1rem;
+      background: var(--blu-4);
+      color: var(--white);
+      border: none;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.5rem;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: all 0.3s;
+      margin-top: 1rem;
+    }
+
+    .submit-btn:hover {
+      background: var(--gold);
+      color: var(--navy);
+      box-shadow: 0 0 20px var(--gold-glow);
+    }
+
   </style>
 </head>
 <body>
 
-  <div id="tech-loader">
-    <div class="loader-content">
-      <div class="glitch-title" data-text="SISTEMA_DRILLS_SVPMUN">SISTEMA_DRILLS_SVPMUN</div>
-      <div class="progress-box">
-        <div class="progress-bar" id="p-bar"></div>
-      </div>
-      <div class="terminal-text">
-        <span id="term-lines"></span><span class="cursor"></span>
-      </div>
-    </div>
+  <div id="loader">
+    <div style="font-family: 'Cinzel', serif; font-size: 2rem; color: var(--white);">INICIALIZANDO SISTEMA</div>
+    <div class="ld-bar"><div id="ldProgress"></div></div>
+    <div id="ldPct">0%</div>
+    <div id="access-granted">ACCESO CONCEDIDO</div>
   </div>
 
-  <div id="mob-topbar">
-    <div class="mob-brand">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="ONU">
-      <span class="mob-brand-name">SVPMUN</span>
+  <section class="hero">
+    <div id="lightning-container"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">SPMUN 2026</h1>
+      <p class="hero-subtitle">El futuro de la diplomacia comienza aquí</p>
     </div>
-    <div class="mob-topbar-badge">DRILLS</div>
-  </div>
+  </section>
 
-  <div id="main-content">
-    
-    <header id="nav-bar">
-      <a class="nb-brand" href="/drills">
-        <img class="nb-emblem" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="ONU">
-        <span class="nb-word">SVPMUN <span class="nb-sep">·</span> DRILLS</span>
-      </a>
-      <nav class="nb-center" aria-label="Acceso rápido">
-        <a class="nb-quick-link" href="/">Inicio</a>
-        <a class="nb-quick-link" href="/inscripciones-drills" style="color: var(--gold-lt);">Inscripciones</a>
-        <a class="nb-quick-link" href="/nosotros">Nosotros</a>
-      </nav>
-      <button class="nb-trigger" onclick="toggleNav()">
-        <span class="nb-trigger-label">Menú</span>
-        <div class="nb-icon" id="menu-icon">
-          <span></span><span></span><span></span>
+  <section class="inscription-section">
+    <div class="form-container">
+      <h2>Portal de Delegaciones</h2>
+      <form action="#" method="POST">
+        <div class="form-group">
+          <label for="nombre">Nombre Completo del Delegado</label>
+          <input type="text" id="nombre" placeholder="Ej. Carolina Sánchez" required>
         </div>
-      </button>
-    </header>
-
-    <div id="nav-overlay">
-      <div class="nvo-deco-panel">
-        <img class="nvo-deco-emblem" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="">
-        <div class="nvo-deco-top">
-          <div class="nvo-deco-brand">SVPMUN · Central de Drills</div>
-          <div class="nvo-deco-title">"El debate<br>constante<br>forja al<br>diplomático."</div>
-          <div class="nvo-deco-line"></div>
-          <div class="nvo-deco-sub">Simulaciones Continuas<br>Drills · Comités · 2026</div>
+        <div class="form-group">
+          <label for="comite">Comité de Preferencia</label>
+          <select id="comite" required>
+            <option value="">Selecciona un comité...</option>
+            <option value="ecosoc">ECOSOC</option>
+            <option value="cs">Consejo de Seguridad</option>
+            <option value="crisis">Gabinete de Crisis</option>
+            <option value="historico">Comité Histórico (Carta de Jamaica)</option>
+          </select>
         </div>
-        <div class="nvo-deco-bottom">
-          <div class="nvo-deco-year">2026</div>
+        <div class="form-group">
+          <label for="experiencia">Experiencia Previa (Modelos)</label>
+          <input type="number" id="experiencia" min="0" placeholder="Número de modelos asistidos" required>
         </div>
-      </div>
-      <div class="nvo-list-panel">
-        <a href="/" class="nvo-item">
-          <div class="nvo-num">←</div>
-          <div class="nvo-body">
-            <div class="nvo-title">Volver al Inicio</div>
-            <div class="nvo-subs-inline">Página principal · SVPMUN</div>
-          </div>
-        </a>
-        <a href="/nosotros" class="nvo-item">
-          <div class="nvo-num">01</div>
-          <div class="nvo-body">
-            <div class="nvo-title">Conoce a Nuestro Equipo</div>
-            <div class="nvo-subs-inline">Directiva · Secretariado · Mesa</div>
-          </div>
-          <div class="nvo-arrow">›</div>
-        </a>
-        <div class="nvo-item" id="nvo-comites-trigger" onclick="toggleComites()">
-          <div class="nvo-num">02</div>
-          <div class="nvo-body">
-            <div class="nvo-title">Comités</div>
-            <div class="nvo-subs-inline">Crisis · OMS · Unión Europea</div>
-          </div>
-          <div class="nvo-arrow-expand">›</div>
-        </div>
-        <div class="nvo-sub-list" id="nvo-comites-sub">
-          <a href="/crisis-roma" class="nvo-sub-item">
-            <div class="nvo-sub-dot"></div>
-            <div class="nvo-sub-name">Crisis — Segunda Guerra Civil Romana</div>
-          </a>
-          <a href="/oms" class="nvo-sub-item">
-            <div class="nvo-sub-dot"></div>
-            <div class="nvo-sub-name">OMS — Organización Mundial de la Salud</div>
-          </a>
-          <a href="/crisis_ue_2035" class="nvo-sub-item">
-            <div class="nvo-sub-dot"></div>
-            <div class="nvo-sub-name">Unión Europea</div>
-          </a>
-        </div>
-        <a href="/inscripciones-drills" class="nvo-item" style="border-left: 2px solid var(--gold); background: linear-gradient(90deg, rgba(58,143,224,0.05) 50%, transparent);">
-          <div class="nvo-num">03</div>
-          <div class="nvo-body">
-            <div class="nvo-title" style="color: var(--gold-lt);">Inscripciones</div>
-            <div class="nvo-subs-inline">Registro · Costos · Fechas</div>
-          </div>
-          <div class="nvo-arrow">›</div>
-        </a>
-      </div>
+        <button type="submit" class="submit-btn">REGISTRAR DELEGADO</button>
+      </form>
     </div>
-
-    <section id="hero">
-      <div class="hero-clouds"></div>
-      <div class="hero-gradient-overlay"></div>
-      <div class="hero-lightning"></div>
-      <div class="hero-bg-img"></div>
-      <div class="hero-content">
-        <div class="hero-topic">Sistema Activo | V Edición</div>
-        <h1 class="hero-title">FORJA TU ORATORIA</h1>
-        <p class="hero-sub">El verdadero debate no se planea, se improvisa. Entra a la arena y demuestra de qué estás hecho.</p>
-      </div>
-    </section>
-
-    <section id="persuasion" class="gsap-section">
-      <div class="section-label">El Reto SVPMUN</div>
-      <p class="persuasion-body p-line">Leer una guía de estudio no te hace un buen delegado. Conocer el protocolo de memoria no te garantiza el éxito frente a una crisis inminente o un comité hostil. La diplomacia real y el liderazgo absoluto se demuestran bajo presión.</p>
-      
-      <div class="persuasion-highlight p-line">
-        ¿Por qué inscribirte? Porque aquí es donde se separan los delegados promedio de los verdaderos líderes.
-      </div>
-
-      <p class="persuasion-body p-line">Los Drills no son simples simulaciones; son la arena de entrenamiento de alto rendimiento. Te expondremos a escenarios imprevistos, resoluciones de última hora y ataques dialécticos. Descubre hasta dónde puedes llevar tu retórica antes del modelo oficial.</p>
-    </section>
-
-    <section id="perfil" class="gsap-section">
-      <div class="section-label">Base de Datos</div>
-      <h2 class="am-title">PERFIL REQUERIDO</h2>
-      <div class="perfil-grid">
-        <div class="perfil-card perfil-anim">
-          <div class="pc-icon">⚡</div>
-          <div class="pc-title">Agilidad Mental</div>
-          <div class="pc-desc">Capacidad para estructurar argumentos letales y coherentes en cuestión de segundos, respondiendo a directivas sorpresivas.</div>
-        </div>
-        <div class="perfil-card perfil-anim">
-          <div class="pc-icon">♟️</div>
-          <div class="pc-title">Estrategia Dialéctica</div>
-          <div class="pc-desc">No basta con hablar fuerte; es necesario saber cuándo ceder, cuándo atacar y cómo manipular el flujo del debate a tu favor.</div>
-        </div>
-        <div class="perfil-card perfil-anim">
-          <div class="pc-icon">🛡️</div>
-          <div class="pc-title">Resiliencia</div>
-          <div class="pc-desc">Control absoluto de la presión. La mesa directiva y los oponentes pondrán a prueba tu paciencia. El control emocional es clave.</div>
-        </div>
-      </div>
-    </section>
-
-    <section id="pasos" class="gsap-section" style="background: var(--black);">
-      <div class="section-label">Protocolo de Acceso</div>
-      <h2 class="am-title">PROCESO DE INSCRIPCIÓN</h2>
-      <div class="pasos-container">
-        <div class="paso-item paso-anim">
-          <div class="paso-num">01</div>
-          <div class="paso-content">
-            <div class="paso-title">Completa la Forma</div>
-            <div class="pc-desc">Llena el formulario oficial con tus datos, experiencia previa (si la tienes) y tus preferencias de comité. No subestimes este primer paso.</div>
-          </div>
-        </div>
-        <div class="paso-item paso-anim">
-          <div class="paso-num">02</div>
-          <div class="paso-content">
-            <div class="paso-title">Validación del Sistema</div>
-            <div class="pc-desc">Nuestro equipo de logística revisará tu solicitud y emitirá una credencial digital confirmando tu participación en el circuito.</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="comites" class="gsap-section">
-      <div class="section-label" style="color: var(--gold);">Simulaciones Activas</div>
-      <h2 class="am-title">COMITÉS INCREÍBLES</h2>
-      
-      <div class="am-cards-grid">
-        <div class="flip-card card-anim">
-          <div class="flip-card-inner">
-            <div class="flip-face flip-front">
-              <div class="flip-icon">I</div>
-              <div class="flip-role">Gabinete de Crisis</div>
-              <div class="flip-desc">Decisiones a contrarreloj. Escenarios históricos y ficticios donde cada directiva cambia el rumbo del mundo.</div>
-            </div>
-            <div class="flip-face flip-back">
-              <div class="flip-name">Agilidad Pura</div>
-              <div class="flip-back-desc">Aprende a formular planes sólidos en segundos. Cuando la crisis estalle, serás el único con un plan de acción letal.</div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="flip-card card-anim">
-          <div class="flip-card-inner">
-            <div class="flip-face flip-front">
-              <div class="flip-icon">II</div>
-              <div class="flip-role">Asambleas Generales</div>
-              <div class="flip-desc">Debate multilateral exhaustivo. Domina el protocolo, la negociación de bloques y la redacción en tiempo récord.</div>
-            </div>
-            <div class="flip-face flip-back">
-              <div class="flip-name">Dominio Total</div>
-              <div class="flip-back-desc">Convence, negocia y manipula el flujo del debate a tu favor. Descubre los puntos ciegos de tus oponentes.</div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="flip-card card-anim">
-          <div class="flip-card-inner">
-            <div class="flip-face flip-front">
-              <div class="flip-icon">III</div>
-              <div class="flip-role">Dinámicas Especiales</div>
-              <div class="flip-desc">Intervenciones sorpresa, juicios rápidos y debates de formato cruzado exclusivos del Sistema Drills.</div>
-            </div>
-            <div class="flip-face flip-back">
-              <div class="flip-name">Presencia Escénica</div>
-              <div class="flip-back-desc">Pierde el miedo al atril. Toma la palabra constantemente, forjando una presencia que intimidará y persuadirá.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="cta-container">
-      <a href="https://forms.gle/RKXdU2uhfBLk215N9" target="_blank" class="cta-btn">INICIAR INSCRIPCIÓN AHORA</a>
-    </div>
-
-    <footer>
-      <div class="foot-spqr">> SVPMUN SYSTEM V.5.0 // AUTHORIZED PERSONNEL ONLY</div>
-    </footer>
-  </div>
-
-  <div id="mob-bottomnav">
-    <a href="/" class="mob-nav-item">
-      <div class="mob-nav-icon">🏛️</div>
-      <div class="mob-nav-label">Inicio</div>
-    </a>
-    <a href="/nosotros" class="mob-nav-item">
-      <div class="mob-nav-icon">🌐</div>
-      <div class="mob-nav-label">Nosotros</div>
-    </a>
-    <a href="/inscripciones-drills" class="mob-nav-item active">
-      <div class="mob-nav-icon">✍️</div>
-      <div class="mob-nav-label">Inscrip</div>
-    </a>
-    <div class="mob-nav-item" onclick="toggleNav()">
-      <div class="mob-nav-icon">☰</div>
-      <div class="mob-nav-label">Menú</div>
-    </div>
-  </div>
+  </section>
 
   <script>
-    /* =========================================
-       LÓGICA NAVBAR UNIVERSAL
-       ========================================= */
-    let navOpen = false;
-    function toggleNav() {
-      navOpen = !navOpen;
-      const bar = document.getElementById('nav-bar');
-      const overlay = document.getElementById('nav-overlay');
-      const icon = document.getElementById('menu-icon');
-      
-      if(bar) bar.classList.toggle('menu-open', navOpen);
-      overlay.classList.toggle('open', navOpen);
-      if(icon) icon.classList.toggle('open', navOpen);
-      
-      document.body.style.overflow = navOpen ? 'hidden' : '';
-      if (!navOpen) {
-        document.getElementById('nvo-comites-sub').classList.remove('open');
-        document.getElementById('nvo-comites-trigger').classList.remove('sub-open');
-      }
-    }
-    
-    function toggleComites() {
-      document.getElementById('nvo-comites-sub').classList.toggle('open');
-      document.getElementById('nvo-comites-trigger').classList.toggle('sub-open');
-    }
+    /* LÓGICA DEL LOADER (Mejorada de tu original) */
+    (function(){
+      const fill = document.getElementById('ldProgress');
+      const pct = document.getElementById('ldPct');
+      const ag = document.getElementById('access-granted');
+      const loader = document.getElementById('loader');
+      let progress = 0;
 
-    window.addEventListener('scroll', () => {
-      const nav = document.getElementById('nav-bar');
-      if(nav) nav.classList.toggle('scrolled', window.scrollY > 40);
-    });
-
-    /* =========================================
-       LÓGICA DEL LOADER & GSAP
-       ========================================= */
-    const lines = [
-      "ESTABLECIENDO CONEXIÓN CON SERVIDORES SVPMUN...",
-      "DESENCRIPTANDO PROTOCOLOS DE INSCRIPCIÓN...",
-      "CARGANDO PARÁMETROS DE DEBATE [████████░░]",
-      "VERIFICANDO IDENTIDAD DE DELEGADO...",
-      "BYPASS DE SEGURIDAD EXITOSO.",
-      "ACCESO CONCEDIDO. PREPÁRATE."
-    ];
-
-    const termSpan = document.getElementById("term-lines");
-    const pBar = document.getElementById("p-bar");
-    const loader = document.getElementById("tech-loader");
-    const mainContent = document.getElementById("main-content");
-
-    let lineIndex = 0;
-    let charIndex = 0;
-    let progress = 0;
-
-    function typeLine() {
-      if (lineIndex < lines.length) {
-        if (charIndex < lines[lineIndex].length) {
-          termSpan.innerHTML += lines[lineIndex].charAt(charIndex);
-          charIndex++;
-          progress += (100 / (lines.length * 30)); 
-          if(progress > 100) progress = 100;
-          pBar.style.width = progress + "%";
-          setTimeout(typeLine, Math.random() * 30 + 10);
-        } else {
-          termSpan.innerHTML += "<br>";
-          charIndex = 0;
-          lineIndex++;
-          setTimeout(typeLine, 300); 
+      const iv = setInterval(function(){
+        progress = Math.min(100, progress + Math.random() * 15 + 5);
+        fill.style.width = progress + '%';
+        pct.textContent  = Math.floor(progress) + '%';
+        if(progress >= 100){
+          clearInterval(iv);
+          setTimeout(function(){
+            ag.classList.add('show');
+            setTimeout(function(){
+              loader.classList.add('exit');
+              setTimeout(function(){ loader.remove(); }, 800);
+            }, 1000);
+          }, 300);
         }
-      } else {
-        pBar.style.width = "100%";
-        setTimeout(() => {
-          loader.style.opacity = "0";
-          setTimeout(() => {
-            loader.style.visibility = "hidden";
-            mainContent.style.display = "flex";
-            window.scrollTo(0, 0);
-            initLightning(); // Inicia los rayos del hero
-            initGSAP();      // Iniciar animaciones de scroll
-          }, 800);
-        }, 800);
-      }
-    }
+      }, 150);
+    })();
 
-    window.onload = () => { setTimeout(typeLine, 500); };
+    /* LÓGICA ÉPICA DE LOS RAYOS DORADOS */
+    const lightningContainer = document.getElementById('lightning-container');
 
-    /* =========================================
-       EFECTO DE RELÁMPAGOS (GSAP)
-       ========================================= */
-    function initLightning() {
-      const tl = gsap.timeline({ repeat: -1, repeatDelay: Math.random() * 5 + 3 });
+    // SVG exacto de un rayo sólido para que se vea la forma real
+    const boltSVG = `
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="var(--gold)"/>
+      </svg>
+    `;
+
+    function strikeLightning() {
+      // Creamos el elemento del rayo
+      const bolt = document.createElement('div');
+      bolt.classList.add('lightning-bolt');
+      bolt.innerHTML = boltSVG;
+
+      // Generamos posiciones aleatorias (centrado más hacia el título)
+      const randomLeft = Math.floor(Math.random() * 60) + 20; // Entre 20% y 80% del ancho
+      const randomTop = Math.floor(Math.random() * 30); // Cae desde arriba (0 a 30% del alto)
+      const randomScale = (Math.random() * 2) + 1; // Tamaño entre 1x y 3x
+      const randomRotation = Math.floor(Math.random() * 60) - 30; // Ángulo entre -30 y 30 grados
+
+      // Aplicamos los estilos calculados
+      bolt.style.left = `${randomLeft}%`;
+      bolt.style.top = `${randomTop}%`;
+      bolt.style.transform = `scale(${randomScale}) rotate(${randomRotation}deg)`;
       
-      tl.to(".hero-lightning", { opacity: 0.3, duration: 0.05 })
-        .to(".hero-lightning", { opacity: 0, duration: 0.05 })
-        .to(".hero-lightning", { opacity: 0.7, duration: 0.05, delay: 0.15 })
-        .to(".hero-lightning", { opacity: 0, duration: 0.3 })
-        .call(() => {
-          // Cambia el tiempo de espera para el próximo rayo para que se vea más orgánico
-          tl.repeatDelay(Math.random() * 8 + 3);
-        });
+      // Aplicamos la animación
+      bolt.style.animation = `thunderStrike 1s ease-out forwards`;
+
+      // Añadimos el rayo al contenedor
+      lightningContainer.appendChild(bolt);
+
+      // Eliminamos el div del DOM después de que termine la animación (1 segundo)
+      // para no saturar la memoria y que tu web no se ponga lenta
+      setTimeout(() => {
+        if (lightningContainer.contains(bolt)) {
+          lightningContainer.removeChild(bolt);
+        }
+      }, 1000);
     }
 
-    /* =========================================
-       ANIMACIONES GSAP (SCROLL)
-       ========================================= */
-    function initGSAP() {
-      // Configuradas para verse fluidas tanto en PC como en Móvil
-      
-      // Hero Animations
-      gsap.from(".hero-topic", { duration: 1, y: -20, opacity: 0, ease: "power3.out" });
-      gsap.from(".hero-title", { duration: 1.5, y: 50, opacity: 0, ease: "power4.out", delay: 0.3 });
-      gsap.from(".hero-sub", { duration: 1.5, y: 20, opacity: 0, ease: "power3.out", delay: 0.6 });
-
-      // Persuasión Text Lines
-      gsap.from(".p-line", {
-        scrollTrigger: { trigger: "#persuasion", start: "top 80%" },
-        y: 40, opacity: 0, duration: 1, stagger: 0.3, ease: "power3.out"
-      });
-
-      // Perfil Grid Cards
-      gsap.from(".perfil-anim", {
-        scrollTrigger: { trigger: "#perfil", start: "top 75%" },
-        y: 40, opacity: 0, duration: 0.8, stagger: 0.2, ease: "power3.out"
-      });
-
-      // Pasos Timeline
-      gsap.from(".paso-anim", {
-        scrollTrigger: { trigger: "#pasos", start: "top 75%" },
-        x: -30, opacity: 0, duration: 0.8, stagger: 0.3, ease: "power2.out"
-      });
-
-      // Comités Flip Cards
-      gsap.from(".card-anim", {
-        scrollTrigger: { trigger: "#comites", start: "top 75%" },
-        y: 60, opacity: 0, duration: 1, stagger: 0.2, ease: "power4.out"
-      });
-
-      // CTA Button
-      gsap.from(".cta-btn", {
-        scrollTrigger: { trigger: ".cta-container", start: "top 90%" },
-        scale: 0.8, opacity: 0, duration: 1, ease: "elastic.out(1, 0.5)"
-      });
+    // Intervalo de tormenta eléctrica (Un rayo cada 2 a 5 segundos)
+    function storm() {
+      strikeLightning();
+      const nextStrike = Math.random() * 3000 + 2000; // Entre 2000ms y 5000ms
+      setTimeout(storm, nextStrike);
     }
+
+    // Iniciamos la tormenta después de que pase el loader (aprox 2.5s)
+    setTimeout(storm, 2500);
+
   </script>
-
 </body>
 </html>
