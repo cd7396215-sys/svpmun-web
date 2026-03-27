@@ -45,6 +45,10 @@ async def nosotros(request: Request):
 async def inscripciones(request: Request):
     return templates.TemplateResponse(request=request, name="inscripciones.html")
 
+@app.get("/inscripciones-drills", response_class=HTMLResponse)
+async def inscripcionesdrills(request: Request):
+    return templates.TemplateResponse(request=request, name="inscripciones-drills.html")
+
 @app.get("/oms", response_class=HTMLResponse)
 async def oms(request: Request):
     return templates.TemplateResponse(request=request, name="oms.html")
