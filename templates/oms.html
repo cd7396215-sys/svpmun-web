@@ -412,6 +412,7 @@
           <a class="nb-quick-link" href="/drills" onclick="event.preventDefault();navigateTo('/drills')">Drills</a>
           <a class="nb-quick-link" href="/crisis-roma" onclick="event.preventDefault();navigateTo('/crisis-roma')">Crisis Roma</a>
           <a class="nb-quick-link" href="/oms" onclick="event.preventDefault();navigateTo('/oms')">OMS</a>
+          <a class="nb-quick-link" href="/Matrices" onclick="event.preventDefault();navigateTo('/Matrices')">Matrices</a>
         </nav>
         <button class="nb-trigger" id="nbTrigger" onclick="toggleNav()" aria-label="Menú">
           <span class="nb-trigger-label">Menú</span>
@@ -483,6 +484,14 @@
             <div class="nvo-arrow">›</div>
           </div>
         </div>
+        <div class="nvo-item" onclick="navigateTo('/Matrices')" style="cursor:pointer;">
+  <div class="nvo-num">04</div>
+  <div class="nvo-body">
+    <div class="nvo-title">Matrices</div>
+    <div class="nvo-subs-inline">Base de Datos Estratégica</div>
+  </div>
+  <div class="nvo-arrow">›</div>
+</div>
     </div>
 
     <main id="dossier-container">
@@ -743,6 +752,10 @@
         <div class="mob-nav-icon">⚕️</div>
         <div class="mob-nav-label">OMS</div>
       </a>
+      <a href="/Matrices" class="mob-nav-item" onclick="event.preventDefault();navigateTo('/Matrices')">
+  <div class="mob-nav-icon">📊</div>
+  <div class="mob-nav-label">Matrices</div>
+</a>
       <div class="mob-nav-item" onclick="toggleNav()">
         <div class="mob-nav-icon">☰</div>
         <div class="mob-nav-label">Menú</div>
