@@ -979,10 +979,11 @@
   const TARGET = new Date('2026-05-02T00:00:00');
   function pad(n){return String(n).padStart(2,'0');}
   let pD='',pH='',pM='',pS='';
+  let mpD='',mpH='',mpM='',mpS='';
   function tick(){
     const diff = Math.max(0, TARGET - new Date());
     const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
-    function pop(id, val, prev, isMobile){
+    function pop(id, val, prev){
       const el = document.getElementById(id);
       if(!el) return prev;
       const v = pad(val);
@@ -994,9 +995,9 @@
       return v;
     }
     // Update Desktop
-    pD = pop('cd-d', d, pD, false); pH = pop('cd-h', h, pH, false); pM = pop('cd-m', m, pM, false); pS = pop('cd-s', s, pS, false);
+    pD = pop('cd-d', d, pD); pH = pop('cd-h', h, pH); pM = pop('cd-m', m, pM); pS = pop('cd-s', s, pS);
     // Update Mobile
-    pop('m-cd-d', d, pD, true); pop('m-cd-h', h, pH, true); pop('m-cd-m', m, pM, true); pop('m-cd-s', s, pS, true);
+    mpD = pop('m-cd-d', d, mpD); mpH = pop('m-cd-h', h, mpH); mpM = pop('m-cd-m', m, mpM); mpS = pop('m-cd-s', s, mpS);
   }
   tick(); setInterval(tick, 1000);
 
