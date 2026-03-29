@@ -502,6 +502,200 @@
     .mob-nav-label { font-family: 'Cinzel', serif; font-size: 0.48rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(142,197,247,0.4); }
     .mob-nav-item.active .mob-nav-icon, .mob-nav-item.active .mob-nav-label { color: var(--gold-lt); }
 
+    /* ══════════════════════════════════════════
+       BIRTHDAY FEATURE — Sistema de Cumpleaños
+    ══════════════════════════════════════════ */
+
+    /* Glow pulsante en la holo-card del cumpleañero */
+    .holo-card.bday-active {
+      border-color: var(--gold) !important;
+      animation: bdayCardPulse 3s ease-in-out infinite;
+    }
+    @keyframes bdayCardPulse {
+      0%, 100% { box-shadow: 0 0 35px rgba(201,168,76,0.4), 0 20px 50px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.8); }
+      50%       { box-shadow: 0 0 80px rgba(201,168,76,0.7), 0 20px 50px rgba(0,0,0,0.8), inset 0 0 40px rgba(201,168,76,0.07); }
+    }
+    /* Glow en mob-staff-card */
+    .mob-staff-card.bday-active {
+      border-color: var(--gold) !important;
+      box-shadow: 0 0 28px rgba(201,168,76,0.45) !important;
+      animation: bdayMobPulse 3s ease-in-out infinite;
+    }
+    @keyframes bdayMobPulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(201,168,76,0.35); }
+      50%       { box-shadow: 0 0 50px rgba(201,168,76,0.65); }
+    }
+
+    /* Ribbon de cumpleaños en la tarjeta desktop */
+    .bday-ribbon {
+      position: absolute; top: 0; left: 0; right: 0; z-index: 20;
+      background: linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.08) 20%, rgba(201,168,76,0.22) 50%, rgba(201,168,76,0.08) 80%, transparent 100%);
+      border-bottom: 1px solid rgba(201,168,76,0.45);
+      padding: 10px 12px;
+      font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.35em;
+      color: var(--gold-lt); text-transform: uppercase; text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      border-radius: 20px 20px 0 0;
+    }
+    /* Ribbon en la tarjeta móvil */
+    .mob-bday-ribbon {
+      font-family: 'Cinzel', serif; font-size: 0.5rem; letter-spacing: 0.22em;
+      color: var(--gold); text-transform: uppercase; text-align: center;
+      margin-bottom: 8px; padding: 4px 8px;
+      background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.35);
+      border-radius: 4px; display: block;
+    }
+
+    /* Partículas flotantes dentro de la tarjeta */
+    .bday-particle {
+      position: absolute; border-radius: 50%; pointer-events: none; z-index: 5;
+      animation: bdayFloat linear infinite;
+    }
+    @keyframes bdayFloat {
+      0%   { transform: translateY(460px) rotate(0deg); opacity: 0; }
+      8%   { opacity: 0.85; }
+      88%  { opacity: 0.7; }
+      100% { transform: translateY(-30px) rotate(720deg); opacity: 0; }
+    }
+
+    /* ─── Modal de Cumpleaños ─── */
+    #bday-modal {
+      position: fixed; inset: 0; z-index: 10000;
+      background: rgba(2,5,12,0.97); backdrop-filter: blur(28px) saturate(1.6);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1);
+      overflow: hidden;
+    }
+    #bday-modal.active { opacity: 1; pointer-events: all; }
+
+    #bday-canvas {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* Estrellas de fondo decorativas */
+    .bday-bg-stars {
+      position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden;
+    }
+    .bday-bg-star {
+      position: absolute; border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.8), transparent);
+      animation: bdayStarTwinkle ease-in-out infinite alternate;
+    }
+    @keyframes bdayStarTwinkle {
+      from { opacity: 0.1; transform: scale(0.7); }
+      to   { opacity: 0.6; transform: scale(1.3); }
+    }
+
+    /* Caja central del modal */
+    .bday-box {
+      position: relative; z-index: 10;
+      width: min(520px, 92vw);
+      background: linear-gradient(145deg, rgba(14,37,74,0.97), rgba(5,13,26,0.99));
+      border: 1px solid rgba(201,168,76,0.55); border-radius: 24px;
+      overflow: hidden;
+      transform: scale(0.82) translateY(50px);
+      transition: transform 0.75s cubic-bezier(0.34,1.4,0.64,1);
+      box-shadow: 0 50px 120px rgba(0,0,0,0.95), 0 0 70px rgba(201,168,76,0.18), inset 1px 1px 4px rgba(255,255,255,0.04);
+    }
+    #bday-modal.active .bday-box { transform: scale(1) translateY(0); }
+
+    /* Banner superior del modal */
+    .bday-banner-top {
+      height: 130px; position: relative; overflow: hidden;
+      background: linear-gradient(135deg, rgba(18,72,168,0.85) 0%, rgba(80,40,10,0.4) 50%, rgba(18,72,168,0.85) 100%);
+      border-bottom: 2px solid var(--gold);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .bday-banner-top::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
+      background-size: 14px 14px; pointer-events: none;
+    }
+    .bday-banner-bg-txt {
+      position: absolute; font-family: 'Bebas Neue', serif;
+      font-size: 5rem; letter-spacing: 0.12em;
+      color: rgba(201,168,76,0.06); pointer-events: none;
+      user-select: none; white-space: nowrap;
+    }
+    /* Foto circular que sobresale del banner */
+    .bday-photo-wrap {
+      position: absolute; bottom: -58px; left: 50%; transform: translateX(-50%);
+      width: 116px; height: 116px; border-radius: 50%;
+      border: 4px solid var(--navy);
+      box-shadow: 0 10px 35px rgba(0,0,0,0.85), 0 0 0 3px var(--gold), 0 0 30px rgba(201,168,76,0.4);
+      background: var(--navy); overflow: hidden; z-index: 10;
+    }
+    .bday-photo { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Cuerpo del modal */
+    .bday-body { padding: 74px 40px 40px; text-align: center; }
+    @media (max-width: 480px) { .bday-body { padding: 74px 24px 32px; } }
+
+    .bday-label {
+      font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.5em;
+      color: var(--gold); text-transform: uppercase; margin-bottom: 10px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .bday-label::before, .bday-label::after { content: ''; width: 28px; height: 1px; background: var(--gold); opacity: 0.5; }
+
+    .bday-headline {
+      font-family: 'Bebas Neue', serif; font-size: clamp(2.8rem, 8vw, 4rem);
+      letter-spacing: 0.06em; line-height: 1;
+      background: linear-gradient(180deg, #fff 0%, var(--gold-lt) 55%, var(--gold) 100%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 6px 22px rgba(201,168,76,0.55)); margin-bottom: 8px;
+    }
+    .bday-name {
+      font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 900;
+      color: #fff; letter-spacing: 0.05em; margin-bottom: 10px; line-height: 1.1;
+    }
+    .bday-role {
+      font-family: 'Bebas Neue', serif; font-size: 0.85rem; letter-spacing: 0.3em;
+      color: #000; background: var(--gold); padding: 5px 18px;
+      border-radius: 4px; display: inline-block; margin-bottom: 26px;
+      box-shadow: 0 4px 16px rgba(201,168,76,0.3);
+    }
+    .bday-divider {
+      width: 60px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 24px;
+    }
+    .bday-message {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-style: italic;
+      color: rgba(185,215,255,0.88); line-height: 1.85; margin-bottom: 34px;
+      max-width: 400px; margin-left: auto; margin-right: auto;
+    }
+    .bday-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 8px; }
+    .bday-btn-primary {
+      padding: 13px 28px; background: var(--gold); border: none;
+      font-family: 'Cinzel', serif; font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.22em; text-transform: uppercase; color: #000;
+      border-radius: 4px; cursor: pointer; transition: all 0.3s ease;
+      box-shadow: 0 6px 22px rgba(201,168,76,0.35);
+    }
+    .bday-btn-primary:hover { background: var(--gold-lt); box-shadow: 0 10px 32px rgba(201,168,76,0.55); transform: translateY(-2px); }
+    .bday-btn-secondary {
+      padding: 13px 28px; background: transparent;
+      border: 1px solid rgba(58,143,224,0.4);
+      font-family: 'Cinzel', serif; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--blu-2);
+      border-radius: 4px; cursor: pointer; transition: all 0.3s ease;
+    }
+    .bday-btn-secondary:hover { border-color: var(--blu-2); background: rgba(58,143,224,0.1); }
+
+    /* X de cierre del modal */
+    .bday-close-btn {
+      position: absolute; top: 16px; right: 16px; z-index: 100;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.18);
+      color: #fff; font-size: 1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .bday-close-btn:hover { background: var(--gold); border-color: var(--gold); color: #000; transform: scale(1.1); }
+
     /* Botón cerrar del modal en footer */
     .modal-close-btn {
       display: inline-flex; align-items: center; gap: 10px;
@@ -534,6 +728,40 @@
     <div class="ld-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png" alt="ONU" class="ld-logo"></div>
   </div>
   <div class="ld-giant-text">SVPMUN</div><div class="ld-status"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     BIRTHDAY MODAL — Homenaje de Cumpleaños
+     Para activar: activarCumpleanos(personId, nombre, apellido, foto, cargo)
+     Ejemplo: activarCumpleanos('anabella', 'Anabella', 'Bravo', '/static/Anabella.jpeg', 'Secretaria de Publicidad')
+════════════════════════════════════════════ -->
+<div id="bday-modal">
+  <canvas id="bday-canvas"></canvas>
+  <div class="bday-bg-stars" id="bday-bg-stars"></div>
+  <div class="bday-box">
+    <div class="bday-banner-top">
+      <div class="bday-banner-bg-txt">SVPMUN</div>
+      <div class="bday-photo-wrap">
+        <img id="bday-photo" src="" alt="Cumpleañero" class="bday-photo"
+             onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'">
+      </div>
+    </div>
+    <div class="bday-body">
+      <div class="bday-label">Homenaje del Staff · SVPMUN</div>
+      <div class="bday-headline">¡Feliz Cumpleaños!</div>
+      <div class="bday-name" id="bday-nombre">—</div>
+      <div class="bday-role" id="bday-cargo">Staff</div>
+      <div class="bday-divider"></div>
+      <p class="bday-message" id="bday-mensaje">
+        Hoy el equipo SVPMUN celebra a quien hace de este proyecto algo extraordinario. Tu dedicación, talento y presencia elevan cada operación. Gracias por ser parte de esta misión — ¡este día es tuyo! 🎂
+      </p>
+      <div class="bday-actions">
+        <button class="bday-btn-primary" id="bday-btn-expediente">Ver Expediente</button>
+        <button class="bday-btn-secondary" onclick="cerrarBday()">Celebrar 🎉</button>
+      </div>
+    </div>
+    <button class="bday-close-btn" onclick="cerrarBday()">✕</button>
+  </div>
 </div>
 
 <div id="bg"></div>
@@ -1118,7 +1346,186 @@ function closeModal() {
   document.body.style.overflow = '';
 }
 
-const tilts = document.querySelectorAll('.tilt-element');
+/* ══════════════════════════════════════════════════════
+   SISTEMA DE CUMPLEAÑOS — Birthday Feature
+   ══════════════════════════════════════════════════════
+   USO: activarCumpleanos(personId, nombre, apellido, foto, cargo)
+
+   personId → id del onclick de la tarjeta (ej: 'anabella', 'rafael', 'sarah', 'mariapaula', 'gabriela')
+   nombre   → primer nombre del miembro
+   apellido → apellido del miembro
+   foto     → ruta a la imagen (ej: '/static/Anabella.jpeg')
+   cargo    → cargo dentro del staff (ej: 'Secretaria de Publicidad')
+
+   Ejemplo de activación:
+   activarCumpleanos('anabella', 'Anabella', 'Bravo', '/static/Anabella.jpeg', 'Secretaria de Publicidad');
+   ══════════════════════════════════════════════════════ */
+
+function activarCumpleanos(personId, nombre, apellido, foto, cargo) {
+  // ── 1. Decorar la holo-card en desktop ──
+  var desktopCard = document.querySelector('.holo-card[onclick*="' + personId + '"]');
+  if (desktopCard) {
+    desktopCard.classList.add('bday-active');
+    // Ribbon superior
+    var ribbon = document.createElement('div');
+    ribbon.className = 'bday-ribbon';
+    ribbon.innerHTML = '🎂 &nbsp; HOY ES SU CUMPLEAÑOS &nbsp; 🎂';
+    desktopCard.insertBefore(ribbon, desktopCard.firstChild);
+    // Partículas flotantes
+    var pColors = ['#c9a84c','#edd98a','#8ec5f7','#ffffff','#3a8fe0','#f0d080'];
+    for (var i = 0; i < 14; i++) {
+      var p = document.createElement('div');
+      p.className = 'bday-particle';
+      var sz = (Math.random() * 5 + 3).toFixed(1) + 'px';
+      p.style.cssText =
+        'width:' + sz + ';height:' + sz + ';' +
+        'background:' + pColors[Math.floor(Math.random() * pColors.length)] + ';' +
+        'left:' + (Math.random() * 88 + 6).toFixed(1) + '%;' +
+        'animation-duration:' + (Math.random() * 4 + 3.5).toFixed(1) + 's;' +
+        'animation-delay:' + (Math.random() * 4).toFixed(1) + 's;' +
+        'box-shadow:0 0 6px rgba(201,168,76,0.5);';
+      desktopCard.appendChild(p);
+    }
+  }
+
+  // ── 2. Decorar la mob-staff-card en móvil ──
+  var mobCard = document.querySelector('.mob-staff-card[onclick*="' + personId + '"]');
+  if (mobCard) {
+    mobCard.classList.add('bday-active');
+    var mobRibbon = document.createElement('div');
+    mobRibbon.className = 'mob-bday-ribbon';
+    mobRibbon.textContent = '🎂 ¡Hoy cumple años!';
+    mobCard.insertBefore(mobRibbon, mobCard.firstChild);
+  }
+
+  // ── 3. Mostrar modal de homenaje tras el loader ──
+  // El loader dura 8 s → esperamos 9.2 s para que ya haya desaparecido
+  setTimeout(function() {
+    mostrarModalCumpleanos(nombre, apellido, foto, cargo, personId);
+  }, 9200);
+}
+
+function mostrarModalCumpleanos(nombre, apellido, foto, cargo, personId) {
+  var modal = document.getElementById('bday-modal');
+  if (!modal) return;
+
+  // Rellenar contenido dinámico
+  var fotoEl = document.getElementById('bday-photo');
+  fotoEl.src = foto;
+
+  document.getElementById('bday-nombre').textContent = nombre + ' ' + apellido;
+  document.getElementById('bday-cargo').textContent = cargo;
+
+  // Botón "Ver expediente" → cierra modal y abre el profile
+  document.getElementById('bday-btn-expediente').onclick = function() {
+    cerrarBday();
+    setTimeout(function() { openModal(personId); }, 450);
+  };
+
+  // Crear estrellas de fondo
+  _crearEstrellasBday();
+
+  // Mostrar modal
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  // Lanzar confetti canvas
+  _lanzarConfetti();
+}
+
+function cerrarBday() {
+  var modal = document.getElementById('bday-modal');
+  if (!modal) return;
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function _crearEstrellasBday() {
+  var cont = document.getElementById('bday-bg-stars');
+  if (!cont || cont.children.length > 0) return; // ya creadas
+  for (var i = 0; i < 28; i++) {
+    var s = document.createElement('div');
+    s.className = 'bday-bg-star';
+    var sz = (Math.random() * 5 + 2).toFixed(1) + 'px';
+    s.style.cssText =
+      'width:' + sz + ';height:' + sz + ';' +
+      'top:' + (Math.random() * 100).toFixed(1) + '%;' +
+      'left:' + (Math.random() * 100).toFixed(1) + '%;' +
+      'animation-duration:' + (Math.random() * 3 + 2).toFixed(1) + 's;' +
+      'animation-delay:' + (Math.random() * 3).toFixed(1) + 's;';
+    cont.appendChild(s);
+  }
+}
+
+function _lanzarConfetti() {
+  var canvas = document.getElementById('bday-canvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  var colores = ['#c9a84c','#edd98a','#8ec5f7','#3a8fe0','#ffffff','#f0c060','#b9d7ff','#ffeaa0'];
+  var piezas = [];
+  for (var i = 0; i < 180; i++) {
+    piezas.push({
+      x: Math.random() * canvas.width,
+      y: -(Math.random() * canvas.height),
+      w: Math.random() * 10 + 4,
+      h: Math.random() * 6 + 3,
+      color: colores[Math.floor(Math.random() * colores.length)],
+      speed: Math.random() * 3.5 + 1.2,
+      angle: Math.random() * Math.PI * 2,
+      spin: (Math.random() - 0.5) * 0.14,
+      alpha: Math.random() * 0.6 + 0.35
+    });
+  }
+
+  var anim;
+  var rondas = 0;
+  function dibujar() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var vivos = false;
+    piezas.forEach(function(p) {
+      p.y += p.speed;
+      p.angle += p.spin;
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.fillStyle = p.color;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle);
+      // mezcla de rectángulos y círculos
+      if (Math.random() > 0.5) {
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      } else {
+        ctx.beginPath();
+        ctx.arc(0, 0, p.h / 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+      if (p.y < canvas.height + 20) vivos = true;
+    });
+    if (vivos) {
+      anim = requestAnimationFrame(dibujar);
+    } else if (rondas < 2) {
+      // relanzar una segunda ronda
+      rondas++;
+      piezas.forEach(function(p) { p.y = -(Math.random() * 100 + 20); });
+      anim = requestAnimationFrame(dibujar);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+  cancelAnimationFrame(anim);
+  dibujar();
+}
+
+/* ══════════════════════════════════════════════════════
+   ACTIVACIÓN ACTUAL
+   Cambia los parámetros cuando sea el cumpleaños de otro miembro.
+   Para desactivar, borra o comenta la siguiente línea.
+   ══════════════════════════════════════════════════════ */
+activarCumpleanos('anabella', 'Anabella', 'Bravo', '/static/Anabella.jpeg', 'Secretaria de Publicidad');
+
 tilts.forEach(el => {
   el.addEventListener('mousemove', e => {
     const rect = el.getBoundingClientRect();
