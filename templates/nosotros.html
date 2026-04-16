@@ -1518,7 +1518,22 @@ function _lanzarConfetti() {
   cancelAnimationFrame(anim);
   dibujar();
 }
+/* ══ SCRIPT DE CONTROL DEL LOADER (NUEVO Y A PRUEBA DE FALLOS) ══ */
+function hideLoader() {
+  const loader = document.getElementById('loader');
+  if (loader) {
+    loader.classList.add('exit');
+    setTimeout(() => { if(loader.parentNode) loader.remove(); }, 1000);
+  }
+}
 
+// Opción A: Quita el loader en cuanto el código HTML cargue (no espera a las imágenes rotas)
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(hideLoader, 500);
+});
+
+// Opción B (Failsafe): Si todo falla, a los 5 segundos lo destruye sí o sí
+setTimeout(hideLoader, 5000);
 /* ══════════════════════════════════════════════════════
    ACTIVACIÓN ACTUAL
    Cambia los parámetros cuando sea el cumpleaños de otro miembro.
