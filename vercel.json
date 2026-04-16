@@ -1,11 +1,9 @@
 {
   "version": 2,
-  "name": "svpmun-project",
   "builds": [
     {
       "src": "main.py",
-      "use": "@vercel/python",
-      "config": { "runtime": "python3.9" }
+      "use": "@vercel/python"
     },
     {
       "src": "static/**",
@@ -21,11 +19,5 @@
       "src": "/(.*)",
       "dest": "main.py"
     }
-  ],
-  "functions": {
-    "main.py": {
-      "memory": 1024,
-      "maxDuration": 10
-    }
-  }
+  ]
 }
