@@ -950,14 +950,6 @@
       <h3 class="holo-name">Gabriela Requena</h3>
       <div class="holo-hint">Toca para desencriptar</div>
     </div>
-    <div class="holo-card rv d6" onclick="openModal('ahmed')">
-      <div class="holo-glare-wrap"><div class="holo-glare"></div></div>
-      <div class="holo-frame"></div>
-      <div class="holo-img-container"><img src="/static/Ahmed.jpeg" alt="Ahmed" class="holo-img" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'"></div>
-      <div class="holo-badge">Coord. de Programación</div>
-      <h3 class="holo-name">Ahmed</h3>
-      <div class="holo-hint">Toca para desencriptar</div>
-    </div>
   </div>
 </section>
 
@@ -1218,59 +1210,6 @@
   </div>
 </template>
 
-<template id="tpl-ahmed">
-  <div class="modal-content-scroll">
-    <div class="scf-banner"></div>
-    <div class="scf-header-vert">
-      <div class="scf-photo-wrap-v">
-        <img src="/static/Ahmed.jpeg" alt="Ahmed" class="scf-photo-v"
-             onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'">
-      </div>
-      <div class="scf-badge-v">💻 Coordinador de Programación</div>
-      <div class="scf-name-v">Ahmed</div>
-    </div>
-
-    <div class="scf-stats-grid">
-      <div class="scf-stat-item"><div class="scf-stat-val">19.7</div><div class="scf-stat-lbl">Índice Acad.</div></div>
-      <div class="scf-stat-item"><div class="scf-stat-val">2025</div><div class="scf-stat-lbl">Inicio MUN</div></div>
-      <div class="scf-stat-item"><div class="scf-stat-val">7mo</div><div class="scf-stat-lbl">Kyu Karate</div></div>
-    </div>
-
-    <div class="scf-category-v">🎖️ Menciones Honoríficas</div>
-    <div class="scf-awards-list">
-      <div class="award-row"><span class="award-icon">🥈</span><div class="award-text"><strong>2H · PAVIMUN</strong></div></div>
-    </div>
-
-    <div class="scf-category-v">🗣️ Menciones Verbales</div>
-    <div class="scf-awards-list">
-      <div class="award-row"><span class="award-icon">🎖️</span><div class="award-text"><strong>Primera Mención Verbal</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">SVPMUN 2025</span></div></div>
-      <div class="award-row"><span class="award-icon">🎖️</span><div class="award-text"><strong>Segunda Mención Verbal</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">SPMUN 2026</span></div></div>
-      <div class="award-row gold"><span class="award-icon">🌐</span><div class="award-text"><strong>Desarrollador Principal de la Web</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">SVPMUN</span></div></div>
-    </div>
-
-    <div class="scf-category-v">📜 Formación y Certificaciones</div>
-    <div class="scf-awards-list">
-      <div class="award-row gold"><span class="award-icon">🐍</span><div class="award-text"><strong>Python Básico</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Certificación oficial</span></div></div>
-      <div class="award-row gold"><span class="award-icon">🐍</span><div class="award-text"><strong>Python Avanzado</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Nivel superior acreditado</span></div></div>
-      <div class="award-row"><span class="award-icon">🔐</span><div class="award-text"><strong>Ciberseguridad</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Acreditación en seguridad digital</span></div></div>
-      <div class="award-row"><span class="award-icon">🌐</span><div class="award-text"><strong>Inglés Integral</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Dominio completo del idioma</span></div></div>
-      <div class="award-row"><span class="award-icon">🎤</span><div class="award-text"><strong>Oratoria</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Formación en comunicación y expresión pública</span></div></div>
-      <div class="award-row"><span class="award-icon">⚙️</span><div class="award-text"><strong>N8N</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Automatización de flujos de trabajo</span></div></div>
-      <div class="award-row"><span class="award-icon">✏️</span><div class="award-text"><strong>Dibujo</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Titulado en artes visuales y técnicas gráficas</span></div></div>
-    </div>
-
-    <div class="scf-category-v">🏅 Perfil Personal</div>
-    <div class="scf-awards-list">
-      <div class="award-row gold"><span class="award-icon">🏊</span><div class="award-text"><strong>Ex-Atleta de Alto Rendimiento</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Natación competitiva</span></div></div>
-      <div class="award-row"><span class="award-icon">🥋</span><div class="award-text"><strong>Karateka — 7mo Kyu</strong><br><span style="color:rgba(185,215,255,0.6);font-size:0.8rem;">Cinturón Naranja · Artes marciales activas</span></div></div>
-    </div>
-
-    <div style="margin-top:30px; text-align:center; padding-bottom: 10px;">
-      <button class="modal-close-btn" onclick="closeModal()">Cerrar Expediente &nbsp;✕</button>
-    </div>
-  </div>
-</template>
-
 <template id="tpl-mystery">
   <div class="modal-content-scroll" style="text-align:center; padding-top: 40px;">
     <div class="scf-banner" style="background: linear-gradient(135deg, #0a0a1a, #0a1931); margin: -40px -40px 40px -40px;"></div>
@@ -1347,11 +1286,6 @@
         <div class="mob-staff-badge" style="background:#8ec5f7;">Sec. Académica</div>
         <div class="mob-staff-name">Gabriela Requena</div>
       </div>
-      <div class="mob-staff-card" onclick="openModal('ahmed')">
-        <img src="/static/Ahmed.jpeg" alt="Ahmed" class="mob-staff-img" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/200px-UN_emblem_blue.svg.png'">
-        <div class="mob-staff-badge" style="background:#8ec5f7;">Coord. Programación</div>
-        <div class="mob-staff-name">Ahmed</div>
-      </div>
     </div>
   </div>
   <div style="text-align:center; padding: 40px 20px;">
@@ -1400,8 +1334,6 @@ function openModal(personId) {
     content.innerHTML = document.getElementById('tpl-mariapaula').innerHTML;
   } else if (personId === 'gabriela') {
     content.innerHTML = document.getElementById('tpl-gabriela').innerHTML;
-  } else if (personId === 'ahmed') {
-    content.innerHTML = document.getElementById('tpl-ahmed').innerHTML;
   } else {
     content.innerHTML = document.getElementById('tpl-mystery').innerHTML;
   }
