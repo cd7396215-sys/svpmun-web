@@ -37,6 +37,10 @@ async def crisis_ue(request: Request):
 async def drills(request: Request):
     return templates.TemplateResponse(request=request, name="drills.html")
 
+@app.get("/Mesas", response_class=HTMLResponse)
+async def drills(request: Request):
+    return templates.TemplateResponse(request=request, name="Mesas.html")
+
 @app.get("/nosotros", response_class=HTMLResponse)
 async def nosotros(request: Request):
     return templates.TemplateResponse(request=request, name="nosotros.html")
