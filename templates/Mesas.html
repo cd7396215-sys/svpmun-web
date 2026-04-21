@@ -910,4 +910,72 @@
     </div>
   </section>
 
- 
+ <div class="award-item"><span class="award-dot"></span><span>Medalla de Oro NEO — UNIMET</span></div>
+            </div> </div> </div> </section>
+
+    </main>
+
+    <button id="back-btn" class="back-to-selector" onclick="goBack()">
+      <span>←</span> Volver a Comités
+    </button>
+
+  </div> <script>
+    // Lógica para quitar la pantalla de carga
+    window.addEventListener("load", () => {
+      const loader = document.getElementById("loader");
+      const selector = document.getElementById("selector");
+      const fill = document.getElementById("loader-fill");
+      const pct = document.getElementById("loader-pct");
+
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += Math.floor(Math.random() * 10) + 5;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+          
+          // Transición de salida
+          setTimeout(() => {
+            loader.classList.add("hide");
+            selector.classList.add("visible");
+          }, 500);
+        }
+        if(fill) fill.style.width = progress + "%";
+        if(pct) pct.textContent = progress + "%";
+      }, 150);
+    });
+
+    // Funciones de navegación
+    function showCommittee(id) {
+      document.getElementById("selector").classList.remove("visible");
+      document.getElementById("back-btn").classList.add("visible");
+
+      const sections = document.querySelectorAll(".committee-section");
+      sections.forEach(sec => sec.classList.remove("active", "visible"));
+
+      const target = document.getElementById("committee-" + id);
+      if (target) {
+        target.classList.add("active");
+        setTimeout(() => target.classList.add("visible"), 50);
+      }
+    }
+
+    function goBack() {
+      document.getElementById("back-btn").classList.remove("visible");
+      const sections = document.querySelectorAll(".committee-section");
+      sections.forEach(sec => {
+        sec.classList.remove("visible");
+        setTimeout(() => sec.classList.remove("active"), 600);
+      });
+      setTimeout(() => document.getElementById("selector").classList.add("visible"), 600);
+    }
+
+    function toggleAwards(button) {
+      const icon = button.querySelector('.toggle-icon');
+      const awards = button.nextElementSibling;
+      icon.classList.toggle('open');
+      awards.classList.toggle('open');
+    }
+  </script>
+</body>
+</html>
