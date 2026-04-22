@@ -3,15 +3,13 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mesa Directiva — Crisis Romana · SVPMUN</title>
+  <title>Alto Mando — Crisis SVPMUN</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Uncial+Antiqua&family=Rajdhani:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Uncial+Antiqua&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --dark:       #0d0a06;
       --stone-bg:   #1a1209;
-      --stone-mid:  #2a2215;
-      --stone-lt:   #3d3020;
       --silver:     #c0bfbb;
       --silver-lt:  #e8e4dc;
       --gold:       #d4af37;
@@ -19,11 +17,8 @@
       --copper:     #b87333;
       --red:        #8b1a1a;
       --red-lt:     #c0392b;
-      --blood:      #5a0000;
       --grey:       #7a7470;
-      --navy:       #071630;
       --gold-nav:   #c9a84c;
-      --gold-lt-nav:#edd98a;
     }
 
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
@@ -36,423 +31,361 @@
     }
 
     /* ══════════════════════════════════════
-       NUEVO LOADER — SELLO DE CERA IMPERIAL
+       NUEVO LOADER: EL MARMOL Y LA FORJA
     ══════════════════════════════════════ */
-    #loader {
+    #loader-dais {
       position:fixed; inset:0; z-index:9999;
-      background: radial-gradient(circle at center, #1f0b0b 0%, #0a0303 60%, #000000 100%);
+      background: #050403;
       display:flex; flex-direction:column; align-items:center; justify-content:center;
-      transition:opacity 1.2s ease, transform 1.4s ease;
-      overflow:hidden;
+      transition:opacity 1.2s ease, visibility 1.2s;
     }
-    #loader.hide { opacity:0; transform:scale(1.1); pointer-events:none; }
-
-    .seal-container {
-      position: relative;
-      width: 150px;
-      height: 150px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: pulseSeal 2s infinite alternate;
+    #loader-dais.hide { opacity:0; visibility:hidden; }
+    
+    .loader-ring {
+      position:relative; width:150px; height:150px;
     }
-    .seal-bg {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle, #8b1a1a, #4a0d0d);
-      border-radius: 50%;
-      filter: drop-shadow(0 0 20px rgba(139, 26, 26, 0.8));
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 0 30px rgba(139,26,26,0.5);
+    .loader-ring::before {
+      content:''; position:absolute; inset:0;
+      border: 2px solid transparent; border-top-color: var(--gold); border-bottom-color: var(--red-lt);
+      border-radius:50%; animation: spin 2s linear infinite;
     }
-    .seal-bg::after {
-      content: '';
-      position: absolute;
-      inset: -5px;
-      border: 3px dashed #d4af37;
-      border-radius: 50%;
-      opacity: 0.3;
-      animation: spinSeal 10s linear infinite;
+    .loader-ring::after {
+      content:''; position:absolute; inset:15px;
+      border: 1px solid transparent; border-left-color: var(--copper); border-right-color: var(--copper);
+      border-radius:50%; animation: spin 1.5s linear infinite reverse;
     }
-    .seal-text {
-      position: relative;
-      z-index: 2;
-      font-family: 'Uncial Antiqua', serif;
-      font-size: 2.5rem;
-      color: #edd98a;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.9);
-      letter-spacing: 0.1em;
-    }
-    @keyframes pulseSeal {
-      0% { transform: scale(1); filter: brightness(1); }
-      100% { transform: scale(1.05); filter: brightness(1.3); }
-    }
-    @keyframes spinSeal {
-      100% { transform: rotate(360deg); }
-    }
-    .loader-title {
-      font-family: 'Cinzel', serif;
-      font-size: 1.2rem;
-      color: var(--gold-lt);
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      margin-top: 40px;
+    .loader-icon {
+      position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);
+      font-family: 'Uncial Antiqua', serif; font-size: 2.5rem; color: var(--silver);
       text-shadow: 0 0 15px rgba(212,175,55,0.5);
+      animation: pulse 2s ease-in-out infinite;
     }
-    .loader-sub {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 1rem;
-      color: var(--grey);
-      margin-top: 10px;
-      letter-spacing: 0.1em;
+    .loader-text {
+      margin-top: 30px; font-family: 'Cinzel', serif; font-size: 0.8rem;
+      letter-spacing: 0.5em; color: var(--gold-lt); text-transform: uppercase;
+      animation: pulse 2s ease-in-out infinite alternate;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; text-shadow: 0 0 20px rgba(212,175,55,0.8); } }
+
+    /* ══════════════════════════════════════
+       NAVBAR (Heredado y adaptado)
+    ══════════════════════════════════════ */
+    #nav-bar {
+      position:fixed; top:0; left:0; right:0; z-index:800; display:flex; align-items:center; justify-content:space-between; padding:0 52px; height:76px;
+      background:linear-gradient(180deg,rgba(13,10,6,0.9) 0%,rgba(13,10,6,0) 100%); backdrop-filter:blur(5px);
+      border-bottom: 1px solid rgba(201,168,76,0.2);
+    }
+    .nb-brand { display:flex; align-items:center; gap:14px; text-decoration:none; z-index:1; }
+    .nb-emblem { width:34px; height:34px; object-fit:contain; filter:brightness(0) invert(1); }
+    .nb-word { font-family:'Cinzel',serif; font-weight:900; font-size:1rem; letter-spacing:0.32em; color:#fff; }
+    .nb-center { position:absolute; left:50%; transform:translateX(-50%); display:flex; align-items:center; z-index:1; }
+    .nb-quick-link { font-family:'Cinzel',serif; font-size:0.56rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.5); padding:6px 18px; text-decoration:none; transition:color 0.3s; }
+    .nb-quick-link:hover { color:var(--gold-lt); }
+
+    /* ══════════════════════════════════════
+       HERO ASIMÉTRICO
+    ══════════════════════════════════════ */
+    .dais-hero {
+      position: relative; min-height: 80vh; display: flex; align-items: center; justify-content: center;
+      padding: 100px 5% 50px; overflow: hidden;
+    }
+    .dais-bg {
+      position: absolute; inset: 0; z-index: -2;
+      background: radial-gradient(circle at 50% 50%, #1a1005 0%, #0d0a06 100%);
+    }
+    .dais-bg-texture {
+      position: absolute; inset: 0; z-index: -1; opacity: 0.15;
+      background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Justitia.jpg/800px-Justitia.jpg');
+      background-size: cover; background-position: center; mix-blend-mode: overlay;
+    }
+    .dais-title-box {
+      text-align: center; position: relative; z-index: 10;
+    }
+    .dais-subtitle {
+      font-family: 'Cinzel', serif; font-size: clamp(0.7rem, 2vw, 1rem); letter-spacing: 0.5em;
+      color: var(--copper); text-transform: uppercase; margin-bottom: 20px;
+    }
+    .dais-title {
+      font-family: 'Uncial Antiqua', serif; font-size: clamp(3rem, 8vw, 6rem);
+      color: transparent; background: linear-gradient(180deg, #fff 0%, var(--silver) 40%, var(--gold) 100%);
+      -webkit-background-clip: text; background-clip: text; line-height: 1;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    }
+    .dais-desc {
+      font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(1.2rem, 2vw, 1.5rem);
+      color: var(--silver-lt); max-width: 700px; margin: 30px auto 0; line-height: 1.6; opacity: 0.8;
     }
 
     /* ══════════════════════════════════════
-       CENIZAS Y NAVBAR (GLOBALES)
+       CONTEXTO ADICIONAL (Diseño Desplazado)
     ══════════════════════════════════════ */
-    #ash-canvas { position:fixed; inset:0; z-index:900; pointer-events:none; }
+    .context-board {
+      position: relative; max-width: 1200px; margin: 0 auto 100px; padding: 0 5%;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    }
+    .context-text { flex: 1; min-width: 300px; padding-right: 50px; }
+    .context-text h2 {
+      font-family: 'Cinzel', serif; font-size: 2rem; color: var(--gold-lt); margin-bottom: 20px;
+    }
+    .context-text p {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; line-height: 1.8; color: var(--silver); margin-bottom: 15px;
+    }
+    .context-visual {
+      flex: 1; min-width: 300px; position: relative; height: 300px;
+    }
+    .context-visual::before {
+      content: ''; position: absolute; top: 20px; left: -20px; width: 100%; height: 100%;
+      border: 2px solid var(--red-lt); opacity: 0.3; z-index: 1;
+    }
+    .context-visual img {
+      width: 100%; height: 100%; object-fit: cover; filter: sepia(0.8) brightness(0.4);
+      position: relative; z-index: 2; box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+    }
+
+    /* ══════════════════════════════════════
+       PERFILES DE MESA (Estructura no rígida)
+    ══════════════════════════════════════ */
+    .profiles-container {
+      max-width: 1200px; margin: 0 auto; padding: 50px 5%; position: relative;
+    }
     
-    /* Copia exacta del Navbar de tu código */
-    #nav-bar { position:fixed; top:0; left:0; right:0; z-index:800; display:flex; align-items:center; justify-content:space-between; padding:0 52px; height:76px; }
-    #nav-bar::before { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(7,22,48,0.75) 0%,rgba(7,22,48,0) 100%); transition:background 0.6s, backdrop-filter 0.6s; pointer-events:none; }
-    #nav-bar.scrolled::before { background:rgba(7,22,48,0.90); backdrop-filter:blur(26px) saturate(1.9); }
-    #nav-bar::after { content:''; position:absolute; bottom:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(--gold-nav),transparent); opacity:1; transition:opacity 0.4s; }
-    #nav-bar.menu-open::before { background:transparent; backdrop-filter:none; }
-    #nav-bar.menu-open::after { opacity:0; }
-    .nb-brand { display:flex; align-items:center; gap:14px; text-decoration:none; position:relative; z-index:1; }
-    .nb-emblem { width:34px; height:34px; object-fit:contain; filter:brightness(0) invert(1) drop-shadow(0 0 12px rgba(142,197,247,0.65)); }
-    .nb-word { font-family:'Cinzel',serif; font-weight:900; font-size:1.08rem; letter-spacing:0.32em; color:#fff; }
-    .nb-word .nb-sep { color:var(--gold-nav); margin:0 4px; }
-    .nb-center { position:absolute; left:50%; transform:translateX(-50%); display:flex; align-items:center; pointer-events:all; z-index:1; }
-    .nb-quick-link { font-family:'Cinzel',serif; font-size:0.56rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.3); padding:6px 18px; text-decoration:none; transition:color 0.3s; }
-    .nb-quick-link:hover { color:var(--gold-lt-nav); }
-    .nb-trigger { position:relative; z-index:1; display:flex; align-items:center; gap:16px; background:none; border:none; cursor:pointer; padding:8px 0; }
-    .nb-trigger-label { font-family:'Cinzel',serif; font-size:0.56rem; letter-spacing:0.4em; text-transform:uppercase; color:rgba(255,255,255,0.4); }
-    .nb-icon span { display:block; height:1.5px; border-radius:2px; background:rgba(255,255,255,0.85); margin-bottom: 4px; transition:0.3s; }
-    .nb-icon span:nth-child(1){width:28px;} .nb-icon span:nth-child(2){width:18px;} .nb-icon span:nth-child(3){width:28px;}
-
-    /* ══════════════════════════════════════
-       HERO SECTION (MESA DIRECTIVA)
-    ══════════════════════════════════════ */
-    #hero {
-      position:relative; min-height:60vh; z-index:3;
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      text-align:center; padding: 120px 24px 40px; overflow:hidden;
-      background: radial-gradient(ellipse at bottom, rgba(139,26,26,0.2) 0%, var(--dark) 70%);
-      border-bottom: 1px solid rgba(212,175,55,0.2);
-    }
-    .hero-bg-img {
-      position:absolute; inset:0; z-index:-1;
-      background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/1280px-Colosseo_2020.jpg');
-      background-size:cover; background-position:center;
-      filter:sepia(0.8) brightness(0.15) contrast(1.2); opacity:0.6;
-    }
-    .hero-eyebrow {
-      font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.5em;
-      color:var(--copper); text-transform:uppercase; margin-bottom:15px;
-    }
-    .hero-title {
-      font-family:'Uncial Antiqua',serif; font-size:clamp(2.5rem,6vw,4.5rem);
-      color:var(--silver-lt); text-shadow:0 0 30px rgba(212,175,55,0.4);
-      margin-bottom:15px; line-height:1.1;
-    }
-    .hero-divider {
-      width:150px; height:2px; background:linear-gradient(90deg,transparent,var(--red-lt),transparent);
-      margin: 20px auto;
+    /* Línea del tiempo/destino en el fondo */
+    .profiles-container::before {
+      content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px;
+      background: linear-gradient(to bottom, transparent, var(--gold), var(--red-lt), transparent);
+      opacity: 0.3; transform: translateX(-50%); z-index: 0;
     }
 
-    /* ══════════════════════════════════════
-       CONTEXTO ADICIONAL
-    ══════════════════════════════════════ */
-    .context-section {
-      position: relative; z-index: 3;
-      padding: 60px 8% 20px; text-align: center; max-width: 900px; margin: 0 auto;
+    .profile-card {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 150px; position: relative; z-index: 2;
+      opacity: 0; transform: translateY(50px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .context-quote {
-      font-family:'Cormorant Garamond',serif; font-style:italic;
-      font-size:clamp(1.1rem, 2vw, 1.4rem); color:var(--silver);
-      line-height:1.8; position: relative;
-    }
-    .context-quote strong { color: var(--gold-lt); font-weight: normal; }
-    .context-quote::before, .context-quote::after {
-      content: '"'; font-family: 'Uncial Antiqua', serif; font-size: 3rem;
-      color: rgba(212,175,55,0.2); position: absolute;
-    }
-    .context-quote::before { top: -20px; left: -30px; }
-    .context-quote::after { bottom: -40px; right: -20px; }
+    .profile-card.visible { opacity: 1; transform: translateY(0); }
+    
+    /* Alternancia de lados */
+    .profile-card:nth-child(even) { flex-direction: row-reverse; }
 
-    /* ══════════════════════════════════════
-       PERFILES DE LA MESA (DISEÑO TIPO EXPEDIENTE)
-    ══════════════════════════════════════ */
-    .dais-section {
-      position: relative; z-index: 3;
-      padding: 60px 5% 100px;
-      display: flex; flex-direction: column; gap: 80px;
-      max-width: 1200px; margin: 0 auto;
+    .profile-img-wrap {
+      flex: 0 0 45%; position: relative; perspective: 1000px;
+    }
+    
+    /* El marco quemado adaptado para retratos */
+    .retrato-quemado {
+      position: relative; width: 100%; aspect-ratio: 3/4;
+      background-color: var(--stone-bg); padding: 15px;
+      box-shadow: inset 0 0 40px 20px rgba(10,5,0,0.9), 0 20px 40px rgba(0,0,0,0.8);
+      border: 1px solid #111; border-radius: 2px; overflow: hidden;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      transform-style: preserve-3d;
+    }
+    .retrato-quemado::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      box-shadow: inset 0 0 60px 25px rgba(25, 10, 5, 0.8); z-index: 5;
+    }
+    .retrato-quemado img {
+      width: 100%; height: 100%; object-fit: cover; object-position: top;
+      filter: sepia(0.3) contrast(1.1) brightness(0.8) grayscale(0.2);
+      transition: filter 0.5s;
+    }
+    .profile-card:hover .retrato-quemado {
+      transform: scale(1.02) rotateY(5deg);
+      box-shadow: inset 0 0 40px 20px rgba(10,5,0,0.9), 0 30px 60px rgba(212,175,55,0.15);
+    }
+    .profile-card:hover .retrato-quemado img {
+      filter: sepia(0.1) contrast(1.1) brightness(1) grayscale(0);
     }
 
-    .dais-card {
-      display: grid; grid-template-columns: 350px 1fr; gap: 50px;
-      align-items: center;
-      background: linear-gradient(135deg, rgba(26,18,9,0.8) 0%, rgba(13,10,6,0.95) 100%);
-      border: 1px solid rgba(180,115,51,0.2);
-      padding: 40px;
-      border-radius: 4px;
-      box-shadow: inset 0 0 50px rgba(0,0,0,0.8), 0 15px 30px rgba(0,0,0,0.6);
+    .profile-info {
+      flex: 0 0 45%; padding: 40px; background: rgba(20, 15, 10, 0.6);
+      border: 1px solid rgba(212,175,55,0.1); backdrop-filter: blur(10px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
       position: relative;
-      overflow: hidden;
     }
-    .dais-card::before {
-      content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 4px;
+    /* Detalles de diseño en las cajas de info */
+    .profile-info::before {
+      content: ''; position: absolute; top: -1px; left: -1px; width: 30px; height: 30px;
+      border-top: 2px solid var(--gold); border-left: 2px solid var(--gold);
     }
-    /* Colores temáticos por rol */
-    .dais-card.president::before { background: linear-gradient(180deg, var(--gold), var(--copper)); }
-    .dais-card.vice::before { background: linear-gradient(180deg, #7a7470, #3d3020); }
-    .dais-card.staff::before { background: linear-gradient(180deg, var(--red-lt), var(--blood)); }
-
-    /* Marco fotográfico (reutilizado del main pero adaptado) */
-    .dais-portrait-wrapper {
-      position: relative;
-      background-color: var(--stone-bg);
-      padding: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.9), inset 0 0 25px 15px rgba(0,0,0,0.95);
-      border: 2px solid #080604;
-      border-radius: 4px 12px 6px 18px / 15px 5px 20px 8px;
-    }
-    .dais-portrait-wrapper img {
-      width: 100%; height: 420px; object-fit: cover; display: block;
-      filter: sepia(0.4) contrast(1.15) brightness(0.85) grayscale(0.1);
-      border-radius: 2px;
-    }
-    .incognito-img {
-      filter: sepia(0.2) contrast(2) brightness(0.3) blur(1px) !important;
-    }
-    
-    .dais-info { display: flex; flex-direction: column; justify-content: center; }
-    .dais-role-roman {
-      font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.4em;
-      text-transform: uppercase; color: var(--copper); margin-bottom: 10px;
-    }
-    .dais-name {
-      font-family: 'Uncial Antiqua', serif; font-size: 2.8rem;
-      color: var(--silver-lt); margin-bottom: 5px; line-height: 1.1;
-    }
-    .dais-role-modern {
-      font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.2rem;
-      color: var(--gold-lt); margin-bottom: 30px; letter-spacing: 0.05em;
+    .profile-info::after {
+      content: ''; position: absolute; bottom: -1px; right: -1px; width: 30px; height: 30px;
+      border-bottom: 2px solid var(--gold); border-right: 2px solid var(--gold);
     }
 
-    .dais-divider {
-      width: 100%; height: 1px; background: linear-gradient(90deg, rgba(212,175,55,0.3), transparent);
-      margin-bottom: 25px;
+    .role-label {
+      font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.4em;
+      color: var(--red-lt); text-transform: uppercase; margin-bottom: 10px; display: block;
+    }
+    .profile-name {
+      font-family: 'Uncial Antiqua', serif; font-size: 2.5rem; color: var(--silver-lt);
+      margin-bottom: 25px; text-shadow: 0 2px 10px rgba(0,0,0,0.8);
     }
 
-    .dais-awards { list-style: none; }
-    .dais-awards li {
-      position: relative; padding-left: 25px; margin-bottom: 15px;
-      font-family: 'Cormorant Garamond', serif; font-size: 1.1rem;
-      color: rgba(192,191,187,0.8); line-height: 1.5;
+    /* TABS (Logros / Biografía) en lugar de listas aburridas */
+    .achievements-grid {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px;
     }
-    .dais-awards li::before {
-      content: '❖'; position: absolute; left: 0; top: 2px;
-      font-size: 0.8rem; color: var(--gold);
+    .achievement-badge {
+      font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.1em;
+      color: var(--gold-lt); background: rgba(212,175,55,0.05);
+      border: 1px solid rgba(212,175,55,0.3); padding: 8px 12px;
+      border-radius: 2px; text-transform: uppercase; transition: all 0.3s ease;
     }
-    .dais-awards li strong { color: var(--silver-lt); font-weight: 600; }
+    .achievement-badge:hover {
+      background: rgba(212,175,55,0.2); border-color: var(--gold); transform: translateY(-2px);
+    }
+    .highlight-badge { border-color: var(--red-lt); color: #fff; background: rgba(139,26,26,0.2); }
 
-    .incognito-text {
-      font-family: 'Cinzel', serif; color: var(--red-lt); letter-spacing: 0.1em; font-size: 1.1rem;
-      text-transform: uppercase; border: 1px solid rgba(139,26,26,0.3);
-      padding: 15px; background: rgba(139,26,26,0.05); display: inline-block;
-    }
+    /* Estilo Especial para el Perfil Incógnito */
+    .incognito-img { filter: blur(8px) grayscale(1) brightness(0.3) !important; }
+    .incognito-card .profile-info { background: repeating-linear-gradient(45deg, rgba(10,10,10,0.8), rgba(10,10,10,0.8) 10px, rgba(20,20,20,0.8) 10px, rgba(20,20,20,0.8) 20px); border-color: #333; }
+    .incognito-card .role-label { color: #555; }
+    .incognito-card .profile-name { color: #888; }
+    .secret-text { font-family: 'Cormorant Garamond', monospace; font-size: 1rem; color: #666; letter-spacing: 0.2em; text-transform: uppercase; }
 
     /* ══════════════════════════════════════
-       RESPONSIVE & MOBILE
+       RESPONSIVE
     ══════════════════════════════════════ */
-    @media(max-width: 950px) {
-      .dais-card { grid-template-columns: 1fr; text-align: center; padding: 30px 20px; gap: 30px; }
-      .dais-card::before { width: 100%; height: 4px; bottom: auto; background: linear-gradient(90deg, var(--gold), var(--copper)); }
-      .dais-portrait-wrapper { max-width: 320px; margin: 0 auto; }
-      .dais-divider { background: linear-gradient(90deg, transparent, rgba(212,175,55,0.3), transparent); }
-      .dais-awards li { text-align: left; }
+    @media (max-width: 900px) {
+      .profile-card, .profile-card:nth-child(even) { flex-direction: column; margin-bottom: 80px; }
+      .profile-img-wrap, .profile-info { flex: 0 0 100%; width: 100%; }
+      .profile-info { margin-top: -40px; z-index: 10; padding: 25px; }
+      .profiles-container::before { left: 10%; }
+      .context-board { flex-direction: column; }
+      .context-text { padding-right: 0; margin-bottom: 30px; }
     }
-    @media(max-width: 768px) {
-      #nav-bar, #hero, .context-section, .dais-section, footer { display: none !important; }
-      #mobile-shell { display: flex !important; flex-direction: column; }
-    }
-
-    /* ══════════════════════════════════════
-       MOBILE SHELL (COPIA EXACTA + ADAPTACIÓN)
-    ══════════════════════════════════════ */
-    #mobile-shell { display: none; min-height: 100vh; background: var(--dark); padding-bottom: 70px; }
     
-    #mob-topbar {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 500; height: 52px;
-      display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
-      background: rgba(13,10,6,0.93); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(212,175,55,0.2);
-    }
-    .mob-brand { display: flex; align-items: center; gap: 10px; }
-    .mob-brand-name { font-family: 'Cinzel', serif; font-weight: 900; font-size: 0.78rem; letter-spacing: 0.22em; color: #fff; }
-    
-    .mob-hero {
-      padding: 90px 20px 30px; text-align: center;
-      background: linear-gradient(180deg, #150e06 0%, #0d0a06 100%);
-      border-bottom: 1px solid rgba(180,115,51,0.2);
-    }
-    .mob-hero-title { font-family: 'Uncial Antiqua', serif; font-size: 2.2rem; color: var(--gold-lt); margin-bottom: 10px; }
-    .mob-hero-sub { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1rem; color: var(--silver); }
-
-    .mob-dais-container { padding: 20px; display: flex; flex-direction: column; gap: 30px; }
-    .mob-dais-card {
-      background: rgba(255,255,255,0.02); border: 1px solid rgba(180,115,51,0.2);
-      border-radius: 8px; overflow: hidden; position: relative;
-    }
-    .mob-dais-card.president { border-top: 3px solid var(--gold); }
-    .mob-dais-card.vice { border-top: 3px solid var(--grey); }
-    .mob-dais-card.staff { border-top: 3px solid var(--red-lt); }
-    
-    .mob-dais-img { width: 100%; height: 300px; object-fit: cover; filter: sepia(0.4) contrast(1.1); }
-    .mob-dais-body { padding: 20px; }
-    .mob-dais-role { font-family: 'Cinzel', serif; font-size: 0.6rem; color: var(--copper); letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 5px; }
-    .mob-dais-name { font-family: 'Uncial Antiqua', serif; font-size: 1.8rem; color: var(--silver-lt); margin-bottom: 15px; }
-    
-    .mob-awards { list-style: none; padding-left: 0; }
-    .mob-awards li {
-      position: relative; padding-left: 20px; margin-bottom: 10px;
-      font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; color: rgba(192,191,187,0.8); line-height: 1.4;
-    }
-    .mob-awards li::before { content: '❖'; position: absolute; left: 0; top: 0; color: var(--gold); font-size: 0.7rem; }
-
-    /* Bottom Nav (Exacto) */
-    #mob-bottomnav {
-      position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; height: 60px;
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; width: 100%; padding: 0 5px;
-      background: rgba(13,10,6,0.96); backdrop-filter: blur(24px); border-top: 1px solid rgba(212,175,55,0.14);
-    }
-    .mob-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; min-width: 0; }
-    .mob-nav-icon { font-size: 18px; color: rgba(180,115,51,0.32); margin-bottom: 2px; }
-    .mob-nav-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(180,115,51,0.32); white-space: nowrap; }
-    .mob-nav-item.active .mob-nav-icon, .mob-nav-item.active .mob-nav-label { color: var(--gold-lt); }
-
-    /* Footer global desktop */
-    footer {
-      background:linear-gradient(to top, #060401, #0d0a06); padding:50px 52px 36px;
-      border-top:1px solid rgba(180,115,51,0.2); text-align:center; position:relative; z-index:3;
-    }
+    /* Footer Simplificado */
+    footer { background:linear-gradient(to top, #060401, #0d0a06); padding:40px 20px; text-align:center; border-top:1px solid rgba(180,115,51,0.2); margin-top: 50px; }
     .foot-spqr { font-family:'Uncial Antiqua',serif; font-size:1rem; color:rgba(212,175,55,0.25); letter-spacing:0.4em; margin-bottom:12px; }
-    .foot-rule { width:120px; height:1px; margin:0 auto 16px; background:linear-gradient(90deg,transparent,rgba(180,115,51,0.4),transparent); }
-    .foot-copy { font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.28em; text-transform:uppercase; color:rgba(122,116,112,0.4); }
+
   </style>
 </head>
 <body>
 
 <!-- LOADER -->
-<div id="loader">
-  <div class="seal-container">
-    <div class="seal-bg"></div>
-    <div class="seal-text">SPQR</div>
-  </div>
-  <div class="loader-title">Senatus Consultum</div>
-  <div class="loader-sub">Abriendo expedientes clasificados...</div>
+<div id="loader-dais">
+  <div class="loader-ring"></div>
+  <div class="loader-icon">SPQR</div>
+  <div class="loader-text">Convocando al Alto Mando...</div>
 </div>
 
-<canvas id="ash-canvas"></canvas>
-
-<!-- NAVBAR DESKTOP -->
+<!-- NAVBAR -->
 <header id="nav-bar">
   <a class="nb-brand" href="/">
-    <img class="nb-emblem" src="/static/ONU.png" alt="ONU" onerror="this.style.display='none'">
-    <span class="nb-word">SVPMUN <span class="nb-sep">·</span> CRISIS</span>
+    <img class="nb-emblem" src="static/ONU.png" alt="ONU" onerror="this.style.display='none'">
+    <span class="nb-word">SVPMUN</span>
   </a>
   <nav class="nb-center">
     <a class="nb-quick-link" href="/">Inicio</a>
-    <a class="nb-quick-link" href="/drills">Drills</a>
-    <a class="nb-quick-link" href="/crisis-roma">Comité</a>
+    <a class="nb-quick-link" href="/crisis-roma">Volver al Comité</a>
   </nav>
 </header>
 
 <!-- HERO -->
-<section id="hero">
-  <div class="hero-bg-img"></div>
-  <div class="hero-eyebrow">Tribunal Senatorial · SVPMUN 2026</div>
-  <h1 class="hero-title">El Alto Mando</h1>
-  <div class="hero-divider"></div>
-  <div style="font-family:'Cinzel',serif; letter-spacing:0.2em; color:var(--gold-lt); text-transform:uppercase; font-size:0.8rem;">
-    Conoce a tu Mesa Directiva
+<section class="dais-hero">
+  <div class="dais-bg"></div>
+  <div class="dais-bg-texture"></div>
+  <div class="dais-title-box">
+    <div class="dais-subtitle">Conoce a tu Mesa Directiva</div>
+    <h1 class="dais-title">Consilium Deorum</h1>
+    <p class="dais-desc">
+      En el caos de la guerra, los soldados luchan y los senadores debaten, pero son los dioses quienes hilan el destino. Descubre a las mentes maestras que juzgarán cada una de tus tácticas.
+    </p>
   </div>
 </section>
 
-<!-- CONTEXTO -->
-<section class="context-section">
-  <p class="context-quote">
-    En los corredores oscuros del Senado y las tiendas de campaña iluminadas por antorchas, 
-    no son solo César y Pompeyo quienes mueven los hilos. <strong>Mentes maestras orquestan el caos</strong>, 
-    evalúan cada traición y dictan el flujo de la historia. Ante ellos rendirás cuentas. Ellos son los verdaderos árbitros de Roma.
-  </p>
+<!-- CONTEXTO ADICIONAL -->
+<section class="context-board rv-trigger">
+  <div class="context-text">
+    <h2>El Tablero está Preparado</h2>
+    <p>
+      La crisis no es un comité ordinario. Aquí, la historia no está escrita; se forja en tiempo real. Mientras vosotros, los delegados, representáis a generales, espías y magistrados, existe un poder superior que observa desde las sombras.
+    </p>
+    <p>
+      La Mesa Directiva no solo modera el debate. Ellos son <strong>el Senado, las legiones enemigas, los espías interceptados y el clima implacable</strong>. Presentamos al Alto Mando: aquellos que han diseñado la Segunda Guerra Civil Romana y están listos para llevar tus habilidades al límite absoluto. ¿Sobrevivirás a su juego?
+    </p>
+  </div>
+  <div class="context-visual">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Vincenzo_Camuccini_-_Death_of_Julius_Caesar.jpg/800px-Vincenzo_Camuccini_-_Death_of_Julius_Caesar.jpg" alt="Muerte de Julio Cesar">
+  </div>
 </section>
 
-<!-- PERFILES DESKTOP -->
-<section class="dais-section">
+<!-- PERFILES -->
+<section class="profiles-container">
 
-  <!-- PRESIDENTE -->
-  <div class="dais-card president">
-    <div class="dais-portrait-wrapper">
-      <img src="static/Daniel.jpeg" alt="Daniel Guanipa" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Bust_of_a_Roman_man_-_Glyptothek_-_Munich_-_Germany_2017.jpg/800px-Bust_of_a_Roman_man_-_Glyptothek_-_Munich_-_Germany_2017.jpg'">
+  <!-- DANIEL GUANIPA (Presidente) -->
+  <div class="profile-card">
+    <div class="profile-img-wrap" onmousemove="tiltEffect(event, this)" onmouseleave="resetTilt(this)">
+      <div class="retrato-quemado">
+        <!-- RUTA DE LA IMAGEN AQUÍ -->
+        <img src="static/Daniel.jpeg" alt="Daniel Guanipa" onerror="this.src='https://via.placeholder.com/400x500/1a1209/d4af37?text=Daniel+Guanipa'">
+      </div>
     </div>
-    <div class="dais-info">
-      <div class="dais-role-roman">Dictator Deliberationis</div>
-      <h2 class="dais-name">Daniel Guanipa</h2>
-      <div class="dais-role-modern">Presidente de Mesa</div>
-      <div class="dais-divider"></div>
-      <ul class="dais-awards">
-        <li>Participante activo y recurrente en Modelos de Naciones Unidas desde el año <strong>2022</strong>.</li>
-        <li><strong>Primer Lugar</strong> en el Modelo del Colegio San Ignacio de Loyola (Caracas).</li>
-        <li><strong>Primeras posiciones</strong> en los Modelos de Los Caminos (Acarigua) y Río Claro (Barquisimeto).</li>
-        <li>Profesor de Inglés y Reclutador oficial para <strong>Tech Research Studies</strong>.</li>
-        <li>Poseedor de Certificación Técnica en <strong>Arquitectura de Machine Learning</strong>.</li>
-        <li>Experiencia como <strong>Crisis Staff</strong> en la Universidad Fermín Toro y el Colegio San Pedro.</li>
-        <li>Vasta experiencia debatiendo en los exigentes circuitos de <strong>Maracaibo y Caracas</strong>.</li>
-        <li>Galardonado como <strong>Mejor Crisis Staff</strong> en SALTOMUN (Maracaibo).</li>
-      </ul>
+    <div class="profile-info">
+      <span class="role-label">Magistrado Supremo · Presidente de Mesa</span>
+      <h2 class="profile-name">Daniel Guanipa</h2>
+      <p style="font-family:'Cormorant Garamond', serif; font-size: 1.1rem; color: #c0bfbb; margin-bottom: 20px; line-height: 1.5; font-style: italic;">
+        "La ley de Roma se dicta en esta sala. Mi deber es mantener el orden; el vuestro, sobrevivir al caos."
+      </p>
+      <div class="achievements-grid">
+        <span class="achievement-badge highlight-badge">Mejor Crisis Staff - SALTOMUN</span>
+        <span class="achievement-badge">MUN Desde 2022</span>
+        <span class="achievement-badge">1er Lugar - San Ignacio de Loyola</span>
+        <span class="achievement-badge">Top Posiciones - Los Caminos & Rio Claro</span>
+        <span class="achievement-badge">Crisis Staff - Fermín Toro & San Pedro</span>
+        <span class="achievement-badge">Circuito Maracaibo y Caracas</span>
+        <span class="achievement-badge" style="border-color: #4a5d8f; color:#aebce0;">Profesor de Inglés</span>
+        <span class="achievement-badge" style="border-color: #4a5d8f; color:#aebce0;">Tech Recruiter & Machine Learning</span>
+      </div>
     </div>
   </div>
 
-  <!-- CRISIS STAFF -->
-  <div class="dais-card staff">
-    <div class="dais-portrait-wrapper">
-      <!-- Añadí el fallback por si la imagen es .png o .jpeg -->
-      <img src="static/Amarantha.jpeg" alt="Amarantha Marthorano" onerror="this.src='static/Amarantha.png'; this.onerror=null;">
+  <!-- AMARANTHA MARTHORANO (Crisis Staff) -->
+  <div class="profile-card">
+    <div class="profile-img-wrap" onmousemove="tiltEffect(event, this)" onmouseleave="resetTilt(this)">
+      <div class="retrato-quemado" style="box-shadow: inset 0 0 40px 20px rgba(10,5,0,0.9), 0 20px 40px rgba(139,26,26,0.3);">
+        <!-- RUTA DE LA IMAGEN AQUÍ -->
+        <img src="static/Amarantha.jpeg" alt="Amarantha Marthorano" onerror="this.src='https://via.placeholder.com/400x500/1a1209/8b1a1a?text=Amarantha+Marthorano'">
+      </div>
     </div>
-    <div class="dais-info">
-      <div class="dais-role-roman">Architectus Chaos</div>
-      <h2 class="dais-name">Amarantha Marthorano</h2>
-      <div class="dais-role-modern">Crisis Staff</div>
-      <div class="dais-divider"></div>
-      <ul class="dais-awards">
-        <li><strong>Primer Promedio</strong> académico de su promoción escolar (2024-2025).</li>
-        <li>Acreditada con un Diplomado en <strong>Comercio Exterior</strong> por la UCV.</li>
-        <li>Disciplina artística impecable: <strong>12 años</strong> de trayectoria como bailarina de flamenco.</li>
-        <li>Designada como <strong>Faculty Advisor</strong> de SVPMUN desde el año 2025.</li>
-        <li>Ejerce como <strong>Presidente del Congreso Nacional</strong> en SPMUN 2026.</li>
-        <li>Galardonada como <strong>Mejor Delegación de Crisis</strong> en MASMUN 2022.</li>
-        <li>Bicampeona como <strong>Mejor Delegación de Crisis</strong> en CAMIMUN (2023 y 2025).</li>
-        <li>Reconocida como <strong>Mejor Crisis Staff</strong> en SALTOMUN (Maracaibo).</li>
-      </ul>
+    <div class="profile-info" style="border-color: rgba(139,26,26,0.3);">
+      <span class="role-label" style="color: var(--copper);">Arquitecta del Caos · Crisis Staff</span>
+      <h2 class="profile-name">Amarantha Marthorano</h2>
+      <p style="font-family:'Cormorant Garamond', serif; font-size: 1.1rem; color: #c0bfbb; margin-bottom: 20px; line-height: 1.5; font-style: italic;">
+        "Cada directriz que aprueben tendrá una consecuencia. Yo soy la pluma que reescribe sus victorias... y sus fracasos."
+      </p>
+      <div class="achievements-grid">
+        <span class="achievement-badge highlight-badge">Mejor Crisis Staff - SALTOMUN</span>
+        <span class="achievement-badge highlight-badge">Presidencia Congreso - SPMUN 2026</span>
+        <span class="achievement-badge">Mejor Delegación Crisis - MASMUN 2022</span>
+        <span class="achievement-badge">Mejor Delegación Crisis - CAMIMUN '23 y '25</span>
+        <span class="achievement-badge">1er Promedio Académico (2024-2025)</span>
+        <span class="achievement-badge">Faculty Advisor SVPMUN 2025</span>
+        <span class="achievement-badge" style="border-color: #b87333; color:#edd98a;">Diplomado Comercio Exterior UCV</span>
+        <span class="achievement-badge" style="border-color: #b87333; color:#edd98a;">Bailarina de Flamenco (12 Años)</span>
+      </div>
     </div>
   </div>
 
-  <!-- VICEPRESIDENTE INCOGNITO -->
-  <div class="dais-card vice">
-    <div class="dais-portrait-wrapper">
-      <img class="incognito-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Bust_of_a_Roman_man_-_Glyptothek_-_Munich_-_Germany_2017.jpg/800px-Bust_of_a_Roman_man_-_Glyptothek_-_Munich_-_Germany_2017.jpg" alt="Incognito">
+  <!-- VICEPRESIDENTE (Incógnito) -->
+  <div class="profile-card incognito-card">
+    <div class="profile-img-wrap" onmousemove="tiltEffect(event, this)" onmouseleave="resetTilt(this)">
+      <div class="retrato-quemado">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Augustus_Beziers_Louvre_Ma3156.jpg/800px-Augustus_Beziers_Louvre_Ma3156.jpg" class="incognito-img" alt="Incógnito">
+      </div>
     </div>
-    <div class="dais-info">
-      <div class="dais-role-roman">Consul Secundus</div>
-      <h2 class="dais-name" style="color:var(--grey);">[ Identidad Sellada ]</h2>
-      <div class="dais-role-modern" style="color:var(--grey);">Vicepresidente de Mesa</div>
-      <div class="dais-divider" style="background: linear-gradient(90deg, rgba(122,116,112,0.3), transparent);"></div>
-      <div class="incognito-text">
-        EXPEDIENTE CLASIFICADO POR ORDEN DEL SENADO. <br><br>
-        La identidad y los logros de este magistrado se mantienen en las sombras hasta que los dioses decreten el inicio de la guerra.
+    <div class="profile-info">
+      <span class="role-label">Identidad Oculta · Vicepresidente de Mesa</span>
+      <h2 class="profile-name">CENSURADO</h2>
+      <p class="secret-text">
+        [ EXPEDIENTE CLASIFICADO POR ORDEN DEL SENADO ]<br><br>
+        La identidad del Vicepresidente se mantiene en las sombras hasta que los augurios sean favorables. Pronto se revelará el rostro de quien secundará el destino de Roma.
+      </p>
+      <div class="achievements-grid" style="margin-top: 30px; opacity: 0.5;">
+        <span class="achievement-badge" style="border-color: #555; color: #888;">DATOS CORRUPTOS</span>
+        <span class="achievement-badge" style="border-color: #555; color: #888;">ACCESO DENEGADO</span>
       </div>
     </div>
   </div>
@@ -461,164 +394,52 @@
 
 <footer>
   <div class="foot-spqr">SPQR · SVPMUN MMXXVI</div>
-  <div class="foot-rule"></div>
-  <div class="foot-copy">© 2026 SVPMUN · Comité de Crisis · Segunda Guerra Civil Romana</div>
+  <div style="font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.2em; color:#777; text-transform:uppercase;">
+    Alto Mando del Comité de Crisis
+  </div>
 </footer>
 
-<!-- ══════════════════════════════════════
-     VERSIÓN MÓVIL
-══════════════════════════════════════ -->
-<div id="mobile-shell">
-  <div id="mob-topbar">
-    <div class="mob-brand">
-      <span class="mob-brand-name">SVPMUN <span style="color:var(--gold);">·</span> CRISIS</span>
-    </div>
-  </div>
-
-  <div class="mob-hero">
-    <div class="mob-hero-title">Alto Mando</div>
-    <div class="mob-hero-sub">Los árbitros de la Guerra Civil</div>
-  </div>
-
-  <div class="mob-dais-container">
-    
-    <!-- Daniel Móvil -->
-    <div class="mob-dais-card president">
-      <img class="mob-dais-img" src="static/Daniel.jpeg" alt="Daniel" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Bust_of_a_Roman_man_-_Glyptothek_-_Munich_-_Germany_2017.jpg/800px-Bust_of_a_Roman_man_-_Glyptothek_-_Munich_-_Germany_2017.jpg'">
-      <div class="mob-dais-body">
-        <div class="mob-dais-role">Presidente de Mesa</div>
-        <div class="mob-dais-name">Daniel Guanipa</div>
-        <ul class="mob-awards">
-          <li>Participante activo en MUN desde 2022.</li>
-          <li><strong>Primer Lugar</strong> en el San Ignacio de Loyola, Caracas.</li>
-          <li><strong>Top posiciones</strong> en Los Caminos y Río Claro.</li>
-          <li>Profesor de Inglés y Reclutador en Tech Research Studies.</li>
-          <li>Certificación en Arquitectura de Machine Learning.</li>
-          <li>Crisis Staff en UFT y Colegio San Pedro.</li>
-          <li><strong>Mejor Crisis Staff</strong> en SALTOMUN (Maracaibo).</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Amarantha Móvil -->
-    <div class="mob-dais-card staff">
-      <img class="mob-dais-img" src="static/Amarantha.jpeg" alt="Amarantha" onerror="this.src='static/Amarantha.png'; this.onerror=null;">
-      <div class="mob-dais-body">
-        <div class="mob-dais-role">Crisis Staff</div>
-        <div class="mob-dais-name">Amarantha Marthorano</div>
-        <ul class="mob-awards">
-          <li><strong>Primer Promedio</strong> de promoción (2024-2025).</li>
-          <li>Diplomado en Comercio Exterior por la UCV.</li>
-          <li>12 años de trayectoria como bailarina de flamenco.</li>
-          <li><strong>Faculty Advisor</strong> de SVPMUN desde 2025.</li>
-          <li>Presidente del Congreso Nacional — SPMUN 2026.</li>
-          <li><strong>Mejor Delegación de Crisis</strong> — MASMUN 2022, CAMIMUN 2023 y 2025.</li>
-          <li><strong>Mejor Crisis Staff</strong> — SALTOMUN (Maracaibo).</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Vicepresidente Móvil -->
-    <div class="mob-dais-card vice">
-      <img class="mob-dais-img incognito-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Bust_of_a_Roman_man_-_Glyptothek_-_Munich_-_Germany_2017.jpg/800px-Bust_of_a_Roman_man_-_Glyptothek_-_Munich_-_Germany_2017.jpg" alt="Incognito">
-      <div class="mob-dais-body">
-        <div class="mob-dais-role" style="color:var(--grey);">Vicepresidente de Mesa</div>
-        <div class="mob-dais-name" style="color:var(--grey);">[ Sellado ]</div>
-        <div style="font-family:'Cinzel',serif; font-size:0.8rem; color:var(--red-lt); padding:10px; border:1px solid rgba(139,26,26,0.3); background:rgba(139,26,26,0.1); text-align:center;">
-          Expediente clasificado por orden del Senado hasta nuevo aviso.
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div id="mob-bottomnav">
-    <a href="/" class="mob-nav-item">
-      <div class="mob-nav-icon">🏛️</div>
-      <div class="mob-nav-label">Inicio</div>
-    </a>
-    <a href="/crisis-roma" class="mob-nav-item">
-      <div class="mob-nav-icon">⚔️</div>
-      <div class="mob-nav-label">Comité</div>
-    </a>
-    <a href="#" class="mob-nav-item active">
-      <div class="mob-nav-icon">📜</div>
-      <div class="mob-nav-label">La Mesa</div>
-    </a>
-    <a href="/Matrices" class="mob-nav-item">
-      <div class="mob-nav-icon">📊</div>
-      <div class="mob-nav-label">Matrices</div>
-    </a>
-  </div>
-</div>
-
 <script>
-  // Quitar el loader
-  setTimeout(() => {
-    document.getElementById('loader').classList.add('hide');
-    setTimeout(() => { document.getElementById('loader').style.display = 'none'; }, 1400);
-  }, 2000);
+  // Quitar loader
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loader-dais').classList.add('hide');
+    }, 1500); // 1.5 segundos de carga visual
+  });
 
-  // Sistema de partículas (Cenizas)
-  (function(){
-    const canvas = document.getElementById('ash-canvas');
-    if(!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let W, H, particles = [];
+  // Animación de aparición al hacer scroll (Scroll Reveal)
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
 
-    function resize() {
-      W = canvas.width  = window.innerWidth;
-      H = canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resize);
-    resize();
+  document.querySelectorAll('.profile-card').forEach(card => {
+    observer.observe(card);
+  });
 
-    function Particle() { this.reset(); }
-    Particle.prototype.reset = function() {
-      this.x = Math.random() * W;
-      this.y = H + 10;
-      this.vy = -(0.5 + Math.random() * 1.5);
-      this.vx = (Math.random() - 0.5) * 0.8;
-      this.size = 1.5 + Math.random() * 3;
-      this.alpha = 0;
-      this.maxAlpha = 0.3 + Math.random() * 0.4;
-      this.life = 0;
-      this.maxLife = 150 + Math.random() * 250;
-      const r = 255; const g = Math.floor(Math.random() * 120 + 50); const b = Math.floor(Math.random() * 20);
-      this.color = `rgb(${r},${g},${b})`;
-      this.wobble = Math.random() * Math.PI * 2;
-    };
-    Particle.prototype.update = function() {
-      this.life++; this.wobble += 0.04;
-      this.x += this.vx + Math.sin(this.wobble) * 0.5;
-      this.y += this.vy;
-      const prog = this.life / this.maxLife;
-      if (prog < 0.2) this.alpha = (prog / 0.2) * this.maxAlpha;
-      else if (prog > 0.7) this.alpha = ((1 - prog) / 0.3) * this.maxAlpha;
-      else this.alpha = this.maxAlpha;
-      if (this.life >= this.maxLife || this.y < -20) this.reset();
-    };
-    Particle.prototype.draw = function() {
-      ctx.save(); ctx.globalAlpha = this.alpha; ctx.fillStyle = this.color;
-      ctx.shadowBlur = 8; ctx.shadowColor = this.color;
-      ctx.beginPath();
-      ctx.ellipse(this.x, this.y, this.size, this.size * 0.6, this.wobble, 0, Math.PI*2);
-      ctx.fill(); ctx.restore();
-    };
+  // Efecto Tilt 3D sutil para las imágenes de los perfiles
+  function tiltEffect(event, element) {
+    const rect = element.getBoundingClientRect();
+    const x = event.clientX - rect.left; // x position within the element.
+    const y = event.clientY - rect.top;  // y position within the element.
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateX = ((y - centerY) / centerY) * -10; // Max rotación 10deg
+    const rotateY = ((x - centerX) / centerX) * 10;
+    
+    const target = element.querySelector('.retrato-quemado');
+    target.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+  }
 
-    for (let i = 0; i < 30; i++) {
-      const p = new Particle();
-      p.life = Math.random() * p.maxLife; p.y = H - Math.random() * H;
-      particles.push(p);
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, W, H);
-      particles.forEach(p => { p.update(); p.draw(); });
-      requestAnimationFrame(animate);
-    }
-    animate();
-  })();
+  function resetTilt(element) {
+    const target = element.querySelector('.retrato-quemado');
+    target.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+  }
 </script>
 </body>
 </html>
