@@ -8,17 +8,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Uncial+Antiqua&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
+      /* Fondos y neutros */
       --dark:       #0d0a06;
       --stone-bg:   #1a1209;
       --silver:     #c0bfbb;
       --silver-lt:  #e8e4dc;
+      --grey:       #7a7470;
+      
+      /* Dorados imponentes (Para Títulos Principales) */
       --gold:       #d4af37;
       --gold-lt:    #edd98a;
-      --copper:     #b87333;
-      --red:        #8b1a1a;
-      --red-lt:     #c0392b;
-      --grey:       #7a7470;
-      --gold-nav:   #c9a84c;
+      
+      /* Nuevos tonos Morados coherentes con el Loader */
+      --purple:     #a855c0;
+      --purple-lt:  #d29bf0;
+      --purple-dk:  #501478;
     }
 
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
@@ -64,7 +68,7 @@
     @keyframes loaderCarve{from{opacity:0;letter-spacing:.28em}to{opacity:1;letter-spacing:.1em}}
 
     /* ══════════════════════════════════════
-       PARTÍCULAS DE FUEGO / CENIZAS
+       PARTÍCULAS DE FUEGO / CENIZAS (SE MANTIENE EL FUEGO)
     ══════════════════════════════════════ */
     #ash-canvas {
       position:fixed; inset:0; z-index:0; pointer-events:none;
@@ -76,14 +80,14 @@
     #nav-bar {
       position:fixed; top:0; left:0; right:0; z-index:800; display:flex; align-items:center; justify-content:space-between; padding:0 52px; height:76px;
       background:linear-gradient(180deg,rgba(13,10,6,0.9) 0%,rgba(13,10,6,0) 100%); backdrop-filter:blur(5px);
-      border-bottom: 1px solid rgba(201,168,76,0.2);
+      border-bottom: 1px solid rgba(168,85,192,0.2);
     }
     .nb-brand { display:flex; align-items:center; gap:14px; text-decoration:none; z-index:1; }
     .nb-emblem { width:34px; height:34px; object-fit:contain; filter:brightness(0) invert(1); }
     .nb-word { font-family:'Cinzel',serif; font-weight:900; font-size:1rem; letter-spacing:0.32em; color:#fff; }
     .nb-center { position:absolute; left:50%; transform:translateX(-50%); display:flex; align-items:center; z-index:1; }
     .nb-quick-link { font-family:'Cinzel',serif; font-size:0.56rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.5); padding:6px 18px; text-decoration:none; transition:color 0.3s; }
-    .nb-quick-link:hover { color:var(--gold-lt); }
+    .nb-quick-link:hover { color:var(--purple-lt); }
 
     /* ══════════════════════════════════════
        HERO ASIMÉTRICO
@@ -106,10 +110,11 @@
     }
     .dais-subtitle {
       font-family: 'Cinzel', serif; font-size: clamp(0.7rem, 2vw, 1rem); letter-spacing: 0.5em;
-      color: var(--copper); text-transform: uppercase; margin-bottom: 20px;
+      color: var(--purple-lt); text-transform: uppercase; margin-bottom: 20px;
     }
     .dais-title {
       font-family: 'Uncial Antiqua', serif; font-size: clamp(3rem, 8vw, 6rem);
+      /* Este se mantiene en Dorado por ser Imponente */
       color: transparent; background: linear-gradient(180deg, #fff 0%, var(--silver) 40%, var(--gold) 100%);
       -webkit-background-clip: text; background-clip: text; line-height: 1;
       text-shadow: 0 10px 30px rgba(0,0,0,0.8);
@@ -125,7 +130,7 @@
     .epic-context-banner {
       position: relative; width: 100%; min-height: 500px; margin: 40px 0 100px;
       display: flex; align-items: center; justify-content: center; overflow: hidden;
-      border-top: 1px solid rgba(212,175,55,0.2); border-bottom: 1px solid rgba(212,175,55,0.2);
+      border-top: 1px solid rgba(168,85,192,0.2); border-bottom: 1px solid rgba(168,85,192,0.2);
       z-index: 2;
     }
     .epic-context-banner img {
@@ -138,10 +143,11 @@
     }
     .epic-context-content {
       position: relative; z-index: 3; max-width: 800px; text-align: center; padding: 40px 20px;
-      background: rgba(20, 15, 10, 0.4); border: 1px solid rgba(212,175,55,0.3);
+      background: rgba(20, 15, 10, 0.4); border: 1px solid rgba(168,85,192,0.3);
       backdrop-filter: blur(8px); box-shadow: 0 20px 50px rgba(0,0,0,0.8);
     }
     .epic-context-content h2 {
+      /* Este se mantiene en Dorado */
       font-family: 'Cinzel', serif; font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--gold-lt); margin-bottom: 20px;
       text-shadow: 0 5px 15px rgba(0,0,0,0.9);
     }
@@ -150,7 +156,7 @@
     }
 
     /* ══════════════════════════════════════
-       EFECTO CIFRADO EN LOS NOMBRES (TAMAÑO CORREGIDO)
+       EFECTO CIFRADO EN LOS NOMBRES
     ══════════════════════════════════════ */
     .name-cipher-wrap {
       position: relative; display: flex; align-items: center; height: 50px; 
@@ -159,19 +165,19 @@
     
     .name-cipher {
       font-family: 'Uncial Antiqua', serif; 
-      font-size: clamp(1.1rem, 2.5vw, 1.7rem); /* Tamaño reducido para que no tape fotos */
-      color: rgba(220, 40, 40, 0.8); 
+      font-size: clamp(1.1rem, 2.5vw, 1.7rem); 
+      color: rgba(168, 85, 192, 0.9); /* Ahora morado */
       letter-spacing: 0.05em;
       transition: opacity 0.4s ease, transform 0.4s ease, filter 0.4s ease;
       position: absolute;
-      text-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+      text-shadow: 0 0 10px rgba(168, 85, 192, 0.6);
       white-space: nowrap; transform: scale(1); opacity: 1;
     }
 
     .name-plain {
       font-family: 'Cinzel', serif; 
-      font-size: clamp(1.1rem, 2.5vw, 1.7rem); /* Tamaño reducido */
-      color: var(--gold-lt); 
+      font-size: clamp(1.1rem, 2.5vw, 1.7rem); 
+      color: var(--gold-lt); /* Nombre claro se mantiene imponente en dorado */
       letter-spacing: 0.1em;
       opacity: 0; transform: scale(0.95);
       transition: opacity 0.4s ease, transform 0.4s ease;
@@ -190,11 +196,11 @@
       max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; z-index: 2;
     }
 
-    /* Línea de destino de fondo (desaparece en pantallas pequeñas) */
+    /* Línea de destino de fondo */
     @media (min-width: 901px) {
       .profiles-container::before {
         content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px;
-        background: linear-gradient(to bottom, transparent, var(--gold), var(--red-lt), transparent);
+        background: linear-gradient(to bottom, transparent, var(--gold), var(--purple), transparent);
         opacity: 0.3; transform: translateX(-50%); z-index: 0;
       }
     }
@@ -226,40 +232,40 @@
     }
     .profile-card:hover .retrato-quemado {
       transform: scale(1.02) rotateY(5deg);
-      box-shadow: inset 0 0 40px 20px rgba(10,5,0,0.9), 0 30px 60px rgba(212,175,55,0.15);
+      box-shadow: inset 0 0 40px 20px rgba(10,5,0,0.9), 0 30px 60px rgba(168,85,192,0.2); /* Sombra morada suave */
     }
     .profile-card:hover .retrato-quemado img { filter: sepia(0.1) contrast(1.1) brightness(1) grayscale(0); }
 
     .profile-info {
       flex: 0 0 48%; padding: 40px; background: rgba(20, 15, 10, 0.85);
-      border: 1px solid rgba(212,175,55,0.15); backdrop-filter: blur(10px);
+      border: 1px solid rgba(168,85,192,0.15); backdrop-filter: blur(10px);
       box-shadow: 0 15px 35px rgba(0,0,0,0.5); position: relative;
     }
     .profile-info::before {
       content: ''; position: absolute; top: -1px; left: -1px; width: 30px; height: 30px;
-      border-top: 2px solid var(--gold); border-left: 2px solid var(--gold);
+      border-top: 2px solid var(--purple); border-left: 2px solid var(--purple);
     }
     .profile-info::after {
       content: ''; position: absolute; bottom: -1px; right: -1px; width: 30px; height: 30px;
-      border-bottom: 2px solid var(--gold); border-right: 2px solid var(--gold);
+      border-bottom: 2px solid var(--purple); border-right: 2px solid var(--purple);
     }
 
     .role-label {
       font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.4em;
-      color: var(--red-lt); text-transform: uppercase; margin-bottom: 10px; display: block;
+      color: var(--purple-lt); text-transform: uppercase; margin-bottom: 10px; display: block;
     }
 
     .achievements-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
     .achievement-badge {
       font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.1em;
-      color: var(--gold-lt); background: rgba(212,175,55,0.05);
-      border: 1px solid rgba(212,175,55,0.3); padding: 8px 12px;
+      color: var(--purple-lt); background: rgba(168,85,192,0.05);
+      border: 1px solid rgba(168,85,192,0.3); padding: 8px 12px;
       border-radius: 2px; text-transform: uppercase; transition: all 0.3s ease;
     }
-    .achievement-badge:hover { background: rgba(212,175,55,0.2); border-color: var(--gold); transform: translateY(-2px); }
-    .highlight-badge { border-color: var(--red-lt); color: #fff; background: rgba(139,26,26,0.2); }
+    .achievement-badge:hover { background: rgba(168,85,192,0.2); border-color: var(--purple); transform: translateY(-2px); }
+    .highlight-badge { border-color: var(--purple); color: #fff; background: rgba(168,85,192,0.2); }
 
-    /* ESTILOS INTERSTICIALES (HISTORIA/LORE) PARA ROMPER LA MONOTONÍA */
+    /* ESTILOS INTERSTICIALES (HISTORIA/LORE) */
     .lore-interstitial {
       position: relative; max-width: 800px; margin: 0 auto 80px; padding: 40px;
       text-align: center; background: radial-gradient(ellipse at center, rgba(30,20,10,0.6) 0%, transparent 70%);
@@ -268,23 +274,23 @@
     .lore-interstitial.visible { opacity: 1; transform: translateY(0); }
     .lore-interstitial::before, .lore-interstitial::after {
       content: ''; display: block; width: 50%; height: 1px; margin: 0 auto;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      background: linear-gradient(90deg, transparent, var(--purple), transparent);
     }
     .lore-interstitial::before { margin-bottom: 20px; }
     .lore-interstitial::after { margin-top: 20px; }
     
-    .lore-interstitial.dark-red::before, .lore-interstitial.dark-red::after {
-      background: linear-gradient(90deg, transparent, var(--red-lt), transparent);
+    .lore-interstitial.dark-purple::before, .lore-interstitial.dark-purple::after {
+      background: linear-gradient(90deg, transparent, var(--purple-lt), transparent);
     }
-    .lore-interstitial.dark-red { background: radial-gradient(ellipse at center, rgba(50,10,10,0.4) 0%, transparent 70%); }
+    .lore-interstitial.dark-purple { background: radial-gradient(ellipse at center, rgba(60,20,90,0.4) 0%, transparent 70%); }
 
     .lore-title { font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--gold-lt); margin-bottom: 15px; letter-spacing: 0.1em; }
-    .lore-interstitial.dark-red .lore-title { color: var(--red-lt); }
+    .lore-interstitial.dark-purple .lore-title { color: var(--purple-lt); }
     .lore-text { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.1rem; color: var(--silver); line-height: 1.6; }
 
     /* Imagen decorativa panorámica pequeña */
     .lore-img-strip {
-      width: 100%; height: 120px; overflow: hidden; margin-bottom: 20px; border: 1px solid rgba(212,175,55,0.2);
+      width: 100%; height: 120px; overflow: hidden; margin-bottom: 20px; border: 1px solid rgba(168,85,192,0.2);
     }
     .lore-img-strip img {
       width: 100%; height: 100%; object-fit: cover; filter: sepia(0.6) brightness(0.4);
@@ -293,6 +299,7 @@
     /* Estilo Especial para el Perfil Incógnito */
     .incognito-img { filter: blur(8px) grayscale(1) brightness(0.3) !important; }
     .incognito-card .profile-info { background: repeating-linear-gradient(45deg, rgba(10,10,10,0.8), rgba(10,10,10,0.8) 10px, rgba(20,20,20,0.8) 10px, rgba(20,20,20,0.8) 20px); border-color: #333; }
+    .incognito-card .profile-info::before, .incognito-card .profile-info::after { border-color: #555; }
     .incognito-card .role-label { color: #555; }
     .secret-text { font-family: 'Cormorant Garamond', monospace; font-size: 1rem; color: #666; letter-spacing: 0.2em; text-transform: uppercase; }
 
@@ -307,7 +314,7 @@
       .epic-context-banner { min-height: 400px; }
     }
     
-    footer { background:linear-gradient(to top, #060401, #0d0a06); padding:40px 20px; text-align:center; border-top:1px solid rgba(180,115,51,0.2); margin-top: 50px; position:relative; z-index: 2;}
+    footer { background:linear-gradient(to top, #060401, #0d0a06); padding:40px 20px; text-align:center; border-top:1px solid rgba(168,85,192,0.3); margin-top: 50px; position:relative; z-index: 2;}
     .foot-spqr { font-family:'Uncial Antiqua',serif; font-size:1rem; color:rgba(212,175,55,0.25); letter-spacing:0.4em; margin-bottom:12px; }
 
   </style>
@@ -388,7 +395,7 @@
   <div class="profile-card reveal-item">
     <div class="profile-img-wrap" onmousemove="tiltEffect(event, this)" onmouseleave="resetTilt(this)">
       <div class="retrato-quemado">
-        <img src="static/Daniel.jpeg" alt="Daniel Guanipa" onerror="this.src='https://via.placeholder.com/400x500/1a1209/d4af37?text=Daniel+Guanipa'">
+        <img src="static/Daniel.jpeg" alt="Daniel Guanipa" onerror="this.src='https://via.placeholder.com/400x500/1a1209/a855c0?text=Daniel+Guanipa'">
       </div>
     </div>
     <div class="profile-info">
@@ -409,8 +416,8 @@
         <span class="achievement-badge">Top Posiciones - Los Caminos & Rio Claro</span>
         <span class="achievement-badge">Crisis Staff - Fermín Toro & San Pedro</span>
         <span class="achievement-badge">Circuito Maracaibo y Caracas</span>
-        <span class="achievement-badge" style="border-color: #4a5d8f; color:#aebce0;">Profesor de Inglés</span>
-        <span class="achievement-badge" style="border-color: #4a5d8f; color:#aebce0;">Tech Recruiter & Machine Learning</span>
+        <span class="achievement-badge" style="border-color: #6b4c9a; color:#bca0dc;">Profesor de Inglés</span>
+        <span class="achievement-badge" style="border-color: #6b4c9a; color:#bca0dc;">Tech Recruiter & Machine Learning</span>
       </div>
     </div>
   </div>
@@ -429,12 +436,12 @@
   <!-- AMARANTHA MARTHORANO (Crisis Staff) -->
   <div class="profile-card reveal-item">
     <div class="profile-img-wrap" onmousemove="tiltEffect(event, this)" onmouseleave="resetTilt(this)">
-      <div class="retrato-quemado" style="box-shadow: inset 0 0 40px 20px rgba(10,5,0,0.9), 0 20px 40px rgba(139,26,26,0.3);">
-        <img src="static/Amarantha.png" alt="Amarantha Marthorano" onerror="this.src='https://via.placeholder.com/400x500/1a1209/8b1a1a?text=Amarantha+Marthorano'">
+      <div class="retrato-quemado" style="box-shadow: inset 0 0 40px 20px rgba(10,5,0,0.9), 0 20px 40px rgba(168,85,192,0.3);">
+        <img src="static/Amarantha.png" alt="Amarantha Marthorano" onerror="this.src='https://via.placeholder.com/400x500/1a1209/a855c0?text=Amarantha+Marthorano'">
       </div>
     </div>
-    <div class="profile-info" style="border-color: rgba(139,26,26,0.3);">
-      <span class="role-label" style="color: var(--copper);">Arquitecta del Caos · Crisis Staff</span>
+    <div class="profile-info" style="border-color: rgba(168,85,192,0.3);">
+      <span class="role-label" style="color: var(--purple-lt);">Arquitecta del Caos · Crisis Staff</span>
       
       <div class="name-cipher-wrap" title="Descifrando identidad...">
         <span class="name-cipher">DPDUDQWKD PDUWKRUDQR</span>
@@ -451,14 +458,14 @@
         <span class="achievement-badge">Mejor Delegación Crisis - CAMIMUN '23 y '25</span>
         <span class="achievement-badge">1er Promedio Académico (2024-2025)</span>
         <span class="achievement-badge">Faculty Advisor SVPMUN 2025</span>
-        <span class="achievement-badge" style="border-color: #b87333; color:#edd98a;">Diplomado Comercio Exterior UCV</span>
-        <span class="achievement-badge" style="border-color: #b87333; color:#edd98a;">Bailarina de Flamenco (12 Años)</span>
+        <span class="achievement-badge" style="border-color: rgba(212,175,55,0.5); color:var(--gold-lt);">Diplomado Comercio Exterior UCV</span>
+        <span class="achievement-badge" style="border-color: rgba(212,175,55,0.5); color:var(--gold-lt);">Bailarina de Flamenco (12 Años)</span>
       </div>
     </div>
   </div>
 
   <!-- INTERSTICIO 2: LAS SOMBRAS Y EL CAOS -->
-  <div class="lore-interstitial dark-red reveal-item">
+  <div class="lore-interstitial dark-purple reveal-item">
     <h3 class="lore-title">Las Sombras de Roma</h3>
     <p class="lore-text">
       Las batallas más sangrientas no se libran en los campos de Farsalia, sino en los pasillos oscuros del poder. Los espías interceptan mensajes, los aliados traicionan por oro, y los Dioses (el Crisis Staff) observan cada movimiento, listos para castigar la soberbia y premiar la astucia implacable.
@@ -485,8 +492,8 @@
         La identidad del Vicepresidente se mantiene en las sombras hasta que los augurios sean favorables. Pronto se revelará el rostro de quien secundará el destino de Roma.
       </p>
       <div class="achievements-grid" style="margin-top: 30px; opacity: 0.5;">
-        <span class="achievement-badge" style="border-color: #555; color: #888;">DATOS CORRUPTOS</span>
-        <span class="achievement-badge" style="border-color: #555; color: #888;">ACCESO DENEGADO</span>
+        <span class="achievement-badge" style="border-color: #555; color: #888; background: transparent;">DATOS CORRUPTOS</span>
+        <span class="achievement-badge" style="border-color: #555; color: #888; background: transparent;">ACCESO DENEGADO</span>
       </div>
     </div>
   </div>
@@ -501,7 +508,7 @@
 </footer>
 
 <script>
-  /* LOADER */
+  /* LOADER (Ajustado para durar al menos ~6.5 segundos visuales) */
   (function(){
     const phrases=[
       'Convocando al Directorio...',
@@ -511,37 +518,54 @@
       'Preparando el tablero de crisis...',
       'Roma no se construyó en un día...'
     ];
-    const nodes=document.querySelectorAll('#l-nodes .l-node');
-    const statusEl=document.getElementById('l-status');
-    let phrase=0;
-    let nodeIdx=0;
-    const interval=setInterval(()=>{
-      if(nodeIdx<nodes.length){
+    const nodes = document.querySelectorAll('#l-nodes .l-node');
+    const statusEl = document.getElementById('l-status');
+    let phrase = 0;
+    let nodeIdx = 0;
+    
+    // Alentizado el intervalo a 700ms para llenar mejor los ~6 segundos.
+    const interval = setInterval(()=>{
+      if(nodeIdx < nodes.length){
         nodes[nodeIdx].classList.add('lit');
         nodeIdx++;
       }
-      if(nodeIdx%2===0&&phrase<phrases.length){
-        statusEl.textContent=phrases[phrase];
+      if(nodeIdx % 2 === 0 && phrase < phrases.length){
+        statusEl.textContent = phrases[phrase];
         phrase++;
       }
-    },220);
-    window.addEventListener('load',()=>{
-      clearInterval(interval);
-      nodes.forEach(n=>n.classList.add('lit'));
-      statusEl.textContent='Directorio convocado. Ad Astra.';
-      setTimeout(()=>{
-        document.getElementById('loader').classList.add('hide');
-        setTimeout(()=>{document.getElementById('loader').style.display='none';},1500);
-      },700);
+    }, 700);
+
+    const minLoaderTime = 6500; // Mínimo 6.5 segundos
+    const startTime = Date.now();
+
+    window.addEventListener('load', () => {
+      const elapsed = Date.now() - startTime;
+      const remainingTime = Math.max(0, minLoaderTime - elapsed);
+
+      setTimeout(() => {
+        clearInterval(interval);
+        nodes.forEach(n => n.classList.add('lit'));
+        statusEl.textContent = 'Directorio convocado. Ad Astra.';
+        
+        setTimeout(() => {
+          document.getElementById('loader').classList.add('hide');
+          setTimeout(() => { document.getElementById('loader').style.display = 'none'; }, 1500);
+        }, 1200);
+      }, remainingTime);
     });
+
+    // Fallback de seguridad en caso de que tarde demasiado o falle el window onload
     setTimeout(()=>{
-      document.getElementById('loader').classList.add('hide');
-      setTimeout(()=>{document.getElementById('loader').style.display='none';},1500);
-    },3800);
+      const loader = document.getElementById('loader');
+      if (!loader.classList.contains('hide')) {
+          loader.classList.add('hide');
+          setTimeout(()=>{loader.style.display='none';},1500);
+      }
+    }, 15000);
   })();
 
   /* ══════════════════════════════════════
-     SISTEMA DE PARTÍCULAS / CENIZAS
+     SISTEMA DE PARTÍCULAS / CENIZAS (Se mantienen cálidas/fuego)
   ══════════════════════════════════════ */
   (function(){
     const canvas = document.getElementById('ash-canvas');
