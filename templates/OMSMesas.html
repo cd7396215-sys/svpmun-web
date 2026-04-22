@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesa Directiva OMS | Informe Clasificado</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600&family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ════════════════════════════════════════
+           MÓDULO 1: ARQUITECTURA TIPOGRÁFICA Y COLOR
+           ════════════════════════════════════════ */
+        :root {
+            --bg-paper: #ffffff;
+            --bg-archive: #f5f5f7;
+            --text-ink: #111111;
+            --text-muted: #666666;
+            --oms-blue: #003366;
+            --alert-crimson: #cc0000;
+            
+            --font-title: 'Cormorant Garamond', serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'Courier Prime', monospace;
+            
+            --navy:      #071630;
+            --gold:      #c9a84c;
+            --gold-lt:   #edd98a;
+            --blu-3:     #3a8fe0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-paper);
+            color: var(--text-ink);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-archive); border-left: 1px solid #ddd; }
+        ::-webkit-scrollbar-thumb { background: var(--text-muted); }
+
+        .global-watermark {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-family: var(--font-title); font-size: 10vw;
+            color: var(--text-ink); opacity: 0.02;
+            white-space: nowrap; pointer-events: none; z-index: -1;
+            text-transform: uppercase; font-weight: 700;
+        }
+
+        #rejection-watermark {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-family: var(--font-title); font-size: 8vw;
+            color: var(--alert-crimson); opacity: 0;
+            white-space: nowrap; pointer-events: none; z-index: 999;
+            text-transform: uppercase; font-weight: 700;
+            border: 10px solid var(--alert-crimson); padding: 20px;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        body.rejected #rejection-watermark { opacity: 0.12; }
+        body.rejected .strikethrough-target {
+            text-decoration: line-through; text-decoration-color: var(--alert-crimson);
+            text-decoration-thickness: 2px; color: var(--text-muted);
+        }
+
+        /* LÓGICA DE DUALIDAD (VERDAD OCULTA VS REVELADA) */
+        .truth-revealed { display: none; }
+        body.rejected .truth-hidden { display: none; }
+        body.rejected .truth-revealed { display: inline; color: var(--alert-crimson); }
+        body.rejected .truth-revealed-block { display: block; color: var(--alert-crimson); }
+        body.rejected .truth-hidden-block { display: none; }
+        
+        /* ════════════════════════════════════════
+           MÓDULO 2: TERMINAL CLASIFICADA (LOADER)
+           ════════════════════════════════════════ */
+        #loader {
+            position: fixed; inset: 0; background-color: #050505; color: #00ff00;
+            z-index: 10000; display: flex; align-items: flex-start; justify-content: flex-start;
+            font-family: var(--font-mono); font-size: 0.9rem; padding: 40px;
+            transition: opacity 0.5s ease;
+        }
+
+        .terminal-container { width: 100%; max-width: 800px; }
+        .terminal-header { font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .terminal-line { margin-bottom: 5px; opacity: 0; }
+        .terminal-line.visible { opacity: 1; }
+        .blink-cursor { display: inline-block; width: 10px; height: 1.2em; background-color: #00ff00; animation: blink 1s step-end infinite; vertical-align: bottom; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* ════════════════════════════════════════
+           MÓDULO 3: NAVBAR ESCRITORIO
+           ════════════════════════════════════════ */
+        #nav-bar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 8000;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 52px; height: 76px; font-family: 'Rajdhani', sans-serif;
+        }
+        #nav-bar::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(180deg, rgba(7,22,48,0.75) 0%, rgba(7,22,48,0) 100%);
+            backdrop-filter: blur(0px); transition: background 0.6s, backdrop-filter 0.6s;
+            pointer-events: none;
+        }
+        #nav-bar.scrolled::before {
+            background: rgba(7,22,48,0.90); backdrop-filter: blur(26px) saturate(1.9);
+        }
+        #nav-bar.menu-open::before { background: transparent; backdrop-filter: none; }
+        #nav-bar::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.0) 10%, rgba(201,168,76,0.55) 35%, rgba(237,217,138,1.0) 50%, rgba(201,168,76,0.55) 65%, rgba(201,168,76,0.0) 90%, transparent 100%);
+            opacity: 1; transition: opacity 0.4s;
+        }
+        #nav-bar.menu-open::after { opacity: 0; }
+
+        .nb-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; position: relative; z-index: 1; }
+        .nb-emblem { width: 34px; height: 34px; object-fit: contain; filter: brightness(0) invert(1); transition: filter 0.4s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+        .nb-brand:hover .nb-emblem { transform: rotate(-12deg) scale(1.1); }
+        .nb-word { font-family: 'Cinzel', serif; font-weight: 900; font-size: 1.08rem; letter-spacing: 0.32em; color: #fff; position: relative; }
+        .nb-word .nb-sep { color: var(--gold); margin: 0 4px; }
+        
+        .nb-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; pointer-events: all; z-index: 1; transition: opacity 0.35s, transform 0.35s; }
+        .nb-quick-link { font-family: 'Cinzel', serif; font-size: 0.56rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.3); padding: 6px 18px; position: relative; cursor: pointer; transition: color 0.3s; text-decoration: none; }
+        .nb-quick-link::after { content: '·'; position: absolute; right: -1px; top: 50%; transform: translateY(-50%); color: rgba(201,168,76,0.2); pointer-events: none; }
+        .nb-quick-link:last-child::after { display: none; }
+        .nb-quick-link:hover { color: rgba(237,217,138,0.9); }
+        #nav-bar.menu-open .nb-center { opacity: 0; transform: translateX(-50%) scale(0.9); pointer-events: none; }
+
+        .nb-trigger { position: relative; z-index: 1; display: flex; align-items: center; gap: 16px; background: none; border: none; cursor: pointer; padding: 8px 0; }
+        .nb-trigger-label { font-family: 'Cinzel', serif; font-size: 0.56rem; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(255,255,255,0.4); transition: color 0.3s, opacity 0.3s; }
+        .nb-trigger:hover .nb-trigger-label { color: rgba(201,168,76,0.85); }
+        #nav-bar.menu-open .nb-trigger-label { opacity: 0; }
+
+        .nb-icon { display: flex; flex-direction: column; gap: 5px; width: 28px; cursor: pointer; }
+        .nb-icon span { display: block; height: 1.5px; border-radius: 2px; background: rgba(255,255,255,0.85); transform-origin: center; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease, width 0.4s ease, background 0.3s; }
+        .nb-icon span:nth-child(1) { width: 28px; }
+        .nb-icon span:nth-child(2) { width: 18px; margin-left: 10px; }
+        .nb-icon span:nth-child(3) { width: 28px; }
+        .nb-icon.open span:nth-child(1) { transform: translateY(6.75px) rotate(45deg); width: 28px; margin-left: 0; background: var(--gold-lt); }
+        .nb-icon.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .nb-icon.open span:nth-child(3) { transform: translateY(-6.75px) rotate(-45deg); background: var(--gold-lt); }
+
+        #nav-overlay {
+            position: fixed; inset: 0; z-index: 7900; font-family: 'Rajdhani', sans-serif;
+            background: var(--navy); display: flex;
+            clip-path: circle(0% at calc(100% - 72px) 38px);
+            transition: clip-path 0.85s cubic-bezier(0.77,0,0.18,1); pointer-events: none; overflow: hidden;
+        }
+        #nav-overlay.open { clip-path: circle(150% at calc(100% - 72px) 38px); pointer-events: all; }
+
+        .nvo-deco-panel { width: 36%; flex-shrink: 0; position: relative; overflow: hidden; border-right: 1px solid rgba(58,143,224,0.1); display: flex; flex-direction: column; justify-content: space-between; padding: 110px 52px 52px; }
+        .nvo-deco-panel::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 55% at 30% 15%, rgba(18,72,168,0.55) 0%, transparent 60%); pointer-events: none; }
+        .nvo-deco-brand { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.42em; text-transform: uppercase; color: rgba(201,168,76,0.55); margin-bottom: 22px; }
+        .nvo-deco-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.7rem, 3.2vw, 2.6rem); font-style: italic; color: rgba(255,255,255,0.82); line-height: 1.28; margin-bottom: 24px; }
+        .nvo-deco-line { width: 38px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin-bottom: 22px; }
+        .nvo-deco-sub { font-family: 'Rajdhani', sans-serif; font-size: 0.78rem; letter-spacing: 0.16em; color: rgba(142,197,247,0.3); text-transform: uppercase; }
+        
+        .nvo-list-panel { flex: 1; position: relative; overflow-y: auto; display: flex; flex-direction: column; padding-top: 76px; }
+        .nvo-item { display: grid; grid-template-columns: 72px 1fr auto; align-items: center; gap: 0 24px; padding: 26px 52px 26px 40px; border-bottom: 1px solid rgba(58,143,224,0.07); cursor: pointer; transition: opacity 0.5s ease; }
+        .nvo-num { font-family: 'Bebas Neue', serif; font-size: 0.68rem; letter-spacing: 0.32em; color: var(--gold); opacity: 0.45; text-align: right; padding-right: 10px; border-right: 1px solid rgba(201,168,76,0.1); }
+        .nvo-body { display: flex; flex-direction: column; gap: 5px; }
+        .nvo-title { font-family: 'Cinzel', serif; font-size: clamp(1rem, 1.8vw, 1.4rem); font-weight: 700; letter-spacing: 0.06em; color: rgba(255,255,255,0.82); transition: color 0.3s; }
+        .nvo-item:hover .nvo-title { color: var(--gold-lt); }
+        .nvo-subs-inline { font-family: 'Rajdhani', sans-serif; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(142,197,247,0.28); }
+        .nvo-arrow { font-size: 1.3rem; color: rgba(255,255,255,0.15); }
+
+        #mob-topbar, #mob-bottomnav { display: none; }
+
+        /* ════════════════════════════════════════
+           MÓDULO 4: ESTÉTICA DEL EXPEDIENTE MESA
+           ════════════════════════════════════════ */
+        #dossier-container {
+            opacity: 0; max-width: 1100px; margin: 100px auto 60px; padding: 0 40px; display: none;
+        }
+        .unroll-animation {
+            display: block !important;
+            transform-origin: top;
+            animation: unroll 1s cubic-bezier(0.25, 1, 0.2, 1) forwards;
+        }
+        @keyframes unroll { 0% { transform: scaleY(0); opacity: 0; } 100% { transform: scaleY(1); opacity: 1; } }
+
+        .dossier-hero { border-bottom: 2px solid var(--text-ink); padding-bottom: 30px; margin-bottom: 40px; }
+        .hero-top-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+        
+        .barcode { display: flex; height: 40px; gap: 2px; }
+        .barcode div { background-color: var(--text-ink); height: 100%; }
+        .bc-1 { width: 2px; } .bc-2 { width: 4px; } .bc-3 { width: 1px; } .bc-4 { width: 6px; } .bc-5 { width: 3px; }
+        
+        .stamp-secret { border: 3px solid var(--alert-crimson); color: var(--alert-crimson); font-family: var(--font-mono); font-weight: bold; font-size: 1.2rem; padding: 5px 15px; transform: rotate(5deg); text-transform: uppercase; letter-spacing: 2px; }
+        
+        .dossier-title { font-family: var(--font-title); font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; line-height: 1.1; text-align: center; margin-bottom: 40px; color: var(--text-ink); }
+        
+        .metadata-grid { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--text-ink); background-color: var(--text-ink); gap: 1px; }
+        .meta-box { background-color: var(--bg-paper); padding: 15px; display: flex; flex-direction: column; }
+        .meta-label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; }
+        .meta-value { font-family: var(--font-mono); font-size: 0.9rem; font-weight: bold; }
+
+        .redacted { background-color: var(--text-ink); color: var(--text-ink); padding: 0 4px; transition: background-color 0.2s, color 0.2s; cursor: crosshair; user-select: none; }
+        .redacted:hover { background-color: transparent; color: var(--alert-crimson); }
+
+        /* ════════════════════════════════════════
+           MÓDULO 5: TARJETAS DE MESA (CLÍNICAS)
+           ════════════════════════════════════════ */
+        .board-grid {
+            display: grid; grid-template-columns: 1fr; gap: 40px; margin-top: 40px;
+        }
+
+        .board-card {
+            display: grid; grid-template-columns: 300px 1fr;
+            border: 1px solid var(--text-ink);
+            background-color: var(--text-ink); gap: 1px;
+            position: relative;
+        }
+
+        /* Foto estilo documento clínico */
+        .photo-section {
+            background-color: var(--bg-archive); padding: 20px;
+            display: flex; flex-direction: column; align-items: center;
+            border-right: 1px dashed var(--text-muted);
+            position: relative;
+        }
+        
+        .photo-wrapper {
+            width: 100%; aspect-ratio: 3/4;
+            border: 1px solid #333; background: #fff;
+            padding: 10px; box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+            position: relative; overflow: hidden;
+        }
+        
+        .photo-wrapper img {
+            width: 100%; height: 100%; object-fit: cover; object-position: top;
+            filter: grayscale(0.8) contrast(1.1);
+            transition: all 0.5s ease;
+        }
+
+        /* El efecto aterrador al rechazar la bioética */
+        body.rejected .photo-wrapper img {
+            filter: grayscale(1) sepia(1) hue-rotate(-50deg) saturate(5) contrast(1.2);
+            transform: scale(1.05);
+        }
+
+        .clip {
+            position: absolute; top: -5px; left: 50%; transform: translateX(-50%);
+            width: 40px; height: 15px; border: 2px solid #999; border-radius: 10px;
+            background: rgba(255,255,255,0.5); z-index: 5;
+        }
+
+        .stamp-overlay {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-25deg);
+            font-family: var(--font-mono); font-size: 1.5rem; font-weight: bold;
+            color: var(--alert-crimson); border: 4px solid var(--alert-crimson); padding: 5px;
+            opacity: 0; transition: opacity 0.4s ease; pointer-events: none; z-index: 10;
+        }
+        body.rejected .stamp-overlay { opacity: 0.8; }
+
+        .photo-id {
+            margin-top: 15px; font-family: var(--font-mono); font-size: 0.8rem; font-weight: bold;
+            letter-spacing: 2px; text-align: center;
+        }
+
+        /* Datos Clínicos / Hoja de vida */
+        .data-section {
+            background-color: var(--bg-paper); padding: 30px;
+            display: flex; flex-direction: column;
+        }
+
+        .data-header {
+            border-bottom: 2px solid var(--text-ink); padding-bottom: 15px; margin-bottom: 20px;
+        }
+        .magistrate-name {
+            font-family: var(--font-title); font-size: 2.5rem; font-weight: 700;
+            color: var(--oms-blue); line-height: 1.1; margin-bottom: 5px; text-transform: uppercase;
+        }
+        .magistrate-role {
+            font-family: var(--font-mono); font-size: 1rem; color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .data-bio {
+            font-size: 0.95rem; text-align: justify; margin-bottom: 20px;
+        }
+
+        .achievements-list {
+            list-style: none; padding-left: 0; font-family: var(--font-mono);
+            font-size: 0.85rem; color: var(--text-ink);
+        }
+        .achievements-list li {
+            position: relative; padding-left: 15px; margin-bottom: 10px; line-height: 1.4;
+        }
+        .achievements-list li::before {
+            content: '>'; position: absolute; left: 0; top: 0;
+            color: var(--oms-blue); font-weight: bold;
+        }
+        body.rejected .achievements-list li::before { color: var(--alert-crimson); }
+
+        .achievements-title {
+            font-weight: bold; margin-bottom: 15px; border-bottom: 1px dashed var(--text-muted);
+            padding-bottom: 5px; display: inline-block; font-family: var(--font-mono);
+        }
+
+        /* ════════════════════════════════════════
+           LA BALANZA ÉTICA (INTERACCIÓN)
+           ════════════════════════════════════════ */
+        .ethics-section { 
+            padding: 40px; border: 2px solid var(--text-ink); background-color: var(--bg-archive); 
+            text-align: center; margin-top: 60px; 
+        }
+        .ethics-heading {
+            font-family: var(--font-title); font-size: 1.5rem; border-bottom: 1px solid var(--text-muted); 
+            padding-bottom: 10px; margin-bottom: 20px; color: var(--oms-blue); text-transform: uppercase;
+        }
+        .ethics-labels { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.9rem; font-weight: bold; margin-bottom: 20px; }
+        .label-left { color: var(--oms-blue); }
+        .label-right { color: var(--alert-crimson); }
+
+        input[type=range] { -webkit-appearance: none; -moz-appearance: none; appearance: none; width: 100%; background: transparent; }
+        input[type=range]:focus { outline: none; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 10px; cursor: pointer; background: repeating-linear-gradient(90deg, var(--text-ink), var(--text-ink) 2px, transparent 2px, transparent 10px); border: 1px solid var(--text-ink); }
+        input[type=range]::-moz-range-track { width: 100%; height: 10px; cursor: pointer; background: repeating-linear-gradient(90deg, var(--text-ink), var(--text-ink) 2px, transparent 2px, transparent 10px); border: 1px solid var(--text-ink); }
+        input[type=range]::-webkit-slider-thumb { height: 30px; width: 15px; border-radius: 0; background: var(--text-ink); cursor: pointer; -webkit-appearance: none; margin-top: -11px; border: 2px solid #fff; }
+        input[type=range]::-moz-range-thumb { height: 30px; width: 15px; border: 2px solid #fff; border-radius: 0; background: var(--text-ink); cursor: pointer; }
+
+        /* ════════════════════════════════════════
+           RESPONSIVE
+           ════════════════════════════════════════ */
+        @media (max-width: 900px) {
+            .board-card { grid-template-columns: 1fr; }
+            .photo-section { border-right: none; border-bottom: 1px dashed var(--text-muted); }
+            .photo-wrapper { width: 250px; }
+        }
+        @media (max-width: 768px) {
+            #nav-bar { display: none !important; }
+            #nav-bar.menu-open { display: flex !important; padding: 0 20px; z-index: 9001; }
+            #nav-bar.menu-open .nb-brand, #nav-bar.menu-open .nb-center { display: none !important; }
+            #nav-bar.menu-open .nb-trigger { margin-left: auto; }
+            
+            #nav-overlay { z-index: 9000; }
+            .nvo-deco-panel { display: none; }
+            .nvo-list-panel { padding-top: 60px; }
+            .nvo-item { padding: 16px 20px; grid-template-columns: 42px 1fr auto; gap: 0 12px; }
+
+            #dossier-container { margin-top: 70px !important; padding: 0 20px !important; margin-bottom: 90px !important; }
+            
+            #mob-topbar {
+                display: flex !important; position: fixed; top: 0; left: 0; right: 0; z-index: 8000; height: 52px;
+                align-items: center; justify-content: space-between; padding: 0 20px;
+                background: rgba(3,8,18,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(201,168,76,0.15);
+            }
+            .mob-brand { display: flex; align-items: center; gap: 10px; }
+            .mob-brand img { width: 22px; height: 22px; object-fit: contain; filter: brightness(0) invert(1); }
+            .mob-brand-name { font-family: 'Cinzel', serif; font-weight: 900; font-size: 0.85rem; letter-spacing: 0.2em; color: #fff; }
+
+            #mob-bottomnav {
+                display: flex !important; position: fixed; bottom: 0; left: 0; right: 0; z-index: 8000; height: 64px;
+                background: rgba(3,8,18,0.96); backdrop-filter: blur(24px); border-top: 1px solid rgba(201,168,76,0.12);
+                align-items: stretch;
+            }
+            .mob-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; text-decoration: none; position: relative; }
+            .mob-nav-icon { font-size: 1.2rem; color: rgba(142,197,247,0.4); }
+            .mob-nav-item.active .mob-nav-icon { color: var(--gold-lt); }
+            .mob-nav-label { font-family: 'Cinzel', serif; font-size: 0.48rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(142,197,247,0.4); }
+            .mob-nav-item.active .mob-nav-label { color: var(--gold-lt); }
+            .metadata-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 500px) {
+            .metadata-grid { grid-template-columns: 1fr; }
+            .ethics-labels { flex-direction: column; gap: 10px; text-align: center; }
+        }
+        /* --- LÓGICA DE INDEX APLICADA A TODAS LAS WEBS --- */
+        #mob-bottomnav {
+          display: grid !important;
+          grid-template-columns: repeat(auto-fit, minmax(0, 1fr)) !important; 
+          gap: 0 !important; width: 100% !important; padding: 0 5px !important;
+          align-items: center !important; justify-content: center !important;
+        }
+        .mob-nav-item {
+          display: flex !important; flex-direction: column !important;
+          align-items: center !important; justify-content: center !important;
+          padding: 8px 0 !important; min-width: 0 !important; 
+        }
+        .mob-nav-label {
+          font-size: 10px !important; text-align: center !important;
+          width: 100% !important; white-space: nowrap !important;
+        }
+        .mob-nav-icon { font-size: 18px !important; margin-bottom: 2px !important; }
+    </style>
+</head>
+<body>
+
+    <div class="global-watermark">OMS - CONFIDENCIAL</div>
+    <div id="rejection-watermark">AUTORIZADO PARA MILITARIZACIÓN</div>
+
+    <div id="loader">
+        <div class="terminal-container">
+            <div class="terminal-header">OMS SECURE INTRANET - BASE DE DATOS DEL COMITÉ</div>
+            <div id="terminal-output"></div>
+            <div><span class="blink-cursor" id="cursor"></span></div>
+        </div>
+    </div>
+
+    <header id="nav-bar">
+        <a class="nb-brand" href="/oms">
+          <img class="nb-emblem" src="/static/ONU.png" alt="ONU">
+          <span class="nb-word">SVPMUN <span class="nb-sep">·</span> OMS</span>
+        </a>
+        <nav class="nb-center" aria-label="Acceso rápido">
+          <a class="nb-quick-link" href="/oms" onclick="event.preventDefault();navigateTo('/oms')">Informe Central</a>
+          <a class="nb-quick-link" href="#" onclick="event.preventDefault();">Mesa Directiva</a>
+        </nav>
+        <button class="nb-trigger" id="nbTrigger" onclick="toggleNav()" aria-label="Menú">
+          <span class="nb-trigger-label">Menú</span>
+          <div class="nb-icon" id="nbIcon">
+            <span></span><span></span><span></span>
+          </div>
+        </button>
+    </header>
+
+    <div id="nav-overlay" role="navigation" aria-label="Menú">
+        <div class="nvo-deco-panel">
+          <img class="nvo-deco-emblem" src="/static/ONU.png" alt="">
+          <div class="nvo-deco-top">
+            <div class="nvo-deco-brand">OMS · COMITÉ BIOÉTICO</div>
+            <div class="nvo-deco-title">"El fin <br>justifica<br>la cura."</div>
+            <div class="nvo-deco-line"></div>
+            <div class="nvo-deco-sub">Perfiles Clasificados<br>Mesa Directiva · 2026</div>
+          </div>
+        </div>
+        <div class="nvo-list-panel">
+          <div class="nvo-item nvo-item-back" onclick="navigateTo('/oms')">
+            <div class="nvo-num">←</div>
+            <div class="nvo-body">
+              <div class="nvo-title">Volver al Comité</div>
+              <div class="nvo-subs-inline">Informe OMEGA-7</div>
+            </div>
+            <div class="nvo-back-arr">‹</div>
+          </div>
+          <div class="nvo-item" onclick="navigateTo('/')">
+            <div class="nvo-num">01</div>
+            <div class="nvo-body">
+              <div class="nvo-title">Inicio</div>
+              <div class="nvo-subs-inline">Central SVPMUN</div>
+            </div>
+            <div class="nvo-arrow">›</div>
+          </div>
+          <div class="nvo-item" onclick="navigateTo('/drills')">
+            <div class="nvo-num">02</div>
+            <div class="nvo-body">
+              <div class="nvo-title">Drills</div>
+              <div class="nvo-subs-inline">Módulo de Simulaciones</div>
+            </div>
+            <div class="nvo-arrow">›</div>
+          </div>
+        </div>
+    </div>
+
+    <main id="dossier-container">
+        
+        <header class="dossier-hero">
+            <div class="hero-top-row">
+                <div class="barcode">
+                    <div class="bc-2"></div><div class="bc-1"></div><div class="bc-3"></div><div class="bc-4"></div>
+                    <div class="bc-1"></div><div class="bc-5"></div><div class="bc-2"></div><div class="bc-1"></div>
+                    <div class="bc-3"></div><div class="bc-4"></div>
+                </div>
+                <div class="stamp-secret">CLEARANCE LEVEL 4</div>
+            </div>
+
+            <h1 class="dossier-title">EXPEDIENTE RESTRINGIDO:<br>MAGISTRADOS DEL COMITÉ BIOÉTICO</h1>
+
+            <div class="metadata-grid">
+                <div class="meta-box"><span class="meta-label">Protocolo Asignado</span><span class="meta-value">MLP-32 / CORDICEPS</span></div>
+                <div class="meta-box"><span class="meta-label">Departamento</span><span class="meta-value">SUPERVISIÓN ÉTICA E INTERVENCIÓN</span></div>
+                <div class="meta-box"><span class="meta-label">Autorización</span><span class="meta-value">CONSEJO DE SEGURIDAD (CSNU)</span></div>
+                <div class="meta-box"><span class="meta-label">Nivel de Riesgo</span>
+                    <span class="meta-value critical truth-hidden">MONITOREO ESTÁNDAR</span>
+                    <span class="meta-value critical truth-revealed">MILITARIZACIÓN ACTIVA</span>
+                </div>
+            </div>
+            
+            <p style="margin-top: 30px; font-size: 1.1rem; text-align: justify;" class="truth-hidden">
+                El Comité de Bioética de la Organización Mundial de la Salud presenta a los honorables magistrados encargados de supervisar el protocolo <span class="strikethrough-target">"Micro-estimulación Límbica Profunda"</span>. Su deber primario es garantizar que la dignidad, autonomía y salud mental de los pacientes internacionales se mantengan intactas bajo el estricto cumplimiento del Código de Nüremberg.
+            </p>
+            <p style="margin-top: 30px; font-size: 1.1rem; text-align: justify;" class="truth-revealed-block">
+                Archivos decodificados del Comando Central del <strong>Proyecto Cordiceps</strong>. Los individuos enlistados a continuación utilizan la bioética como fachada operativa para legitimar la lobotomía térmica masiva. Han sido designados directamente por el Consejo de Seguridad para silenciar disidentes y optimizar el rendimiento de la "Cohorte B".
+            </p>
+        </header>
+
+        <div class="board-grid">
+            
+            <div class="board-card">
+                <div class="photo-section">
+                    <div class="photo-wrapper">
+                        <div class="clip"></div>
+                        <img src="static/Andres.jpeg" alt="Andres Leal" onerror="this.src='https://via.placeholder.com/300x400/000/fff?text=FOTO+CLASIFICADA'">
+                        <div class="stamp-overlay">DIRECTOR<br>DE ARMAS</div>
+                    </div>
+                    <div class="photo-id">ID: AL-089-PRES</div>
+                </div>
+                
+                <div class="data-section">
+                    <div class="data-header">
+                        <div class="magistrate-name">Andres Leal</div>
+                        <div class="magistrate-role truth-hidden">PRESIDENTE DEL COMITÉ · MAGISTRADO SUPERIOR</div>
+                        <div class="magistrate-role truth-revealed-block">DIRECTOR DE OPERACIONES CSNU · COMANDANTE DE PROYECTO</div>
+                    </div>
+                    
+                    <div class="data-bio truth-hidden">
+                        Eminencia en comunicación y ética médica. Reconocido internacionalmente por su labor en la diplomacia humanitaria, el Magistrado Leal es el encargado de salvaguardar los derechos de los pacientes en el programa MLP-32, asegurando total transparencia en las evaluaciones clínicas ante la comunidad global.
+                    </div>
+                    <div class="data-bio truth-revealed-block">
+                        Estratega maestro de operaciones encubiertas y manipulación mediática. Leal es el arquitecto de la propaganda diseñada para ocultar la militarización de los pacientes bajo el velo de la "salud mental". Coordina directamente los escuadrones sin voluntad y altera los informes de autopsia.
+                    </div>
+
+                    <div class="achievements-title">REGISTRO CURRICULAR Y HONORES</div>
+                    <ul class="achievements-list">
+                        <li>Estudiante de Comunicación Social (UNICA) y T.S.U. en Publicidad (IUTAJS).</li>
+                        <li>Más de <span class="redacted">10 Modelos de Naciones Unidas</span> actuando como Faculty Advisor <span class="truth-revealed">y Reclutador Táctico</span>.</li>
+                        <li>Galardón a la Mejor Delegación, UFTMUN 2024.</li>
+                        <li>Galardón a la Mejor Mesa Directiva, COAMUN 2023.</li>
+                        <li>Doble condecoración diplomática: 2da Mención Honorífica en SPMUN 2019 y RCMUN 2019.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="board-card">
+                <div class="photo-section">
+                    <div class="photo-wrapper">
+                        <div class="clip"></div>
+                        <img src="static/Humberto.jpeg" alt="Humberto Bolognini" onerror="this.src='https://via.placeholder.com/300x400/000/fff?text=FOTO+CLASIFICADA'">
+                        <div class="stamp-overlay">INGENIERO<br>NEURONAL</div>
+                    </div>
+                    <div class="photo-id">ID: HB-104-VICE</div>
+                </div>
+                
+                <div class="data-section">
+                    <div class="data-header">
+                        <div class="magistrate-name">Humberto Bolognini</div>
+                        <div class="magistrate-role truth-hidden">VICEPRESIDENTE DE MESA · SUPERVISOR CLÍNICO</div>
+                        <div class="magistrate-role truth-revealed-block">INGENIERO DE HARDWARE NEURONAL · CONTRATISTA MILITAR</div>
+                    </div>
+                    
+                    <div class="data-bio truth-hidden">
+                        Auditor principal de las intervenciones neurológicas y figura clave en el proceso de validación procedimental. Bolognini revisa rigurosamente cada escáner y electroencefalograma para certificar que ningún paciente sea sometido a estrés cognitivo o daños colaterales.
+                    </div>
+                    <div class="data-bio truth-revealed-block">
+                        El creador del hardware parasitario. Bolognini diseñó los micro-electrodos de tungsteno que reescriben los impulsos motores de la corteza. Califica la "apatía terminal" de los sujetos no como una tragedia médica, sino como el máximo logro de ingeniería militar del siglo.
+                    </div>
+
+                    <div class="achievements-title">HOJA DE SERVICIO TÁCTICO</div>
+                    <ul class="achievements-list">
+                        <li>Amplio despliegue operativo en simulaciones: UFTMUN '24, SVPMUN '24, SPMUN '25, RCMUN '25, SIMUN '25 y SPMUN '26.</li>
+                        <li>Experiencia previa en control de comité: Mesa Directiva confirmada en SVPMUN 2025.</li>
+                        <li>Logros diplomáticos de alto rendimiento: 1era Mención Honorífica en SPMUN 2026.</li>
+                        <li>Manejo táctico y resolución de crisis: 2da Mención Honorífica obtenida en SVPMUN 2024.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <section class="ethics-section">
+            <h2 class="ethics-heading">VERIFICACIÓN DE ANTECEDENTES: ESCÁNER ÉTICO</h2>
+            <p style="font-family: var(--font-body); font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">
+                Ajuste el calibrador para escanear el historial clasificado de la Mesa Directiva. La desviación del nivel de bioética revelará la realidad operativa detrás de las credenciales públicas.
+            </p>
+            <div class="ethics-labels">
+                <span class="label-left">PERFILES PÚBLICOS (BIOÉTICA)</span>
+                <span class="label-right">DATOS DESENCRIPTADOS (PROYECTO CORDICEPS)</span>
+            </div>
+            <input type="range" id="ethics-slider" min="0" max="100" value="0">
+        </section>
+
+    </main>
+
+    <div id="mob-topbar">
+      <div class="mob-brand">
+        <img src="/static/ONU.png" alt="ONU">
+        <span class="mob-brand-name">SVPMUN</span>
+      </div>
+    </div>
+
+    <div id="mob-bottomnav">
+      <a href="/oms" class="mob-nav-item" onclick="event.preventDefault();navigateTo('/oms')">
+        <div class="mob-nav-icon">⚕️</div>
+        <div class="mob-nav-label">OMS</div>
+      </a>
+      <div class="mob-nav-item active">
+        <div class="mob-nav-icon">📁</div>
+        <div class="mob-nav-label">Mesa</div>
+      </div>
+      <a href="/drills" class="mob-nav-item" onclick="event.preventDefault();navigateTo('/drills')">
+        <div class="mob-nav-icon">⚡</div>
+        <div class="mob-nav-label">Drills</div>
+      </a>
+      <a href="/Matrices" class="mob-nav-item" onclick="event.preventDefault();navigateTo('/Matrices')">
+        <div class="mob-nav-icon">📊</div>
+        <div class="mob-nav-label">Matrices</div>
+      </a>
+      <div class="mob-nav-item" onclick="toggleNav()">
+        <div class="mob-nav-icon">☰</div>
+        <div class="mob-nav-label">Menú</div>
+      </div>
+    </div>
+
+    <script>
+        // TERMINAL LOADER
+        document.addEventListener('DOMContentLoaded', () => {
+            const lines = [
+                "ESTABLECIENDO CONEXIÓN SEGURA CON EL SERVIDOR SUIZO...",
+                "VERIFICANDO CREDENCIALES NIVEL OMEGA...",
+                "BYPASS DE CORTAFUEGOS BIOÉTICO COMPLETADO.",
+                "ACCEDIENDO A LOS PERFILES CLÍNICOS DE LA MESA DIRECTIVA...",
+                "ADVERTENCIA: LAS IDENTIDADES MOSTRADAS PODRÍAN ESTAR COMPROMETIDAS.",
+                "DESENCRIPTACIÓN COMPLETADA. ABRIENDO EXPEDIENTE..."
+            ];
+            
+            const output = document.getElementById('terminal-output');
+            let i = 0;
+
+            function typeLine() {
+                if (i < lines.length) {
+                    const p = document.createElement('div');
+                    p.className = 'terminal-line';
+                    p.innerText = "> " + lines[i];
+                    output.appendChild(p);
+                    setTimeout(() => p.classList.add('visible'), 50);
+                    i++;
+                    const delay = (i === lines.length - 1) ? 1200 : Math.random() * 300 + 150;
+                    setTimeout(typeLine, delay);
+                } else {
+                    setTimeout(() => {
+                        const loader = document.getElementById('loader');
+                        const dossier = document.getElementById('dossier-container');
+                        loader.style.opacity = '0';
+                        setTimeout(() => {
+                            loader.style.display = 'none';
+                            dossier.classList.add('unroll-animation');
+                        }, 500);
+                    }, 500);
+                }
+            }
+            setTimeout(typeLine, 600);
+        });
+
+        // NAVBAR & NAVIGATION
+        let navOpen = false;
+        function toggleNav() {
+            navOpen = !navOpen;
+            const bar = document.getElementById('nav-bar');
+            const overlay = document.getElementById('nav-overlay');
+            const icon = document.getElementById('nbIcon');
+            
+            if(bar) bar.classList.toggle('menu-open', navOpen);
+            if(overlay) overlay.classList.toggle('open', navOpen);
+            if(icon) icon.classList.toggle('open', navOpen);
+            
+            document.body.style.overflow = navOpen ? 'hidden' : 'auto';
+        }
+        
+        window.addEventListener('scroll', () => {
+            const bar = document.getElementById('nav-bar');
+            if(bar) bar.classList.toggle('scrolled', window.scrollY > 40);
+        });
+
+        function navigateTo(url) {
+            window.location.href = url;
+        }
+
+        // LÓGICA DEL ESCÁNER ÉTICO (GIMMICK DE DUALIDAD)
+        const slider = document.getElementById('ethics-slider');
+        const body = document.body;
+
+        slider.addEventListener('input', (e) => {
+            const value = e.target.value;
+            if (value > 50) {
+                body.classList.add('rejected');
+            } else {
+                body.classList.remove('rejected');
+            }
+        });
+    </script>
+</body>
+</html>

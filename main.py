@@ -41,6 +41,10 @@ async def drills(request: Request):
 async def drills(request: Request):
     return templates.TemplateResponse(request=request, name="Mesas.html")
 
+@app.get("/MesasOMS", response_class=HTMLResponse)
+async def drills(request: Request):
+    return templates.TemplateResponse(request=request, name="OMSMesas.html")
+
 @app.get("/nosotros", response_class=HTMLResponse)
 async def nosotros(request: Request):
     return templates.TemplateResponse(request=request, name="nosotros.html")
