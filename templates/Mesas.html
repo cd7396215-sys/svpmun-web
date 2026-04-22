@@ -31,7 +31,7 @@
     }
 
     /* ══════════════════════════════════════
-       LOADER — ROMANO ANTIGUO (Restaurado)
+       LOADER — ROMANO ANTIGUO
     ══════════════════════════════════════ */
     #loader {
       position:fixed; inset:0; z-index:9999;
@@ -221,125 +221,101 @@
     }
 
     /* ══════════════════════════════════════
-       CONTEXTO ADICIONAL 
+       NUEVO CONTEXTO ADICIONAL (COLISEO EPICO)
     ══════════════════════════════════════ */
-    .context-board {
-      position: relative; max-width: 1200px; margin: 0 auto 100px; padding: 0 5%;
-      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-      z-index: 2; /* Para que esté por encima de las cenizas */
+    .epic-context-banner {
+      position: relative; width: 100%; min-height: 500px; margin: 40px 0 100px;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      border-top: 1px solid rgba(212,175,55,0.2); border-bottom: 1px solid rgba(212,175,55,0.2);
+      z-index: 2;
     }
-    .context-text { flex: 1; min-width: 300px; padding-right: 50px; }
-    .context-text h2 {
-      font-family: 'Cinzel', serif; font-size: 2rem; color: var(--gold-lt); margin-bottom: 20px;
+    .epic-context-banner img {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+      filter: sepia(0.5) brightness(0.3) contrast(1.2); z-index: 1;
     }
-    .context-text p {
-      font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; line-height: 1.8; color: var(--silver); margin-bottom: 15px;
-    }
-    .context-visual {
-      flex: 1; min-width: 300px; position: relative; height: 350px;
-    }
-    .context-visual::before {
-      content: ''; position: absolute; top: 20px; left: -20px; width: 100%; height: 100%;
-      border: 2px solid var(--red-lt); opacity: 0.3; z-index: 1;
-    }
-    
-    .context-img-wrapper {
+    .epic-context-overlay {
       position: absolute; inset: 0; z-index: 2;
-      box-shadow: inset 0 0 50px 20px var(--dark);
+      background: linear-gradient(90deg, rgba(13,10,6,0.95) 0%, rgba(13,10,6,0.6) 50%, rgba(13,10,6,0.95) 100%);
     }
-    
-    .context-visual img {
-      width: 100%; height: 100%; 
-      object-fit: cover; 
-      object-position: top center; 
-      filter: sepia(0.6) brightness(0.5) contrast(1.2);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-      border-radius: 2px;
-      position: relative; z-index: -1;
+    .epic-context-content {
+      position: relative; z-index: 3; max-width: 800px; text-align: center; padding: 40px 20px;
+      background: rgba(20, 15, 10, 0.4); border: 1px solid rgba(212,175,55,0.3);
+      backdrop-filter: blur(8px); box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    }
+    .epic-context-content h2 {
+      font-family: 'Cinzel', serif; font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--gold-lt); margin-bottom: 20px;
+      text-shadow: 0 5px 15px rgba(0,0,0,0.9);
+    }
+    .epic-context-content p {
+      font-family: 'Cormorant Garamond', serif; font-size: clamp(1.1rem, 2vw, 1.3rem); line-height: 1.8; color: var(--silver-lt); margin-bottom: 15px;
     }
 
     /* ══════════════════════════════════════
-       EFECTO CIFRADO EN LOS NOMBRES (CORREGIDO)
+       EFECTO CIFRADO EN LOS NOMBRES (TAMAÑO CORREGIDO)
     ══════════════════════════════════════ */
     .name-cipher-wrap {
-      position: relative; 
-      display: flex; 
-      align-items: center;
-      height: 50px; /* Altura fija para que no empuje el texto de abajo */
-      margin-bottom: 25px; 
-      cursor: crosshair;
+      position: relative; display: flex; align-items: center; height: 50px; 
+      margin-bottom: 20px; cursor: crosshair;
     }
     
-    /* Estado inicial: El Cifrado visible */
     .name-cipher {
       font-family: 'Uncial Antiqua', serif; 
-      font-size: clamp(1.4rem, 3.5vw, 2.1rem); /* Tamaño seguro */
-      color: rgba(200, 169, 122, 0.4); /* Color desvanecido/pergamino original */
-      letter-spacing: 0.1em;
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      font-size: clamp(1.1rem, 2.5vw, 1.7rem); /* Tamaño reducido para que no tape fotos */
+      color: rgba(220, 40, 40, 0.8); 
+      letter-spacing: 0.05em;
+      transition: opacity 0.4s ease, transform 0.4s ease, filter 0.4s ease;
       position: absolute;
-      text-shadow: 0 0 5px rgba(0,0,0,0.8);
-      white-space: nowrap; /* Evita que se rompa en dos líneas */
-      transform: scale(1);
-      opacity: 1;
+      text-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+      white-space: nowrap; transform: scale(1); opacity: 1;
     }
 
-    /* Estado secundario: El nombre real oculto */
     .name-plain {
       font-family: 'Cinzel', serif; 
-      font-size: clamp(1.4rem, 3.5vw, 2.1rem); /* Tamaño seguro */
-      color: var(--gold-lt); /* Dorado resplandeciente */
-      letter-spacing: 0.15em;
-      opacity: 0;
-      transform: scale(0.95);
+      font-size: clamp(1.1rem, 2.5vw, 1.7rem); /* Tamaño reducido */
+      color: var(--gold-lt); 
+      letter-spacing: 0.1em;
+      opacity: 0; transform: scale(0.95);
       transition: opacity 0.4s ease, transform 0.4s ease;
       position: absolute;
       text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
-      white-space: nowrap; /* Evita que se rompa en dos líneas */
+      white-space: nowrap;
     }
     
-    /* Al pasar el mouse: Ocultar cifrado, mostrar real */
-    .name-cipher-wrap:hover .name-cipher { 
-      opacity: 0; 
-      transform: scale(1.05); 
-    }
-    .name-cipher-wrap:hover .name-plain { 
-      opacity: 1; 
-      transform: scale(1); 
-    }
+    .name-cipher-wrap:hover .name-cipher { opacity: 0; transform: scale(1.05); filter: blur(5px); }
+    .name-cipher-wrap:hover .name-plain { opacity: 1; transform: scale(1); }
 
     /* ══════════════════════════════════════
-       PERFILES DE MESA
+       PERFILES DE MESA & INTERSTICIOS (LORE)
     ══════════════════════════════════════ */
     .profiles-container {
-      max-width: 1200px; margin: 0 auto; padding: 50px 5%; position: relative; z-index: 2;
+      max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; z-index: 2;
     }
-    
-    .profiles-container::before {
-      content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px;
-      background: linear-gradient(to bottom, transparent, var(--gold), var(--red-lt), transparent);
-      opacity: 0.3; transform: translateX(-50%); z-index: 0;
+
+    /* Línea de destino de fondo (desaparece en pantallas pequeñas) */
+    @media (min-width: 901px) {
+      .profiles-container::before {
+        content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px;
+        background: linear-gradient(to bottom, transparent, var(--gold), var(--red-lt), transparent);
+        opacity: 0.3; transform: translateX(-50%); z-index: 0;
+      }
     }
 
     .profile-card {
       display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 150px; position: relative; z-index: 2;
-      opacity: 0; transform: translateY(50px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-bottom: 80px; position: relative; z-index: 2;
+      opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .profile-card.visible { opacity: 1; transform: translateY(0); }
     .profile-card:nth-child(even) { flex-direction: row-reverse; }
 
-    .profile-img-wrap {
-      flex: 0 0 45%; position: relative; perspective: 1000px;
-    }
+    .profile-img-wrap { flex: 0 0 42%; position: relative; perspective: 1000px; }
     
     .retrato-quemado {
       position: relative; width: 100%; aspect-ratio: 3/4;
       background-color: var(--stone-bg); padding: 15px;
       box-shadow: inset 0 0 40px 20px rgba(10,5,0,0.9), 0 20px 40px rgba(0,0,0,0.8);
       border: 1px solid #111; border-radius: 2px; overflow: hidden;
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-      transform-style: preserve-3d;
+      transition: transform 0.4s ease, box-shadow 0.4s ease; transform-style: preserve-3d;
     }
     .retrato-quemado::after {
       content: ''; position: absolute; inset: 0; pointer-events: none;
@@ -347,22 +323,18 @@
     }
     .retrato-quemado img {
       width: 100%; height: 100%; object-fit: cover; object-position: top;
-      filter: sepia(0.3) contrast(1.1) brightness(0.8) grayscale(0.2);
-      transition: filter 0.5s;
+      filter: sepia(0.3) contrast(1.1) brightness(0.8) grayscale(0.2); transition: filter 0.5s;
     }
     .profile-card:hover .retrato-quemado {
       transform: scale(1.02) rotateY(5deg);
       box-shadow: inset 0 0 40px 20px rgba(10,5,0,0.9), 0 30px 60px rgba(212,175,55,0.15);
     }
-    .profile-card:hover .retrato-quemado img {
-      filter: sepia(0.1) contrast(1.1) brightness(1) grayscale(0);
-    }
+    .profile-card:hover .retrato-quemado img { filter: sepia(0.1) contrast(1.1) brightness(1) grayscale(0); }
 
     .profile-info {
-      flex: 0 0 45%; padding: 40px; background: rgba(20, 15, 10, 0.7);
-      border: 1px solid rgba(212,175,55,0.1); backdrop-filter: blur(10px);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-      position: relative;
+      flex: 0 0 48%; padding: 40px; background: rgba(20, 15, 10, 0.85);
+      border: 1px solid rgba(212,175,55,0.15); backdrop-filter: blur(10px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5); position: relative;
     }
     .profile-info::before {
       content: ''; position: absolute; top: -1px; left: -1px; width: 30px; height: 30px;
@@ -378,19 +350,46 @@
       color: var(--red-lt); text-transform: uppercase; margin-bottom: 10px; display: block;
     }
 
-    .achievements-grid {
-      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px;
-    }
+    .achievements-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
     .achievement-badge {
       font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.1em;
       color: var(--gold-lt); background: rgba(212,175,55,0.05);
       border: 1px solid rgba(212,175,55,0.3); padding: 8px 12px;
       border-radius: 2px; text-transform: uppercase; transition: all 0.3s ease;
     }
-    .achievement-badge:hover {
-      background: rgba(212,175,55,0.2); border-color: var(--gold); transform: translateY(-2px);
-    }
+    .achievement-badge:hover { background: rgba(212,175,55,0.2); border-color: var(--gold); transform: translateY(-2px); }
     .highlight-badge { border-color: var(--red-lt); color: #fff; background: rgba(139,26,26,0.2); }
+
+    /* ESTILOS INTERSTICIALES (HISTORIA/LORE) PARA ROMPER LA MONOTONÍA */
+    .lore-interstitial {
+      position: relative; max-width: 800px; margin: 0 auto 80px; padding: 40px;
+      text-align: center; background: radial-gradient(ellipse at center, rgba(30,20,10,0.6) 0%, transparent 70%);
+      opacity: 0; transform: translateY(30px); transition: all 0.8s ease; z-index: 2;
+    }
+    .lore-interstitial.visible { opacity: 1; transform: translateY(0); }
+    .lore-interstitial::before, .lore-interstitial::after {
+      content: ''; display: block; width: 50%; height: 1px; margin: 0 auto;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .lore-interstitial::before { margin-bottom: 20px; }
+    .lore-interstitial::after { margin-top: 20px; }
+    
+    .lore-interstitial.dark-red::before, .lore-interstitial.dark-red::after {
+      background: linear-gradient(90deg, transparent, var(--red-lt), transparent);
+    }
+    .lore-interstitial.dark-red { background: radial-gradient(ellipse at center, rgba(50,10,10,0.4) 0%, transparent 70%); }
+
+    .lore-title { font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--gold-lt); margin-bottom: 15px; letter-spacing: 0.1em; }
+    .lore-interstitial.dark-red .lore-title { color: var(--red-lt); }
+    .lore-text { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.1rem; color: var(--silver); line-height: 1.6; }
+
+    /* Imagen decorativa panorámica pequeña */
+    .lore-img-strip {
+      width: 100%; height: 120px; overflow: hidden; margin-bottom: 20px; border: 1px solid rgba(212,175,55,0.2);
+    }
+    .lore-img-strip img {
+      width: 100%; height: 100%; object-fit: cover; filter: sepia(0.6) brightness(0.4);
+    }
 
     /* Estilo Especial para el Perfil Incógnito */
     .incognito-img { filter: blur(8px) grayscale(1) brightness(0.3) !important; }
@@ -404,11 +403,9 @@
     @media (max-width: 900px) {
       .profile-card, .profile-card:nth-child(even) { flex-direction: column; margin-bottom: 80px; }
       .profile-img-wrap, .profile-info { flex: 0 0 100%; width: 100%; }
-      .profile-info { margin-top: -40px; z-index: 10; padding: 25px; }
-      .profiles-container::before { left: 10%; }
-      .context-board { flex-direction: column; }
-      .context-text { padding-right: 0; margin-bottom: 30px; }
+      .profile-info { margin-top: -30px; padding: 25px; }
       .name-plain, .name-cipher { white-space: normal; line-height: 1.2;}
+      .epic-context-banner { min-height: 400px; }
     }
     
     footer { background:linear-gradient(to top, #060401, #0d0a06); padding:40px 20px; text-align:center; border-top:1px solid rgba(180,115,51,0.2); margin-top: 50px; position:relative; z-index: 2;}
@@ -421,7 +418,7 @@
 <!-- CANVAS PARA EL FUEGO/CENIZAS EN EL FONDO -->
 <canvas id="ash-canvas"></canvas>
 
-<!-- LOADER (El original de Crisis, con textos adaptados) -->
+<!-- LOADER ROMANO CLÁSICO (Restaurado) -->
 <div id="loader">
   <div class="loader-fire-base"></div>
   <div class="loader-fire-flicker"></div>
@@ -438,38 +435,16 @@
   </div>
 
   <div class="loader-scroll">
-    <img class="loader-eagle"
-         src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Aquila.svg/200px-Aquila.svg.png"
-         alt="Aquila SPQR"
-         onerror="this.style.display='none'">
+    <img class="loader-eagle" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Aquila.svg/200px-Aquila.svg.png" alt="Aquila SPQR" onerror="this.style.display='none'">
     <div class="loader-spqr">· Senatus Populusque Romanus ·</div>
-
     <div class="loader-sep"></div>
-
     <div class="loader-alert-title">Alto Mando</div>
-
-    <div class="loader-proclama">
-      CRISIS COMITIALIS · SVPMUN MMXXVI<br>
-      Conoce a la Mesa Directiva
-    </div>
-
+    <div class="loader-proclama">CRISIS COMITIALIS · SVPMUN MMXXVI<br>Conoce a la Mesa Directiva</div>
     <div class="loader-sep"></div>
-
-    <div class="loader-status-roman" id="loader-status">
-      Convocando a los Magistrados...
-    </div>
-
+    <div class="loader-status-roman" id="loader-status">Convocando a los Magistrados...</div>
     <div class="loader-tally" id="loader-tally">
-      <div class="tally-mark"></div>
-      <div class="tally-mark"></div>
-      <div class="tally-mark"></div>
-      <div class="tally-mark"></div>
-      <div class="tally-mark"></div>
-      <div class="tally-mark"></div>
-      <div class="tally-mark"></div>
-      <div class="tally-mark"></div>
-      <div class="tally-mark"></div>
-      <div class="tally-mark"></div>
+      <div class="tally-mark"></div><div class="tally-mark"></div><div class="tally-mark"></div><div class="tally-mark"></div><div class="tally-mark"></div>
+      <div class="tally-mark"></div><div class="tally-mark"></div><div class="tally-mark"></div><div class="tally-mark"></div><div class="tally-mark"></div>
     </div>
   </div>
 </div>
@@ -499,9 +474,11 @@
   </div>
 </section>
 
-<!-- CONTEXTO ADICIONAL -->
-<section class="context-board rv-trigger">
-  <div class="context-text">
+<!-- NUEVO BANNER DE CONTEXTO (COLISEO) -->
+<section class="epic-context-banner">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/1280px-Colosseo_2020.jpg" alt="Coliseo Romano">
+  <div class="epic-context-overlay"></div>
+  <div class="epic-context-content">
     <h2>El Tablero está Preparado</h2>
     <p>
       La crisis no es un comité ordinario. Aquí, la historia no está escrita; se forja en tiempo real. Mientras vosotros, los delegados, representáis a generales, espías y magistrados, existe un poder superior que observa desde las sombras.
@@ -510,18 +487,13 @@
       La Mesa Directiva no solo modera el debate. Ellos son <strong>el Senado, las legiones enemigas, los espías interceptados y el clima implacable</strong>. Presentamos al Alto Mando: aquellos que han diseñado la Segunda Guerra Civil Romana y están listos para llevar tus habilidades al límite absoluto. ¿Sobrevivirás a su juego?
     </p>
   </div>
-  <div class="context-visual">
-    <div class="context-img-wrapper">
-      <img src="static/Cesar.png" alt="Muerte de Julio Cesar" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Vincenzo_Camuccini_-_Death_of_Julius_Caesar.jpg/800px-Vincenzo_Camuccini_-_Death_of_Julius_Caesar.jpg'">
-    </div>
-  </div>
 </section>
 
-<!-- PERFILES -->
+<!-- CONTENEDOR DE PERFILES E INTERSTICIOS -->
 <section class="profiles-container">
 
   <!-- DANIEL GUANIPA (Presidente) -->
-  <div class="profile-card">
+  <div class="profile-card reveal-item">
     <div class="profile-img-wrap" onmousemove="tiltEffect(event, this)" onmouseleave="resetTilt(this)">
       <div class="retrato-quemado">
         <img src="static/Daniel.jpeg" alt="Daniel Guanipa" onerror="this.src='https://via.placeholder.com/400x500/1a1209/d4af37?text=Daniel+Guanipa'">
@@ -530,7 +502,6 @@
     <div class="profile-info">
       <span class="role-label">Magistrado Supremo · Presidente de Mesa</span>
       
-      <!-- EFECTO CIFRADO CÉSAR: Se muestra cifrado por defecto, revela original en hover -->
       <div class="name-cipher-wrap" title="Descifrando identidad...">
         <span class="name-cipher">GDQLHO JXDQLSD</span>
         <span class="name-plain">Daniel Guanipa</span>
@@ -552,8 +523,19 @@
     </div>
   </div>
 
+  <!-- INTERSTICIO 1: EL PODER DEL SENADO -->
+  <div class="lore-interstitial reveal-item">
+    <div class="lore-img-strip">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Forum_romanum_6k_%285765477647%29.jpg/1200px-Forum_romanum_6k_%285765477647%29.jpg" alt="Foro Romano">
+    </div>
+    <h3 class="lore-title">Auctoritas Patrum</h3>
+    <p class="lore-text">
+      La autoridad del Senado descansa sobre los hombros del Magistrado Supremo. Una palabra suya puede silenciar a un cónsul o desatar el avance de las legiones. En este comité, el orden parlamentario es la única y última barrera que separa a la civilización de la barbarie absoluta.
+    </p>
+  </div>
+
   <!-- AMARANTHA MARTHORANO (Crisis Staff) -->
-  <div class="profile-card">
+  <div class="profile-card reveal-item">
     <div class="profile-img-wrap" onmousemove="tiltEffect(event, this)" onmouseleave="resetTilt(this)">
       <div class="retrato-quemado" style="box-shadow: inset 0 0 40px 20px rgba(10,5,0,0.9), 0 20px 40px rgba(139,26,26,0.3);">
         <img src="static/Amarantha.png" alt="Amarantha Marthorano" onerror="this.src='https://via.placeholder.com/400x500/1a1209/8b1a1a?text=Amarantha+Marthorano'">
@@ -562,11 +544,10 @@
     <div class="profile-info" style="border-color: rgba(139,26,26,0.3);">
       <span class="role-label" style="color: var(--copper);">Arquitecta del Caos · Crisis Staff</span>
       
-      <!-- EFECTO CIFRADO CÉSAR: Se muestra cifrado por defecto, revela original en hover -->
-    <div class="name-cipher-wrap" title="Descifrando identidad...">
-  <span class="name-cipher" style="font-size: clamp(1rem, 2.5vw, 1.5rem); letter-spacing: 0;">DPDUDQWKD PDUWKRUDQR</span>
-  <span class="name-plain" style="font-size: clamp(1rem, 2.5vw, 1.5rem); letter-spacing: 0;">Amarantha Marthorano</span>
-</div>
+      <div class="name-cipher-wrap" title="Descifrando identidad...">
+        <span class="name-cipher">DPDUDQWKD PDUWKRUDQR</span>
+        <span class="name-plain">Amarantha Marthorano</span>
+      </div>
 
       <p style="font-family:'Cormorant Garamond', serif; font-size: 1.1rem; color: #c0bfbb; margin-bottom: 20px; line-height: 1.5; font-style: italic;">
         "Cada directriz que aprueben tendrá una consecuencia. Yo soy la pluma que reescribe sus victorias... y sus fracasos."
@@ -584,8 +565,16 @@
     </div>
   </div>
 
+  <!-- INTERSTICIO 2: LAS SOMBRAS Y EL CAOS -->
+  <div class="lore-interstitial dark-red reveal-item">
+    <h3 class="lore-title">Las Sombras de Roma</h3>
+    <p class="lore-text">
+      Las batallas más sangrientas no se libran en los campos de Farsalia, sino en los pasillos oscuros del poder. Los espías interceptan mensajes, los aliados traicionan por oro, y los Dioses (el Crisis Staff) observan cada movimiento, listos para castigar la soberbia y premiar la astucia implacable.
+    </p>
+  </div>
+
   <!-- VICEPRESIDENTE (Incógnito) -->
-  <div class="profile-card incognito-card">
+  <div class="profile-card incognito-card reveal-item">
     <div class="profile-img-wrap" onmousemove="tiltEffect(event, this)" onmouseleave="resetTilt(this)">
       <div class="retrato-quemado">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Augustus_Beziers_Louvre_Ma3156.jpg/800px-Augustus_Beziers_Louvre_Ma3156.jpg" class="incognito-img" alt="Incógnito">
@@ -594,7 +583,6 @@
     <div class="profile-info">
       <span class="role-label">Identidad Oculta · Vicepresidente de Mesa</span>
       
-      <!-- EFECTO CIFRADO CÉSAR: Se muestra cifrado por defecto, revela original en hover -->
       <div class="name-cipher-wrap" title="Descifrando identidad...">
         <span class="name-cipher">FHQVXUDGR</span>
         <span class="name-plain" style="color:#888; text-shadow: none;">CENSURADO</span>
@@ -622,7 +610,7 @@
 
 <script>
   /* ══════════════════════════════════════
-     LOGICA DEL LOADER ROMANO
+     LOGICA DEL LOADER ROMANO CLÁSICO
   ══════════════════════════════════════ */
   (function(){
     const statusMsgs = [
@@ -748,7 +736,7 @@
     });
   }, { threshold: 0.15 });
 
-  document.querySelectorAll('.profile-card').forEach(card => {
+  document.querySelectorAll('.reveal-item').forEach(card => {
     observer.observe(card);
   });
 
