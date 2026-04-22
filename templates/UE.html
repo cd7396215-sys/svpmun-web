@@ -296,7 +296,7 @@
     .section-title { font-family: var(--font-title); font-size: clamp(3rem, 8vw, 6rem); color: var(--ghost); letter-spacing: 8px; line-height: 1; margin-bottom: 16px; }
     .section-desc { font-family: var(--font-body); font-size: 0.82rem; color: rgba(255,255,255,0.35); letter-spacing: 2px; text-transform: uppercase; }
 
-    .directiva-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding-bottom: 120px; }
+    .directiva-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding-bottom: 80px; }
     @media(max-width: 860px) { .directiva-grid { grid-template-columns: 1fr; max-width: 520px; margin: 0 auto; } }
 
     .auth-card { position: relative; background: var(--bg-panel); border: 1px solid var(--border); overflow: hidden; transition: transform 0.4s cubic-bezier(0.25,1,0.5,1), box-shadow 0.4s; }
@@ -319,17 +319,17 @@
 
     .auth-card-accent { height: 3px; width: 100%; }
 
-    /* EFECTOS Y CONTENEDOR FOTOGRAFÍAS (AJUSTE PARA FORMATO RETRATO) */
+    /* EFECTOS FOTOGRAFÍAS (AJUSTE PARA FORMATO RETRATO) */
     .auth-photo-wrap {
       position: relative; width: 100%; 
-      aspect-ratio: 4/5; /* MEJORA: Modificado de 4/3 a 4/5 para que las fotos se ajusten como retratos sin recortarse */
+      aspect-ratio: 4/5; 
       overflow: hidden; background: #080808; 
       cursor: crosshair; 
     }
     .auth-photo-wrap img {
       width: 100%; height: 100%; 
       object-fit: cover; 
-      object-position: center 15%; /* MEJORA: Ajuste del encuadre para priorizar rostros en fotos verticales */
+      object-position: center 15%; 
       filter: grayscale(20%) contrast(1.08); display: block;
       transition: filter 0.4s, transform 0.6s cubic-bezier(0.25,1,0.5,1);
     }
@@ -370,6 +370,25 @@
     .auth-card.vice .sniper-reticle, .auth-card.vice .sniper-reticle-y { background: rgba(255, 179, 0, 0.9); box-shadow:0 0 5px rgba(255, 179, 0, 0.8); }
     .auth-card.vice .sniper-scope::before { box-shadow:0 0 10px rgba(255, 179, 0, 1); }
 
+    /* EASTER EGG SNIPER - OBJETIVO ELIMINADO */
+    .eliminated-overlay {
+      position: absolute; inset: 0;
+      background: rgba(180, 0, 0, 0.5);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
+      z-index: 40; backdrop-filter: grayscale(80%) contrast(1.5);
+    }
+    .eliminated-text {
+      font-family: var(--font-head); font-size: 3rem; color: #fff;
+      text-shadow: 0 0 15px #ff0033, 0 0 30px #ff0033, 4px 4px 0 #000;
+      transform: scale(0.5) rotate(-10deg); transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      line-height: 1; text-align: center;
+    }
+    .auth-photo-wrap.is-dead .eliminated-overlay { opacity: 1; }
+    .auth-photo-wrap.is-dead .eliminated-text { transform: scale(1) rotate(-5deg); }
+    .auth-photo-wrap.is-dead .sniper-scope { opacity: 0 !important; display: none; }
+    .auth-photo-wrap.is-dead { cursor: not-allowed; }
+
     @keyframes photoFlash {
         0%   { background: #fff; opacity: 1; }
         15%  { opacity: 0.8; }
@@ -391,19 +410,19 @@
     .auth-status { position: absolute; top: 96px; right: 28px; display: flex; align-items: center; gap: 6px; font-family: var(--font-body); font-size: 0.55rem; color: rgba(255,255,255,0.25); letter-spacing: 2px; }
     .auth-status::before { content: ''; width: 6px; height: 6px; background: #22ff88; border-radius: 50%; box-shadow: 0 0 8px #22ff88; animation: blink 2s infinite; }
 
-    /* EXPEDIENTES / ACHIVEMENTS LISTING (MEJORADOS PARA LECTURA) */
+    /* EXPEDIENTES / ACHIVEMENTS LISTING */
     .auth-achievements-title { 
-      font-family: var(--font-body); font-size: 0.75rem; /* Aumentado */
-      letter-spacing: 2px; color: var(--ghost); opacity: 1; /* Más brillante */
-      text-transform: uppercase; margin-bottom: 16px; /* Más margen */
+      font-family: var(--font-body); font-size: 0.75rem; 
+      letter-spacing: 2px; color: var(--ghost); opacity: 1; 
+      text-transform: uppercase; margin-bottom: 16px; 
     }
     
     .auth-achievements-list {
-        font-family: var(--font-body); font-size: 0.8rem; /* Aumentado drásticamente */
-        color: rgba(255,255,255,0.85); /* Más blanco y legible */
-        line-height: 1.7; /* Más aire entre líneas */
+        font-family: var(--font-body); font-size: 0.8rem; 
+        color: rgba(255,255,255,0.85); 
+        line-height: 1.7; 
         letter-spacing: 0.5px; 
-        max-height: 340px; /* Caja mucho más alta para evitar exceso de scroll */
+        max-height: 340px; 
         overflow-y: auto; padding-right: 16px; 
         display: flex; flex-direction: column;
     }
@@ -416,18 +435,75 @@
     
     .auth-achievements-list ul { 
       list-style: none; padding-left: 0; margin: 0; 
-      display: flex; flex-direction: column; gap: 14px; /* Mayor separación entre logros */
+      display: flex; flex-direction: column; gap: 14px; 
     }
     .auth-achievements-list li { 
       position: relative; padding-left: 16px; 
       color: rgba(255,255,255,0.85); 
-      text-align: left; /* Mejor para leer párrafos */
+      text-align: left; 
     }
     .auth-achievements-list li::before { 
       content: '>'; position: absolute; left: 0; top: 0px; 
       color: var(--tech); font-weight: bold; font-size: 0.9rem; 
     }
     .presidente .auth-achievements-list li::before { color: var(--alert); }
+
+    /* ════════════════════════════════════════════════
+       ANEXO DE INTELIGENCIA: CONTEXTO (NUEVO)
+    ════════════════════════════════════════════════ */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: stretch; margin-bottom: 60px;}
+    @media(max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+    
+    .text-block {
+      background: var(--bg-panel); padding: 40px;
+      border: 1px solid var(--border); font-size: 0.95rem; line-height: 1.8;
+      position: relative; color: #bbb; font-family: var(--font-body);
+    }
+    .text-block p { margin-bottom: 20px; }
+    .text-block::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 40px; height: 40px;
+      border-top: 3px solid var(--ghost); border-left: 3px solid var(--ghost);
+    }
+
+    .drone-feed {
+      position: relative; width: 100%; height: 260px;
+      background: #000; border: 1px solid var(--border);
+      overflow: hidden; margin-top: 20px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .drone-feed::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.8) 100%); pointer-events: none;}
+    .crosshair { position: absolute; width: 60px; height: 60px; border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; pointer-events:none;}
+    .crosshair::before { content: ''; width: 100%; height: 1px; background: rgba(255,255,255,0.3); position: absolute; }
+    .crosshair::after { content: ''; height: 100%; width: 1px; background: rgba(255,255,255,0.3); position: absolute; }
+    .drone-text { position: absolute; bottom: 15px; left: 15px; font-size: 0.7rem; color: #0f0; z-index: 10; font-family: var(--font-body); letter-spacing: 2px;}
+
+    .radar-map {
+      background: #050505; border: 1px solid var(--border);
+      height: 100%; min-height: 260px; position: relative;
+      overflow: hidden; display: flex; align-items: center; justify-content: center;
+      margin-top: 20px; flex: 1;
+    }
+    .radar-grid { position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 30px 30px; pointer-events:none;}
+    .radar-sweep {
+      position: absolute; top: 50%; left: 50%; width: 200%; height: 200%;
+      background: conic-gradient(from 0deg, transparent 70%, rgba(255, 179, 0, 0.4) 100%);
+      transform-origin: 0 0; animation: radarSpin 4s linear infinite; pointer-events:none;
+    }
+    @keyframes radarSpin { 100% { transform: rotate(360deg); } }
+
+    .crisis-point {
+      position: absolute; width: 16px; height: 16px; background: var(--alert); border-radius: 50%;
+      transform: translate(-50%, -50%); box-shadow: 0 0 20px var(--alert); z-index: 2;
+    }
+    .crisis-point::after {
+      content: ''; position: absolute; inset: -15px; border: 2px solid var(--alert); border-radius: 50%;
+      animation: ping 1.5s infinite ease-out;
+    }
+    .cp-sicily { top: 70%; left: 45%; }
+    .cp-malta { top: 80%; left: 47%; }
+    .cp-poland { top: 35%; left: 70%; background: var(--tech); box-shadow: 0 0 20px var(--tech); }
+    .cp-poland::after { border-color: var(--tech); }
+    .map-label { position: absolute; color: #fff; font-size: 0.65rem; background: rgba(0,0,0,0.8); padding: 2px 6px; border: 1px solid #444; z-index: 3; font-family: var(--font-body); letter-spacing: 1px;}
 
     /* ── SECCIÓN CLASIFICADA ── */
     .clasif-banner { background: rgba(255,0,51,0.06); border-top: 1px solid rgba(255,0,51,0.2); border-bottom: 1px solid rgba(255,0,51,0.2); padding: 18px 0; text-align: center; font-family: var(--font-body); font-size: 0.65rem; letter-spacing: 5px; color: rgba(255,0,51,0.5); text-transform: uppercase; overflow: hidden; white-space: nowrap; margin-bottom: 80px; }
@@ -441,7 +517,7 @@
     .footer-ref { font-family: var(--font-body); font-size: 0.55rem; color: rgba(255,255,255,0.15); letter-spacing: 2px; text-transform: uppercase; text-align: right; }
 
     /* ── BACK LINK ── */
-    .back-link { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-body); font-size: 0.7rem; color: rgba(255,255,255,0.3); letter-spacing: 3px; text-transform: uppercase; text-decoration: none; border: 1px solid rgba(255,255,255,0.1); padding: 10px 20px; transition: all 0.3s; margin-top: 60px; margin-bottom: 20px; }
+    .back-link { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-body); font-size: 0.7rem; color: rgba(255,255,255,0.3); letter-spacing: 3px; text-transform: uppercase; text-decoration: none; border: 1px solid rgba(255,255,255,0.1); padding: 10px 20px; transition: all 0.3s; margin-bottom: 20px; }
     .back-link::before { content: '←'; }
     .back-link:hover { color: var(--ghost); border-color: var(--ghost); background: rgba(207,255,244,0.04); }
 
@@ -457,12 +533,13 @@
       .nvo-item { padding: 16px 20px; grid-template-columns: 42px 1fr auto; gap: 0 12px; }
       .hero-corner.tr, .hero-corner.bl, .hero-corner.br { display: none; }
       .rec-badge { top: 70px; }
+      .eliminated-text { font-size: 2rem; }
     }
   </style>
 </head>
 <body>
 
-<!-- Pantalla de carga (Igual) -->
+<!-- Pantalla de carga (EAS Loader) -->
 <div id="eas-screen">
   <div class="eas-top-band"></div>
   <div class="eas-bot-band"></div>
@@ -582,25 +659,24 @@
       <div class="section-desc">Miembros acreditados · Nivel de acceso: ALPHA</div>
     </div>
 
-    <div class="clasif-banner reveal">
-      <span class="clasif-inner">
-        ◆ TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR · TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR · TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR ◆ TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR ◆
-      </span>
-    </div>
-
     <!-- GRID MESA -->
     <div class="directiva-grid">
       
       <!-- CARD 01 PRESIDENTE - SARA RIERA -->
       <div class="auth-card presidente reveal">
         <div class="auth-card-accent"></div>
-        <div class="auth-photo-wrap" onclick="fireSniper(event)">
+        <div class="auth-photo-wrap" data-shots="0" onclick="fireSniper(event)">
           <img src="static/Sarah.jpeg" alt="Sara Riera" loading="eager">
           <div class="auth-photo-overlay"></div>
           
           <div class="sniper-scope">
               <div class="sniper-reticle"></div>
               <div class="sniper-reticle-y"></div>
+          </div>
+
+          <!-- Overlay Easter Egg -->
+          <div class="eliminated-overlay">
+            <div class="eliminated-text">OBJETIVO<br>ELIMINADO</div>
           </div>
           
           <div class="auth-photo-code">ID: PRES-001 · CLS: ALPHA · ACT: FIRE (X)</div>
@@ -638,13 +714,18 @@
       <!-- CARD 02 VICEPRESIDENTE - MARIA BASTIDAS -->
       <div class="auth-card vice reveal" style="transition-delay:0.15s">
         <div class="auth-card-accent"></div>
-        <div class="auth-photo-wrap" onclick="fireSniper(event)">
+        <div class="auth-photo-wrap" data-shots="0" onclick="fireSniper(event)">
           <img src="static/MariaB.jpeg" alt="Maria Jose Bastidas" loading="eager">
           <div class="auth-photo-overlay"></div>
           
           <div class="sniper-scope">
               <div class="sniper-reticle"></div>
               <div class="sniper-reticle-y"></div>
+          </div>
+
+          <!-- Overlay Easter Egg -->
+          <div class="eliminated-overlay">
+            <div class="eliminated-text">OBJETIVO<br>ELIMINADO</div>
           </div>
           
           <div class="auth-photo-code">ID: VICE-001 · CLS: ALPHA · ACT: FIRE (X)</div>
@@ -678,8 +759,58 @@
           
         </div>
       </div>
-      
-    </div> <!--/grid-->
+    </div> <!--/grid mesa-->
+
+    <div class="clasif-banner reveal">
+      <span class="clasif-inner">
+        ◆ TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR · TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR · TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR ◆ TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR ◆
+      </span>
+    </div>
+
+    <!-- ════════ ANEXO DE INTELIGENCIA: CONTEXTO DE CRISIS ════════ -->
+    <div class="section-header reveal" style="padding-top: 20px;">
+      <div class="section-eyebrow">Dossier de Inteligencia</div>
+      <div class="section-title" style="font-size: clamp(2rem, 6vw, 4rem);">LA FRACTURA EUROPEA</div>
+      <div class="section-desc">Reporte de Situación Anexo · Material Videográfico Confidencial</div>
+    </div>
+
+    <div class="grid-2 reveal">
+      <!-- BLOQUE 1: HISTORIA + DRON -->
+      <div class="text-block">
+        <p>La UE se encuentra fracturada desde adentro. El flujo migratorio desde el Sahel y el norte de África, que se triplicó entre 2025 y 2033 por el colapso climático, transformó la demografía de las ciudades europeas a una velocidad inaudita.</p>
+        <p>En Francia, Alemania e Italia, el debate sobre identidad, cultura y el lugar del islam en Europa se convirtió en la grieta política más profunda del continente. Los partidos nacionalistas se consolidaron bajo una misma agenda: <span style="color:var(--alert); font-weight:bold;">"menos Bruselas, más capital nacional"</span>.</p>
+        
+        <div class="drone-feed">
+          <!-- Asegúrate de tener este video en static/drill.mp4 o reemplázalo con una URL -->
+          <video autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover; filter: sepia(1) hue-rotate(180deg) saturate(3) brightness(0.4);" src="static/drill.mp4"></video>
+          <div class="crosshair"></div>
+          <div class="drone-text">UAV FEED // PARIS_RIOT_0306 // REC</div>
+        </div>
+      </div>
+
+      <!-- BLOQUE 2: COLAPSO + RADAR -->
+      <div class="text-block" style="display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <p>Esta semana, el frágil equilibrio colapsó. Italia declaró que no reconoce la autoridad del Tribunal de Justicia de la UE en materia presupuestaria, arrastrando a Polonia y Hungría a cerrar filas.</p>
+          <p>En las costas de Malta y Sicilia hay una nueva oleada migratoria sin respuesta. El mecanismo de crisis migratoria aprobado en 2024 <span style="color:var(--alert); font-weight:bold;">no se está aplicando</span> porque los países del este se niegan a cumplir sus cuotas, blindando sus fronteras con despliegues militares de contingencia.</p>
+        </div>
+        
+        <div class="radar-map">
+          <div class="radar-grid"></div>
+          <div class="radar-sweep"></div>
+          
+          <div class="crisis-point cp-sicily"></div>
+          <div class="map-label" style="top: 74%; left: 42%;">SICILIA - OVERFLOW</div>
+          
+          <div class="crisis-point cp-malta"></div>
+          <div class="map-label" style="top: 84%; left: 44%;">MALTA - SOS</div>
+          
+          <div class="crisis-point cp-poland"></div>
+          <div class="map-label" style="top: 28%; left: 65%; color: var(--tech);">BLOQUE ESTE - CLOSED</div>
+        </div>
+      </div>
+    </div>
+    <!-- /FIN DEL ANEXO -->
 
     <div style="text-align:center; padding-bottom: 60px;" class="reveal">
       <a class="back-link" href="/crisis_ue_2035" onclick="event.preventDefault(); navigateTo('/crisis_ue_2035')">
@@ -697,10 +828,16 @@
 </div><!-- /main-content -->
 
 <script>
+  /* ════════════════════════════════════════════════
+     LÓGICA DEL IMPACTO Y EASTER EGG (15 DISPAROS)
+  ════════════════════════════════════════════════ */
   window.fireSniper = function(event) {
     const wrap = event.currentTarget;
-    const rect = wrap.getBoundingClientRect();
     
+    // Si ya está eliminado, ignorar el clic.
+    if (wrap.classList.contains('is-dead')) return;
+
+    const rect = wrap.getBoundingClientRect();
     const targetX = event.clientX - rect.left;
     const targetY = event.clientY - rect.top;
 
@@ -755,8 +892,22 @@
     holeContainer.appendChild(crackMask);
     holeContainer.appendChild(core);
     wrap.appendChild(holeContainer);
+
+    // EASTER EGG LÓGICA
+    let shots = parseInt(wrap.dataset.shots || "0");
+    shots++;
+    wrap.dataset.shots = shots;
+
+    if (shots >= 15) {
+      setTimeout(() => {
+        wrap.classList.add('is-dead');
+      }, 300); // Pequeño retraso para ver el último disparo
+    }
   };
 
+  /* ════════════════════════════════════════════════
+     EAS LOADER Y TRANSICIONES DE PÁGINA
+  ════════════════════════════════════════════════ */
   (function() {
     const phases = [
       { delay: 200,  duration: 700  },
