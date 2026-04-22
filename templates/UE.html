@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MESA DIRECTIVA — CRISIS UE 2035</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Uncial+Antiqua&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:        #050505;
+      --bg-panel:  #0d0d0d;
+      --alert:     #ff0033;
+      --tech:      #ffb300;
+      --ghost:     #cffff4;
+      --text:      #e0e0e0;
+      --border:    #333333;
+
+      --font-head: 'Archivo Black', sans-serif;
+      --font-title:'Bebas Neue', cursive;
+      --font-body: 'Space Mono', monospace;
+
+      --navy:        #071630;
+      --navy-mid:    #0e254a;
+      --blu-3:       #3a8fe0;
+      --gold-nav:    #c9a84c;
+      --gold-lt-nav: #edd98a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body, html {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* ── CRT OVERLAY ─────────────────────────────── */
+    body::before {
+      content: '';
+      display: block; position: fixed; inset: 0;
+      background:
+        linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.22) 50%),
+        linear-gradient(90deg, rgba(255,0,0,0.03), rgba(0,255,0,0.01), rgba(0,0,255,0.03));
+      background-size: 100% 4px, 3px 100%;
+      z-index: 9999; pointer-events: none;
+    }
+
+    /* ── GLITCH ──────────────────────────────────── */
+    .glitch { position: relative; display: inline-block; }
+    .glitch::before, .glitch::after {
+      content: attr(data-text);
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    }
+    .glitch::before {
+      left: 3px; text-shadow: -2px 0 var(--alert);
+      clip-path: inset(24% 0 53% 0);
+      animation: glitch1 2s infinite linear alternate-reverse;
+    }
+    .glitch::after {
+      left: -3px; text-shadow: -2px 0 var(--ghost);
+      clip-path: inset(80% 0 5% 0);
+      animation: glitch2 3s infinite linear alternate-reverse;
+    }
+    @keyframes glitch1 {
+      0%  { clip-path: inset(20% 0 80% 0); transform: translate(0); }
+      20% { clip-path: inset(60% 0 10% 0); transform: translate(-2px,2px); }
+      40% { clip-path: inset(40% 0 50% 0); transform: translate(2px,-2px); }
+      60% { clip-path: inset(80% 0  5% 0); transform: translate(-2px,0); }
+      80% { clip-path: inset(10% 0 70% 0); transform: translate(2px,2px); }
+      100%{ clip-path: inset(30% 0 50% 0); transform: translate(0); }
+    }
+    @keyframes glitch2 {
+      0%  { clip-path: inset(10% 0 60% 0); transform: translate(2px,-2px); }
+      20% { clip-path: inset(30% 0 20% 0); transform: translate(-2px,2px); }
+      40% { clip-path: inset(70% 0 10% 0); transform: translate(2px,0); }
+      60% { clip-path: inset(20% 0 50% 0); transform: translate(-2px,-2px); }
+      80% { clip-path: inset(50% 0 30% 0); transform: translate(0,2px); }
+      100%{ clip-path: inset( 5% 0 80% 0); transform: translate(-2px,0); }
+    }
+    @keyframes blink { 0%,100%{ opacity:1; } 50%{ opacity:0; } }
+
+    /* ════════════════════════════════════════════════
+       EMERGENCY ALERT LOADING SCREEN
+    ════════════════════════════════════════════════ */
+    #eas-screen {
+      position: fixed; inset: 0; z-index: 10010;
+      background: #000;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Fondo de ruido estático */
+    #eas-screen::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      opacity: 0.06;
+      pointer-events: none;
+      animation: staticShift 0.08s steps(1) infinite;
+    }
+    @keyframes staticShift {
+      0%  { background-position: 0 0; }
+      25% { background-position: 3px -5px; }
+      50% { background-position: -3px 8px; }
+      75% { background-position: 5px 2px; }
+      100%{ background-position: -2px -3px; }
+    }
+
+    /* Líneas horizontales de interferencia */
+    #eas-screen::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 3px,
+        rgba(255,0,51,0.015) 3px,
+        rgba(255,0,51,0.015) 4px
+      );
+      pointer-events: none;
+    }
+
+    /* ── BANDA SUPERIOR DE ALERTA ── */
+    .eas-top-band {
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 6px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--alert) 0px, var(--alert) 40px,
+        #000 40px, #000 50px
+      );
+      animation: bandScroll 0.6s linear infinite;
+    }
+    @keyframes bandScroll {
+      0%   { background-position: 0 0; }
+      100% { background-position: 50px 0; }
+    }
+    .eas-bot-band {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 6px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--alert) 0px, var(--alert) 40px,
+        #000 40px, #000 50px
+      );
+      animation: bandScroll 0.6s linear infinite reverse;
+    }
+
+    /* ── CONTENEDOR CENTRAL EAS ── */
+    .eas-box {
+      position: relative; z-index: 2;
+      width: min(820px, 92vw);
+      border: 2px solid var(--alert);
+      box-shadow: 0 0 60px rgba(255,0,51,0.35), inset 0 0 60px rgba(255,0,51,0.04);
+      background: rgba(0,0,0,0.92);
+      padding: 0;
+      overflow: hidden;
+    }
+
+    /* Destello de alerta */
+    .eas-box::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(255,0,51,0.08);
+      animation: easFlash 1.2s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes easFlash {
+      0%  { opacity: 0; }
+      100%{ opacity: 1; }
+    }
+
+    /* ── CABECERA ROJA ── */
+    .eas-header {
+      background: var(--alert);
+      padding: 14px 28px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: relative; overflow: hidden;
+    }
+    .eas-header::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        90deg, transparent 0, transparent 8px,
+        rgba(0,0,0,0.12) 8px, rgba(0,0,0,0.12) 9px
+      );
+    }
+    .eas-header-label {
+      font-family: var(--font-head);
+      font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+      color: #000; letter-spacing: 4px;
+      text-transform: uppercase;
+      position: relative; z-index: 1;
+    }
+    .eas-header-code {
+      font-family: var(--font-body);
+      font-size: 0.72rem; color: rgba(0,0,0,0.7);
+      letter-spacing: 2px; position: relative; z-index: 1;
+    }
+
+    /* ── TONOS VISUALES (barras de color EAS) ── */
+    .eas-tones {
+      display: flex; height: 8px;
+    }
+    .eas-tones span {
+      flex: 1;
+    }
+    .eas-tones span:nth-child(1) { background: #fff; }
+    .eas-tones span:nth-child(2) { background: #ff0; }
+    .eas-tones span:nth-child(3) { background: #0ff; }
+    .eas-tones span:nth-child(4) { background: #0f0; }
+    .eas-tones span:nth-child(5) { background: #f0f; }
+    .eas-tones span:nth-child(6) { background: #f00; }
+    .eas-tones span:nth-child(7) { background: #00f; }
+    .eas-tones span:nth-child(8) { background: #000; }
+
+    /* ── CUERPO EAS ── */
+    .eas-body { padding: 30px 28px 24px; }
+
+    .eas-attention {
+      font-family: var(--font-title);
+      font-size: clamp(2.8rem, 8vw, 5rem);
+      color: var(--alert);
+      letter-spacing: 6px;
+      line-height: 1;
+      text-shadow: 0 0 30px rgba(255,0,51,0.6);
+      animation: attentionPulse 0.8s ease-in-out infinite alternate;
+      margin-bottom: 6px;
+    }
+    @keyframes attentionPulse {
+      0%  { text-shadow: 0 0 20px rgba(255,0,51,0.4); }
+      100%{ text-shadow: 0 0 50px rgba(255,0,51,0.9), 0 0 80px rgba(255,0,51,0.3); }
+    }
+
+    .eas-subtitle {
+      font-family: var(--font-body);
+      font-size: clamp(0.6rem, 1.8vw, 0.82rem);
+      color: var(--tech);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+
+    .eas-divider {
+      height: 1px;
+      background: linear-gradient(90deg, var(--alert), transparent 60%);
+      margin: 18px 0;
+    }
+
+    /* ── MENSAJE SCROLLING ── */
+    .eas-ticker-wrap {
+      background: #000;
+      border: 1px solid rgba(255,0,51,0.4);
+      overflow: hidden; padding: 10px 0;
+      margin-bottom: 22px;
+    }
+    .eas-ticker-inner {
+      display: inline-block;
+      white-space: nowrap;
+      animation: easTicker 18s linear infinite;
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      color: var(--alert);
+      letter-spacing: 2px;
+    }
+    @keyframes easTicker {
+      0%   { transform: translateX(100vw); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* ── FASES DE ESCANEO ── */
+    .eas-phases { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+    .eas-phase-row {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .eas-phase-icon {
+      width: 18px; height: 18px; flex-shrink: 0;
+      border: 1.5px solid rgba(255,0,51,0.35);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.6rem;
+      transition: all 0.3s;
+    }
+    .eas-phase-icon.done {
+      border-color: var(--tech);
+      color: var(--tech);
+      box-shadow: 0 0 8px rgba(255,179,0,0.4);
+    }
+    .eas-phase-icon.active {
+      border-color: var(--alert);
+      color: var(--alert);
+      animation: iconSpin 1s linear infinite;
+      box-shadow: 0 0 8px rgba(255,0,51,0.5);
+    }
+    @keyframes iconSpin { 100%{ transform: rotate(360deg); } }
+    .eas-phase-label {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      flex: 1;
+      transition: color 0.3s;
+    }
+    .eas-phase-label.done  { color: var(--tech); }
+    .eas-phase-label.active{ color: var(--text); }
+    .eas-phase-label.wait  { color: rgba(255,255,255,0.2); }
+    .eas-phase-status {
+      font-family: var(--font-body);
+      font-size: 0.62rem;
+      letter-spacing: 1px;
+    }
+    .eas-phase-status.done   { color: var(--tech); }
+    .eas-phase-status.active { color: var(--alert); animation: blink 0.6s infinite; }
+    .eas-phase-status.wait   { color: rgba(255,255,255,0.2); }
+
+    /* ── BARRA DE PROGRESO PRINCIPAL ── */
+    .eas-progress-wrap {
+      position: relative; margin-bottom: 14px;
+    }
+    .eas-progress-track {
+      height: 28px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,0,51,0.3);
+      position: relative; overflow: hidden;
+    }
+    .eas-progress-fill {
+      height: 100%;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--alert) 0px, var(--alert) 18px,
+        rgba(180,0,30,0.7) 18px, rgba(180,0,30,0.7) 20px
+      );
+      width: 0%;
+      transition: width 0.3s ease;
+      position: relative;
+    }
+    .eas-progress-fill::after {
+      content: '';
+      position: absolute; top: 0; right: 0; bottom: 0; width: 4px;
+      background: #fff;
+      box-shadow: 0 0 12px #fff;
+    }
+    .eas-progress-ghost {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(90deg, transparent 40%, rgba(255,255,255,0.06) 50%, transparent 60%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s linear infinite;
+    }
+    @keyframes shimmer {
+      0%  { background-position: -200% 0; }
+      100%{ background-position: 200% 0; }
+    }
+    .eas-progress-label {
+      position: absolute; top: 50%; right: 10px;
+      transform: translateY(-50%);
+      font-family: var(--font-body); font-size: 0.65rem;
+      color: rgba(255,255,255,0.5); letter-spacing: 1px;
+      mix-blend-mode: screen;
+    }
+
+    .eas-pct {
+      font-family: var(--font-title);
+      font-size: 3rem;
+      color: var(--alert);
+      letter-spacing: 4px;
+      line-height: 1;
+      text-align: right;
+      text-shadow: 0 0 20px rgba(255,0,51,0.5);
+    }
+
+    /* ── PIE EAS ── */
+    .eas-footer {
+      background: rgba(255,0,51,0.06);
+      border-top: 1px solid rgba(255,0,51,0.2);
+      padding: 10px 28px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .eas-footer-code {
+      font-family: var(--font-body); font-size: 0.6rem;
+      color: rgba(255,255,255,0.25); letter-spacing: 2px;
+    }
+    .eas-rec-dot {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-body); font-size: 0.6rem;
+      color: var(--alert); letter-spacing: 2px;
+    }
+    .eas-rec-dot::before {
+      content: ''; width: 8px; height: 8px;
+      background: var(--alert); border-radius: 50%;
+      animation: blink 0.8s infinite;
+    }
+
+    /* Flicker de pantalla completa al inicio */
+    #eas-screen.eas-flash {
+      animation: fullFlash 0.06s steps(1) 4;
+    }
+    @keyframes fullFlash {
+      0%,50%{ background: #fff; }
+      25%,75%{ background: #000; }
+    }
+
+    /* ════════════════════════════════════════════════
+       NAVBAR (idéntico al original)
+    ════════════════════════════════════════════════ */
+    #nav-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 10000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 52px; height: 76px;
+    }
+    #nav-bar::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg,rgba(7,22,48,0.75) 0%,rgba(7,22,48,0) 100%);
+      backdrop-filter: blur(0px);
+      transition: background 0.6s, backdrop-filter 0.6s; pointer-events: none;
+    }
+    #nav-bar.scrolled::before { background: rgba(7,22,48,0.90); backdrop-filter: blur(26px) saturate(1.9); }
+    #nav-bar.menu-open::before { background: transparent; backdrop-filter: none; }
+    #nav-bar::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg,transparent 0%,rgba(201,168,76,0.0) 10%,rgba(201,168,76,0.55) 35%,rgba(237,217,138,1.0) 50%,rgba(201,168,76,0.55) 65%,rgba(201,168,76,0.0) 90%,transparent 100%);
+      opacity: 1; transition: opacity 0.4s;
+    }
+    #nav-bar.menu-open::after { opacity: 0; }
+
+    .nb-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; position: relative; z-index: 1; }
+    .nb-word { font-family: 'Cinzel', serif; font-weight: 900; font-size: 1.08rem; letter-spacing: 0.32em; color: #fff; position: relative; }
+    .nb-word .nb-sep { color: var(--gold-nav); margin: 0 4px; }
+    .nb-word::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg, var(--gold-nav), transparent); transform: scaleX(0); transform-origin: left; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); }
+    .nb-brand:hover .nb-word::after { transform: scaleX(1); }
+
+    .nb-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; pointer-events: all; z-index: 1; transition: opacity 0.35s,transform 0.35s; }
+    .nb-quick-link { font-family: 'Cinzel', serif; font-size: 0.56rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.3); padding: 6px 18px; position: relative; cursor: pointer; transition: color 0.3s; text-decoration: none; }
+    .nb-quick-link::after { content: '·'; position: absolute; right: -1px; top: 50%; transform: translateY(-50%); color: rgba(201,168,76,0.2); pointer-events: none; }
+    .nb-quick-link:last-child::after { display: none; }
+    .nb-quick-link:hover { color: rgba(237,217,138,0.9); }
+    #nav-bar.menu-open .nb-center { opacity: 0; transform: translateX(-50%) scale(0.9); pointer-events: none; }
+
+    .nb-trigger { position: relative; z-index: 1; display: flex; align-items: center; gap: 16px; background: none; border: none; cursor: pointer; padding: 8px 0; }
+    .nb-trigger-label { font-family: 'Cinzel', serif; font-size: 0.56rem; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(255,255,255,0.4); transition: color 0.3s,opacity 0.3s; }
+    .nb-trigger:hover .nb-trigger-label { color: rgba(201,168,76,0.85); }
+    #nav-bar.menu-open .nb-trigger-label { opacity: 0; }
+    .nb-icon { display: flex; flex-direction: column; gap: 5px; width: 28px; cursor: pointer; }
+    .nb-icon span { display: block; height: 1.5px; border-radius: 2px; background: rgba(255,255,255,0.85); transform-origin: center; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1),opacity 0.35s ease,width 0.4s ease,background 0.3s; }
+    .nb-icon span:nth-child(1){width:28px;} .nb-icon span:nth-child(2){width:18px;margin-left:10px;} .nb-icon span:nth-child(3){width:28px;}
+    .nb-icon.open span:nth-child(1){transform:translateY(6.75px) rotate(45deg);width:28px;margin-left:0;background:var(--gold-lt-nav);}
+    .nb-icon.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+    .nb-icon.open span:nth-child(3){transform:translateY(-6.75px) rotate(-45deg);background:var(--gold-lt-nav);}
+
+    /* ── OVERLAY NAV ── */
+    #nav-overlay { position: fixed; inset: 0; z-index: 9990; background: var(--navy); display: flex; clip-path: circle(0% at calc(100% - 72px) 38px); transition: clip-path 0.85s cubic-bezier(0.77,0,0.18,1); pointer-events: none; overflow: hidden; }
+    #nav-overlay.open { clip-path: circle(150% at calc(100% - 72px) 38px); pointer-events: all; }
+    .nvo-deco-panel { width: 36%; flex-shrink: 0; position: relative; overflow: hidden; border-right: 1px solid rgba(58,143,224,0.1); display: flex; flex-direction: column; justify-content: space-between; padding: 110px 52px 52px; }
+    .nvo-deco-panel::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 80% 55% at 30% 15%,rgba(18,72,168,0.55) 0%,transparent 60%),radial-gradient(ellipse 55% 70% at 75% 85%,rgba(58,143,224,0.1) 0%,transparent 60%); }
+    .nvo-deco-brand { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.42em; text-transform: uppercase; color: rgba(201,168,76,0.55); margin-bottom: 22px; }
+    .nvo-deco-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.7rem,3.2vw,2.6rem); font-style: italic; color: rgba(255,255,255,0.82); line-height: 1.28; margin-bottom: 24px; }
+    .nvo-deco-line { width: 38px; height: 1px; background: linear-gradient(90deg,var(--gold-nav),transparent); margin-bottom: 22px; }
+    .nvo-deco-sub { font-family: 'Rajdhani', sans-serif; font-size: 0.78rem; letter-spacing: 0.16em; color: rgba(142,197,247,0.3); text-transform: uppercase; line-height: 1.9; }
+    .nvo-deco-bottom { position: relative; z-index: 2; }
+    .nvo-deco-year { font-family: 'Bebas Neue', serif; font-size: 4.5rem; line-height: 1; letter-spacing: 0.06em; color: rgba(255,255,255,0.04); }
+    .nvo-deco-copy { font-size: 0.58rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(142,197,247,0.18); margin-top: 8px; }
+    .nvo-list-panel { flex: 1; position: relative; overflow-y: auto; display: flex; flex-direction: column; padding-top: 76px; }
+    .nvo-list-panel::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0; background-image: linear-gradient(rgba(58,143,224,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(58,143,224,0.025) 1px,transparent 1px); background-size: 60px 60px; }
+    .nvo-item { display: grid; grid-template-columns: 72px 1fr auto; align-items: center; gap: 0 24px; padding: 26px 52px 26px 40px; border-bottom: 1px solid rgba(58,143,224,0.07); cursor: pointer; position: relative; overflow: hidden; z-index: 1; opacity: 0; transform: translateX(28px); transition: opacity 0.5s ease,transform 0.5s ease; }
+    .nvo-item:last-child { border-bottom: none; }
+    #nav-overlay.open .nvo-item { opacity: 1; transform: translateX(0); }
+    #nav-overlay.open .nvo-item:nth-child(1){transition-delay:0.22s;} #nav-overlay.open .nvo-item:nth-child(2){transition-delay:0.28s;} #nav-overlay.open .nvo-item:nth-child(3){transition-delay:0.34s;} #nav-overlay.open .nvo-item:nth-child(4){transition-delay:0.40s;}
+    .nvo-item::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg,rgba(58,143,224,0) 0%,rgba(58,143,224,0.05) 50%,rgba(58,143,224,0) 100%); opacity: 0; transition: opacity 0.4s; }
+    .nvo-item:hover::before { opacity: 1; }
+    .nvo-item::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 2px; background: linear-gradient(180deg,transparent,var(--gold-nav) 50%,transparent); transform: scaleY(0); transform-origin: center; transition: transform 0.42s cubic-bezier(0.4,0,0.2,1); }
+    .nvo-item:hover::after { transform: scaleY(1); }
+    .nvo-num { font-family: 'Bebas Neue', serif; font-size: 0.68rem; letter-spacing: 0.32em; color: var(--gold-nav); opacity: 0.45; text-align: right; padding-right: 10px; border-right: 1px solid rgba(201,168,76,0.1); transition: opacity 0.3s; line-height: 1; }
+    .nvo-item:hover .nvo-num { opacity: 1; text-shadow: 0 0 14px rgba(201,168,76,0.5); }
+    .nvo-body { display: flex; flex-direction: column; gap: 5px; }
+    .nvo-title { font-family: 'Cinzel', serif; font-size: clamp(1rem,1.8vw,1.4rem); font-weight: 700; letter-spacing: 0.06em; color: rgba(255,255,255,0.82); transition: color 0.3s,letter-spacing 0.4s; }
+    .nvo-item:hover .nvo-title { color: var(--gold-lt-nav); letter-spacing: 0.1em; }
+    .nvo-subs-inline { font-family: 'Rajdhani', sans-serif; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(142,197,247,0.28); transition: color 0.3s; }
+    .nvo-item:hover .nvo-subs-inline { color: rgba(142,197,247,0.55); }
+    .nvo-arrow { font-size: 1.3rem; color: rgba(255,255,255,0.15); transition: color 0.3s,transform 0.3s; }
+    .nvo-item:hover .nvo-arrow { color: var(--gold-nav); transform: translateX(4px); }
+
+    /* ════════════════════════════════════════════════
+       MAIN CONTENT
+    ════════════════════════════════════════════════ */
+    #main-content { display: none; }
+
+    /* ── HERO BANNER ── */
+    .mesa-hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 5% 80px;
+      overflow: hidden;
+      border-bottom: 2px solid rgba(255,0,51,0.4);
+    }
+
+    /* Grid de fondo tipo terminal */
+    .mesa-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,179,0,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,179,0,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+    /* Viñeta radial */
+    .mesa-hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 30%, var(--bg) 80%);
+      pointer-events: none;
+    }
+
+    /* Líneas de escaneo verticales animadas */
+    .hero-scanline {
+      position: absolute; top: 0; bottom: 0; width: 2px;
+      background: linear-gradient(180deg, transparent, var(--alert) 50%, transparent);
+      opacity: 0.15;
+      animation: scanV 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .hero-scanline:nth-child(1) { left: 20%; animation-delay: 0s; }
+    .hero-scanline:nth-child(2) { left: 50%; animation-delay: 2s; }
+    .hero-scanline:nth-child(3) { left: 80%; animation-delay: 4s; }
+    @keyframes scanV {
+      0%,100%{ opacity: 0; transform: scaleY(0) translateY(-50%); }
+      40%,60% { opacity: 0.15; transform: scaleY(1) translateY(0); }
+    }
+
+    .hero-eyebrow {
+      position: relative; z-index: 2;
+      font-family: var(--font-body);
+      font-size: 0.75rem; letter-spacing: 5px;
+      color: var(--alert); text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: 12px;
+      margin-bottom: 24px;
+    }
+    .hero-eyebrow::before,
+    .hero-eyebrow::after {
+      content: '';
+      display: inline-block; width: 40px; height: 1px;
+      background: var(--alert);
+    }
+
+    .hero-badge {
+      position: relative; z-index: 2;
+      display: inline-block;
+      border: 1px solid rgba(255,179,0,0.4);
+      background: rgba(255,179,0,0.06);
+      padding: 5px 18px;
+      font-family: var(--font-body);
+      font-size: 0.65rem; letter-spacing: 3px;
+      color: var(--tech); text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .mesa-h1 {
+      position: relative; z-index: 2;
+      font-family: var(--font-head);
+      font-size: clamp(4rem, 14vw, 11rem);
+      line-height: 0.85;
+      text-transform: uppercase;
+      color: var(--text);
+      text-shadow: 5px 5px 0px var(--alert), -2px -2px 0px rgba(207,255,244,0.15);
+      margin-bottom: 14px;
+    }
+
+    .mesa-h1-sub {
+      position: relative; z-index: 2;
+      font-family: var(--font-title);
+      font-size: clamp(1.4rem, 4vw, 3rem);
+      letter-spacing: 12px;
+      color: var(--ghost);
+      margin-bottom: 40px;
+      opacity: 0.7;
+    }
+
+    /* Decoración esquinas hero */
+    .hero-corner {
+      position: absolute; z-index: 2;
+      width: 50px; height: 50px;
+    }
+    .hero-corner.tl { top: 100px; left: 5%; border-top: 2px solid var(--ghost); border-left: 2px solid var(--ghost); }
+    .hero-corner.tr { top: 100px; right: 5%; border-top: 2px solid var(--ghost); border-right: 2px solid var(--ghost); }
+    .hero-corner.bl { bottom: 40px; left: 5%; border-bottom: 2px solid var(--ghost); border-left: 2px solid var(--ghost); }
+    .hero-corner.br { bottom: 40px; right: 5%; border-bottom: 2px solid var(--ghost); border-right: 2px solid var(--ghost); }
+
+    /* REC indicator */
+    .rec-badge {
+      position: absolute; top: 100px; right: 5%; z-index: 3;
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-body); font-size: 0.72rem;
+      color: var(--alert); letter-spacing: 3px;
+    }
+    .rec-dot {
+      width: 10px; height: 10px;
+      background: var(--alert); border-radius: 50%;
+      animation: blink 1s infinite;
+    }
+
+    /* Código de referencia */
+    .hero-ref {
+      position: relative; z-index: 2;
+      font-family: var(--font-body); font-size: 0.6rem;
+      color: rgba(255,255,255,0.2); letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    /* ── TICKER DEBAJO DEL HERO ── */
+    .ticker-wrap {
+      background: var(--alert); color: #000; padding: 11px 0;
+      overflow: hidden; white-space: nowrap; font-weight: bold;
+      border-top: 2px solid #000; border-bottom: 2px solid #000;
+      box-shadow: 0 0 30px rgba(255,0,51,0.5);
+    }
+    .ticker {
+      display: inline-block;
+      animation: ticker 22s linear infinite;
+      font-family: var(--font-body); font-size: 1.1rem; letter-spacing: 2px;
+    }
+    @keyframes ticker { 0%{ transform: translateX(100vw); } 100%{ transform: translateX(-100%); } }
+
+    /* ════════════════════════════════════════════════
+       SECCIÓN MESA DIRECTIVA
+    ════════════════════════════════════════════════ */
+    .content-wrapper { max-width: 1300px; margin: 0 auto; padding: 0 5%; }
+
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.25,1,0.5,1); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    .section-header {
+      text-align: center;
+      padding: 100px 0 60px;
+      position: relative;
+    }
+    .section-header::before {
+      content: 'DIRECTIVE — MESA — EU CRISIS 2035';
+      position: absolute; top: 70px; left: 50%; transform: translateX(-50%);
+      font-family: var(--font-body); font-size: 0.55rem;
+      color: rgba(255,255,255,0.07); letter-spacing: 6px;
+      white-space: nowrap;
+    }
+    .section-eyebrow {
+      font-family: var(--font-body); font-size: 0.7rem;
+      letter-spacing: 5px; color: var(--tech);
+      text-transform: uppercase; margin-bottom: 16px;
+      display: flex; align-items: center; justify-content: center; gap: 16px;
+    }
+    .section-eyebrow::before,
+    .section-eyebrow::after {
+      content: ''; display: inline-block;
+      width: 60px; height: 1px; background: var(--tech); opacity: 0.4;
+    }
+    .section-title {
+      font-family: var(--font-title);
+      font-size: clamp(3rem, 8vw, 6rem);
+      color: var(--ghost); letter-spacing: 8px;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      font-family: var(--font-body); font-size: 0.82rem;
+      color: rgba(255,255,255,0.35); letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ── GRID DE AUTORIDADES ── */
+    .directiva-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 120px;
+    }
+    @media(max-width: 860px) {
+      .directiva-grid { grid-template-columns: 1fr; max-width: 520px; margin: 0 auto; }
+    }
+
+    /* ── CARD DE AUTORIDAD ── */
+    .auth-card {
+      position: relative;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: transform 0.4s cubic-bezier(0.25,1,0.5,1), box-shadow 0.4s;
+    }
+    .auth-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 30px rgba(207,255,244,0.06);
+    }
+
+    /* Borde animado en hover */
+    .auth-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      border: 1px solid var(--ghost);
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .auth-card:hover::before { opacity: 0.15; }
+
+    /* Esquina superior izquierda decorativa */
+    .auth-card::after {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 60px; height: 60px;
+      border-top: 2px solid var(--ghost);
+      border-left: 2px solid var(--ghost);
+      opacity: 0.35; z-index: 10;
+      pointer-events: none;
+    }
+
+    /* PRESIDENTE: acento rojo */
+    .auth-card.presidente { border-color: rgba(255,0,51,0.25); }
+    .auth-card.presidente::after { border-color: var(--alert); opacity: 0.5; }
+    .auth-card.presidente:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(255,0,51,0.12); }
+    .auth-card.presidente .auth-role-badge { background: rgba(255,0,51,0.12); border-color: rgba(255,0,51,0.4); color: var(--alert); }
+    .auth-card.presidente .auth-card-accent { background: var(--alert); }
+
+    /* VICEPRESIDENTE: acento dorado */
+    .auth-card.vice { border-color: rgba(255,179,0,0.2); }
+    .auth-card.vice::after { border-color: var(--tech); opacity: 0.4; }
+    .auth-card.vice:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(255,179,0,0.1); }
+    .auth-card.vice .auth-role-badge { background: rgba(255,179,0,0.1); border-color: rgba(255,179,0,0.35); color: var(--tech); }
+    .auth-card.vice .auth-card-accent { background: var(--tech); }
+
+    /* Línea de color superior */
+    .auth-card-accent {
+      height: 3px; width: 100%;
+    }
+
+    /* Foto */
+    .auth-photo-wrap {
+      position: relative;
+      width: 100%; aspect-ratio: 4/3;
+      overflow: hidden;
+      background: #080808;
+    }
+    .auth-photo-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      filter: grayscale(20%) contrast(1.08);
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.25,1,0.5,1), filter 0.4s;
+    }
+    .auth-card:hover .auth-photo-wrap img {
+      transform: scale(1.04);
+      filter: grayscale(0%) contrast(1.1);
+    }
+
+    /* Overlay sobre la foto */
+    .auth-photo-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(0deg, rgba(5,5,5,0.9) 0%, rgba(5,5,5,0.2) 40%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Crosshair en foto */
+    .auth-photo-cross {
+      position: absolute; top: 20px; right: 20px;
+      width: 36px; height: 36px;
+      pointer-events: none; opacity: 0.35;
+    }
+    .auth-photo-cross::before {
+      content: ''; position: absolute;
+      top: 50%; left: 0; right: 0; height: 1px;
+      background: var(--ghost);
+    }
+    .auth-photo-cross::after {
+      content: ''; position: absolute;
+      left: 50%; top: 0; bottom: 0; width: 1px;
+      background: var(--ghost);
+    }
+    /* Círculo del crosshair */
+    .cross-circle {
+      position: absolute; inset: 5px;
+      border: 1px solid var(--ghost);
+      border-radius: 50%;
+    }
+
+    /* Código de referencia en foto */
+    .auth-photo-code {
+      position: absolute; bottom: 14px; left: 14px;
+      font-family: var(--font-body); font-size: 0.55rem;
+      color: rgba(207,255,244,0.5); letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* Info card */
+    .auth-info {
+      padding: 28px 28px 32px;
+      position: relative;
+    }
+
+    .auth-role-badge {
+      display: inline-block;
+      border: 1px solid;
+      padding: 5px 14px;
+      font-family: var(--font-body); font-size: 0.6rem;
+      letter-spacing: 3px; text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .auth-name {
+      font-family: var(--font-head);
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+      text-transform: uppercase;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .auth-divider {
+      height: 1px; width: 100%;
+      background: linear-gradient(90deg, var(--border), transparent);
+      margin: 16px 0;
+    }
+
+    .auth-meta {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .auth-meta-row {
+      display: flex; align-items: center; gap: 12px;
+      font-family: var(--font-body); font-size: 0.65rem;
+      color: rgba(255,255,255,0.35); letter-spacing: 1.5px;
+    }
+    .auth-meta-row span:first-child {
+      color: rgba(255,255,255,0.18);
+      font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase;
+      width: 80px; flex-shrink: 0;
+    }
+
+    /* Número de autoridad */
+    .auth-number {
+      position: absolute; top: 28px; right: 28px;
+      font-family: var(--font-title);
+      font-size: 5rem; line-height: 1;
+      color: rgba(255,255,255,0.03);
+      letter-spacing: 2px;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Indicador de estado (activo) */
+    .auth-status {
+      position: absolute; bottom: 28px; right: 28px;
+      display: flex; align-items: center; gap: 6px;
+      font-family: var(--font-body); font-size: 0.55rem;
+      color: rgba(255,255,255,0.25); letter-spacing: 2px;
+    }
+    .auth-status::before {
+      content: ''; width: 6px; height: 6px;
+      background: #22ff88; border-radius: 50%;
+      box-shadow: 0 0 8px #22ff88;
+      animation: blink 2s infinite;
+    }
+
+    /* ── SECCIÓN CLASIFICADA ── */
+    .clasif-banner {
+      background: rgba(255,0,51,0.06);
+      border-top: 1px solid rgba(255,0,51,0.2);
+      border-bottom: 1px solid rgba(255,0,51,0.2);
+      padding: 18px 0;
+      text-align: center;
+      font-family: var(--font-body); font-size: 0.65rem;
+      letter-spacing: 5px; color: rgba(255,0,51,0.5);
+      text-transform: uppercase;
+      overflow: hidden; white-space: nowrap;
+      margin-bottom: 80px;
+    }
+    .clasif-inner {
+      display: inline-block;
+      animation: clasifScroll 30s linear infinite;
+    }
+    @keyframes clasifScroll {
+      0%  { transform: translateX(0); }
+      100%{ transform: translateX(-50%); }
+    }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+      background: rgba(0,0,0,0.3);
+    }
+    .footer-brand {
+      font-family: 'Cinzel', serif; font-weight: 900;
+      font-size: 0.9rem; letter-spacing: 0.3em; color: rgba(255,255,255,0.3);
+    }
+    .footer-brand span { color: var(--gold-nav); }
+    .footer-ref {
+      font-family: var(--font-body); font-size: 0.55rem;
+      color: rgba(255,255,255,0.15); letter-spacing: 2px;
+      text-transform: uppercase; text-align: right;
+    }
+
+    /* ── BACK LINK ── */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--font-body); font-size: 0.7rem;
+      color: rgba(255,255,255,0.3); letter-spacing: 3px;
+      text-transform: uppercase; text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 10px 20px;
+      transition: all 0.3s;
+      margin-top: 60px; margin-bottom: 20px;
+    }
+    .back-link::before { content: '←'; }
+    .back-link:hover {
+      color: var(--ghost); border-color: var(--ghost);
+      background: rgba(207,255,244,0.04);
+    }
+
+    /* ── MOBILE ── */
+    @media(max-width: 768px) {
+      #nav-bar { display: none !important; }
+      #nav-bar.menu-open { display: flex !important; padding: 0 20px; z-index: 10001; }
+      #nav-bar.menu-open .nb-brand, #nav-bar.menu-open .nb-center { display: none !important; }
+      #nav-bar.menu-open .nb-trigger { margin-left: auto; }
+      #nav-overlay { z-index: 9990; }
+      .nvo-deco-panel { display: none; }
+      .nvo-list-panel { padding-top: 60px; }
+      .nvo-item { padding: 16px 20px; grid-template-columns: 42px 1fr auto; gap: 0 12px; }
+      .hero-corner.tr, .hero-corner.bl, .hero-corner.br { display: none; }
+      .rec-badge { top: 70px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════
+     EMERGENCY ALERT SYSTEM — PANTALLA DE CARGA
+════════════════════════════════════════════════════ -->
+<div id="eas-screen">
+  <div class="eas-top-band"></div>
+  <div class="eas-bot-band"></div>
+
+  <div class="eas-box">
+    <!-- Tonos EAS clásicos -->
+    <div class="eas-tones">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
+
+    <!-- Cabecera roja -->
+    <div class="eas-header">
+      <span class="eas-header-label">⚠ SISTEMA DE ALERTA DE EMERGENCIA · EAS-EU-2035 ⚠</span>
+      <span class="eas-header-code" id="eas-timestamp">—</span>
+    </div>
+
+    <!-- Cuerpo -->
+    <div class="eas-body">
+      <div class="eas-attention glitch" data-text="ATENCIÓN">ATENCIÓN</div>
+      <div class="eas-subtitle">— PROTOCOLO DE ACCESO RESTRINGIDO ACTIVADO —</div>
+
+      <!-- Ticker de mensaje -->
+      <div class="eas-ticker-wrap">
+        <span class="eas-ticker-inner">
+          ◆ CANAL SEGURO ESTABLECIDO · VERIFICANDO CREDENCIALES DE DELEGADO · NIVEL DE AUTORIZACIÓN: MESA DIRECTIVA · PROTOCOLO EU-CRI-2035-DELTA · NO DISTRIBUIR ◆ CANAL SEGURO ESTABLECIDO · VERIFICANDO CREDENCIALES DE DELEGADO · NIVEL DE AUTORIZACIÓN: MESA DIRECTIVA · PROTOCOLO EU-CRI-2035-DELTA · NO DISTRIBUIR ◆
+        </span>
+      </div>
+
+      <div class="eas-divider"></div>
+
+      <!-- Fases de escaneo -->
+      <div class="eas-phases">
+        <div class="eas-phase-row" id="phase-0">
+          <div class="eas-phase-icon" id="pi-0">○</div>
+          <div class="eas-phase-label wait" id="pl-0">Estableciendo canal cifrado</div>
+          <div class="eas-phase-status wait" id="ps-0">EN ESPERA</div>
+        </div>
+        <div class="eas-phase-row" id="phase-1">
+          <div class="eas-phase-icon" id="pi-1">○</div>
+          <div class="eas-phase-label wait" id="pl-1">Autenticación de protocolo EU-DELTA</div>
+          <div class="eas-phase-status wait" id="ps-1">EN ESPERA</div>
+        </div>
+        <div class="eas-phase-row" id="phase-2">
+          <div class="eas-phase-icon" id="pi-2">○</div>
+          <div class="eas-phase-label wait" id="pl-2">Verificando credenciales de mesa</div>
+          <div class="eas-phase-status wait" id="ps-2">EN ESPERA</div>
+        </div>
+        <div class="eas-phase-row" id="phase-3">
+          <div class="eas-phase-icon" id="pi-3">○</div>
+          <div class="eas-phase-label wait" id="pl-3">Desencriptando archivos directivos</div>
+          <div class="eas-phase-status wait" id="ps-3">EN ESPERA</div>
+        </div>
+        <div class="eas-phase-row" id="phase-4">
+          <div class="eas-phase-icon" id="pi-4">○</div>
+          <div class="eas-phase-label wait" id="pl-4">Concediendo acceso nivel DIRECTIVA</div>
+          <div class="eas-phase-status wait" id="ps-4">EN ESPERA</div>
+        </div>
+      </div>
+
+      <div class="eas-divider"></div>
+
+      <!-- Barra de progreso -->
+      <div class="eas-progress-wrap">
+        <div class="eas-progress-track">
+          <div class="eas-progress-fill" id="eas-bar"></div>
+          <div class="eas-progress-ghost"></div>
+          <div class="eas-progress-label" id="eas-bar-label">INICIALIZANDO...</div>
+        </div>
+      </div>
+
+      <!-- Porcentaje -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+        <div style="font-family:var(--font-body);font-size:0.6rem;color:rgba(255,255,255,0.2);letter-spacing:2px;">ACCESO EN PROGRESO</div>
+        <div class="eas-pct" id="eas-pct">0%</div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="eas-footer">
+      <span class="eas-footer-code">UNIT: EU-CRISIS-2035 · MESA: /mesa_crisis_ue · v2.35-DELTA</span>
+      <span class="eas-rec-dot">TRANSMITIENDO</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     NAVBAR (idéntico al original)
+════════════════════════════════════════════════════ -->
+<nav id="nav-bar">
+  <a class="nb-brand" href="/crisis_ue_2035" onclick="event.preventDefault(); navigateTo('/crisis_ue_2035')">
+    <span class="nb-word">CRISIS<span class="nb-sep">·</span>UE</span>
+  </a>
+  <div class="nb-center">
+    <a class="nb-quick-link" href="/crisis_ue_2035" onclick="event.preventDefault(); navigateTo('/crisis_ue_2035')">Inicio</a>
+    <a class="nb-quick-link" href="/mesa_crisis_ue" onclick="event.preventDefault(); navigateTo('/mesa_crisis_ue')">Mesa</a>
+  </div>
+  <button class="nb-trigger" onclick="toggleNav()">
+    <span class="nb-trigger-label">Menú</span>
+    <div class="nb-icon" id="nbIcon">
+      <span></span><span></span><span></span>
+    </div>
+  </button>
+</nav>
+
+<!-- Overlay nav -->
+<div id="nav-overlay">
+  <div class="nvo-deco-panel">
+    <div>
+      <div class="nvo-deco-brand">Crisis · UE · 2035</div>
+      <div class="nvo-deco-title">El último bastión<br>de Europa</div>
+      <div class="nvo-deco-line"></div>
+      <div class="nvo-deco-sub">Mesa Directiva<br>Consejo de Emergencia<br>Protocolo EU-DELTA</div>
+    </div>
+    <div class="nvo-deco-bottom">
+      <div class="nvo-deco-year">2035</div>
+      <div class="nvo-deco-copy">Sesión Clasificada</div>
+    </div>
+  </div>
+  <div class="nvo-list-panel">
+    <div class="nvo-item" onclick="navigateTo('/crisis_ue_2035'); toggleNav();">
+      <div class="nvo-num">01</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Crisis EU 2035</div>
+        <div class="nvo-subs-inline">Página principal · Informe completo</div>
+      </div>
+      <div class="nvo-arrow">→</div>
+    </div>
+    <div class="nvo-item" onclick="navigateTo('/mesa_crisis_ue'); toggleNav();">
+      <div class="nvo-num">02</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Mesa Directiva</div>
+        <div class="nvo-subs-inline">Presidente · Vicepresidente</div>
+      </div>
+      <div class="nvo-arrow">→</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     MAIN CONTENT
+════════════════════════════════════════════════════ -->
+<div id="main-content">
+
+  <!-- HERO -->
+  <section class="mesa-hero">
+    <div class="hero-scanline"></div>
+    <div class="hero-scanline"></div>
+    <div class="hero-scanline"></div>
+
+    <div class="hero-corner tl"></div>
+    <div class="hero-corner tr"></div>
+    <div class="hero-corner bl"></div>
+    <div class="hero-corner br"></div>
+
+    <div class="rec-badge">
+      <div class="rec-dot"></div>
+      SESIÓN ACTIVA
+    </div>
+
+    <div class="hero-badge">// DOCUMENTO CLASIFICADO · NIVEL DIRECTIVA //</div>
+
+    <div class="hero-eyebrow">CRISIS UE 2035</div>
+
+    <h1 class="mesa-h1 glitch" data-text="MESA">MESA</h1>
+    <div class="mesa-h1-sub">DIRECTIVA</div>
+
+    <div class="hero-ref">REF: EU-CRISIS-2035 · ANEXO-MESA · /mesa_crisis_ue</div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <span class="ticker">
+      ◆ MESA DIRECTIVA CONSTITUIDA · SESIÓN PLENARIA EN CURSO · 2 DE MAYO 2026 · PROTOCOLO EU-DELTA ACTIVO · ACCESO RESTRINGIDO A DELEGADOS ACREDITADOS · TODA FILTRACIÓN SERÁ PROCESADA BAJO EL ART. 26 ◆ MESA DIRECTIVA CONSTITUIDA · SESIÓN PLENARIA EN CURSO · 2 DE MAYO 2026
+    </span>
+  </div>
+
+  <!-- SECCIÓN MESA -->
+  <div class="content-wrapper">
+
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Autoridades de Sesión</div>
+      <div class="section-title">COMPOSICIÓN</div>
+      <div class="section-desc">Miembros acreditados · Nivel de acceso: ALPHA</div>
+    </div>
+
+    <!-- BANNER CLASIFICADO (scrolling) -->
+    <div class="clasif-banner reveal">
+      <span class="clasif-inner">
+        ◆ TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR · TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR · TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR · TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR ◆ TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR · TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR · TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR ·
+      </span>
+    </div>
+
+    <!-- GRID CARDS -->
+    <div class="directiva-grid">
+
+      <!-- CARD PRESIDENTE -->
+      <div class="auth-card presidente reveal">
+        <div class="auth-card-accent"></div>
+        <div class="auth-photo-wrap">
+          <img src="mesa.jpeg" alt="Presidente de Mesa" loading="eager">
+          <div class="auth-photo-overlay"></div>
+          <div class="auth-photo-cross">
+            <div class="cross-circle"></div>
+          </div>
+          <div class="auth-photo-code">ID: PRES-001 · CLS: ALPHA · EU-DELTA</div>
+        </div>
+        <div class="auth-info">
+          <div class="auth-number">01</div>
+          <div class="auth-role-badge">⬛ PRESIDENTE DE MESA</div>
+          <div class="auth-name">[Nombre del<br>Presidente]</div>
+          <div class="auth-divider"></div>
+          <div class="auth-meta">
+            <div class="auth-meta-row">
+              <span>CARGO</span>
+              <span>Presidente de Mesa Directiva</span>
+            </div>
+            <div class="auth-meta-row">
+              <span>SESIÓN</span>
+              <span>Crisis UE 2035 · 02/05/2026</span>
+            </div>
+            <div class="auth-meta-row">
+              <span>PROTOCOLO</span>
+              <span>EU-DELTA · Nivel ALPHA</span>
+            </div>
+          </div>
+          <div class="auth-status">EN FUNCIONES</div>
+        </div>
+      </div>
+
+      <!-- CARD VICEPRESIDENTE -->
+      <div class="auth-card vice reveal" style="transition-delay:0.15s">
+        <div class="auth-card-accent"></div>
+        <div class="auth-photo-wrap">
+          <img src="vice.jpeg" alt="Vicepresidente de Mesa" loading="eager">
+          <div class="auth-photo-overlay"></div>
+          <div class="auth-photo-cross">
+            <div class="cross-circle"></div>
+          </div>
+          <div class="auth-photo-code">ID: VICE-001 · CLS: ALPHA · EU-DELTA</div>
+        </div>
+        <div class="auth-info">
+          <div class="auth-number">02</div>
+          <div class="auth-role-badge">◈ VICEPRESIDENTE DE MESA</div>
+          <div class="auth-name">[Nombre del<br>Vicepresidente]</div>
+          <div class="auth-divider"></div>
+          <div class="auth-meta">
+            <div class="auth-meta-row">
+              <span>CARGO</span>
+              <span>Vicepresidente de Mesa Directiva</span>
+            </div>
+            <div class="auth-meta-row">
+              <span>SESIÓN</span>
+              <span>Crisis UE 2035 · 02/05/2026</span>
+            </div>
+            <div class="auth-meta-row">
+              <span>PROTOCOLO</span>
+              <span>EU-DELTA · Nivel ALPHA</span>
+            </div>
+          </div>
+          <div class="auth-status">EN FUNCIONES</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- LINK DE VUELTA -->
+    <div style="text-align:center; padding-bottom: 60px;" class="reveal">
+      <a class="back-link" href="/crisis_ue_2035" onclick="event.preventDefault(); navigateTo('/crisis_ue_2035')">
+        Volver a Crisis UE 2035
+      </a>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="page-footer">
+    <div class="footer-brand">CRISIS<span> · </span>UE · 2035</div>
+    <div class="footer-ref">
+      ANEXO MESA DIRECTIVA · /mesa_crisis_ue<br>
+      PROTOCOLO EU-DELTA · NIVEL ALPHA · CLASIFICADO
+    </div>
+  </footer>
+
+</div><!-- /main-content -->
+
+<script>
+  /* ════════════════════════════════════════════════
+     EAS LOADER SEQUENCE
+  ════════════════════════════════════════════════ */
+  (function() {
+    const phases = [
+      { delay: 200,  duration: 700  },
+      { delay: 1100, duration: 900  },
+      { delay: 2200, duration: 800  },
+      { delay: 3200, duration: 700  },
+      { delay: 4100, duration: 600  },
+    ];
+    const barLabel = document.getElementById('eas-bar-label');
+    const barFill  = document.getElementById('eas-bar');
+    const pct      = document.getElementById('eas-pct');
+    const ets      = document.getElementById('eas-timestamp');
+
+    // Timestamp en tiempo real
+    function updateTimestamp() {
+      const now = new Date();
+      ets.textContent = now.toISOString().replace('T',' ').substring(0,19) + ' UTC';
+    }
+    updateTimestamp();
+    const tsInterval = setInterval(updateTimestamp, 1000);
+
+    // Barra de progreso animada
+    let progress = 0;
+    const pctTargets = [0, 20, 42, 65, 82, 100];
+    const labels = [
+      'INICIALIZANDO...', 'CIFRANDO CANAL...', 'AUTENTICANDO...',
+      'VERIFICANDO...', 'DESENCRIPTANDO...', 'ACCESO CONCEDIDO'
+    ];
+
+    function animateBar(targetPct, label, duration, cb) {
+      barLabel.textContent = label;
+      const start = progress;
+      const startTime = performance.now();
+      function step(now) {
+        const elapsed = now - startTime;
+        const t = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - t, 3);
+        const current = Math.round(start + (targetPct - start) * eased);
+        progress = current;
+        barFill.style.width = current + '%';
+        pct.textContent = current + '%';
+        if (t < 1) requestAnimationFrame(step);
+        else if (cb) cb();
+      }
+      requestAnimationFrame(step);
+    }
+
+    // Activar fase
+    function activatePhase(i) {
+      const icon  = document.getElementById('pi-' + i);
+      const label = document.getElementById('pl-' + i);
+      const stat  = document.getElementById('ps-' + i);
+      icon.className  = 'eas-phase-icon active';
+      icon.textContent = '◌';
+      label.className = 'eas-phase-label active';
+      stat.className  = 'eas-phase-status active';
+      stat.textContent = 'PROCESANDO';
+    }
+    function completePhase(i) {
+      const icon  = document.getElementById('pi-' + i);
+      const label = document.getElementById('pl-' + i);
+      const stat  = document.getElementById('ps-' + i);
+      icon.className  = 'eas-phase-icon done';
+      icon.textContent = '✓';
+      label.className = 'eas-phase-label done';
+      stat.className  = 'eas-phase-status done';
+      stat.textContent = 'OK';
+    }
+
+    // Inicio de secuencia
+    function runSequence() {
+      animateBar(pctTargets[1], labels[1], 800);
+
+      phases.forEach((ph, i) => {
+        setTimeout(() => {
+          activatePhase(i);
+          animateBar(pctTargets[i+1], labels[i+1], ph.duration, () => {
+            completePhase(i);
+          });
+        }, ph.delay);
+      });
+
+      // Acceso concedido al final
+      setTimeout(() => {
+        barLabel.textContent = 'ACCESO CONCEDIDO';
+        pct.textContent = '100%';
+        pct.style.color = 'var(--tech)';
+        pct.style.textShadow = '0 0 20px rgba(255,179,0,0.5)';
+
+        // Flash y desvanecimiento
+        setTimeout(() => {
+          const eas = document.getElementById('eas-screen');
+          eas.classList.add('eas-flash');
+          setTimeout(() => {
+            eas.style.transition = 'opacity 0.7s ease';
+            eas.style.opacity = '0';
+            setTimeout(() => {
+              eas.style.display = 'none';
+              clearInterval(tsInterval);
+              // Mostrar contenido
+              const mc = document.getElementById('main-content');
+              mc.style.display = 'block';
+              mc.style.opacity = '0';
+              mc.style.transition = 'opacity 0.8s ease';
+              setTimeout(() => { mc.style.opacity = '1'; }, 50);
+              // Inicializar scroll reveal
+              initScrollReveal();
+            }, 750);
+          }, 350);
+        }, 600);
+      }, 5200);
+    }
+
+    // Pequeño flash inicial
+    setTimeout(() => {
+      const eas = document.getElementById('eas-screen');
+      eas.classList.add('eas-flash');
+      setTimeout(() => { eas.classList.remove('eas-flash'); }, 300);
+      runSequence();
+    }, 400);
+  })();
+
+  /* ════════════════════════════════════════════════
+     SCROLL REVEAL
+  ════════════════════════════════════════════════ */
+  function initScrollReveal() {
+    const els = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
+    }, { threshold: 0.12 });
+    els.forEach(el => obs.observe(el));
+  }
+
+  /* ════════════════════════════════════════════════
+     NAVBAR TOGGLE
+  ════════════════════════════════════════════════ */
+  let navOpen = false;
+  function toggleNav() {
+    navOpen = !navOpen;
+    const bar = document.getElementById('nav-bar');
+    const overlay = document.getElementById('nav-overlay');
+    const icon = document.getElementById('nbIcon');
+    bar.classList.toggle('menu-open', navOpen);
+    overlay.classList.toggle('open', navOpen);
+    icon.classList.toggle('open', navOpen);
+    document.body.style.overflow = navOpen ? 'hidden' : '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && navOpen) toggleNav(); });
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav-bar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  /* ════════════════════════════════════════════════
+     PAGE TRANSITION CURTAIN
+  ════════════════════════════════════════════════ */
+  (function() {
+    const curtain = document.createElement('div');
+    curtain.id = 'curtain';
+    curtain.style.cssText = 'position:fixed;inset:0;z-index:9998;pointer-events:none;display:flex;';
+    curtain.innerHTML =
+      '<div class="c-half L" style="flex:1;height:100%;background:#0d0a06;transform:scaleX(0);transform-origin:left;"></div>' +
+      '<div class="c-half R" style="flex:1;height:100%;background:#0d0a06;transform:scaleX(0);transform-origin:right;"></div>';
+    document.body.prepend(curtain);
+    const s = document.createElement('style');
+    s.textContent = `
+      body.entering .c-half.L{animation:cOpenL .65s cubic-bezier(.77,0,.18,1) forwards;}
+      body.entering .c-half.R{animation:cOpenR .65s cubic-bezier(.77,0,.18,1) .05s forwards;}
+      body.exiting  .c-half.L{animation:cCloseL .45s cubic-bezier(.77,0,.18,1) forwards;}
+      body.exiting  .c-half.R{animation:cCloseR .45s cubic-bezier(.77,0,.18,1) .04s forwards;}
+      @keyframes cOpenL{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+      @keyframes cOpenR{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+      @keyframes cCloseL{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+      @keyframes cCloseR{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+    `;
+    document.head.appendChild(s);
+    document.body.classList.add('entering');
+    window.navigateTo = function(url) {
+      document.body.classList.remove('entering');
+      document.body.classList.add('exiting');
+      document.getElementById('curtain').style.pointerEvents = 'all';
+      setTimeout(() => { window.location.href = url; }, 520);
+    };
+  })();
+</script>
+</body>
+</html>
