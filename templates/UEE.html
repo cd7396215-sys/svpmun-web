@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Conoce tu Mesa · Crisis Romana · SVPMUN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Uncial+Antiqua&family=Rajdhani:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dark:#07050f; --imp-bg:#0e0a1a; --imp-mid:#1e1535; --imp-lt:#2d2050;
+      --silver:#c0bfbb; --silver-lt:#e8e4dc;
+      --gold:#d4af37; --gold-lt:#edd98a; --gold-ox:#8b6914;
+      --copper:#b87333;
+      --amethyst:#7b2d8b; --amethyst-lt:#a855c0; --amethyst-dk:#3d0055;
+      --crimson:#8b1a1a; --grey:#7a7470; --parchment:#c8a97a; --cream:#e8dcc8;
+      --navy:#071630; --gold-nav:#c9a84c; --gold-lt-nav:#edd98a;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Cormorant Garamond',serif;background:var(--dark);color:var(--silver-lt);overflow-x:hidden;}
+
+    /* LOADER */
+    #loader{position:fixed;inset:0;z-index:9999;background:radial-gradient(ellipse at 50% 55%,#1a0d2e 0%,#0e0820 45%,#030108 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 1.3s ease,transform 1.5s ease;overflow:hidden;}
+    #loader.hide{opacity:0;transform:scale(1.03);pointer-events:none;}
+    .loader-nebula{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 45% at 30% 40%,rgba(80,20,120,0.18) 0%,transparent 100%),radial-gradient(ellipse 45% 60% at 75% 60%,rgba(50,0,90,0.12) 0%,transparent 100%);}
+    .loader-col{position:absolute;bottom:0;display:flex;flex-direction:column;align-items:center;}
+    .loader-col.left{left:6%}.loader-col.right{right:6%}
+    .col-capital-top{width:40px;height:14px;background:linear-gradient(to bottom,rgba(212,175,55,0.4),rgba(139,105,20,0.2));border-radius:2px 2px 0 0;border-top:1px solid rgba(212,175,55,0.3);border-left:1px solid rgba(212,175,55,0.15);border-right:1px solid rgba(212,175,55,0.15);}
+    .col-shaft-body{width:16px;background:linear-gradient(to right,rgba(212,175,55,0.06),rgba(180,130,40,0.12),rgba(212,175,55,0.06));border-left:1px solid rgba(212,175,55,0.1);border-right:1px solid rgba(212,175,55,0.1);min-height:55vh;}
+    .col-base-foot{width:30px;height:10px;background:linear-gradient(to top,rgba(212,175,55,0.25),rgba(139,105,20,0.15));border-bottom:1px solid rgba(212,175,55,0.2);}
+    .loader-card{position:relative;z-index:5;width:min(520px,88vw);background:linear-gradient(160deg,#170f2c 0%,#0f0a1e 55%,#150c26 100%);border:1px solid rgba(168,85,192,0.2);box-shadow:0 0 80px rgba(100,20,160,0.25),0 0 160px rgba(80,10,130,0.1),inset 0 0 60px rgba(0,0,0,0.55),inset 0 1px 0 rgba(212,175,55,0.08);padding:46px 52px 42px;text-align:center;}
+    .loader-card-line{position:absolute;left:0;right:0;height:2px;}
+    .loader-card-line.top{top:0;background:linear-gradient(90deg,transparent,rgba(168,85,192,0.4) 20%,rgba(212,175,55,0.9) 50%,rgba(168,85,192,0.4) 80%,transparent);}
+    .loader-card-line.bot{bottom:0;background:linear-gradient(90deg,transparent,rgba(100,20,160,0.4) 20%,rgba(168,85,192,0.7) 50%,rgba(100,20,160,0.4) 80%,transparent);}
+    .lc-corner{position:absolute;width:18px;height:18px;animation:cornerPulse 3s ease-in-out infinite alternate;}
+    .lc-corner.tl{top:0;left:0;border-top:2px solid rgba(212,175,55,0.5);border-left:2px solid rgba(212,175,55,0.5);}
+    .lc-corner.tr{top:0;right:0;border-top:2px solid rgba(212,175,55,0.5);border-right:2px solid rgba(212,175,55,0.5);}
+    .lc-corner.bl{bottom:0;left:0;border-bottom:2px solid rgba(212,175,55,0.5);border-left:2px solid rgba(212,175,55,0.5);}
+    .lc-corner.br{bottom:0;right:0;border-bottom:2px solid rgba(212,175,55,0.5);border-right:2px solid rgba(212,175,55,0.5);}
+    @keyframes cornerPulse{0%{opacity:.4}100%{opacity:.9;box-shadow:0 0 10px rgba(212,175,55,0.3)}}
+    .loader-eagle{width:66px;height:66px;object-fit:contain;margin:0 auto 18px;display:block;filter:invert(.9) sepia(.4) hue-rotate(250deg) saturate(1.8);animation:eagleDrift 2.8s ease-in-out infinite;}
+    @keyframes eagleDrift{0%,100%{transform:translateY(0);opacity:.75;filter:invert(.9) sepia(.4) hue-rotate(250deg) saturate(1.8) drop-shadow(0 0 8px rgba(168,85,192,.4))}50%{transform:translateY(-4px);opacity:1;filter:invert(.9) sepia(.4) hue-rotate(250deg) saturate(1.8) drop-shadow(0 0 22px rgba(168,85,192,.9))}}
+    .loader-spqr-label{font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:.58em;color:rgba(168,85,192,.45);text-transform:uppercase;margin-bottom:18px;}
+    .loader-sep{width:100%;height:1px;margin:18px 0;background:linear-gradient(90deg,transparent,rgba(212,175,55,.35),transparent);}
+    .loader-sep.v{background:linear-gradient(90deg,transparent,rgba(168,85,192,.45),transparent);}
+    .loader-big-title{font-family:'Uncial Antiqua',serif;font-size:clamp(1rem,2.8vw,1.55rem);color:#c8c4be;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;text-shadow:0 2px 16px rgba(100,20,160,.65);animation:loaderCarve 1s ease both;}
+    .loader-sub-title{font-family:'Cinzel',serif;font-size:clamp(.52rem,1.3vw,.68rem);color:rgba(168,85,192,.65);letter-spacing:.35em;text-transform:uppercase;margin-top:8px;}
+    .loader-proclama{font-family:'Cinzel',serif;font-size:clamp(.56rem,1.3vw,.72rem);color:rgba(180,115,51,.7);letter-spacing:.28em;text-transform:uppercase;margin:14px 0 20px;line-height:2.3;}
+    .loader-status-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(200,169,122,.68);letter-spacing:.05em;min-height:1.4em;margin-bottom:20px;}
+    .loader-nodes{display:flex;justify-content:center;gap:12px;margin-top:8px;}
+    .l-node{width:8px;height:8px;border-radius:50%;border:1px solid rgba(212,175,55,.18);background:rgba(212,175,55,.08);transition:background .4s,box-shadow .4s,transform .3s,border-color .4s;}
+    .l-node.lit{background:radial-gradient(circle,#a855c0,#6b1a8b);border-color:rgba(212,175,55,.5);box-shadow:0 0 12px rgba(168,85,192,.7),0 0 4px rgba(212,175,55,.4);transform:scale(1.35);}
+    @keyframes loaderCarve{from{opacity:0;letter-spacing:.28em}to{opacity:1;letter-spacing:.1em}}
+
+    /* REVEAL */
+    .rv{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s ease;}
+    .rv.on{opacity:1;transform:translateY(0);}
+    .d1{transition-delay:.1s}.d2{transition-delay:.22s}.d3{transition-delay:.34s}.d4{transition-delay:.46s}.d5{transition-delay:.58s}.d6{transition-delay:.7s}
+
+    /* CANVAS */
+    #dust-canvas{position:fixed;inset:0;z-index:2;pointer-events:none;}
+
+    /* NAVBAR */
+    #nav-bar{position:fixed;top:0;left:0;right:0;z-index:800;display:flex;align-items:center;justify-content:space-between;padding:0 52px;height:76px;}
+    #nav-bar::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,8,26,.72) 0%,rgba(14,8,26,0) 100%);backdrop-filter:blur(0px);transition:background .6s,backdrop-filter .6s;pointer-events:none;}
+    #nav-bar.scrolled::before{background:rgba(14,8,26,.93);backdrop-filter:blur(26px) saturate(1.9);}
+    #nav-bar.menu-open::before{background:transparent;backdrop-filter:none;}
+    #nav-bar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,rgba(201,168,76,0) 10%,rgba(168,85,192,.45) 35%,rgba(237,217,138,.7) 50%,rgba(168,85,192,.45) 65%,rgba(201,168,76,0) 90%,transparent 100%);opacity:1;transition:opacity .4s;}
+    #nav-bar.menu-open::after{opacity:0;}
+    .nb-brand{display:flex;align-items:center;gap:14px;text-decoration:none;position:relative;z-index:1;}
+    .nb-emblem{width:34px;height:34px;object-fit:contain;filter:brightness(0) invert(1) drop-shadow(0 0 12px rgba(168,85,192,.55));transition:filter .4s,transform .5s cubic-bezier(.34,1.56,.64,1);}
+    .nb-brand:hover .nb-emblem{transform:rotate(-12deg) scale(1.1);}
+    .nb-word{font-family:'Cinzel',serif;font-weight:900;font-size:1.08rem;letter-spacing:.32em;color:#fff;position:relative;}
+    .nb-word .nb-sep{color:var(--gold-nav);margin:0 4px;}
+    .nb-word::after{content:'';position:absolute;bottom:-5px;left:0;width:100%;height:1px;background:linear-gradient(90deg,var(--gold-nav),transparent);transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.4,0,.2,1);}
+    .nb-brand:hover .nb-word::after{transform:scaleX(1);}
+    .nb-center{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;pointer-events:all;z-index:1;transition:opacity .35s,transform .35s;}
+    .nb-quick-link{font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:6px 18px;position:relative;cursor:pointer;transition:color .3s;text-decoration:none;}
+    .nb-quick-link::after{content:'·';position:absolute;right:-1px;top:50%;transform:translateY(-50%);color:rgba(201,168,76,.2);pointer-events:none;}
+    .nb-quick-link:last-child::after{display:none;}
+    .nb-quick-link:hover{color:rgba(237,217,138,.9);}
+    .nb-quick-link.active{color:rgba(168,85,192,.8);}
+    #nav-bar.menu-open .nb-center{opacity:0;transform:translateX(-50%) scale(.9);pointer-events:none;}
+    .nb-trigger{position:relative;z-index:1;display:flex;align-items:center;gap:16px;background:none;border:none;cursor:pointer;padding:8px 0;}
+    .nb-trigger-label{font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:.4em;text-transform:uppercase;color:rgba(255,255,255,.4);transition:color .3s,opacity .3s;}
+    .nb-trigger:hover .nb-trigger-label{color:rgba(201,168,76,.85);}
+    #nav-bar.menu-open .nb-trigger-label{opacity:0;}
+    .nb-icon{display:flex;flex-direction:column;gap:5px;width:28px;cursor:pointer;}
+    .nb-icon span{display:block;height:1.5px;border-radius:2px;background:rgba(255,255,255,.85);transform-origin:center;transition:transform .5s cubic-bezier(.4,0,.2,1),opacity .35s ease,width .4s ease,background .3s;}
+    .nb-icon span:nth-child(1){width:28px}.nb-icon span:nth-child(2){width:18px;margin-left:10px}.nb-icon span:nth-child(3){width:28px}
+    .nb-icon.open span:nth-child(1){transform:translateY(6.75px) rotate(45deg);width:28px;margin-left:0;background:var(--gold-lt-nav);}
+    .nb-icon.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+    .nb-icon.open span:nth-child(3){transform:translateY(-6.75px) rotate(-45deg);background:var(--gold-lt-nav);}
+    #nav-overlay{position:fixed;inset:0;z-index:790;background:var(--navy);display:flex;clip-path:circle(0% at calc(100% - 72px) 38px);transition:clip-path .85s cubic-bezier(.77,0,.18,1);pointer-events:none;overflow:hidden;}
+    #nav-overlay.open{clip-path:circle(150% at calc(100% - 72px) 38px);pointer-events:all;}
+    .nvo-deco-panel{width:36%;flex-shrink:0;position:relative;overflow:hidden;border-right:1px solid rgba(123,45,139,.15);display:flex;flex-direction:column;justify-content:space-between;padding:110px 52px 52px;}
+    .nvo-deco-panel::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 55% at 30% 15%,rgba(60,0,100,.55) 0%,transparent 60%),radial-gradient(ellipse 55% 70% at 75% 85%,rgba(123,45,139,.1) 0%,transparent 60%);}
+    .nvo-deco-emblem{position:absolute;right:-40px;top:50%;transform:translateY(-50%);width:300px;height:300px;object-fit:contain;opacity:.04;filter:brightness(0) invert(1);pointer-events:none;}
+    .nvo-deco-brand{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.42em;text-transform:uppercase;color:rgba(201,168,76,.55);margin-bottom:22px;}
+    .nvo-deco-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,3.2vw,2.6rem);font-style:italic;color:rgba(255,255,255,.82);line-height:1.28;margin-bottom:24px;}
+    .nvo-deco-line{width:38px;height:1px;background:linear-gradient(90deg,var(--gold-nav),transparent);margin-bottom:22px;}
+    .nvo-deco-sub{font-family:'Rajdhani',sans-serif;font-size:.78rem;letter-spacing:.16em;color:rgba(168,85,192,.4);text-transform:uppercase;line-height:1.9;}
+    .nvo-deco-year{font-family:'Bebas Neue',serif;font-size:4.5rem;line-height:1;letter-spacing:.06em;color:rgba(255,255,255,.04);}
+    .nvo-deco-copy{font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(168,85,192,.18);margin-top:8px;}
+    .nvo-list-panel{flex:1;position:relative;overflow-y:auto;display:flex;flex-direction:column;padding-top:76px;}
+    .nvo-list-panel::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(123,45,139,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(123,45,139,.025) 1px,transparent 1px);background-size:60px 60px;}
+    .nvo-item{display:grid;grid-template-columns:72px 1fr auto;align-items:center;gap:0 24px;padding:26px 52px 26px 40px;border-bottom:1px solid rgba(123,45,139,.08);cursor:pointer;position:relative;overflow:hidden;z-index:1;opacity:0;transform:translateX(28px);transition:opacity .5s ease,transform .5s ease;}
+    .nvo-item:last-child{border-bottom:none;}
+    #nav-overlay.open .nvo-item{opacity:1;transform:translateX(0);}
+    #nav-overlay.open .nvo-item:nth-child(1){transition-delay:.22s}#nav-overlay.open .nvo-item:nth-child(2){transition-delay:.28s}#nav-overlay.open .nvo-item:nth-child(3){transition-delay:.34s}#nav-overlay.open .nvo-item:nth-child(4){transition-delay:.40s}#nav-overlay.open .nvo-item:nth-child(5){transition-delay:.46s}
+    .nvo-item::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(123,45,139,0) 0%,rgba(123,45,139,.05) 50%,rgba(123,45,139,0) 100%);opacity:0;transition:opacity .4s;}
+    .nvo-item:hover::before{opacity:1;}
+    .nvo-item::after{content:'';position:absolute;top:0;left:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,var(--gold-nav) 50%,transparent);transform:scaleY(0);transform-origin:center;transition:transform .42s cubic-bezier(.4,0,.2,1);}
+    .nvo-item:hover::after{transform:scaleY(1);}
+    .nvo-num{font-family:'Bebas Neue',serif;font-size:.68rem;letter-spacing:.32em;color:var(--gold-nav);opacity:.45;text-align:right;padding-right:10px;border-right:1px solid rgba(201,168,76,.1);transition:opacity .3s;line-height:1;}
+    .nvo-item:hover .nvo-num{opacity:1;text-shadow:0 0 14px rgba(201,168,76,.5);}
+    .nvo-body{display:flex;flex-direction:column;gap:5px;}
+    .nvo-title{font-family:'Cinzel',serif;font-size:clamp(1rem,1.8vw,1.4rem);font-weight:700;letter-spacing:.06em;color:rgba(255,255,255,.82);transition:color .3s,letter-spacing .4s;}
+    .nvo-item:hover .nvo-title{color:var(--gold-lt-nav);letter-spacing:.1em;}
+    .nvo-subs-inline{font-family:'Rajdhani',sans-serif;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(168,85,192,.35);transition:color .3s;}
+    .nvo-item:hover .nvo-subs-inline{color:rgba(168,85,192,.65);}
+    .nvo-arrow{font-size:1.3rem;color:rgba(255,255,255,.15);transition:color .3s,transform .3s;}
+    .nvo-item:hover .nvo-arrow{color:var(--gold-nav);transform:translateX(4px);}
+    .nvo-arrow-expand{font-size:1.2rem;color:rgba(255,255,255,.15);transition:color .3s,transform .45s cubic-bezier(.4,0,.2,1);line-height:1;}
+    .nvo-item:hover .nvo-arrow-expand{color:var(--gold-nav);}
+    .nvo-item.sub-open .nvo-arrow-expand{transform:rotate(90deg);color:var(--gold-nav);}
+    .nvo-sub-list{max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.4,0,.2,1);background:rgba(255,255,255,.015);border-bottom:1px solid rgba(123,45,139,.07);}
+    .nvo-sub-list.open{max-height:320px;}
+    .nvo-sub-item{display:flex;align-items:center;gap:20px;padding:16px 52px 16px 130px;cursor:pointer;border-top:1px solid rgba(123,45,139,.05);transition:background .3s;}
+    .nvo-sub-item:hover{background:rgba(123,45,139,.04);}
+    .nvo-sub-dot{width:5px;height:5px;border-radius:50%;background:rgba(201,168,76,.35);flex-shrink:0;transition:background .3s;}
+    .nvo-sub-item:hover .nvo-sub-dot{background:var(--gold-nav);}
+    .nvo-sub-name{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.18em;color:rgba(255,255,255,.45);text-transform:uppercase;transition:color .3s;}
+    .nvo-sub-item:hover .nvo-sub-name{color:rgba(237,217,138,.85);}
+    .nvo-item-back .nvo-title{font-size:clamp(.85rem,1.4vw,1.1rem);color:rgba(255,255,255,.45);}
+    .nvo-item-back:hover .nvo-title{color:var(--gold-lt-nav);}
+    .nvo-back-arr{font-size:1.1rem;color:rgba(255,255,255,.15);transition:color .3s,transform .3s;}
+    .nvo-item-back:hover .nvo-back-arr{color:var(--gold-nav);transform:translateX(-4px);}
+    @media(max-width:860px){#nav-bar{padding:0 20px}.nb-center{display:none}.nvo-deco-panel{display:none}.nvo-item{padding:22px 24px 22px 20px}.nvo-sub-item{padding:14px 24px 14px 56px}}
+  </style>
+  <style>
+    /* HERO */
+    #hero{position:relative;min-height:100vh;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:90px 24px 70px;overflow:hidden;}
+    .hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 100% 70% at 50% 100%,rgba(61,0,85,.55) 0%,transparent 55%),radial-gradient(ellipse 80% 60% at 50% 50%,rgba(14,8,26,0) 0%,rgba(7,5,15,.96) 100%),linear-gradient(to bottom,#07050f 0%,#0f081e 50%,#08051a 100%);}
+    .hero-bg-img{position:absolute;inset:0;z-index:-1;background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Forum_romanum_6k_%285765477647%29.jpg/1280px-Forum_romanum_6k_%285765477647%29.jpg');background-size:cover;background-position:center 45%;filter:sepia(1) hue-rotate(230deg) brightness(.12) contrast(1.35) saturate(1.6);opacity:.95;}
+    .hero-mosaic{position:absolute;inset:0;z-index:1;pointer-events:none;background-image:repeating-linear-gradient(0deg,transparent,transparent 8px,rgba(168,85,192,.015) 8px,rgba(168,85,192,.015) 9px),repeating-linear-gradient(90deg,transparent,transparent 8px,rgba(212,175,55,.012) 8px,rgba(212,175,55,.012) 9px);}
+    .hero-content{position:relative;z-index:5;max-width:900px;}
+    .hero-eyebrow{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.56em;text-transform:uppercase;color:var(--amethyst-lt);margin-bottom:22px;display:flex;align-items:center;justify-content:center;gap:16px;animation:heroFade 1s ease .1s both;}
+    .hero-eyebrow::before{content:'';width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--amethyst-lt));}
+    .hero-eyebrow::after{content:'';width:50px;height:1px;background:linear-gradient(90deg,var(--amethyst-lt),transparent);}
+    .hero-title{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(2.8rem,7.5vw,6.5rem);line-height:1.02;letter-spacing:.04em;color:transparent;background:linear-gradient(155deg,#e8e4dc 0%,#c0bfbb 18%,#d4af37 40%,#a855c0 68%,#edd98a 85%,#e8e4dc 100%);-webkit-background-clip:text;background-clip:text;margin-bottom:16px;animation:heroFade 1s ease .25s both;}
+    .hero-title-italic{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1rem,2.5vw,1.9rem);color:rgba(200,169,122,.6);letter-spacing:.12em;margin-bottom:28px;animation:heroFade 1s ease .4s both;}
+    .hero-ornament{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:28px;animation:heroFade 1s ease .5s both;}
+    .hero-orn-line{flex:1;max-width:80px;height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,55,.5));}
+    .hero-orn-line.r{background:linear-gradient(90deg,rgba(212,175,55,.5),transparent);}
+    .hero-orn-diamond{width:8px;height:8px;background:linear-gradient(45deg,var(--gold),var(--amethyst-lt));transform:rotate(45deg);box-shadow:0 0 12px rgba(168,85,192,.5);}
+    .hero-desc{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1rem,1.9vw,1.3rem);line-height:2;color:rgba(200,169,122,.68);max-width:640px;margin:0 auto 38px;animation:heroFade 1s ease .6s both;}
+    .hero-tag{display:inline-flex;align-items:center;gap:12px;border:1px solid rgba(168,85,192,.3);padding:9px 26px;font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.42em;text-transform:uppercase;color:rgba(168,85,192,.75);background:rgba(100,20,150,.07);animation:heroFade 1s ease .8s both;}
+    .hero-relic{width:90px;height:90px;margin:0 auto 28px;display:block;animation:heroFade 1s ease .05s both;}
+    .hero-scroll-ind{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;z-index:5;animation:heroFade 1s ease 1.2s both;}
+    .hs-label{font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.38em;color:rgba(255,255,255,.18);text-transform:uppercase;}
+    .hs-line{width:1px;height:48px;background:linear-gradient(to bottom,transparent,rgba(168,85,192,.5),transparent);animation:scrollFlow 2.2s ease-in-out infinite;}
+    @keyframes heroFade{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes scrollFlow{0%,100%{opacity:.25}50%{opacity:1}}
+
+    /* INTRO BAND */
+    #intro-band{position:relative;z-index:3;padding:70px 8%;background:linear-gradient(180deg,#0a0518 0%,#07050f 100%);border-top:1px solid rgba(123,45,139,.18);border-bottom:1px solid rgba(123,45,139,.12);}
+    .intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;}
+    .intro-eyebrow{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.5em;text-transform:uppercase;color:var(--copper);margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+    .intro-eyebrow::before{content:'';width:32px;height:1px;background:linear-gradient(90deg,transparent,var(--copper));}
+    .intro-title{font-family:'Uncial Antiqua',serif;font-size:clamp(1.5rem,3vw,2.5rem);line-height:1.2;color:var(--silver-lt);margin-bottom:18px;text-shadow:0 0 30px rgba(123,45,139,.3);}
+    .intro-body{font-family:'Cormorant Garamond',serif;font-size:clamp(.95rem,1.4vw,1.1rem);line-height:1.95;color:rgba(192,191,187,.65);margin-bottom:18px;}
+    .intro-body strong{color:var(--gold);font-weight:600;}
+    .intro-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px;}
+    .istat{text-align:center;padding:18px 10px;border:1px solid rgba(168,85,192,.14);background:rgba(123,45,139,.04);position:relative;}
+    .istat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--amethyst-lt),transparent);}
+    .istat-num{font-family:'Cinzel',serif;font-size:1.7rem;font-weight:700;color:var(--gold);margin-bottom:4px;}
+    .istat-lbl{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.25em;text-transform:uppercase;color:var(--grey);}
+    .intro-col-quote{position:relative;padding:32px 38px 32px 50px;border-left:3px solid rgba(168,85,192,.45);background:rgba(100,20,150,.04);}
+    .intro-col-quote::before{content:'"';position:absolute;top:-12px;left:14px;font-family:'Cormorant Garamond',serif;font-size:6rem;line-height:1;color:rgba(168,85,192,.1);pointer-events:none;}
+    .iq-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.05rem,1.7vw,1.35rem);line-height:1.9;color:var(--silver-lt);margin-bottom:18px;}
+    .iq-text strong{color:var(--gold-lt);font-style:normal;}
+    .iq-attr{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(168,85,192,.55);}
+
+    /* CONTEXT */
+    #context-section{position:relative;z-index:3;padding:90px 8%;background:radial-gradient(ellipse 70% 40% at 50% 0%,rgba(61,0,85,.22) 0%,transparent 60%),linear-gradient(180deg,#07050f 0%,#0e0a1a 100%);border-bottom:1px solid rgba(123,45,139,.12);}
+    .ctx-header{text-align:center;margin-bottom:70px;}
+    .ctx-eyebrow{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.52em;text-transform:uppercase;color:var(--amethyst-lt);margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:14px;}
+    .ctx-eyebrow::before{content:'';width:40px;height:1px;background:linear-gradient(90deg,transparent,var(--amethyst-lt));}
+    .ctx-eyebrow::after{content:'';width:40px;height:1px;background:linear-gradient(90deg,var(--amethyst-lt),transparent);}
+    .ctx-main-title{font-family:'Uncial Antiqua',serif;font-size:clamp(1.9rem,4.5vw,3.4rem);line-height:1.1;color:var(--silver-lt);margin-bottom:12px;text-shadow:0 0 45px rgba(100,20,160,.4);}
+    .ctx-subtitle{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(200,169,122,.5);letter-spacing:.08em;}
+    .ctx-header-div{width:140px;height:1px;margin:22px auto 0;background:linear-gradient(90deg,transparent,var(--gold),rgba(168,85,192,.7),var(--gold),transparent);}
+    .ctx-cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-bottom:66px;}
+    .ctx-card{padding:28px 24px;position:relative;overflow:hidden;border:1px solid rgba(123,45,139,.18);background:rgba(255,255,255,.018);}
+    .ctx-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--amethyst-lt),transparent);}
+    .ctx-card-num{font-family:'Bebas Neue',serif;font-size:2.5rem;line-height:1;color:rgba(168,85,192,.12);margin-bottom:8px;letter-spacing:.05em;}
+    .ctx-card-title{font-family:'Cinzel',serif;font-size:.88rem;font-weight:700;letter-spacing:.1em;color:var(--silver-lt);margin-bottom:12px;}
+    .ctx-card-body{font-family:'Cormorant Garamond',serif;font-size:.97rem;line-height:1.85;color:rgba(192,191,187,.6);}
+    .ctx-highlight-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+    .ctx-highlight{text-align:center;padding:24px 12px;border:1px solid rgba(180,115,51,.14);background:rgba(255,255,255,.016);position:relative;}
+    .ctx-highlight::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+    .ctx-h-num{font-family:'Cinzel',serif;font-size:1.85rem;font-weight:700;color:var(--gold);margin-bottom:5px;}
+    .ctx-h-lbl{font-family:'Cinzel',serif;font-size:.53rem;letter-spacing:.24em;text-transform:uppercase;color:var(--grey);}
+
+    /* MESA SECTION */
+    #mesa-section{position:relative;z-index:3;padding:100px 6%;background:radial-gradient(ellipse 80% 30% at 50% 0%,rgba(20,5,40,.35) 0%,transparent 60%),linear-gradient(180deg,#0a0615 0%,#07050f 100%);border-top:1px solid rgba(123,45,139,.15);}
+    .mesa-hdr{text-align:center;margin-bottom:80px;}
+    .mesa-eyebrow{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.52em;text-transform:uppercase;color:var(--copper);margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:14px;}
+    .mesa-eyebrow::before{content:'';width:40px;height:1px;background:linear-gradient(90deg,transparent,var(--copper));}
+    .mesa-eyebrow::after{content:'';width:40px;height:1px;background:linear-gradient(90deg,var(--copper),transparent);}
+    .mesa-main-title{font-family:'Uncial Antiqua',serif;font-size:clamp(2rem,5vw,3.8rem);line-height:1.1;color:var(--silver-lt);margin-bottom:14px;text-shadow:0 0 55px rgba(100,20,160,.35);}
+    .mesa-subtitle{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(200,169,122,.5);max-width:580px;margin:0 auto;line-height:1.8;}
+    .mesa-div{width:180px;height:1px;margin:26px auto 0;background:linear-gradient(90deg,transparent,var(--gold),rgba(168,85,192,.65),var(--gold),transparent);}
+    .staff-grid-top{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-bottom:36px;}
+    .staff-grid-bot{max-width:660px;margin:0 auto;}
+
+    /* STAFF CARD */
+    .staff-card{position:relative;overflow:hidden;background:linear-gradient(165deg,#130a22 0%,#0c0818 65%,#160e2a 100%);border:1px solid rgba(180,130,50,.18);transition:transform .45s cubic-bezier(.4,0,.2,1),box-shadow .45s;}
+    .staff-card:hover{transform:translateY(-7px);box-shadow:0 24px 70px rgba(100,20,160,.28),0 6px 24px rgba(0,0,0,.6);}
+    .staff-card::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(100,20,160,.07) 0%,transparent 100%);}
+    .sc-corner{position:absolute;width:22px;height:22px;z-index:10;pointer-events:none;}
+    .sc-corner.tl{top:0;left:0;border-top:2px solid rgba(212,175,55,.45);border-left:2px solid rgba(212,175,55,.45);}
+    .sc-corner.tr{top:0;right:0;border-top:2px solid rgba(212,175,55,.45);border-right:2px solid rgba(212,175,55,.45);}
+    .sc-corner.bl{bottom:0;left:0;border-bottom:2px solid rgba(212,175,55,.45);border-left:2px solid rgba(212,175,55,.45);}
+    .sc-corner.br{bottom:0;right:0;border-bottom:2px solid rgba(212,175,55,.45);border-right:2px solid rgba(212,175,55,.45);}
+    .card-top-stripe{height:3px;width:100%;}
+    .card-top-stripe.gold{background:linear-gradient(90deg,transparent,var(--gold-lt),var(--gold),var(--gold-lt),transparent);}
+    .card-top-stripe.silver{background:linear-gradient(90deg,transparent,var(--silver),rgba(192,191,187,.6),var(--silver),transparent);}
+    .card-top-stripe.copper{background:linear-gradient(90deg,transparent,var(--copper),rgba(200,130,80,.8),var(--copper),transparent);}
+    .card-photo-wrap{position:relative;overflow:hidden;}
+    .card-photo-wrap::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse 100% 28% at 50% 100%,rgba(12,8,24,1) 0%,transparent 100%),radial-gradient(ellipse 28% 100% at 0% 50%,rgba(12,8,24,.55) 0%,transparent 100%),radial-gradient(ellipse 28% 100% at 100% 50%,rgba(12,8,24,.55) 0%,transparent 100%),radial-gradient(ellipse 100% 14% at 50% 0%,rgba(12,8,24,.45) 0%,transparent 100%);}
+    .card-photo{width:100%;display:block;object-fit:cover;height:370px;filter:sepia(.45) saturate(.75) hue-rotate(255deg) brightness(.88) contrast(1.1);transition:filter .55s ease,transform .65s cubic-bezier(.4,0,.2,1);}
+    .staff-card:hover .card-photo{filter:sepia(.2) saturate(.95) hue-rotate(255deg) brightness(.97) contrast(1.05);transform:scale(1.05);}
+    .card-caption{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:22px 26px 18px;background:linear-gradient(to top,rgba(12,8,24,.99),transparent);}
+    .card-role-chip{display:inline-block;font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:.45em;text-transform:uppercase;padding:4px 14px;border:1px solid rgba(212,175,55,.28);margin-bottom:10px;}
+    .card-role-chip.gold{color:var(--gold-lt);border-color:rgba(212,175,55,.38);background:rgba(212,175,55,.05);}
+    .card-role-chip.silver{color:var(--silver-lt);border-color:rgba(200,200,200,.25);background:rgba(200,200,200,.04);}
+    .card-role-chip.copper{color:var(--copper);border-color:rgba(184,115,51,.38);background:rgba(184,115,51,.05);}
+    .card-person-name{font-family:'Cinzel',serif;font-weight:700;font-size:clamp(1.1rem,1.9vw,1.65rem);letter-spacing:.05em;color:var(--silver-lt);text-shadow:0 2px 14px rgba(0,0,0,.8);}
+    .card-body-area{padding:26px 28px 30px;position:relative;z-index:1;}
+    .card-awards-heading{font-family:'Cinzel',serif;font-size:.57rem;letter-spacing:.42em;text-transform:uppercase;color:var(--copper);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+    .card-awards-heading::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(184,115,51,.4),transparent);}
+    .awards-ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+    .award-li{display:flex;align-items:flex-start;gap:12px;font-family:'Cormorant Garamond',serif;font-size:.95rem;line-height:1.55;color:rgba(200,196,188,.68);}
+    .a-dot{flex-shrink:0;margin-top:6px;width:6px;height:6px;border-radius:50%;background:rgba(168,85,192,.65);box-shadow:0 0 6px rgba(168,85,192,.4);}
+    .a-dot.g{background:rgba(212,175,55,.7);box-shadow:0 0 6px rgba(212,175,55,.35);}
+    .incognito-area{position:relative;height:370px;overflow:hidden;background:linear-gradient(180deg,#0f0a20 0%,#07061a 100%);display:flex;align-items:center;justify-content:center;}
+    .incog-pattern{position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(-52deg,transparent,transparent 12px,rgba(100,20,160,.025) 12px,rgba(100,20,160,.025) 13px);}
+    .incog-glow{position:absolute;inset:0;background:radial-gradient(ellipse 55% 55% at 50% 42%,rgba(100,20,160,.12) 0%,transparent 100%);}
+    .incog-inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:18px;}
+    .incog-ring{width:120px;height:120px;border-radius:50%;border:2px dashed rgba(212,175,55,.18);display:flex;align-items:center;justify-content:center;animation:incogPulse 3.5s ease-in-out infinite;}
+    .incog-ring-inner{width:90px;height:90px;border-radius:50%;border:1px solid rgba(168,85,192,.12);display:flex;align-items:center;justify-content:center;font-size:3.2rem;opacity:.22;}
+    @keyframes incogPulse{0%,100%{box-shadow:0 0 20px rgba(100,20,160,.08);border-color:rgba(212,175,55,.12)}50%{box-shadow:0 0 50px rgba(100,20,160,.22);border-color:rgba(212,175,55,.32)}}
+    .incog-label{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.42em;text-transform:uppercase;color:rgba(200,169,122,.25);text-align:center;}
+    .incog-body-text{padding:26px 28px 32px;text-align:center;}
+    .incog-verse{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(192,191,187,.22);line-height:2;letter-spacing:.04em;margin-bottom:22px;}
+    .incog-coming{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.4em;text-transform:uppercase;color:rgba(192,191,187,.18);}
+
+    /* FOOTER */
+    footer{position:relative;z-index:3;padding:58px 8% 36px;border-top:1px solid rgba(123,45,139,.15);background:linear-gradient(to top,#030208 0%,#07050f 100%);text-align:center;}
+    .footer-brand{font-family:'Cinzel',serif;font-weight:900;font-size:1.2rem;letter-spacing:.3em;color:rgba(255,255,255,.55);margin-bottom:10px;}
+    .footer-brand em{color:var(--gold);font-style:normal;}
+    .footer-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;color:rgba(200,169,122,.32);letter-spacing:.08em;margin-bottom:26px;}
+    .footer-hr{width:110px;height:1px;margin:0 auto 22px;background:linear-gradient(90deg,transparent,rgba(212,175,55,.28),transparent);}
+    .footer-copy{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.14);}
+
+    /* MOBILE HIDE/SHOW */
+    @media(max-width:768px){
+      #dust-canvas,#nav-bar,#hero,#intro-band,#context-section,#mesa-section,footer{display:none!important;}
+      #nav-bar.menu-open{display:flex!important;padding:0 20px;z-index:9001;}
+      #nav-bar.menu-open .nb-brand,#nav-bar.menu-open .nb-center{display:none!important;}
+      #nav-bar.menu-open .nb-trigger{margin-left:auto;}
+      #nav-overlay{z-index:9000;}
+      .nvo-deco-panel{display:none;}
+      .nvo-list-panel{padding-top:60px;}
+      .nvo-item{padding:16px 20px;grid-template-columns:42px 1fr auto;gap:0 12px;}
+      .nvo-sub-item{padding:12px 20px 12px 74px;gap:12px;}
+      .nvo-title{font-size:1rem;}
+      .nvo-subs-inline{display:none;}
+      #mobile-shell{display:flex!important;}
+    }
+    @media(max-width:480px){.nvo-item{padding:14px 16px;grid-template-columns:36px 1fr auto;gap:0 10px}.nvo-sub-item{padding-left:62px}}
+
+    /* MOBILE SHELL */
+    #mobile-shell{display:none;flex-direction:column;min-height:100vh;background:var(--dark);color:var(--silver-lt);font-family:'Cormorant Garamond',serif;overflow-x:hidden;padding-bottom:60px;}
+    #mob-topbar{position:fixed;top:0;left:0;right:0;z-index:500;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(7,5,15,.96);backdrop-filter:blur(20px);border-bottom:1px solid rgba(168,85,192,.2);}
+    .mob-brand{display:flex;align-items:center;gap:10px;}
+    .mob-brand img{width:20px;height:20px;object-fit:contain;filter:brightness(0) invert(1);}
+    .mob-brand-name{font-family:'Cinzel',serif;font-weight:900;font-size:.78rem;letter-spacing:.22em;color:#fff;}
+    .mob-sep-c{color:var(--gold);margin:0 2px;}
+    .mob-hero-wrap{position:relative;padding:88px 22px 38px;text-align:center;overflow:hidden;background:linear-gradient(180deg,#09051a 0%,#0e0820 60%,#07050f 100%);border-bottom:1px solid rgba(123,45,139,.2);}
+    .mob-hero-bg-img{position:absolute;inset:0;z-index:0;background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Forum_romanum_6k_%285765477647%29.jpg/1280px-Forum_romanum_6k_%285765477647%29.jpg');background-size:cover;background-position:center;filter:sepia(1) hue-rotate(230deg) brightness(.1) contrast(1.4);}
+    .mob-hero-ov{position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 90% 70% at 50% 100%,rgba(61,0,85,.5) 0%,transparent 65%),linear-gradient(180deg,rgba(7,5,15,.6) 0%,rgba(7,5,15,.05) 50%,rgba(7,5,15,.85) 100%);}
+    .mob-eye{position:relative;z-index:2;font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:.5em;text-transform:uppercase;color:var(--amethyst-lt);margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:10px;}
+    .mob-eye::before,.mob-eye::after{content:'';width:14px;height:1px;background:var(--amethyst-lt);}
+    .mob-h1{position:relative;z-index:2;font-family:'Cinzel',serif;font-weight:900;font-size:2.2rem;line-height:1.05;letter-spacing:.03em;color:transparent;background:linear-gradient(155deg,#e8e4dc 0%,#d4af37 45%,#a855c0 80%);-webkit-background-clip:text;background-clip:text;margin-bottom:8px;}
+    .mob-sub{position:relative;z-index:2;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;color:rgba(200,169,122,.65);letter-spacing:.08em;margin-bottom:16px;line-height:1.5;}
+    .mob-staff-list{padding:28px 18px;}
+    .mob-section-label{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.42em;text-transform:uppercase;color:var(--copper);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+    .mob-section-label::before{content:'';width:14px;height:1px;background:var(--copper);}
+    .mob-card{position:relative;overflow:hidden;margin-bottom:24px;background:linear-gradient(165deg,#130a22 0%,#0c0818 100%);border:1px solid rgba(180,130,50,.18);}
+    .mob-card-stripe{height:2px;}
+    .mob-card-stripe.g{background:linear-gradient(90deg,transparent,var(--gold-lt),transparent);}
+    .mob-card-stripe.s{background:linear-gradient(90deg,transparent,var(--silver),transparent);}
+    .mob-card-stripe.c{background:linear-gradient(90deg,transparent,var(--copper),transparent);}
+    .mob-photo-wrap{position:relative;overflow:hidden;}
+    .mob-photo-wrap::after{content:'';position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 100% 35% at 50% 100%,rgba(12,8,24,1) 0%,transparent 100%);}
+    .mob-photo{width:100%;height:220px;object-fit:cover;display:block;filter:sepia(.45) saturate(.75) hue-rotate(255deg) brightness(.88) contrast(1.1);}
+    .mob-caption{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:14px 16px 12px;background:linear-gradient(to top,rgba(12,8,24,.98),transparent);}
+    .mob-chip{display:inline-block;font-family:'Cinzel',serif;font-size:.45rem;letter-spacing:.38em;text-transform:uppercase;padding:3px 10px;border:1px solid rgba(212,175,55,.25);margin-bottom:5px;}
+    .mob-chip.g{color:var(--gold-lt)}.mob-chip.s{color:var(--silver-lt)}.mob-chip.c{color:var(--copper)}
+    .mob-name{font-family:'Cinzel',serif;font-weight:700;font-size:1.1rem;letter-spacing:.05em;color:var(--silver-lt);}
+    .mob-body{padding:18px 16px 22px;}
+    .mob-aw-label{font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:.38em;text-transform:uppercase;color:var(--copper);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+    .mob-aw-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(184,115,51,.4),transparent);}
+    .mob-aw-item{display:flex;align-items:flex-start;gap:9px;margin-bottom:7px;font-family:'Cormorant Garamond',serif;font-size:.9rem;line-height:1.45;color:rgba(192,191,187,.65);}
+    .mob-dot{flex-shrink:0;margin-top:5px;width:5px;height:5px;border-radius:50%;background:rgba(168,85,192,.7);}
+    .mob-dot.g{background:rgba(212,175,55,.7);}
+    .mob-incog-area{height:180px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#0f0a20,#07061a);}
+    .mob-incog-ring{width:90px;height:90px;border-radius:50%;border:2px dashed rgba(212,175,55,.18);display:flex;align-items:center;justify-content:center;font-size:2.5rem;opacity:.25;animation:incogPulse 3.5s ease-in-out infinite;}
+    .mob-footer{padding:28px 20px 16px;text-align:center;border-top:1px solid rgba(123,45,139,.14);}
+    .mob-footer-brand{font-family:'Cinzel',serif;font-size:.78rem;font-weight:700;letter-spacing:.3em;color:rgba(255,255,255,.4);margin-bottom:5px;}
+    .mob-footer-copy{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.8rem;color:rgba(200,169,122,.28);}
+
+    /* RESPONSIVE TWEAKS */
+    @media(max-width:1100px){.staff-grid-top{grid-template-columns:1fr}.staff-grid-bot{max-width:100%}.intro-grid{grid-template-columns:1fr}.ctx-cards-grid{grid-template-columns:1fr}.ctx-highlight-bar{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:900px){#intro-band,#context-section,#mesa-section{padding-left:5%;padding-right:5%}.intro-stats{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-nebula"></div>
+  <div class="loader-col left"><div class="col-capital-top"></div><div class="col-shaft-body"></div><div class="col-base-foot"></div></div>
+  <div class="loader-col right"><div class="col-capital-top"></div><div class="col-shaft-body"></div><div class="col-base-foot"></div></div>
+  <div class="loader-card">
+    <div class="loader-card-line top"></div><div class="loader-card-line bot"></div>
+    <div class="lc-corner tl"></div><div class="lc-corner tr"></div><div class="lc-corner bl"></div><div class="lc-corner br"></div>
+    <img class="loader-eagle" src="/static/ONU.png" alt="SVPMUN" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Aquila.svg/200px-Aquila.svg.png'">
+    <div class="loader-spqr-label">· Senatus Populusque Romanus ·</div>
+    <div class="loader-sep"></div>
+    <div class="loader-big-title">Ordo Directorum</div>
+    <div class="loader-sub-title">Crisis · Segunda Guerra Civil Romana</div>
+    <div class="loader-proclama">SVPMUN MMXXVI · Crisis Comitialis<br>Directorivm in Session · XLIX A.C.</div>
+    <div class="loader-sep v"></div>
+    <div class="loader-status-text" id="l-status">Convocando al Directorio...</div>
+    <div class="loader-nodes" id="l-nodes">
+      <div class="l-node"></div><div class="l-node"></div><div class="l-node"></div>
+      <div class="l-node"></div><div class="l-node"></div><div class="l-node"></div>
+      <div class="l-node"></div><div class="l-node"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CANVAS -->
+<canvas id="dust-canvas"></canvas>
+
+<!-- NAVBAR -->
+<header id="nav-bar">
+  <a class="nb-brand" href="/drills">
+    <img class="nb-emblem" src="/static/ONU.png" alt="ONU" onerror="this.style.display='none'">
+    <span class="nb-word">SVPMUN <span class="nb-sep">·</span> CRISIS</span>
+  </a>
+  <nav class="nb-center" aria-label="Navegación rápida">
+    <a class="nb-quick-link" href="/" onclick="event.preventDefault();navigateTo('/')">Inicio</a>
+    <a class="nb-quick-link" href="/drills" onclick="event.preventDefault();navigateTo('/drills')">Drills</a>
+    <a class="nb-quick-link" href="/crisis-roma" onclick="event.preventDefault();navigateTo('/crisis-roma')">El Comité</a>
+    <a class="nb-quick-link active" href="#">Tu Mesa</a>
+  </nav>
+  <button class="nb-trigger" onclick="toggleNav()" aria-label="Menú">
+    <span class="nb-trigger-label">Menú</span>
+    <div class="nb-icon" id="nbIcon"><span></span><span></span><span></span></div>
+  </button>
+</header>
+
+<!-- NAV OVERLAY -->
+<div id="nav-overlay" role="navigation">
+  <div class="nvo-deco-panel">
+    <img class="nvo-deco-emblem" src="/static/ONU.png" alt="">
+    <div>
+      <div class="nvo-deco-brand">SVPMUN · Crisis Comitial</div>
+      <div class="nvo-deco-title">"Alea<br>iacta<br>est."</div>
+      <div class="nvo-deco-line"></div>
+      <div class="nvo-deco-sub">Segunda Guerra Civil<br>49 A.C. · Mesa de Crisis</div>
+    </div>
+    <div>
+      <div class="nvo-deco-year">XLIX</div>
+      <div class="nvo-deco-copy">© 2026 SVPMUN · Model United Nations</div>
+    </div>
+  </div>
+  <div class="nvo-list-panel">
+    <div class="nvo-item nvo-item-back" onclick="navigateTo('/crisis-roma')" style="cursor:pointer;">
+      <div class="nvo-num">←</div>
+      <div class="nvo-body"><div class="nvo-title">Volver al Comité</div><div class="nvo-subs-inline">Crisis Romana · SVPMUN</div></div>
+      <div class="nvo-back-arr">‹</div>
+    </div>
+    <div class="nvo-item" onclick="navigateTo('/')" style="cursor:pointer;">
+      <div class="nvo-num">01</div>
+      <div class="nvo-body"><div class="nvo-title">Inicio</div><div class="nvo-subs-inline">Página principal · SVPMUN</div></div>
+      <div class="nvo-arrow">›</div>
+    </div>
+    <div class="nvo-item" id="nvo-comites-trigger" onclick="toggleComites()" style="cursor:pointer;">
+      <div class="nvo-num">02</div>
+      <div class="nvo-body"><div class="nvo-title">Comités</div><div class="nvo-subs-inline">Crisis Roma · OMS · Unión Europea</div></div>
+      <div class="nvo-arrow-expand">›</div>
+    </div>
+    <div class="nvo-sub-list" id="nvo-comites-sub">
+      <div class="nvo-sub-item" onclick="navigateTo('/crisis-roma')"><div class="nvo-sub-dot"></div><div class="nvo-sub-name">Crisis — Segunda Guerra Civil Romana</div></div>
+      <div class="nvo-sub-item" onclick="navigateTo('/oms')"><div class="nvo-sub-dot"></div><div class="nvo-sub-name">OMS — Organización Mundial de la Salud</div></div>
+      <div class="nvo-sub-item" onclick="navigateTo('/crisis_ue_2035')"><div class="nvo-sub-dot"></div><div class="nvo-sub-name">Unión Europea</div></div>
+    </div>
+    <div class="nvo-item" onclick="navigateTo('/inscripciones-drills')" style="cursor:pointer;">
+      <div class="nvo-num">03</div>
+      <div class="nvo-body"><div class="nvo-title">Inscripciones</div><div class="nvo-subs-inline">Registro · Costos · Fechas</div></div>
+      <div class="nvo-arrow">›</div>
+    </div>
+    <div class="nvo-item" onclick="navigateTo('/Matrices')" style="cursor:pointer;">
+      <div class="nvo-num">04</div>
+      <div class="nvo-body"><div class="nvo-title">Matrices</div><div class="nvo-subs-inline">Base de Datos Estratégica</div></div>
+      <div class="nvo-arrow">›</div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-bg-img"></div>
+  <div class="hero-mosaic"></div>
+  <div class="hero-content">
+    <svg class="hero-relic" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="hg1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#edd98a"/><stop offset="45%" stop-color="#a855c0"/><stop offset="100%" stop-color="#d4af37"/>
+        </linearGradient>
+        <filter id="hglow"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <polygon points="45,6 78,24 78,66 45,84 12,66 12,24" fill="none" stroke="url(#hg1)" stroke-width="0.8" opacity="0.35" filter="url(#hglow)"/>
+      <polygon points="45,18 66,29 66,61 45,72 24,61 24,29" fill="none" stroke="url(#hg1)" stroke-width="0.6" opacity="0.25"/>
+      <line x1="45" y1="6" x2="45" y2="18" stroke="url(#hg1)" stroke-width="0.7" opacity="0.4"/>
+      <line x1="78" y1="24" x2="66" y2="29" stroke="url(#hg1)" stroke-width="0.7" opacity="0.4"/>
+      <line x1="78" y1="66" x2="66" y2="61" stroke="url(#hg1)" stroke-width="0.7" opacity="0.4"/>
+      <line x1="45" y1="84" x2="45" y2="72" stroke="url(#hg1)" stroke-width="0.7" opacity="0.4"/>
+      <line x1="12" y1="66" x2="24" y2="61" stroke="url(#hg1)" stroke-width="0.7" opacity="0.4"/>
+      <line x1="12" y1="24" x2="24" y2="29" stroke="url(#hg1)" stroke-width="0.7" opacity="0.4"/>
+      <circle cx="45" cy="45" r="8" fill="none" stroke="url(#hg1)" stroke-width="0.8" opacity="0.5"/>
+      <circle cx="45" cy="45" r="3" fill="url(#hg1)" opacity="0.6"/>
+    </svg>
+    <div class="hero-eyebrow">SVPMUN MMXXVI · Crisis Comitial</div>
+    <h1 class="hero-title">CONOCE<br>TU MESA</h1>
+    <div class="hero-title-italic">Los Árbitros del Destino Romano</div>
+    <div class="hero-ornament">
+      <div class="hero-orn-line"></div>
+      <div class="hero-orn-diamond"></div>
+      <div class="hero-orn-line r"></div>
+    </div>
+    <p class="hero-desc">
+      Ellos son los guardianes del orden dentro del caos. La Mesa de Crisis de la 
+      <em>Segunda Guerra Civil Romana</em> teje el hilo invisible del destino entre 
+      Populares y Optimates, forjando la historia de Roma ante tus ojos.
+    </p>
+    <div class="hero-tag"><span>·</span> Crisis · Segunda Guerra Civil Romana · 49 A.C. <span>·</span></div>
+  </div>
+  <div class="hero-scroll-ind">
+    <span class="hs-label">Scroll</span>
+    <div class="hs-line"></div>
+  </div>
+</section>
+
+<!-- INTRO BAND -->
+<section id="intro-band">
+  <div class="intro-grid">
+    <div class="intro-col-text rv">
+      <div class="intro-eyebrow">El Directorio</div>
+      <h2 class="intro-title">¿Qué es la<br>Mesa de Crisis?</h2>
+      <p class="intro-body">
+        En un Comité de Crisis, la <strong>Mesa Directiva</strong> no es solo un panel de observadores: 
+        es el motor secreto que mantiene la simulación viva. Son ellos quienes envían las 
+        <strong>actualizaciones de crisis</strong>, inyectan eventos imprevistos al debate, evalúan las 
+        respuestas de los delegados y determinan las consecuencias de cada decisión tomada en sala.
+      </p>
+      <p class="intro-body">
+        Su rol exige conocimiento histórico profundo, creatividad narrativa y una 
+        <strong>mente estratégica</strong> capaz de anticipar los movimientos de decenas de delegados 
+        simultáneamente. En este comité, la Mesa conoce el final de la guerra antes de que 
+        empiece — pero son los delegados quienes deciden el camino.
+      </p>
+      <div class="intro-stats">
+        <div class="istat rv d1"><div class="istat-num">III</div><div class="istat-lbl">Directores</div></div>
+        <div class="istat rv d2"><div class="istat-num">49 A.C.</div><div class="istat-lbl">El año de la crisis</div></div>
+        <div class="istat rv d3"><div class="istat-num">∞</div><div class="istat-lbl">Escenarios posibles</div></div>
+      </div>
+    </div>
+    <div class="intro-col-quote rv d2">
+      <p class="iq-text">
+        "La Mesa de Crisis no arbitra desde la distancia. Habita la sala, 
+        respira el caos y responde en tiempo real. Cuando el Senado tiembla 
+        y los generales dudan, <strong>ellos son quienes deciden si Roma arde 
+        o si la República sobrevive un día más.</strong>"
+      </p>
+      <div class="iq-attr">— Nota del Secretariado · SVPMUN MMXXVI</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTEXT SECTION -->
+<section id="context-section">
+  <div class="ctx-header rv">
+    <div class="ctx-eyebrow">El Escenario</div>
+    <h2 class="ctx-main-title">La República en Llamas</h2>
+    <div class="ctx-subtitle">49 Antes de Cristo · Roma · La Crisis que Cambió el Mundo Occidental</div>
+    <div class="ctx-header-div"></div>
+  </div>
+  <div class="ctx-cards-grid">
+    <div class="ctx-card rv d1">
+      <div class="ctx-card-num">I</div>
+      <div class="ctx-card-title">Alea Iacta Est — El Rubicón Cruzado</div>
+      <div class="ctx-card-body">César ha franqueado el río sagrado con la XIII Legión Gemina. La ley que prohibía a todo general entrar en Italia armado acaba de romperse. No es una amenaza. Es una declaración de guerra. El Senado, en pánico, abandona Roma en la madrugada del 10 de enero del 49 A.C.</div>
+    </div>
+    <div class="ctx-card rv d2">
+      <div class="ctx-card-num">II</div>
+      <div class="ctx-card-title">Dos Visiones del Mundo en Choque</div>
+      <div class="ctx-card-body">Los <strong style="color:var(--gold)">Populares</strong> de César exigen tierra para los veteranos, justicia para los ciudadanos y el fin del monopolio patricio. Los <strong style="color:rgba(160,180,220,.9)">Optimates</strong> de Pompeyo defienden el orden senatorial de siglos, el sistema que hizo grande a Roma. Ambos tienen razón. Ambos están dispuestos a morir.</div>
+    </div>
+    <div class="ctx-card rv d3">
+      <div class="ctx-card-num">III</div>
+      <div class="ctx-card-title">El Destino en Manos de los Delegados</div>
+      <div class="ctx-card-body">Cada decreto que emita el comité, cada alianza forjada o traicionada, cada legión que se mueva en el tablero tiene consecuencias reales dentro del escenario. La historia real fue una. Pero en este comité, el destino de Roma podría ser completamente distinto.</div>
+    </div>
+  </div>
+  <div class="ctx-highlight-bar rv">
+    <div class="ctx-highlight"><div class="ctx-h-num">II</div><div class="ctx-h-lbl">Facciones en Conflicto</div></div>
+    <div class="ctx-highlight"><div class="ctx-h-num">49 A.C.</div><div class="ctx-h-lbl">Año de la Simulación</div></div>
+    <div class="ctx-highlight"><div class="ctx-h-num">III</div><div class="ctx-h-lbl">Árbitros de la Mesa</div></div>
+    <div class="ctx-highlight"><div class="ctx-h-num">∞</div><div class="ctx-h-lbl">Desenlaces Posibles</div></div>
+  </div>
+</section>
+
+<!-- MESA SECTION -->
+<section id="mesa-section">
+  <div class="mesa-hdr rv">
+    <div class="mesa-eyebrow">El Directorio</div>
+    <h2 class="mesa-main-title">Los Árbitros del Caos</h2>
+    <p class="mesa-subtitle">Guardianes de la coherencia histórica, arquitectos del conflicto y los únicos que conocen el verdadero final de esta guerra antes de que ocurra.</p>
+    <div class="mesa-div"></div>
+  </div>
+
+  <div class="staff-grid-top">
+    <!-- DANIEL GUANIPA -->
+    <div class="staff-card rv d1">
+      <div class="sc-corner tl"></div><div class="sc-corner tr"></div><div class="sc-corner bl"></div><div class="sc-corner br"></div>
+      <div class="card-top-stripe gold"></div>
+      <div class="card-photo-wrap">
+        <img class="card-photo" src="static/Daniel.jpeg" alt="Daniel Guanipa" onerror="this.src='static/Daniel.jpg';this.onerror=null;">
+        <div class="card-caption">
+          <div class="card-role-chip gold">Presidente de Mesa</div>
+          <div class="card-person-name">Daniel Guanipa</div>
+        </div>
+      </div>
+      <div class="card-body-area">
+        <div class="card-awards-heading">Merita · Trayectoria</div>
+        <ul class="awards-ul">
+          <li class="award-li"><div class="a-dot g"></div>Participante activo en MUN desde el año 2022</li>
+          <li class="award-li"><div class="a-dot g"></div>Primer lugar — San Ignacio de Loyola, Caracas</li>
+          <li class="award-li"><div class="a-dot"></div>Primeras posiciones en Los Caminos de Acarigua y Río Claro de Barquisimeto</li>
+          <li class="award-li"><div class="a-dot"></div>Profesor de Inglés y Reclutador — Tech Research Studies</li>
+          <li class="award-li"><div class="a-dot"></div>Certificación técnica en Arquitectura de Machine Learning</li>
+          <li class="award-li"><div class="a-dot"></div>Crisis Staff en la Universidad Fermín Toro y Colegio San Pedro</li>
+          <li class="award-li"><div class="a-dot"></div>Experiencia en circuitos de Maracaibo y Caracas</li>
+          <li class="award-li"><div class="a-dot g"></div>Mejor Crisis Staff — SALTOMUN, Maracaibo</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- VICEPRESIDENTE INCOGNITO -->
+    <div class="staff-card rv d2">
+      <div class="sc-corner tl"></div><div class="sc-corner tr"></div><div class="sc-corner bl"></div><div class="sc-corner br"></div>
+      <div class="card-top-stripe silver"></div>
+      <div class="card-photo-wrap">
+        <div class="incognito-area">
+          <div class="incog-pattern"></div>
+          <div class="incog-glow"></div>
+          <div class="incog-inner">
+            <div class="incog-ring"><div class="incog-ring-inner">?</div></div>
+            <div class="incog-label">Identidad Clasificada</div>
+          </div>
+        </div>
+        <div class="card-caption">
+          <div class="card-role-chip silver">Vicepresidente de Mesa</div>
+          <div class="card-person-name" style="color:rgba(192,191,187,.3);font-style:italic;font-size:1.15rem;">Por Revelarse</div>
+        </div>
+      </div>
+      <div class="incog-body-text">
+        <p class="incog-verse">
+          "Hay figuras que prefieren operar<br>
+          desde las sombras del Senado.<br>
+          Su identidad se revelará<br>
+          cuando el momento sea propicio."
+        </p>
+        <div style="width:70px;height:1px;margin:0 auto 18px;background:linear-gradient(90deg,transparent,rgba(192,191,187,.12),transparent);"></div>
+        <div class="incog-coming">Información Próximamente</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AMARANTHA MARTHORANO -->
+  <div class="staff-grid-bot">
+    <div class="staff-card rv d3">
+      <div class="sc-corner tl"></div><div class="sc-corner tr"></div><div class="sc-corner bl"></div><div class="sc-corner br"></div>
+      <div class="card-top-stripe copper"></div>
+      <div class="card-photo-wrap">
+        <img class="card-photo" src="static/Amarantha.jpeg" alt="Amarantha Marthorano" onerror="this.src='static/Amarantha.png';this.onerror=null;" style="height:410px;">
+        <div class="card-caption">
+          <div class="card-role-chip copper">Crisis Staff</div>
+          <div class="card-person-name">Amarantha Marthorano</div>
+        </div>
+      </div>
+      <div class="card-body-area">
+        <div class="card-awards-heading">Merita · Trayectoria</div>
+        <ul class="awards-ul">
+          <li class="award-li"><div class="a-dot g"></div>Primer Promedio de su promoción — 2024-2025</li>
+          <li class="award-li"><div class="a-dot g"></div>Diplomado en Comercio Exterior por la UCV</li>
+          <li class="award-li"><div class="a-dot"></div>12 años como bailarina de flamenco</li>
+          <li class="award-li"><div class="a-dot"></div>Faculty Advisor de SVPMUN desde 2025</li>
+          <li class="award-li"><div class="a-dot g"></div>Presidente del Congreso Nacional — SPMUN 2026</li>
+          <li class="award-li"><div class="a-dot g"></div>Mejor Delegación de Crisis — MASMUN 2022</li>
+          <li class="award-li"><div class="a-dot g"></div>Mejor Delegación de Crisis — CAMIMUN 2023 y 2025</li>
+          <li class="award-li"><div class="a-dot g"></div>Mejor Crisis Staff — SALTOMUN, Maracaibo</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">SVPMUN <em>·</em> CRISIS</div>
+  <div class="footer-sub">Segunda Guerra Civil Romana · 49 A.C. · MMXXVI</div>
+  <div class="footer-hr"></div>
+  <div class="footer-copy">© 2026 SVPMUN · Model United Nations · Todos los Derechos Reservados</div>
+</footer>
+
+<!-- MOBILE SHELL -->
+<div id="mobile-shell">
+  <div id="mob-topbar">
+    <div class="mob-brand">
+      <img src="/static/ONU.png" alt="" onerror="this.style.display='none'">
+      <span class="mob-brand-name">SVPMUN <span class="mob-sep-c">·</span> CRISIS</span>
+    </div>
+    <button onclick="toggleNav()" style="background:none;border:none;cursor:pointer;padding:8px;">
+      <svg width="22" height="16" viewBox="0 0 22 16"><rect y="0" width="22" height="1.5" rx="1" fill="rgba(255,255,255,0.8)"/><rect y="7" width="14" height="1.5" rx="1" fill="rgba(255,255,255,0.8)"/><rect y="14" width="22" height="1.5" rx="1" fill="rgba(255,255,255,0.8)"/></svg>
+    </button>
+  </div>
+  <div style="height:52px;"></div>
+  <div class="mob-hero-wrap">
+    <div class="mob-hero-bg-img"></div>
+    <div class="mob-hero-ov"></div>
+    <div class="mob-eye">SVPMUN · Crisis</div>
+    <h1 class="mob-h1">Conoce<br>Tu Mesa</h1>
+    <div class="mob-sub">Los Árbitros del Destino Romano</div>
+  </div>
+  <div class="mob-staff-list">
+    <div class="mob-section-label">El Directorio</div>
+    <!-- Daniel mobile -->
+    <div class="mob-card">
+      <div class="mob-card-stripe g"></div>
+      <div class="mob-photo-wrap">
+        <img class="mob-photo" src="static/Daniel.jpeg" alt="Daniel Guanipa" onerror="this.src='static/Daniel.jpg';this.onerror=null;">
+        <div class="mob-caption">
+          <div class="mob-chip g">Presidente de Mesa</div>
+          <div class="mob-name">Daniel Guanipa</div>
+        </div>
+      </div>
+      <div class="mob-body">
+        <div class="mob-aw-label">Trayectoria</div>
+        <div class="mob-aw-item"><div class="mob-dot g"></div>Participante MUN desde 2022</div>
+        <div class="mob-aw-item"><div class="mob-dot g"></div>Primer lugar — San Ignacio de Loyola, Caracas</div>
+        <div class="mob-aw-item"><div class="mob-dot"></div>Primeras posiciones en Acarigua y Barquisimeto</div>
+        <div class="mob-aw-item"><div class="mob-dot"></div>Certificación en Arquitectura de Machine Learning</div>
+        <div class="mob-aw-item"><div class="mob-dot"></div>Crisis Staff en U. Fermín Toro y C. San Pedro</div>
+        <div class="mob-aw-item"><div class="mob-dot g"></div>Mejor Crisis Staff — SALTOMUN, Maracaibo</div>
+      </div>
+    </div>
+    <!-- VP mobile -->
+    <div class="mob-card">
+      <div class="mob-card-stripe s"></div>
+      <div class="mob-incog-area"><div class="mob-incog-ring">?</div></div>
+      <div style="padding:10px 16px 4px;">
+        <div class="mob-chip s">Vicepresidente de Mesa</div>
+        <div style="font-family:'Cinzel',serif;font-weight:700;font-size:1rem;letter-spacing:.05em;color:rgba(192,191,187,.3);font-style:italic;margin-top:4px;margin-bottom:8px;">Por Revelarse</div>
+      </div>
+      <div class="mob-body" style="text-align:center;">
+        <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(192,191,187,.25);line-height:1.7;">Identidad clasificada · Próximamente...</p>
+      </div>
+    </div>
+    <!-- Amarantha mobile -->
+    <div class="mob-card">
+      <div class="mob-card-stripe c"></div>
+      <div class="mob-photo-wrap">
+        <img class="mob-photo" src="static/Amarantha.jpeg" alt="Amarantha Marthorano" onerror="this.src='static/Amarantha.png';this.onerror=null;">
+        <div class="mob-caption">
+          <div class="mob-chip c">Crisis Staff</div>
+          <div class="mob-name">Amarantha Marthorano</div>
+        </div>
+      </div>
+      <div class="mob-body">
+        <div class="mob-aw-label">Trayectoria</div>
+        <div class="mob-aw-item"><div class="mob-dot g"></div>Primer Promedio de su promoción — 2024-2025</div>
+        <div class="mob-aw-item"><div class="mob-dot g"></div>Diplomado en Comercio Exterior por la UCV</div>
+        <div class="mob-aw-item"><div class="mob-dot"></div>12 años como bailarina de flamenco</div>
+        <div class="mob-aw-item"><div class="mob-dot"></div>Faculty Advisor de SVPMUN desde 2025</div>
+        <div class="mob-aw-item"><div class="mob-dot g"></div>Presidente del Congreso Nacional — SPMUN 2026</div>
+        <div class="mob-aw-item"><div class="mob-dot g"></div>Mejor Delegación de Crisis — MASMUN 2022</div>
+        <div class="mob-aw-item"><div class="mob-dot g"></div>Mejor Delegación de Crisis — CAMIMUN 2023 y 2025</div>
+        <div class="mob-aw-item"><div class="mob-dot g"></div>Mejor Crisis Staff — SALTOMUN, Maracaibo</div>
+      </div>
+    </div>
+  </div>
+  <div class="mob-footer">
+    <div class="mob-footer-brand">SVPMUN · CRISIS</div>
+    <div class="mob-footer-copy">Segunda Guerra Civil Romana · 49 A.C. · MMXXVI</div>
+  </div>
+</div>
+
+<script>
+/* PAGE TRANSITION CURTAIN */
+(function(){
+  const curtain=document.createElement('div');
+  curtain.id='curtain';
+  curtain.style.cssText='position:fixed;inset:0;z-index:9998;pointer-events:none;display:flex;';
+  curtain.innerHTML='<div class="c-half L" style="flex:1;height:100%;background:#07050f;transform:scaleX(0);transform-origin:left;"></div><div class="c-half R" style="flex:1;height:100%;background:#07050f;transform:scaleX(0);transform-origin:right;"></div>';
+  document.body.prepend(curtain);
+  const s=document.createElement('style');
+  s.textContent=`
+    body.entering .c-half.L{animation:cOpenL .65s cubic-bezier(.77,0,.18,1) forwards;}
+    body.entering .c-half.R{animation:cOpenR .65s cubic-bezier(.77,0,.18,1) .05s forwards;}
+    body.exiting  .c-half.L{animation:cCloseL .45s cubic-bezier(.77,0,.18,1) forwards;}
+    body.exiting  .c-half.R{animation:cCloseR .45s cubic-bezier(.77,0,.18,1) .04s forwards;}
+    @keyframes cOpenL{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+    @keyframes cOpenR{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+    @keyframes cCloseL{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+    @keyframes cCloseR{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  `;
+  document.head.appendChild(s);
+  document.body.classList.add('entering');
+  window.navigateTo=function(url){
+    document.body.classList.remove('entering');
+    document.body.classList.add('exiting');
+    document.getElementById('curtain').style.pointerEvents='all';
+    setTimeout(()=>{window.location.href=url;},520);
+  };
+})();
+
+/* LOADER */
+(function(){
+  const phrases=[
+    'Convocando al Directorio...',
+    'Invocando los espíritus del Senado...',
+    'Cruzando el Rubicón...',
+    'Desplegando las legiones del saber...',
+    'Preparando el tablero de crisis...',
+    'Roma no se construyó en un día...'
+  ];
+  const nodes=document.querySelectorAll('#l-nodes .l-node');
+  const statusEl=document.getElementById('l-status');
+  let phrase=0;
+  let nodeIdx=0;
+  const interval=setInterval(()=>{
+    if(nodeIdx<nodes.length){
+      nodes[nodeIdx].classList.add('lit');
+      nodeIdx++;
+    }
+    if(nodeIdx%2===0&&phrase<phrases.length){
+      statusEl.textContent=phrases[phrase];
+      phrase++;
+    }
+  },220);
+  window.addEventListener('load',()=>{
+    clearInterval(interval);
+    nodes.forEach(n=>n.classList.add('lit'));
+    statusEl.textContent='Directorio convocado. Ad Astra.';
+    setTimeout(()=>{
+      document.getElementById('loader').classList.add('hide');
+      setTimeout(()=>{document.getElementById('loader').style.display='none';},1500);
+    },700);
+  });
+  setTimeout(()=>{
+    document.getElementById('loader').classList.add('hide');
+    setTimeout(()=>{document.getElementById('loader').style.display='none';},1500);
+  },3800);
+})();
+
+/* NAVBAR */
+let navOpen=false;
+function toggleNav(){
+  navOpen=!navOpen;
+  const bar=document.getElementById('nav-bar');
+  const overlay=document.getElementById('nav-overlay');
+  const icon=document.getElementById('nbIcon');
+  bar.classList.toggle('menu-open',navOpen);
+  overlay.classList.toggle('open',navOpen);
+  icon.classList.toggle('open',navOpen);
+  document.body.style.overflow=navOpen?'hidden':'';
+  if(!navOpen)document.getElementById('nvo-comites-sub').classList.remove('open');
+}
+function toggleComites(){
+  document.getElementById('nvo-comites-sub').classList.toggle('open');
+  document.getElementById('nvo-comites-trigger').classList.toggle('sub-open');
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&navOpen)toggleNav();});
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav-bar').classList.toggle('scrolled',window.scrollY>40);
+});
+
+/* SCROLL REVEAL */
+const ro=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});
+},{threshold:0.08});
+document.querySelectorAll('.rv').forEach(el=>ro.observe(el));
+
+/* DUST PARTICLES */
+(function(){
+  const canvas=document.getElementById('dust-canvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  let W,H;
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  resize();
+  window.addEventListener('resize',resize);
+  const particles=[];
+  const COLORS=['rgba(168,85,192,','rgba(212,175,55,','rgba(100,20,160,','rgba(200,169,122,'];
+  class Particle{
+    constructor(){this.reset();}
+    reset(){
+      this.x=Math.random()*W;
+      this.y=H+Math.random()*40;
+      this.vx=(Math.random()-.5)*.35;
+      this.vy=-(Math.random()*.55+.12);
+      this.size=Math.random()*2+.3;
+      this.maxLife=220+Math.random()*120;
+      this.life=0;
+      this.color=COLORS[Math.floor(Math.random()*COLORS.length)];
+    }
+    update(){
+      this.x+=this.vx;this.y+=this.vy;this.life++;
+      if(this.life>this.maxLife)this.reset();
+    }
+    draw(){
+      const p=this.life/this.maxLife;
+      const op=p<.15?p/.15:p>.75?(1-p)/.25:1;
+      ctx.beginPath();
+      ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+      ctx.fillStyle=this.color+(op*.22)+')';
+      ctx.fill();
+    }
+  }
+  for(let i=0;i<38;i++){
+    const p=new Particle();
+    p.life=Math.random()*p.maxLife;
+    p.y=H-Math.random()*H;
+    particles.push(p);
+  }
+  function animate(){
+    ctx.clearRect(0,0,W,H);
+    particles.forEach(p=>{p.update();p.draw();});
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+</script>
+</body>
+</html>

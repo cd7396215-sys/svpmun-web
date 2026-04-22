@@ -30,139 +30,38 @@
       overflow-x:hidden;
     }
 
-    /* ══════════════════════════════════════
-       LOADER — ROMANO ANTIGUO
-    ══════════════════════════════════════ */
-    #loader {
-      position:fixed; inset:0; z-index:9999;
-      background: radial-gradient(ellipse at 50% 80%, #3b0808 0%, #1a0303 40%, #050101 100%);
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      transition:opacity 1.2s ease, transform 1.4s ease;
-      overflow:hidden;
-    }
-    #loader.hide { opacity:0; transform:scale(1.04); pointer-events:none; }
-
-    .loader-fire-base {
-      position:absolute; bottom:0; left:0; right:0; height:220px;
-      background: linear-gradient(to top, rgba(180,40,10,0.55) 0%, rgba(200,80,20,0.3) 30%, transparent 100%);
-      pointer-events:none;
-    }
-    .loader-fire-flicker {
-      position:absolute; bottom:0; left:0; right:0; height:120px;
-      background: linear-gradient(to top, rgba(255,120,20,0.4) 0%, rgba(220,60,10,0.15) 50%, transparent 100%);
-      animation: fireFlicker 0.18s ease-in-out infinite alternate;
-    }
-    @keyframes fireFlicker {
-      0%  { opacity:0.6; transform:scaleX(1)   scaleY(1); }
-      50% { opacity:1;   transform:scaleX(1.02) scaleY(1.06); }
-      100%{ opacity:0.7; transform:scaleX(0.98) scaleY(0.95); }
-    }
-
-    .loader-torch { position:absolute; bottom:0; width:60px; display:flex; flex-direction:column; align-items:center; }
-    .loader-torch.left  { left:8%; }
-    .loader-torch.right { right:8%; }
-    .torch-flame {
-      width:24px; height:48px;
-      background:radial-gradient(ellipse at 50% 80%, #ff9a00 0%, #e05a00 40%, rgba(180,20,0,0.3) 100%);
-      border-radius:50% 50% 30% 30%;
-      animation:torchFlame 0.22s ease-in-out infinite alternate;
-      filter:blur(1.5px);
-    }
-    @keyframes torchFlame {
-      0%  { transform:scaleX(1) scaleY(1) rotate(-3deg); opacity:0.9; }
-      100%{ transform:scaleX(0.85) scaleY(1.18) rotate(3deg); opacity:1; }
-    }
-    .torch-inner {
-      width:10px; height:10px; margin-top:-6px;
-      background:radial-gradient(circle, #fff8e0, #ffd060);
-      border-radius:50%; filter:blur(2px);
-      animation:torchFlame 0.15s ease-in-out infinite alternate-reverse;
-    }
-    .torch-body {
-      width:10px; height:90px;
-      background:linear-gradient(to bottom, #8b6914, #5a3e10, #2a1a08);
-      border-radius:2px;
-    }
-
-    .loader-scroll {
-      position:relative; z-index:2;
-      width:min(560px, 90vw);
-      background:linear-gradient(160deg, #1e1508 0%, #120e05 50%, #1a1309 100%);
-      border:1px solid rgba(180,130,40,0.35);
-      box-shadow:
-        0 0 60px rgba(180,60,0,0.3),
-        0 0 120px rgba(140,30,0,0.15),
-        inset 0 0 40px rgba(0,0,0,0.7),
-        inset 0 1px 0 rgba(212,175,55,0.15);
-      padding:48px 52px 44px;
-      text-align:center;
-    }
-    .loader-scroll::before, .loader-scroll::after {
-      content:'';
-      position:absolute; left:0; right:0; height:6px;
-      background:linear-gradient(90deg, transparent, rgba(180,115,51,0.6) 20%, rgba(212,175,55,0.9) 50%, rgba(180,115,51,0.6) 80%, transparent);
-    }
-    .loader-scroll::before { top:0; }
-    .loader-scroll::after  { bottom:0; }
-
-    .loader-eagle {
-      width:70px; height:70px; object-fit:contain; margin:0 auto 20px;
-      filter: invert(0.85) sepia(0.6) hue-rotate(5deg) saturate(2);
-      animation:eaglePulse 2.5s ease-in-out infinite;
-    }
-    @keyframes eaglePulse {
-      0%,100%{ opacity:0.7; filter:invert(0.85) sepia(0.6) hue-rotate(5deg) saturate(2) drop-shadow(0 0 8px rgba(212,175,55,0.4)); }
-      50%    { opacity:1;   filter:invert(0.85) sepia(0.6) hue-rotate(5deg) saturate(2) drop-shadow(0 0 18px rgba(212,175,55,0.8)); }
-    }
-
-    .loader-spqr {
-      font-family:'Uncial Antiqua',serif;
-      font-size:0.55rem; letter-spacing:0.55em; color:rgba(212,175,55,0.5);
-      text-transform:uppercase; margin-bottom:14px;
-    }
-    .loader-alert-title {
-      font-family:'Uncial Antiqua',serif;
-      font-size:clamp(1.1rem,3vw,1.7rem);
-      color:#c0bfbb;
-      letter-spacing:0.12em;
-      text-transform:uppercase;
-      margin-bottom:8px;
-      text-shadow:0 2px 12px rgba(180,60,10,0.6);
-      animation:carve 0.8s ease both;
-    }
-    .loader-proclama {
-      font-family:'Cinzel',serif;
-      font-size:clamp(0.62rem,1.5vw,0.78rem);
-      color:rgba(180,115,51,0.8);
-      letter-spacing:0.28em; text-transform:uppercase;
-      margin:14px 0 22px;
-      line-height:2.2;
-    }
-    .loader-sep {
-      width:100%; height:1px; margin:18px 0;
-      background:linear-gradient(90deg,transparent,rgba(212,175,55,0.4),transparent);
-    }
-    .loader-status-roman {
-      font-family:'Cormorant Garamond',serif; font-style:italic;
-      font-size:1rem; color:rgba(200,169,122,0.75);
-      letter-spacing:0.06em; min-height:1.4em;
-      margin-bottom:20px;
-    }
-    .loader-tally {
-      display:flex; justify-content:center; gap:8px; margin-top:12px;
-    }
-    .tally-mark {
-      width:2px; height:20px; background:rgba(212,175,55,0.2);
-      border-radius:1px; transition:background 0.3s, box-shadow 0.3s;
-    }
-    .tally-mark.lit {
-      background:rgba(212,175,55,0.8);
-      box-shadow:0 0 8px rgba(212,175,55,0.5);
-    }
-    @keyframes carve {
-      from { opacity:0; letter-spacing:0.3em; }
-      to   { opacity:1; letter-spacing:0.12em; }
-    }
+    /* LOADER */
+    #loader{position:fixed;inset:0;z-index:9999;background:radial-gradient(ellipse at 50% 55%,#1a0d2e 0%,#0e0820 45%,#030108 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 1.3s ease,transform 1.5s ease;overflow:hidden;}
+    #loader.hide{opacity:0;transform:scale(1.03);pointer-events:none;}
+    .loader-nebula{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 45% at 30% 40%,rgba(80,20,120,0.18) 0%,transparent 100%),radial-gradient(ellipse 45% 60% at 75% 60%,rgba(50,0,90,0.12) 0%,transparent 100%);}
+    .loader-col{position:absolute;bottom:0;display:flex;flex-direction:column;align-items:center;}
+    .loader-col.left{left:6%}.loader-col.right{right:6%}
+    .col-capital-top{width:40px;height:14px;background:linear-gradient(to bottom,rgba(212,175,55,0.4),rgba(139,105,20,0.2));border-radius:2px 2px 0 0;border-top:1px solid rgba(212,175,55,0.3);border-left:1px solid rgba(212,175,55,0.15);border-right:1px solid rgba(212,175,55,0.15);}
+    .col-shaft-body{width:16px;background:linear-gradient(to right,rgba(212,175,55,0.06),rgba(180,130,40,0.12),rgba(212,175,55,0.06));border-left:1px solid rgba(212,175,55,0.1);border-right:1px solid rgba(212,175,55,0.1);min-height:55vh;}
+    .col-base-foot{width:30px;height:10px;background:linear-gradient(to top,rgba(212,175,55,0.25),rgba(139,105,20,0.15));border-bottom:1px solid rgba(212,175,55,0.2);}
+    .loader-card{position:relative;z-index:5;width:min(520px,88vw);background:linear-gradient(160deg,#170f2c 0%,#0f0a1e 55%,#150c26 100%);border:1px solid rgba(168,85,192,0.2);box-shadow:0 0 80px rgba(100,20,160,0.25),0 0 160px rgba(80,10,130,0.1),inset 0 0 60px rgba(0,0,0,0.55),inset 0 1px 0 rgba(212,175,55,0.08);padding:46px 52px 42px;text-align:center;}
+    .loader-card-line{position:absolute;left:0;right:0;height:2px;}
+    .loader-card-line.top{top:0;background:linear-gradient(90deg,transparent,rgba(168,85,192,0.4) 20%,rgba(212,175,55,0.9) 50%,rgba(168,85,192,0.4) 80%,transparent);}
+    .loader-card-line.bot{bottom:0;background:linear-gradient(90deg,transparent,rgba(100,20,160,0.4) 20%,rgba(168,85,192,0.7) 50%,rgba(100,20,160,0.4) 80%,transparent);}
+    .lc-corner{position:absolute;width:18px;height:18px;animation:cornerPulse 3s ease-in-out infinite alternate;}
+    .lc-corner.tl{top:0;left:0;border-top:2px solid rgba(212,175,55,0.5);border-left:2px solid rgba(212,175,55,0.5);}
+    .lc-corner.tr{top:0;right:0;border-top:2px solid rgba(212,175,55,0.5);border-right:2px solid rgba(212,175,55,0.5);}
+    .lc-corner.bl{bottom:0;left:0;border-bottom:2px solid rgba(212,175,55,0.5);border-left:2px solid rgba(212,175,55,0.5);}
+    .lc-corner.br{bottom:0;right:0;border-bottom:2px solid rgba(212,175,55,0.5);border-right:2px solid rgba(212,175,55,0.5);}
+    @keyframes cornerPulse{0%{opacity:.4}100%{opacity:.9;box-shadow:0 0 10px rgba(212,175,55,0.3)}}
+    .loader-eagle{width:66px;height:66px;object-fit:contain;margin:0 auto 18px;display:block;filter:invert(.9) sepia(.4) hue-rotate(250deg) saturate(1.8);animation:eagleDrift 2.8s ease-in-out infinite;}
+    @keyframes eagleDrift{0%,100%{transform:translateY(0);opacity:.75;filter:invert(.9) sepia(.4) hue-rotate(250deg) saturate(1.8) drop-shadow(0 0 8px rgba(168,85,192,.4))}50%{transform:translateY(-4px);opacity:1;filter:invert(.9) sepia(.4) hue-rotate(250deg) saturate(1.8) drop-shadow(0 0 22px rgba(168,85,192,.9))}}
+    .loader-spqr-label{font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:.58em;color:rgba(168,85,192,.45);text-transform:uppercase;margin-bottom:18px;}
+    .loader-sep{width:100%;height:1px;margin:18px 0;background:linear-gradient(90deg,transparent,rgba(212,175,55,.35),transparent);}
+    .loader-sep.v{background:linear-gradient(90deg,transparent,rgba(168,85,192,.45),transparent);}
+    .loader-big-title{font-family:'Uncial Antiqua',serif;font-size:clamp(1rem,2.8vw,1.55rem);color:#c8c4be;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;text-shadow:0 2px 16px rgba(100,20,160,.65);animation:loaderCarve 1s ease both;}
+    .loader-sub-title{font-family:'Cinzel',serif;font-size:clamp(.52rem,1.3vw,.68rem);color:rgba(168,85,192,.65);letter-spacing:.35em;text-transform:uppercase;margin-top:8px;}
+    .loader-proclama{font-family:'Cinzel',serif;font-size:clamp(.56rem,1.3vw,.72rem);color:rgba(180,115,51,.7);letter-spacing:.28em;text-transform:uppercase;margin:14px 0 20px;line-height:2.3;}
+    .loader-status-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(200,169,122,.68);letter-spacing:.05em;min-height:1.4em;margin-bottom:20px;}
+    .loader-nodes{display:flex;justify-content:center;gap:12px;margin-top:8px;}
+    .l-node{width:8px;height:8px;border-radius:50%;border:1px solid rgba(212,175,55,.18);background:rgba(212,175,55,.08);transition:background .4s,box-shadow .4s,transform .3s,border-color .4s;}
+    .l-node.lit{background:radial-gradient(circle,#a855c0,#6b1a8b);border-color:rgba(212,175,55,.5);box-shadow:0 0 12px rgba(168,85,192,.7),0 0 4px rgba(212,175,55,.4);transform:scale(1.35);}
+    @keyframes loaderCarve{from{opacity:0;letter-spacing:.28em}to{opacity:1;letter-spacing:.1em}}
 
     /* ══════════════════════════════════════
        PARTÍCULAS DE FUEGO / CENIZAS
@@ -418,33 +317,26 @@
 <!-- CANVAS PARA EL FUEGO/CENIZAS EN EL FONDO -->
 <canvas id="ash-canvas"></canvas>
 
-<!-- LOADER ROMANO CLÁSICO (Restaurado) -->
+<!-- LOADER -->
 <div id="loader">
-  <div class="loader-fire-base"></div>
-  <div class="loader-fire-flicker"></div>
-
-  <div class="loader-torch left">
-    <div class="torch-flame"></div>
-    <div class="torch-inner"></div>
-    <div class="torch-body"></div>
-  </div>
-  <div class="loader-torch right">
-    <div class="torch-flame"></div>
-    <div class="torch-inner"></div>
-    <div class="torch-body"></div>
-  </div>
-
-  <div class="loader-scroll">
-    <img class="loader-eagle" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Aquila.svg/200px-Aquila.svg.png" alt="Aquila SPQR" onerror="this.style.display='none'">
-    <div class="loader-spqr">· Senatus Populusque Romanus ·</div>
+  <div class="loader-nebula"></div>
+  <div class="loader-col left"><div class="col-capital-top"></div><div class="col-shaft-body"></div><div class="col-base-foot"></div></div>
+  <div class="loader-col right"><div class="col-capital-top"></div><div class="col-shaft-body"></div><div class="col-base-foot"></div></div>
+  <div class="loader-card">
+    <div class="loader-card-line top"></div><div class="loader-card-line bot"></div>
+    <div class="lc-corner tl"></div><div class="lc-corner tr"></div><div class="lc-corner bl"></div><div class="lc-corner br"></div>
+    <img class="loader-eagle" src="static/ONU.png" alt="SVPMUN" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Aquila.svg/200px-Aquila.svg.png'">
+    <div class="loader-spqr-label">· Senatus Populusque Romanus ·</div>
     <div class="loader-sep"></div>
-    <div class="loader-alert-title">Alto Mando</div>
+    <div class="loader-big-title">Alto Mando</div>
+    <div class="loader-sub-title">Crisis · Segunda Guerra Civil Romana</div>
     <div class="loader-proclama">CRISIS COMITIALIS · SVPMUN MMXXVI<br>Conoce a la Mesa Directiva</div>
-    <div class="loader-sep"></div>
-    <div class="loader-status-roman" id="loader-status">Convocando a los Magistrados...</div>
-    <div class="loader-tally" id="loader-tally">
-      <div class="tally-mark"></div><div class="tally-mark"></div><div class="tally-mark"></div><div class="tally-mark"></div><div class="tally-mark"></div>
-      <div class="tally-mark"></div><div class="tally-mark"></div><div class="tally-mark"></div><div class="tally-mark"></div><div class="tally-mark"></div>
+    <div class="loader-sep v"></div>
+    <div class="loader-status-text" id="l-status">Convocando al Directorio...</div>
+    <div class="loader-nodes" id="l-nodes">
+      <div class="l-node"></div><div class="l-node"></div><div class="l-node"></div>
+      <div class="l-node"></div><div class="l-node"></div><div class="l-node"></div>
+      <div class="l-node"></div><div class="l-node"></div>
     </div>
   </div>
 </div>
@@ -609,41 +501,43 @@
 </footer>
 
 <script>
-  /* ══════════════════════════════════════
-     LOGICA DEL LOADER ROMANO CLÁSICO
-  ══════════════════════════════════════ */
+  /* LOADER */
   (function(){
-    const statusMsgs = [
-      'Convocando al Alto Mando...',
-      'Preparando el tablero de guerra...',
-      'Repartiendo legiones...',
-      'Las Parcas hilan el destino...',
-      'El Senado aguarda su veredicto...',
-      'Consilium Deorum preparado.'
+    const phrases=[
+      'Convocando al Directorio...',
+      'Invocando los espíritus del Senado...',
+      'Cruzando el Rubicón...',
+      'Desplegando las legiones del saber...',
+      'Preparando el tablero de crisis...',
+      'Roma no se construyó en un día...'
     ];
-    const marks = document.querySelectorAll('.tally-mark');
-    const statusEl = document.getElementById('loader-status');
-    let step = 0;
-    const total = marks.length;
-
-    function advance() {
-      if (step < total) {
-        marks[step].classList.add('lit');
-        step++;
-        if (statusMsgs[Math.floor(step * statusMsgs.length / total)]) {
-          statusEl.textContent = statusMsgs[Math.floor(step * statusMsgs.length / total)];
-        }
+    const nodes=document.querySelectorAll('#l-nodes .l-node');
+    const statusEl=document.getElementById('l-status');
+    let phrase=0;
+    let nodeIdx=0;
+    const interval=setInterval(()=>{
+      if(nodeIdx<nodes.length){
+        nodes[nodeIdx].classList.add('lit');
+        nodeIdx++;
       }
-      if (step < total) {
-        setTimeout(advance, 280 + Math.random() * 180);
-      } else {
-        setTimeout(() => {
-          document.getElementById('loader').classList.add('hide');
-          setTimeout(()=>{ document.getElementById('loader').style.display='none'; }, 1400);
-        }, 600);
+      if(nodeIdx%2===0&&phrase<phrases.length){
+        statusEl.textContent=phrases[phrase];
+        phrase++;
       }
-    }
-    setTimeout(advance, 600);
+    },220);
+    window.addEventListener('load',()=>{
+      clearInterval(interval);
+      nodes.forEach(n=>n.classList.add('lit'));
+      statusEl.textContent='Directorio convocado. Ad Astra.';
+      setTimeout(()=>{
+        document.getElementById('loader').classList.add('hide');
+        setTimeout(()=>{document.getElementById('loader').style.display='none';},1500);
+      },700);
+    });
+    setTimeout(()=>{
+      document.getElementById('loader').classList.add('hide');
+      setTimeout(()=>{document.getElementById('loader').style.display='none';},1500);
+    },3800);
   })();
 
   /* ══════════════════════════════════════
