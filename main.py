@@ -61,6 +61,11 @@ async def inscripcionesdrills(request: Request):
 async def oms(request: Request):
     return templates.TemplateResponse(request=request, name="oms.html")
 
+
+
+@app.get("/mesaUE", response_class=HTMLResponse)
+async def oms(request: Request):
+    return templates.TemplateResponse(request=request, name="UE.html")
 @app.get("/health")
 async def health():
     return {"status": "ok", "message": "SVPMUN Server is running"}
