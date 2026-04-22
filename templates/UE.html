@@ -41,8 +41,10 @@
 
     /* ── CRT OVERLAY ─────────────────────────────── */
     body::before {
-      content: ''; display: block; position: fixed; inset: 0;
-      background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.22) 50%),
+      content: '';
+      display: block; position: fixed; inset: 0;
+      background:
+        linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.22) 50%),
         linear-gradient(90deg, rgba(255,0,0,0.03), rgba(0,255,0,0.01), rgba(0,0,255,0.03));
       background-size: 100% 4px, 3px 100%;
       z-index: 9999; pointer-events: none;
@@ -51,44 +53,100 @@
     /* ── GLITCH ──────────────────────────────────── */
     .glitch { position: relative; display: inline-block; }
     .glitch::before, .glitch::after {
-      content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      content: attr(data-text);
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     }
-    .glitch::before { left: 3px; text-shadow: -2px 0 var(--alert); clip-path: inset(24% 0 53% 0); animation: glitch1 2s infinite linear alternate-reverse; }
-    .glitch::after { left: -3px; text-shadow: -2px 0 var(--ghost); clip-path: inset(80% 0 5% 0); animation: glitch2 3s infinite linear alternate-reverse; }
-    
+    .glitch::before {
+      left: 3px; text-shadow: -2px 0 var(--alert);
+      clip-path: inset(24% 0 53% 0);
+      animation: glitch1 2s infinite linear alternate-reverse;
+    }
+    .glitch::after {
+      left: -3px; text-shadow: -2px 0 var(--ghost);
+      clip-path: inset(80% 0 5% 0);
+      animation: glitch2 3s infinite linear alternate-reverse;
+    }
     @keyframes glitch1 {
-      0%  { clip-path: inset(20% 0 80% 0); transform: translate(0); } 20% { clip-path: inset(60% 0 10% 0); transform: translate(-2px,2px); }
-      40% { clip-path: inset(40% 0 50% 0); transform: translate(2px,-2px); } 60% { clip-path: inset(80% 0  5% 0); transform: translate(-2px,0); }
-      80% { clip-path: inset(10% 0 70% 0); transform: translate(2px,2px); } 100%{ clip-path: inset(30% 0 50% 0); transform: translate(0); }
+      0%  { clip-path: inset(20% 0 80% 0); transform: translate(0); }
+      20% { clip-path: inset(60% 0 10% 0); transform: translate(-2px,2px); }
+      40% { clip-path: inset(40% 0 50% 0); transform: translate(2px,-2px); }
+      60% { clip-path: inset(80% 0  5% 0); transform: translate(-2px,0); }
+      80% { clip-path: inset(10% 0 70% 0); transform: translate(2px,2px); }
+      100%{ clip-path: inset(30% 0 50% 0); transform: translate(0); }
     }
     @keyframes glitch2 {
-      0%  { clip-path: inset(10% 0 60% 0); transform: translate(2px,-2px); } 20% { clip-path: inset(30% 0 20% 0); transform: translate(-2px,2px); }
-      40% { clip-path: inset(70% 0 10% 0); transform: translate(2px,0); } 60% { clip-path: inset(20% 0 50% 0); transform: translate(-2px,-2px); }
-      80% { clip-path: inset(50% 0 30% 0); transform: translate(0,2px); } 100%{ clip-path: inset( 5% 0 80% 0); transform: translate(-2px,0); }
+      0%  { clip-path: inset(10% 0 60% 0); transform: translate(2px,-2px); }
+      20% { clip-path: inset(30% 0 20% 0); transform: translate(-2px,2px); }
+      40% { clip-path: inset(70% 0 10% 0); transform: translate(2px,0); }
+      60% { clip-path: inset(20% 0 50% 0); transform: translate(-2px,-2px); }
+      80% { clip-path: inset(50% 0 30% 0); transform: translate(0,2px); }
+      100%{ clip-path: inset( 5% 0 80% 0); transform: translate(-2px,0); }
     }
     @keyframes blink { 0%,100%{ opacity:1; } 50%{ opacity:0; } }
 
     /* ════════════════════════════════════════════════
        EMERGENCY ALERT LOADING SCREEN
     ════════════════════════════════════════════════ */
-    #eas-screen { position: fixed; inset: 0; z-index: 10010; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
-    #eas-screen::before { content: ''; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"); background-size: 200px 200px; opacity: 0.06; pointer-events: none; animation: staticShift 0.08s steps(1) infinite; }
-    @keyframes staticShift { 0%{ background-position: 0 0; } 25%{ background-position: 3px -5px; } 50%{ background-position: -3px 8px; } 75%{ background-position: 5px 2px; } 100%{ background-position: -2px -3px; } }
-    #eas-screen::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(255,0,51,0.015) 3px,rgba(255,0,51,0.015) 4px); pointer-events: none; }
-    
-    .eas-top-band { position: absolute; top: 0; left: 0; right: 0; height: 6px; background: repeating-linear-gradient(90deg, var(--alert) 0px, var(--alert) 40px, #000 40px, #000 50px); animation: bandScroll 0.6s linear infinite; }
-    .eas-bot-band { position: absolute; bottom: 0; left: 0; right: 0; height: 6px; background: repeating-linear-gradient(90deg, var(--alert) 0px, var(--alert) 40px, #000 40px, #000 50px); animation: bandScroll 0.6s linear infinite reverse; }
-    @keyframes bandScroll { 0%{ background-position: 0 0; } 100%{ background-position: 50px 0; } }
+    #eas-screen {
+      position: fixed; inset: 0; z-index: 10010;
+      background: #000;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      overflow: hidden;
+    }
 
-    .eas-box { position: relative; z-index: 2; width: min(820px, 92vw); border: 2px solid var(--alert); box-shadow: 0 0 60px rgba(255,0,51,0.35), inset 0 0 60px rgba(255,0,51,0.04); background: rgba(0,0,0,0.92); padding: 0; overflow: hidden; }
-    .eas-box::before { content: ''; position: absolute; inset: 0; background: rgba(255,0,51,0.08); animation: easFlash 1.2s ease-in-out infinite alternate; pointer-events: none; }
-    @keyframes easFlash { 0% { opacity: 0; } 100%{ opacity: 1; } }
+    #eas-screen::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+      background-size: 200px 200px; opacity: 0.06; pointer-events: none;
+      animation: staticShift 0.08s steps(1) infinite;
+    }
+    @keyframes staticShift {
+      0%  { background-position: 0 0; } 25% { background-position: 3px -5px; }
+      50% { background-position: -3px 8px; } 75% { background-position: 5px 2px; }
+      100%{ background-position: -2px -3px; }
+    }
+
+    #eas-screen::after {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(255,0,51,0.015) 3px,rgba(255,0,51,0.015) 4px);
+      pointer-events: none;
+    }
+
+    .eas-top-band {
+      position: absolute; top: 0; left: 0; right: 0; height: 6px;
+      background: repeating-linear-gradient(90deg, var(--alert) 0px, var(--alert) 40px, #000 40px, #000 50px);
+      animation: bandScroll 0.6s linear infinite;
+    }
+    @keyframes bandScroll { 0% { background-position: 0 0; } 100% { background-position: 50px 0; } }
+    .eas-bot-band {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 6px;
+      background: repeating-linear-gradient(90deg, var(--alert) 0px, var(--alert) 40px, #000 40px, #000 50px);
+      animation: bandScroll 0.6s linear infinite reverse;
+    }
+
+    .eas-box {
+      position: relative; z-index: 2; width: min(820px, 92vw);
+      border: 2px solid var(--alert); box-shadow: 0 0 60px rgba(255,0,51,0.35), inset 0 0 60px rgba(255,0,51,0.04);
+      background: rgba(0,0,0,0.92); padding: 0; overflow: hidden;
+    }
+    .eas-box::before {
+      content: ''; position: absolute; inset: 0; background: rgba(255,0,51,0.08);
+      animation: easFlash 1.2s ease-in-out infinite alternate; pointer-events: none;
+    }
+    @keyframes easFlash { 0%  { opacity: 0; } 100%{ opacity: 1; } }
 
     .eas-header { background: var(--alert); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; position: relative; overflow: hidden; }
     .eas-header::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent 0, transparent 8px, rgba(0,0,0,0.12) 8px, rgba(0,0,0,0.12) 9px); }
     .eas-header-label { font-family: var(--font-head); font-size: clamp(0.9rem, 2.5vw, 1.3rem); color: #000; letter-spacing: 4px; text-transform: uppercase; position: relative; z-index: 1; }
     .eas-header-code { font-family: var(--font-body); font-size: 0.72rem; color: rgba(0,0,0,0.7); letter-spacing: 2px; position: relative; z-index: 1; }
-    .eas-tones { display: flex; height: 8px; } .eas-tones span { flex: 1; } .eas-tones span:nth-child(1){background:#fff;} .eas-tones span:nth-child(2){background:#ff0;} .eas-tones span:nth-child(3){background:#0ff;} .eas-tones span:nth-child(4){background:#0f0;} .eas-tones span:nth-child(5){background:#f0f;} .eas-tones span:nth-child(6){background:#f00;} .eas-tones span:nth-child(7){background:#00f;} .eas-tones span:nth-child(8){background:#000;}
+    .eas-tones { display: flex; height: 8px; }
+    .eas-tones span { flex: 1; }
+    .eas-tones span:nth-child(1){background:#fff;} .eas-tones span:nth-child(2){background:#ff0;}
+    .eas-tones span:nth-child(3){background:#0ff;} .eas-tones span:nth-child(4){background:#0f0;}
+    .eas-tones span:nth-child(5){background:#f0f;} .eas-tones span:nth-child(6){background:#f00;}
+    .eas-tones span:nth-child(7){background:#00f;} .eas-tones span:nth-child(8){background:#000;}
+
     .eas-body { padding: 30px 28px 24px; }
     .eas-attention { font-family: var(--font-title); font-size: clamp(2.8rem, 8vw, 5rem); color: var(--alert); letter-spacing: 6px; line-height: 1; text-shadow: 0 0 30px rgba(255,0,51,0.6); animation: attentionPulse 0.8s ease-in-out infinite alternate; margin-bottom: 6px; }
     @keyframes attentionPulse { 0%  { text-shadow: 0 0 20px rgba(255,0,51,0.4); } 100%{ text-shadow: 0 0 50px rgba(255,0,51,0.9), 0 0 80px rgba(255,0,51,0.3); } }
@@ -122,11 +180,12 @@
     .eas-footer-code { font-family: var(--font-body); font-size: 0.6rem; color: rgba(255,255,255,0.25); letter-spacing: 2px; }
     .eas-rec-dot { display: flex; align-items: center; gap: 8px; font-family: var(--font-body); font-size: 0.6rem; color: var(--alert); letter-spacing: 2px; }
     .eas-rec-dot::before { content: ''; width: 8px; height: 8px; background: var(--alert); border-radius: 50%; animation: blink 0.8s infinite; }
+
     #eas-screen.eas-flash { animation: fullFlash 0.06s steps(1) 4; }
     @keyframes fullFlash { 0%,50%{ background: #fff; } 25%,75%{ background: #000; } }
 
     /* ════════════════════════════════════════════════
-       NAVBAR Y OVERLAY
+       NAVBAR 
     ════════════════════════════════════════════════ */
     #nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; display: flex; align-items: center; justify-content: space-between; padding: 0 52px; height: 76px; }
     #nav-bar::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg,rgba(7,22,48,0.75) 0%,rgba(7,22,48,0) 100%); backdrop-filter: blur(0px); transition: background 0.6s, backdrop-filter 0.6s; pointer-events: none; }
@@ -134,17 +193,20 @@
     #nav-bar.menu-open::before { background: transparent; backdrop-filter: none; }
     #nav-bar::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg,transparent 0%,rgba(201,168,76,0.0) 10%,rgba(201,168,76,0.55) 35%,rgba(237,217,138,1.0) 50%,rgba(201,168,76,0.55) 65%,rgba(201,168,76,0.0) 90%,transparent 100%); opacity: 1; transition: opacity 0.4s; }
     #nav-bar.menu-open::after { opacity: 0; }
+
     .nb-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; position: relative; z-index: 1; }
     .nb-word { font-family: 'Cinzel', serif; font-weight: 900; font-size: 1.08rem; letter-spacing: 0.32em; color: #fff; position: relative; }
     .nb-word .nb-sep { color: var(--gold-nav); margin: 0 4px; }
     .nb-word::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg, var(--gold-nav), transparent); transform: scaleX(0); transform-origin: left; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); }
     .nb-brand:hover .nb-word::after { transform: scaleX(1); }
+
     .nb-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; pointer-events: all; z-index: 1; transition: opacity 0.35s,transform 0.35s; }
     .nb-quick-link { font-family: 'Cinzel', serif; font-size: 0.56rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.3); padding: 6px 18px; position: relative; cursor: pointer; transition: color 0.3s; text-decoration: none; }
     .nb-quick-link::after { content: '·'; position: absolute; right: -1px; top: 50%; transform: translateY(-50%); color: rgba(201,168,76,0.2); pointer-events: none; }
     .nb-quick-link:last-child::after { display: none; }
     .nb-quick-link:hover { color: rgba(237,217,138,0.9); }
     #nav-bar.menu-open .nb-center { opacity: 0; transform: translateX(-50%) scale(0.9); pointer-events: none; }
+
     .nb-trigger { position: relative; z-index: 1; display: flex; align-items: center; gap: 16px; background: none; border: none; cursor: pointer; padding: 8px 0; }
     .nb-trigger-label { font-family: 'Cinzel', serif; font-size: 0.56rem; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(255,255,255,0.4); transition: color 0.3s,opacity 0.3s; }
     .nb-trigger:hover .nb-trigger-label { color: rgba(201,168,76,0.85); }
@@ -186,36 +248,44 @@
     .nvo-item:hover .nvo-arrow { color: var(--gold-nav); transform: translateX(4px); }
 
     /* ════════════════════════════════════════════════
-       MAIN CONTENT - HERO / SEC
+       MAIN CONTENT
     ════════════════════════════════════════════════ */
     #main-content { display: none; }
+
     .mesa-hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 120px 5% 80px; overflow: hidden; border-bottom: 2px solid rgba(255,0,51,0.4); }
     .mesa-hero::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,179,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,179,0,0.03) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none; }
     .mesa-hero::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 30%, var(--bg) 80%); pointer-events: none; }
+
     .hero-scanline { position: absolute; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, transparent, var(--alert) 50%, transparent); opacity: 0.15; animation: scanV 6s ease-in-out infinite; pointer-events: none; }
     .hero-scanline:nth-child(1) { left: 20%; animation-delay: 0s; } .hero-scanline:nth-child(2) { left: 50%; animation-delay: 2s; } .hero-scanline:nth-child(3) { left: 80%; animation-delay: 4s; }
     @keyframes scanV { 0%,100%{ opacity: 0; transform: scaleY(0) translateY(-50%); } 40%,60% { opacity: 0.15; transform: scaleY(1) translateY(0); } }
 
     .hero-eyebrow { position: relative; z-index: 2; font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 5px; color: var(--alert); text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px; margin-bottom: 24px; }
     .hero-eyebrow::before, .hero-eyebrow::after { content: ''; display: inline-block; width: 40px; height: 1px; background: var(--alert); }
+
     .hero-badge { position: relative; z-index: 2; display: inline-block; border: 1px solid rgba(255,179,0,0.4); background: rgba(255,179,0,0.06); padding: 5px 18px; font-family: var(--font-body); font-size: 0.65rem; letter-spacing: 3px; color: var(--tech); text-transform: uppercase; margin-bottom: 20px; }
+
     .mesa-h1 { position: relative; z-index: 2; font-family: var(--font-head); font-size: clamp(4rem, 14vw, 11rem); line-height: 0.85; text-transform: uppercase; color: var(--text); text-shadow: 5px 5px 0px var(--alert), -2px -2px 0px rgba(207,255,244,0.15); margin-bottom: 14px; }
     .mesa-h1-sub { position: relative; z-index: 2; font-family: var(--font-title); font-size: clamp(1.4rem, 4vw, 3rem); letter-spacing: 12px; color: var(--ghost); margin-bottom: 40px; opacity: 0.7; }
 
     .hero-corner { position: absolute; z-index: 2; width: 50px; height: 50px; }
-    .hero-corner.tl { top: 100px; left: 5%; border-top: 2px solid var(--ghost); border-left: 2px solid var(--ghost); } .hero-corner.tr { top: 100px; right: 5%; border-top: 2px solid var(--ghost); border-right: 2px solid var(--ghost); }
-    .hero-corner.bl { bottom: 40px; left: 5%; border-bottom: 2px solid var(--ghost); border-left: 2px solid var(--ghost); } .hero-corner.br { bottom: 40px; right: 5%; border-bottom: 2px solid var(--ghost); border-right: 2px solid var(--ghost); }
+    .hero-corner.tl { top: 100px; left: 5%; border-top: 2px solid var(--ghost); border-left: 2px solid var(--ghost); }
+    .hero-corner.tr { top: 100px; right: 5%; border-top: 2px solid var(--ghost); border-right: 2px solid var(--ghost); }
+    .hero-corner.bl { bottom: 40px; left: 5%; border-bottom: 2px solid var(--ghost); border-left: 2px solid var(--ghost); }
+    .hero-corner.br { bottom: 40px; right: 5%; border-bottom: 2px solid var(--ghost); border-right: 2px solid var(--ghost); }
+
     .rec-badge { position: absolute; top: 100px; right: 5%; z-index: 3; display: flex; align-items: center; gap: 8px; font-family: var(--font-body); font-size: 0.72rem; color: var(--alert); letter-spacing: 3px; }
     .rec-dot { width: 10px; height: 10px; background: var(--alert); border-radius: 50%; animation: blink 1s infinite; }
     .hero-ref { position: relative; z-index: 2; font-family: var(--font-body); font-size: 0.6rem; color: rgba(255,255,255,0.2); letter-spacing: 3px; text-transform: uppercase; }
+
     .ticker-wrap { background: var(--alert); color: #000; padding: 11px 0; overflow: hidden; white-space: nowrap; font-weight: bold; border-top: 2px solid #000; border-bottom: 2px solid #000; box-shadow: 0 0 30px rgba(255,0,51,0.5); }
     .ticker { display: inline-block; animation: ticker 22s linear infinite; font-family: var(--font-body); font-size: 1.1rem; letter-spacing: 2px; }
     @keyframes ticker { 0%{ transform: translateX(100vw); } 100%{ transform: translateX(-100%); } }
 
     /* ════════════════════════════════════════════════
-       SECCIÓN MESA DIRECTIVA / TARJETAS
+       SECCIÓN MESA DIRECTIVA / EXPEDIENTE LOGROS
     ════════════════════════════════════════════════ */
-    .content-wrapper { max-width: 1400px; margin: 0 auto; padding: 0 5%; }
+    .content-wrapper { max-width: 1300px; margin: 0 auto; padding: 0 5%; }
     .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.25,1,0.5,1); }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
@@ -226,163 +296,264 @@
     .section-title { font-family: var(--font-title); font-size: clamp(3rem, 8vw, 6rem); color: var(--ghost); letter-spacing: 8px; line-height: 1; margin-bottom: 16px; }
     .section-desc { font-family: var(--font-body); font-size: 0.82rem; color: rgba(255,255,255,0.35); letter-spacing: 2px; text-transform: uppercase; }
 
-    .directiva-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding-bottom: 120px; align-items: stretch;}
-    @media(max-width: 960px) { .directiva-grid { grid-template-columns: 1fr; max-width: 580px; margin: 0 auto; } }
+    .directiva-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding-bottom: 120px; }
+    @media(max-width: 860px) { .directiva-grid { grid-template-columns: 1fr; max-width: 520px; margin: 0 auto; } }
 
-    .auth-card { position: relative; background: var(--bg-panel); border: 1px solid var(--border); overflow: hidden; transition: transform 0.4s cubic-bezier(0.25,1,0.5,1), box-shadow 0.4s; display: flex; flex-direction: column; }
+    .auth-card { position: relative; background: var(--bg-panel); border: 1px solid var(--border); overflow: hidden; transition: transform 0.4s cubic-bezier(0.25,1,0.5,1), box-shadow 0.4s; }
     .auth-card:hover { transform: translateY(-8px); box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 30px rgba(207,255,244,0.06); }
     .auth-card::before { content: ''; position: absolute; inset: 0; border: 1px solid var(--ghost); opacity: 0; transition: opacity 0.4s; pointer-events: none; z-index: 10; }
     .auth-card:hover::before { opacity: 0.15; }
     .auth-card::after { content: ''; position: absolute; top: 0; left: 0; width: 60px; height: 60px; border-top: 2px solid var(--ghost); border-left: 2px solid var(--ghost); opacity: 0.35; z-index: 10; pointer-events: none; }
 
-    /* ESTILO DE CARD ROJA VS AMARILLA */
     .auth-card.presidente { border-color: rgba(255,0,51,0.25); }
     .auth-card.presidente::after { border-color: var(--alert); opacity: 0.5; }
     .auth-card.presidente:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(255,0,51,0.12); }
     .auth-card.presidente .auth-role-badge { background: rgba(255,0,51,0.12); border-color: rgba(255,0,51,0.4); color: var(--alert); }
     .auth-card.presidente .auth-card-accent { background: var(--alert); }
+
     .auth-card.vice { border-color: rgba(255,179,0,0.2); }
     .auth-card.vice::after { border-color: var(--tech); opacity: 0.4; }
     .auth-card.vice:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(255,179,0,0.1); }
     .auth-card.vice .auth-role-badge { background: rgba(255,179,0,0.1); border-color: rgba(255,179,0,0.35); color: var(--tech); }
     .auth-card.vice .auth-card-accent { background: var(--tech); }
-    .auth-card-accent { height: 3px; width: 100%; flex-shrink: 0; }
 
-    /* CORRECCIÓN PROPORCIONES DE LA FOTO - DE PAISAJE A RETRATO VERTICAL */
+    .auth-card-accent { height: 3px; width: 100%; }
+
+    /* EFECTOS Y CONTENEDOR FOTOGRAFÍAS (AJUSTE PARA FORMATO RETRATO) */
     .auth-photo-wrap {
       position: relative; width: 100%; 
-      aspect-ratio: 4/5; /* SE ARREGLA EL CORTE VERTICAL DANDOLE MÁS ESPACIO RETRATO A LA FOTO*/
+      aspect-ratio: 4/5; /* MEJORA: Modificado de 4/3 a 4/5 para que las fotos se ajusten como retratos sin recortarse */
       overflow: hidden; background: #080808; 
       cursor: crosshair; 
-      flex-shrink: 0;
     }
     .auth-photo-wrap img {
-      width: 100%; height: 100%; object-fit: cover; 
-      object-position: center 15%; /* ENFOCADO EN PECHO-CABEZA, PARA PREVENIR EL ZOOM MUY ALTO */
+      width: 100%; height: 100%; 
+      object-fit: cover; 
+      object-position: center 15%; /* MEJORA: Ajuste del encuadre para priorizar rostros en fotos verticales */
       filter: grayscale(20%) contrast(1.08); display: block;
       transition: filter 0.4s, transform 0.6s cubic-bezier(0.25,1,0.5,1);
     }
     .auth-card:hover .auth-photo-wrap img { filter: grayscale(0%) contrast(1.1); }
     
     .auth-photo-wrap.shooting img { animation: shootShake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
-    @keyframes shootShake { 10%, 90% { transform: translate3d(-1px, 0, 0) scale(1.02); } 20%, 80% { transform: translate3d(2px, 0, 0) scale(1.04); } 30%, 50%, 70% { transform: translate3d(-4px, -2px, 0) scale(1.06); } 40%, 60% { transform: translate3d(4px, 2px, 0) scale(1.03); } }
-    .auth-photo-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(5,5,5,0.95) 0%, rgba(5,5,5,0.15) 30%, transparent 80%); pointer-events: none; }
     
-    /* SNIPER VISUAL */
-    .sniper-scope { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.5); width: 120px; height: 120px; border-radius: 50%; border: 1.5px dashed rgba(255, 0, 51, 0.4); pointer-events: none; opacity: 0; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease-out; z-index: 10; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 20px rgba(255, 0, 51, 0.2); }
-    .auth-photo-wrap:hover .sniper-scope { transform: translate(-50%, -50%) scale(1); opacity: 1; border-color: rgba(255, 0, 51, 0.9); animation: spinScope 5s linear infinite reverse; box-shadow: inset 0 0 30px rgba(255, 0, 51, 0.4); }
+    @keyframes shootShake {
+      10%, 90% { transform: translate3d(-1px, 0, 0) scale(1.02); }
+      20%, 80% { transform: translate3d(2px, 0, 0) scale(1.04); }
+      30%, 50%, 70% { transform: translate3d(-4px, -2px, 0) scale(1.06); }
+      40%, 60% { transform: translate3d(4px, 2px, 0) scale(1.03); }
+    }
+
+    .auth-photo-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(5,5,5,0.9) 0%, rgba(5,5,5,0.2) 40%, transparent 70%); pointer-events: none; }
+    
+    /* Sniper visual effect dynamic */
+    .sniper-scope {
+        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.5); width: 120px; height: 120px;
+        border-radius: 50%; border: 1.5px dashed rgba(255, 0, 51, 0.4); pointer-events: none; opacity: 0;
+        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease-out; z-index: 10; display: flex; align-items: center; justify-content: center;
+        box-shadow: inset 0 0 20px rgba(255, 0, 51, 0.2);
+    }
+    .auth-photo-wrap:hover .sniper-scope {
+        transform: translate(-50%, -50%) scale(1); opacity: 1; border-color: rgba(255, 0, 51, 0.9);
+        animation: spinScope 5s linear infinite reverse; box-shadow: inset 0 0 30px rgba(255, 0, 51, 0.4);
+    }
     @keyframes spinScope { to { transform: translate(-50%, -50%) scale(1) rotate(360deg); } }
+
     .sniper-scope::before { content:''; position:absolute; width:4px; height:4px; border-radius:50%; background:#fff; box-shadow:0 0 10px rgba(255, 0, 51, 1); animation: blink 1.5s infinite alternate; }
+
     .sniper-reticle, .sniper-reticle-y { position: absolute; background: rgba(255, 0, 51, 0.9); box-shadow:0 0 5px rgba(255, 0, 51, 0.8); }
-    .sniper-reticle { width: 140%; height: 1px; left: -20%; } .sniper-reticle-y { height: 140%; width: 1px; top: -20%; }
+    .sniper-reticle { width: 140%; height: 1px; left: -20%; }
+    .sniper-reticle-y { height: 140%; width: 1px; top: -20%; }
+    
     .auth-card.vice .sniper-scope { border-color: rgba(255, 179, 0, 0.4); box-shadow: inset 0 0 20px rgba(255, 179, 0, 0.2); }
     .auth-card.vice .auth-photo-wrap:hover .sniper-scope { border-color: rgba(255, 179, 0, 0.9); box-shadow: inset 0 0 30px rgba(255, 179, 0, 0.4); }
     .auth-card.vice .sniper-reticle, .auth-card.vice .sniper-reticle-y { background: rgba(255, 179, 0, 0.9); box-shadow:0 0 5px rgba(255, 179, 0, 0.8); }
     .auth-card.vice .sniper-scope::before { box-shadow:0 0 10px rgba(255, 179, 0, 1); }
-    @keyframes photoFlash { 0%{ background: #fff; opacity: 1; } 15%{ opacity: 0.8; } 100%{ opacity: 0; background: rgba(0,0,0,1); } }
+
+    @keyframes photoFlash {
+        0%   { background: #fff; opacity: 1; }
+        15%  { opacity: 0.8; }
+        100% { opacity: 0; background: rgba(0,0,0,1); }
+    }
+
     .auth-photo-code { position: absolute; bottom: 14px; left: 14px; font-family: var(--font-body); font-size: 0.55rem; color: rgba(207,255,244,0.5); letter-spacing: 2px; text-transform: uppercase; }
 
-    /* CARD INFO STRUCTURE */
-    .auth-info { padding: 28px 28px 40px; position: relative; flex: 1; display: flex; flex-direction: column; }
+    .auth-info { padding: 28px 28px 40px; position: relative; }
     .auth-role-badge { display: inline-block; border: 1px solid; padding: 5px 14px; font-family: var(--font-body); font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; }
-    .auth-name { font-family: var(--font-head); font-size: clamp(1.8rem, 4vw, 2.8rem); text-transform: uppercase; color: var(--text); line-height: 1.1; margin-bottom: 8px; }
+    .auth-name { font-family: var(--font-head); font-size: clamp(1.5rem, 3.5vw, 2.2rem); text-transform: uppercase; color: var(--text); line-height: 1.1; margin-bottom: 8px; }
     .auth-divider { height: 1px; width: 100%; background: linear-gradient(90deg, var(--border), transparent); margin: 16px 0; }
     
     .auth-meta { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px;}
-    .auth-meta-row { display: flex; align-items: center; gap: 12px; font-family: var(--font-body); font-size: 0.70rem; color: rgba(255,255,255,0.4); letter-spacing: 1px; }
-    .auth-meta-row span:first-child { color: rgba(255,255,255,0.25); font-size: 0.60rem; letter-spacing: 2px; text-transform: uppercase; width: 80px; flex-shrink: 0; font-weight: 700; }
-    .auth-number { position: absolute; top: 28px; right: 28px; font-family: var(--font-title); font-size: 5rem; line-height: 1; color: rgba(255,255,255,0.04); letter-spacing: 2px; pointer-events: none; user-select: none; }
-    .auth-status { position: absolute; top: 110px; right: 28px; display: flex; align-items: center; gap: 6px; font-family: var(--font-body); font-size: 0.55rem; color: rgba(255,255,255,0.3); letter-spacing: 2px; }
+    .auth-meta-row { display: flex; align-items: center; gap: 12px; font-family: var(--font-body); font-size: 0.65rem; color: rgba(255,255,255,0.35); letter-spacing: 1.5px; }
+    .auth-meta-row span:first-child { color: rgba(255,255,255,0.18); font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; width: 80px; flex-shrink: 0; }
+
+    .auth-number { position: absolute; top: 28px; right: 28px; font-family: var(--font-title); font-size: 5rem; line-height: 1; color: rgba(255,255,255,0.03); letter-spacing: 2px; pointer-events: none; user-select: none; }
+    .auth-status { position: absolute; top: 96px; right: 28px; display: flex; align-items: center; gap: 6px; font-family: var(--font-body); font-size: 0.55rem; color: rgba(255,255,255,0.25); letter-spacing: 2px; }
     .auth-status::before { content: ''; width: 6px; height: 6px; background: #22ff88; border-radius: 50%; box-shadow: 0 0 8px #22ff88; animation: blink 2s infinite; }
 
-    /* REDISEÑO TOTAL: EXPEDIENTES / LOGROS  */
-    .auth-achievements-title { font-family: var(--font-body); font-size: 0.70rem; letter-spacing: 3px; color: var(--ghost); opacity: 0.8; text-transform: uppercase; margin-bottom: 15px; font-weight: bold; }
+    /* EXPEDIENTES / ACHIVEMENTS LISTING (MEJORADOS PARA LECTURA) */
+    .auth-achievements-title { 
+      font-family: var(--font-body); font-size: 0.75rem; /* Aumentado */
+      letter-spacing: 2px; color: var(--ghost); opacity: 1; /* Más brillante */
+      text-transform: uppercase; margin-bottom: 16px; /* Más margen */
+    }
+    
     .auth-achievements-list {
-        font-family: var(--font-body); font-size: 0.82rem; /* MUCH MAS GRANDE PARA LEER */
-        color: rgba(255,255,255,0.7); line-height: 1.7; letter-spacing: 0px; 
-        max-height: 420px; overflow-y: auto; padding-right: 15px; flex: 1; /* Cero limites sofocantes de vista, pero da scroll si sobra */
+        font-family: var(--font-body); font-size: 0.8rem; /* Aumentado drásticamente */
+        color: rgba(255,255,255,0.85); /* Más blanco y legible */
+        line-height: 1.7; /* Más aire entre líneas */
+        letter-spacing: 0.5px; 
+        max-height: 340px; /* Caja mucho más alta para evitar exceso de scroll */
+        overflow-y: auto; padding-right: 16px; 
+        display: flex; flex-direction: column;
     }
     
     .auth-achievements-list::-webkit-scrollbar { width: 4px; }
-    .auth-achievements-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
-    .presidente .auth-achievements-list::-webkit-scrollbar-thumb { background: rgba(255,0,51,0.4); border-radius: 4px;}
-    .vice .auth-achievements-list::-webkit-scrollbar-thumb { background: rgba(255,179,0,0.4); border-radius: 4px; }
+    .auth-achievements-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 4px; }
+    .auth-achievements-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 4px; }
+    .presidente .auth-achievements-list::-webkit-scrollbar-thumb { background: rgba(255,0,51,0.6); }
+    .vice .auth-achievements-list::-webkit-scrollbar-thumb { background: rgba(255,179,0,0.6); }
     
-    .auth-achievements-list ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
-    .auth-achievements-list li { position: relative; padding-left: 20px; color: rgba(255,255,255,0.7); }
-    .auth-achievements-list li::before { content: '►'; position: absolute; left: 0; top: 0px; font-size: 0.75rem;}
-    .presidente .auth-achievements-list li::before { color: var(--alert); text-shadow: 0 0 5px var(--alert);}
-    .vice .auth-achievements-list li::before { color: var(--tech); text-shadow: 0 0 5px var(--tech);}
-
-    /* CAJAS TAG PARA CLASIFICAR LAS VENTAJAS Y DESTACAR */
-    .ach-tag {
-        font-family: var(--font-title); font-size: 1.15rem;
-        letter-spacing: 1.5px; margin-right: 8px; margin-bottom: 3px;
-        background: rgba(255,255,255,0.06); padding: 3px 8px; 
-        border-radius: 3px; display: inline-block;
-        vertical-align: baseline; color: #fff;
+    .auth-achievements-list ul { 
+      list-style: none; padding-left: 0; margin: 0; 
+      display: flex; flex-direction: column; gap: 14px; /* Mayor separación entre logros */
     }
-    .presidente .ach-tag { border-bottom: 2px solid var(--alert); }
-    .vice .ach-tag { border-bottom: 2px solid var(--tech); }
+    .auth-achievements-list li { 
+      position: relative; padding-left: 16px; 
+      color: rgba(255,255,255,0.85); 
+      text-align: left; /* Mejor para leer párrafos */
+    }
+    .auth-achievements-list li::before { 
+      content: '>'; position: absolute; left: 0; top: 0px; 
+      color: var(--tech); font-weight: bold; font-size: 0.9rem; 
+    }
+    .presidente .auth-achievements-list li::before { color: var(--alert); }
 
+    /* ── SECCIÓN CLASIFICADA ── */
     .clasif-banner { background: rgba(255,0,51,0.06); border-top: 1px solid rgba(255,0,51,0.2); border-bottom: 1px solid rgba(255,0,51,0.2); padding: 18px 0; text-align: center; font-family: var(--font-body); font-size: 0.65rem; letter-spacing: 5px; color: rgba(255,0,51,0.5); text-transform: uppercase; overflow: hidden; white-space: nowrap; margin-bottom: 80px; }
     .clasif-inner { display: inline-block; animation: clasifScroll 30s linear infinite; }
     @keyframes clasifScroll { 0%  { transform: translateX(0); } 100%{ transform: translateX(-50%); } }
 
+    /* ── FOOTER ── */
     .page-footer { border-top: 1px solid var(--border); padding: 40px 5%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; background: rgba(0,0,0,0.3); }
-    .footer-brand { font-family: 'Cinzel', serif; font-weight: 900; font-size: 0.9rem; letter-spacing: 0.3em; color: rgba(255,255,255,0.3); } .footer-brand span { color: var(--gold-nav); }
+    .footer-brand { font-family: 'Cinzel', serif; font-weight: 900; font-size: 0.9rem; letter-spacing: 0.3em; color: rgba(255,255,255,0.3); }
+    .footer-brand span { color: var(--gold-nav); }
     .footer-ref { font-family: var(--font-body); font-size: 0.55rem; color: rgba(255,255,255,0.15); letter-spacing: 2px; text-transform: uppercase; text-align: right; }
-    .back-link { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-body); font-size: 0.7rem; color: rgba(255,255,255,0.3); letter-spacing: 3px; text-transform: uppercase; text-decoration: none; border: 1px solid rgba(255,255,255,0.1); padding: 10px 20px; transition: all 0.3s; margin-top: 60px; margin-bottom: 20px; }
-    .back-link::before { content: '←'; } .back-link:hover { color: var(--ghost); border-color: var(--ghost); background: rgba(207,255,244,0.04); }
 
+    /* ── BACK LINK ── */
+    .back-link { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-body); font-size: 0.7rem; color: rgba(255,255,255,0.3); letter-spacing: 3px; text-transform: uppercase; text-decoration: none; border: 1px solid rgba(255,255,255,0.1); padding: 10px 20px; transition: all 0.3s; margin-top: 60px; margin-bottom: 20px; }
+    .back-link::before { content: '←'; }
+    .back-link:hover { color: var(--ghost); border-color: var(--ghost); background: rgba(207,255,244,0.04); }
+
+    /* ── MOBILE ── */
     @media(max-width: 768px) {
-      #nav-bar { display: none !important; } #nav-bar.menu-open { display: flex !important; padding: 0 20px; z-index: 10001; } #nav-bar.menu-open .nb-brand, #nav-bar.menu-open .nb-center { display: none !important; } #nav-bar.menu-open .nb-trigger { margin-left: auto; }
-      #nav-overlay { z-index: 9990; } .nvo-deco-panel { display: none; } .nvo-list-panel { padding-top: 60px; } .nvo-item { padding: 16px 20px; grid-template-columns: 42px 1fr auto; gap: 0 12px; }
-      .hero-corner.tr, .hero-corner.bl, .hero-corner.br { display: none; } .rec-badge { top: 70px; }
-      .auth-name { font-size: 2.2rem; }
+      #nav-bar { display: none !important; }
+      #nav-bar.menu-open { display: flex !important; padding: 0 20px; z-index: 10001; }
+      #nav-bar.menu-open .nb-brand, #nav-bar.menu-open .nb-center { display: none !important; }
+      #nav-bar.menu-open .nb-trigger { margin-left: auto; }
+      #nav-overlay { z-index: 9990; }
+      .nvo-deco-panel { display: none; }
+      .nvo-list-panel { padding-top: 60px; }
+      .nvo-item { padding: 16px 20px; grid-template-columns: 42px 1fr auto; gap: 0 12px; }
+      .hero-corner.tr, .hero-corner.bl, .hero-corner.br { display: none; }
+      .rec-badge { top: 70px; }
     }
   </style>
 </head>
 <body>
 
+<!-- Pantalla de carga (Igual) -->
 <div id="eas-screen">
-  <div class="eas-top-band"></div><div class="eas-bot-band"></div>
+  <div class="eas-top-band"></div>
+  <div class="eas-bot-band"></div>
   <div class="eas-box">
     <div class="eas-tones"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
     <div class="eas-header">
-      <span class="eas-header-label">⚠ ALERTA MESA DE COMANDOS · EAS-EU-2035 ⚠</span>
+      <span class="eas-header-label">⚠ SISTEMA DE ALERTA DE EMERGENCIA · EAS-EU-2035 ⚠</span>
       <span class="eas-header-code" id="eas-timestamp">—</span>
     </div>
     <div class="eas-body">
       <div class="eas-attention glitch" data-text="ATENCIÓN">ATENCIÓN</div>
       <div class="eas-subtitle">— PROTOCOLO DE ACCESO RESTRINGIDO ACTIVADO —</div>
       <div class="eas-ticker-wrap">
-        <span class="eas-ticker-inner">◆ VERIFICANDO IDENTIDAD · CLASIFICACIÓN MESA DIRECTIVA · PROTOCOLO ALPHA ACTIVADO · PROCEDER CON PRECAUCIÓN ◆ CANAL CIFRADO EN OPERACIÓN</span>
+        <span class="eas-ticker-inner">
+          ◆ CANAL SEGURO ESTABLECIDO · VERIFICANDO CREDENCIALES DE DELEGADO · NIVEL DE AUTORIZACIÓN: MESA DIRECTIVA · PROTOCOLO EU-CRI-2035-DELTA · NO DISTRIBUIR ◆ CANAL SEGURO ESTABLECIDO · VERIFICANDO CREDENCIALES DE DELEGADO · NIVEL DE AUTORIZACIÓN: MESA DIRECTIVA · PROTOCOLO EU-CRI-2035-DELTA · NO DISTRIBUIR ◆
+        </span>
       </div>
       <div class="eas-divider"></div>
       <div class="eas-phases">
-        <div class="eas-phase-row" id="phase-0"><div class="eas-phase-icon" id="pi-0">○</div><div class="eas-phase-label wait" id="pl-0">Autenticando Archivos Fotográficos</div><div class="eas-phase-status wait" id="ps-0">ESPERA</div></div>
-        <div class="eas-phase-row" id="phase-1"><div class="eas-phase-icon" id="pi-1">○</div><div class="eas-phase-label wait" id="pl-1">Abriendo Expediente Confidencial de Logros</div><div class="eas-phase-status wait" id="ps-1">ESPERA</div></div>
-        <div class="eas-phase-row" id="phase-2"><div class="eas-phase-icon" id="pi-2">○</div><div class="eas-phase-label wait" id="pl-2">Proyectando Interfaz</div><div class="eas-phase-status wait" id="ps-2">ESPERA</div></div>
+        <div class="eas-phase-row" id="phase-0"><div class="eas-phase-icon" id="pi-0">○</div><div class="eas-phase-label wait" id="pl-0">Estableciendo canal cifrado</div><div class="eas-phase-status wait" id="ps-0">EN ESPERA</div></div>
+        <div class="eas-phase-row" id="phase-1"><div class="eas-phase-icon" id="pi-1">○</div><div class="eas-phase-label wait" id="pl-1">Autenticación de protocolo EU-DELTA</div><div class="eas-phase-status wait" id="ps-1">EN ESPERA</div></div>
+        <div class="eas-phase-row" id="phase-2"><div class="eas-phase-icon" id="pi-2">○</div><div class="eas-phase-label wait" id="pl-2">Verificando credenciales de mesa</div><div class="eas-phase-status wait" id="ps-2">EN ESPERA</div></div>
+        <div class="eas-phase-row" id="phase-3"><div class="eas-phase-icon" id="pi-3">○</div><div class="eas-phase-label wait" id="pl-3">Desencriptando archivos directivos</div><div class="eas-phase-status wait" id="ps-3">EN ESPERA</div></div>
+        <div class="eas-phase-row" id="phase-4"><div class="eas-phase-icon" id="pi-4">○</div><div class="eas-phase-label wait" id="pl-4">Concediendo acceso nivel DIRECTIVA</div><div class="eas-phase-status wait" id="ps-4">EN ESPERA</div></div>
       </div>
       <div class="eas-divider"></div>
-      <div class="eas-progress-wrap"><div class="eas-progress-track"><div class="eas-progress-fill" id="eas-bar"></div><div class="eas-progress-ghost"></div><div class="eas-progress-label" id="eas-bar-label">PROCESANDO RED...</div></div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;"><div style="font-family:var(--font-body);font-size:0.6rem;color:rgba(255,255,255,0.2);letter-spacing:2px;">SEGURIDAD TÁCTICA </div><div class="eas-pct" id="eas-pct">0%</div></div>
+      <div class="eas-progress-wrap">
+        <div class="eas-progress-track">
+          <div class="eas-progress-fill" id="eas-bar"></div>
+          <div class="eas-progress-ghost"></div>
+          <div class="eas-progress-label" id="eas-bar-label">INICIALIZANDO...</div>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+        <div style="font-family:var(--font-body);font-size:0.6rem;color:rgba(255,255,255,0.2);letter-spacing:2px;">ACCESO EN PROGRESO</div>
+        <div class="eas-pct" id="eas-pct">0%</div>
+      </div>
+    </div>
+    <div class="eas-footer">
+      <span class="eas-footer-code">UNIT: EU-CRISIS-2035 · MESA: /mesa_crisis_ue · v2.35-DELTA</span>
+      <span class="eas-rec-dot">TRANSMITIENDO</span>
     </div>
   </div>
 </div>
 
 <nav id="nav-bar">
-  <a class="nb-brand" href="/crisis_ue_2035" onclick="event.preventDefault(); navigateTo('/crisis_ue_2035')"><span class="nb-word">CRISIS<span class="nb-sep">·</span>UE</span></a>
-  <div class="nb-center"><a class="nb-quick-link" href="/crisis_ue_2035" onclick="event.preventDefault(); navigateTo('/crisis_ue_2035')">Inicio</a><a class="nb-quick-link" href="/mesa_crisis_ue" onclick="event.preventDefault(); navigateTo('/mesa_crisis_ue')">Mesa</a></div>
-  <button class="nb-trigger" onclick="toggleNav()"><span class="nb-trigger-label">Menú</span><div class="nb-icon" id="nbIcon"><span></span><span></span><span></span></div></button>
+  <a class="nb-brand" href="/crisis_ue_2035" onclick="event.preventDefault(); navigateTo('/crisis_ue_2035')">
+    <span class="nb-word">CRISIS<span class="nb-sep">·</span>UE</span>
+  </a>
+  <div class="nb-center">
+    <a class="nb-quick-link" href="/crisis_ue_2035" onclick="event.preventDefault(); navigateTo('/crisis_ue_2035')">Inicio</a>
+    <a class="nb-quick-link" href="/mesa_crisis_ue" onclick="event.preventDefault(); navigateTo('/mesa_crisis_ue')">Mesa</a>
+  </div>
+  <button class="nb-trigger" onclick="toggleNav()">
+    <span class="nb-trigger-label">Menú</span>
+    <div class="nb-icon" id="nbIcon">
+      <span></span><span></span><span></span>
+    </div>
+  </button>
 </nav>
 
 <div id="nav-overlay">
-  <div class="nvo-deco-panel"><div><div class="nvo-deco-brand">Crisis · UE · 2035</div><div class="nvo-deco-title">Bastión Europa</div><div class="nvo-deco-line"></div></div></div>
+  <div class="nvo-deco-panel">
+    <div>
+      <div class="nvo-deco-brand">Crisis · UE · 2035</div>
+      <div class="nvo-deco-title">El último bastión<br>de Europa</div>
+      <div class="nvo-deco-line"></div>
+      <div class="nvo-deco-sub">Mesa Directiva<br>Consejo de Emergencia<br>Protocolo EU-DELTA</div>
+    </div>
+    <div class="nvo-deco-bottom">
+      <div class="nvo-deco-year">2035</div>
+      <div class="nvo-deco-copy">Sesión Clasificada</div>
+    </div>
+  </div>
   <div class="nvo-list-panel">
-    <div class="nvo-item" onclick="navigateTo('/crisis_ue_2035'); toggleNav();"><div class="nvo-num">01</div><div class="nvo-body"><div class="nvo-title">Crisis EU 2035</div></div><div class="nvo-arrow">→</div></div>
-    <div class="nvo-item" onclick="navigateTo('/mesa_crisis_ue'); toggleNav();"><div class="nvo-num">02</div><div class="nvo-body"><div class="nvo-title">Mesa Directiva</div></div><div class="nvo-arrow">→</div></div>
+    <div class="nvo-item" onclick="navigateTo('/crisis_ue_2035'); toggleNav();">
+      <div class="nvo-num">01</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Crisis EU 2035</div>
+        <div class="nvo-subs-inline">Página principal · Informe completo</div>
+      </div>
+      <div class="nvo-arrow">→</div>
+    </div>
+    <div class="nvo-item" onclick="navigateTo('/mesa_crisis_ue'); toggleNav();">
+      <div class="nvo-num">02</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Mesa Directiva</div>
+        <div class="nvo-subs-inline">Presidente · Vicepresidente</div>
+      </div>
+      <div class="nvo-arrow">→</div>
+    </div>
   </div>
 </div>
 
@@ -390,65 +561,77 @@
   <section class="mesa-hero">
     <div class="hero-scanline"></div><div class="hero-scanline"></div><div class="hero-scanline"></div>
     <div class="hero-corner tl"></div><div class="hero-corner tr"></div><div class="hero-corner bl"></div><div class="hero-corner br"></div>
-    <div class="rec-badge"><div class="rec-dot"></div>SESIÓN ALPHA DIRECTIVA ACTIVA</div>
-    <div class="hero-badge">// RECOPILACIÓN: IDENTIDADES VISUALES Y EXPEDIENTES //</div>
-    <div class="hero-eyebrow">UNIÓN EUROPEA - COMANDOS EXCLUSIVOS</div>
-    <h1 class="mesa-h1 glitch" data-text="MESA">MESA</h1><div class="mesa-h1-sub">DIRECTIVA</div>
+    <div class="rec-badge"><div class="rec-dot"></div>SESIÓN ACTIVA</div>
+    <div class="hero-badge">// DOCUMENTO CLASIFICADO · NIVEL DIRECTIVA //</div>
+    <div class="hero-eyebrow">CRISIS UE 2035</div>
+    <h1 class="mesa-h1 glitch" data-text="MESA">MESA</h1>
+    <div class="mesa-h1-sub">DIRECTIVA</div>
+    <div class="hero-ref">REF: EU-CRISIS-2035 · ANEXO-MESA · /mesa_crisis_ue</div>
   </section>
 
-  <div class="ticker-wrap"><span class="ticker">◆ ADVERTENCIA: IDENTIDADES E HISTORIAL OPERACIONAL REGISTRADO. TODA RED DISTRIBUTIVA ES MONITOREADA ◆ ANÁLISIS DE EXPEDIENTE ACTIVADO</span></div>
+  <div class="ticker-wrap">
+    <span class="ticker">
+      ◆ MESA DIRECTIVA CONSTITUIDA · SESIÓN PLENARIA EN CURSO · 2 DE MAYO 2026 · PROTOCOLO EU-DELTA ACTIVO · ACCESO RESTRINGIDO A DELEGADOS ACREDITADOS · TODA FILTRACIÓN SERÁ PROCESADA BAJO EL ART. 26 ◆ MESA DIRECTIVA CONSTITUIDA · SESIÓN PLENARIA EN CURSO · 2 DE MAYO 2026
+    </span>
+  </div>
 
   <div class="content-wrapper">
     <div class="section-header reveal">
-      <div class="section-eyebrow">Autoridades de Sesión Identificadas</div>
-      <div class="section-title">AUTORIDADES LÍDERES</div>
-      <div class="section-desc">Reportes de impacto adjuntados por rango estructural.</div>
+      <div class="section-eyebrow">Autoridades de Sesión</div>
+      <div class="section-title">COMPOSICIÓN</div>
+      <div class="section-desc">Miembros acreditados · Nivel de acceso: ALPHA</div>
     </div>
 
-    <!-- REDESIGN CARDS PARA PERFIL SUPERIOR  -->
+    <div class="clasif-banner reveal">
+      <span class="clasif-inner">
+        ◆ TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR · TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR · TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR ◆ TOP SECRET · EU-CRISIS-2035 · MESA DIRECTIVA · NO DISTRIBUIR ◆
+      </span>
+    </div>
+
+    <!-- GRID MESA -->
     <div class="directiva-grid">
       
       <!-- CARD 01 PRESIDENTE - SARA RIERA -->
       <div class="auth-card presidente reveal">
         <div class="auth-card-accent"></div>
         <div class="auth-photo-wrap" onclick="fireSniper(event)">
-          <!-- AJUSTE LA POSICION POR CENTRO DEL ROSTRO AUTOMÁTICO EN LA CARPETA ESTÁTICA-->
           <img src="static/Sarah.jpeg" alt="Sara Riera" loading="eager">
           <div class="auth-photo-overlay"></div>
           
-          <!-- Visor del Disparador Láser -->
-          <div class="sniper-scope"><div class="sniper-reticle"></div><div class="sniper-reticle-y"></div></div>
-          <div class="auth-photo-code">CÓDIGO: PRES-001 | FOTO RECUPERADA EN HD</div>
+          <div class="sniper-scope">
+              <div class="sniper-reticle"></div>
+              <div class="sniper-reticle-y"></div>
+          </div>
+          
+          <div class="auth-photo-code">ID: PRES-001 · CLS: ALPHA · ACT: FIRE (X)</div>
         </div>
         
         <div class="auth-info">
           <div class="auth-number">01</div>
-          <div class="auth-role-badge">⬛ RANGO ALTO // PRESI-MESA</div>
-          <div class="auth-name">SARA RIERA</div>
+          <div class="auth-role-badge">⬛ PRESIDENTE DE MESA</div>
+          <div class="auth-name">SARA<br>RIERA</div>
           
           <div class="auth-divider"></div>
           <div class="auth-meta">
-            <div class="auth-meta-row"><span>ROLES BASE</span><span>Presidente, Sec. Logística, F-Advisor & General.</span></div>
-            <div class="auth-meta-row"><span>ALTA EN MUN</span><span>Militarizada al frente Operacional desde el 2022.</span></div>
-            <div class="auth-status">MONITOR AL CIEN</div>
+            <div class="auth-meta-row"><span>CARGO</span><span>Presidenta · Sec. Logística · FA y SG.</span></div>
+            <div class="auth-meta-row"><span>PROTOCOL</span><span>EU-DELTA · Activo desde 2022</span></div>
+            <div class="auth-status">ACTIVO</div>
           </div>
-          <div class="auth-divider"></div>
           
-          <!-- EL REDISEÑO VISUAL - LISTAS MAS LEÍBLES-->
-          <div class="auth-achievements-title">// DATOS CLASIFICADOS DE DESEMPEÑO_ //</div>
+          <div class="auth-divider"></div>
+          <div class="auth-achievements-title">// EXPEDIENTE_001 //</div>
           <div class="auth-achievements-list">
               <ul>
-                  <li><span class="ach-tag">LIDERAZGO TOTAL</span><strong>Premio oficial como Mejor Mesa Directiva del círculo (MASMUN)</strong> además de dirigir sin debilidad técnica siendo el control principal operativo logrando Mesa de Prensa élite registrada por PAVIMUN.</li>
-                  
-                  <li><span class="ach-tag">EXPERTISE PRENSA</span>La catalogación y nominación contundente por historial rotundo: <strong>Cuatro distinciones acumulativas consecutivas</strong> avaladas en la esfera como <u style="text-underline-offset:3px;">Mejor Delegación de Redacción Periodística/Prensa</u> para las facciones centralizadas nacionales del <b>SPMUN, UFTMUN, CAMIMUN y el macro bloque MASMUN.</b></li>
-                  
-                  <li><span class="ach-tag">ESTRATEGA ONÍRICA</span>Táctica constante adjudicada al acumular un récord con honores blindado a fuego logístico que agrupa distinciones y <strong>menciones Oficiales de primera fila (1H)</strong> dentro y fuera (Delegación en SPMUN, UFTMUN, SALTOMUN), mas base blindada dual validada por el estado 2H dentro el perímetro masivo MASMUN.</li>
-                  
-                  <li><span class="ach-tag">EXPERTA COMMS</span>Acreditación oficial paralela obtenida al ostentar en sistema un <b>Mérito Total de Rendimiento Orfebre Redactor (Mejor Redacción)</b> conmemorando labores puramente escritas bajo modelo operativo expedido de evaluación cerrada modelo oficial base central del bloque (RCMUN).</li>
-                  
-                  <li><span class="ach-tag">NIVEL CORPORATIVO</span>Porte validado exterior por <b>Certificación Profesional Comercial Activa Especializada (Operaciones Digital/Manejo) nivel jerarquía Social Media Manager - InnTalent</b> además avalada para resolución redaccional/operativa en bases comunicacionales civiles. Logró cruzar radar y dominios estadales externos hacia la sede Jesuita colegiada exterior de orden mayor participando y tomando reconocimiento diplomático táctico al destacar activamente verbal dentro de sus filiales mayores abiertas regionales en fronteras logísticas diplomadas SAIMUN-2.</li>
+                  <li>Participante constante en Modelos de Naciones Unidas desde 2022 como Delegada de ONU y Prensa.</li>
+                  <li>Premio: Mejor Mesa Directiva del congreso (MASMUN) y líder como Mesa de Prensa dentro de PAVIMUN.</li>
+                  <li>Reconocimiento total en redacción: Multiples Mejor Delegación (Prensa) en eventos nacionales e interestatales (SPMUN, UFTMUN, CAMIMUN, MASMUN).</li>
+                  <li>Despliegue Galardonado 1H: Adjudicado en terreno SPMUN, UFTMUN y SALTOMUN, más récord 2H en circuito MASMUN.</li>
+                  <li>Mérito Oficial por Excelencia Retórica/Escritura expedido y refrendado operativamente durante modelo RCMUN.</li>
+                  <li>Intervenciones diplomáticas Extracurriculares (Simun - Jesuitas) y Verbal Outstanding Performance en plataforma externa SAIMUN.</li>
+                  <li>Manejadora oficial y Operativa nivel Experto/SMM respaldada digital y logísticamente con certificaciones privadas (Inntalent).</li>
               </ul>
           </div>
+
         </div>
       </div>
 
@@ -456,121 +639,236 @@
       <div class="auth-card vice reveal" style="transition-delay:0.15s">
         <div class="auth-card-accent"></div>
         <div class="auth-photo-wrap" onclick="fireSniper(event)">
-          <!-- ASPECTO PRO POR DEFECTO ESTABILIZA SUS FOTOS DE RETRATO MÁGICAMENTE-->
           <img src="static/MariaB.jpeg" alt="Maria Jose Bastidas" loading="eager">
           <div class="auth-photo-overlay"></div>
           
-          <!-- Visor Láser Amarillo Letal -->
-          <div class="sniper-scope"><div class="sniper-reticle"></div><div class="sniper-reticle-y"></div></div>
-          <div class="auth-photo-code">CÓDIGO: VICE-002 | VIGILANCIA EN REGLA</div>
+          <div class="sniper-scope">
+              <div class="sniper-reticle"></div>
+              <div class="sniper-reticle-y"></div>
+          </div>
+          
+          <div class="auth-photo-code">ID: VICE-001 · CLS: ALPHA · ACT: FIRE (X)</div>
         </div>
         
         <div class="auth-info">
           <div class="auth-number">02</div>
-          <div class="auth-role-badge">◈ COMANDO SUB // VICEPRESI-MESA</div>
-          <div class="auth-name">MARÍA J. BASTIDAS</div>
+          <div class="auth-role-badge">◈ VICEPRESIDENTE DE MESA</div>
+          <div class="auth-name">MARÍA JOSÉ<br>BASTIDAS</div>
           
           <div class="auth-divider"></div>
           <div class="auth-meta">
-            <div class="auth-meta-row"><span>CARGO FIJO</span><span>Vicepresidente Ejecutiva Mesa de Directiva Operativa</span></div>
-            <div class="auth-meta-row"><span>ALTA EN MUN</span><span>Integrada logísticamente como base élite: Período '25.</span></div>
-            <div class="auth-status">INTERCEPTORA CLARA</div>
+            <div class="auth-meta-row"><span>CARGO</span><span>Vicepresidenta de Mesa Directiva</span></div>
+            <div class="auth-meta-row"><span>PROTOCOL</span><span>EU-DELTA · Origen Base 2025</span></div>
+            <div class="auth-status">ACTIVO</div>
           </div>
+          
           <div class="auth-divider"></div>
-          
-          <div class="auth-achievements-title">// DATOS CLASIFICADOS DE DESEMPEÑO_ //</div>
-          
-          <!-- LECTURA RÁPIDA, NO ESTÁ APREJUDA -->
+          <div class="auth-achievements-title">// EXPEDIENTE_002 //</div>
           <div class="auth-achievements-list">
               <ul>
-                  <li><span class="ach-tag">IMPERIO TÁCTICO CDH</span>Furia desplegada frontal diplomática avalada superior: Posicionó base y asedió de primera obteniendo con asertiva agresión estructural en logísticas bases abiertas galardón a título total absoluto <u style="text-underline-offset:3px;">Mejor Delegación Base</u> superando competidores durante contienda central resolutiva internacional a alta jerarquía oficial frente panel central, base del estamento (Congregación élite 26 MASMUN).</li>
-                  
-                  <li><span class="ach-tag">JEFE ALTO RIESGO</span>Mano logística suprema paralela demostrada logrando desbancar, neutralizando la mesa paralela general adjunta para coronarse oficial élite general, como absoluta cabeza asamblearía tras un gran debate táctico: <strong>(Mejor Delegación Continente Bloque Extremo Confidencial Operaciones Pavimun General '26 Resolución Cero Continental Base Extrema Base Comité)</strong> demostrando nervio resolutor.</li>
-
-                  <li><span class="ach-tag">VICE LEGISLADORA</span>Elevación masificada a alta administración como Ejecutora en Mando adjunta general asimilada legal ostentando rango mayor administrativo total para plenarias centrales oficiales (<b>Vicepresidenta del Senado Central Táctico Legislativo Bloque Resolución en SPMUN para el ciclo del 2026 oficial).</b> </li>
-
-                  <li><span class="ach-tag">PERFIL ORATORIA UNODC</span>Imparable dominación purista diplomada discursivamente destacada que fue detectada de fondo estructural formal. Otorgación táctica central oficial galardonando superior peso evaluador al adjudicar formal estricta credencial <b> Mérito Supremo Especial Retórica - Oratoria base oficial formal panel experto validada abierta internacional Rioclaromun '25).</b></li>
-                  
-                  <li><span class="ach-tag">GALARDÓN INGLÉS MAX</span>Oro absoluto puro (C-Duo Evaluado Alto Dominio Bilingüe Estamento base plenario logístico lingüístico interno para base plenarios externos operativos). Destrucción operativa lingüística adjudicándose la joya: <strong>C2 Bilingüe Puro ORO Oficial Olimpiadas Inglés Rigor Unimet Interna Central Base Formativas Certificación Final Validada Total Neo '26 Pregrado Lengua Exigencia Base Neta Cúspide Elite Estadal General Central Finalistas Generación Cero General Nacionales Oro Básico Absoluto Superior Competencias Olimpiadas Bases.</strong></li>
+                  <li>Ejecutiva operacional listada y activa en el radar logístico a lo largo del sistema de Modelos de Naciones Unidas desde la promoción del ciclo operativo del 2025.</li>
+                  <li>Títulos tácticos avalados y expedidos tempranamente: "Primera Mención Honorífica - Bloque IWGIA" en las asambleas resolutivas oficiales del bloque orgánico de CAMIMUN (Generación '25).</li>
+                  <li>Reclutamiento táctico especial a un grado superior legislativo desempeñando efectivamente el título de 'Vicepresidenta del Congreso Nacional' expedido y reconocido a la par por SPMUN en el cronograma programado durante simulaciones a un alto espectro nacional ('26).</li>
+                  <li>Honores internacionales de peso registrados con 'Mérito Puro a la Oratoria Internacional UNODC' desplegado por directriz en bloque de conferencias logísticas anexado y gestionado integral y visible por la cumbre resolutiva regional en zona abierta, Rioclaro ('25).</li>
+                  <li>Placas estratégicas duales de rendimiento ofensivo adjudicadas durante campo cerrado de negociación agresiva diplomática a 'Mejor delegación logístico CDH' operando a profundidad estratégica superior masificada validado internacional en Masmun ('26). Y un equivalente pareado paralelo catalogado también simultáneo por resolutivo central Pavimun ('26), al destacar en las intervenciones resolutorias como cabecilla y delegación élite de contingencias operativas urgentes registradas resolviendo el evento cerrado como 'Módulo Crisis Suprema Continental Integral Continental Lograda con un récord oficial diplomático'.</li>
+                  <li>Pre-Medallista Lingüística élite listada con acreditamiento Oro del podio (Certeza: Oro C2 / Oro General Plenaria Competencia Total English NEO Competence Olimpiadas Inter-estatales e internados). Distinguida medalla final lograda plenaria general Unimet superior evaluatoria competitiva a máximo rigor táctico a prueba bajo protocolos oratoria logísticos oficiales directiva en plenario para ciclo formativo base al congreso central, y de validación certificada integral base en lenguas oratorias. Unimet-base 2026 oficialización final lingüística oficial pre plenario.</li>
+                  <li>Secundario galardón: Cimentada credibilidad técnica adicional demostrativamente desplegada y sustentando históricas bases argumentativas solidificando y blindando en terreno internacional por segundo galardón formal oficial 2H CEPAL en área regional táctica operativa documentada, con peso formal diplomado superior y adjudicado directo desde Spmun a todo el sistema operativo unificado para directiva bloque resolución (Generación oficial '25).</li>
               </ul>
           </div>
           
         </div>
       </div>
       
-    </div> <!-- Cierre Flex Grid Box  -->
+    </div> <!--/grid-->
 
-    <div style="text-align:center; padding-bottom: 60px;" class="reveal"><a class="back-link" href="/crisis_ue_2035" onclick="event.preventDefault(); navigateTo('/crisis_ue_2035')">Retornar al Sistema Base Cero</a></div>
+    <div style="text-align:center; padding-bottom: 60px;" class="reveal">
+      <a class="back-link" href="/crisis_ue_2035" onclick="event.preventDefault(); navigateTo('/crisis_ue_2035')">
+        Volver a Crisis UE 2035
+      </a>
+    </div>
+
   </div>
   
   <footer class="page-footer">
     <div class="footer-brand">CRISIS<span> · </span>UE · 2035</div>
-    <div class="footer-ref">EXPEDIENTE INTERCEPTADO · COMUNICACIONES Y DATA ASEGURADA</div>
+    <div class="footer-ref">ANEXO MESA DIRECTIVA · /mesa_crisis_ue<br>PROTOCOLO EU-DELTA · NIVEL ALPHA · CLASIFICADO</div>
   </footer>
 
-</div>
+</div><!-- /main-content -->
 
 <script>
   window.fireSniper = function(event) {
-    const wrap = event.currentTarget; const rect = wrap.getBoundingClientRect();
-    const targetX = event.clientX - rect.left, targetY = event.clientY - rect.top;
-    wrap.classList.remove('shooting'); void wrap.offsetWidth; wrap.classList.add('shooting');
+    const wrap = event.currentTarget;
+    const rect = wrap.getBoundingClientRect();
+    
+    const targetX = event.clientX - rect.left;
+    const targetY = event.clientY - rect.top;
 
-    const isVice = wrap.closest('.auth-card').classList.contains('vice');
-    const overrideFlashColor = isVice ? "rgba(255, 179, 0, 0.4)" : "rgba(255,0,51,0.4)";
+    wrap.classList.remove('shooting');
+    void wrap.offsetWidth; 
+    wrap.classList.add('shooting');
+
+    const flashInfo = window.getComputedStyle(wrap).borderColor; 
+    let overrideFlashColor = "rgba(255,0,51,0.4)";
+    if(wrap.closest('.auth-card').classList.contains('vice')) {
+       overrideFlashColor = "rgba(255, 179, 0, 0.4)";
+    }
 
     const flash = document.createElement('div');
     flash.style.cssText = `position:absolute; inset:0; z-index:30; background:${overrideFlashColor}; pointer-events:none; animation: photoFlash 0.18s forwards; mix-blend-mode: color-dodge;`;
-    wrap.appendChild(flash); setTimeout(() => flash.remove(), 200);
+    wrap.appendChild(flash);
+    setTimeout(() => flash.remove(), 200);
 
     const holeContainer = document.createElement('div');
-    holeContainer.style.cssText = `position: absolute; z-index: 25; pointer-events: none; left: ${targetX}px; top: ${targetY}px; transform:translate(-50%, -50%);`;
+    holeContainer.style.cssText = `
+       position: absolute; z-index: 25; pointer-events: none;
+       left: ${targetX}px; top: ${targetY}px; transform:translate(-50%, -50%);
+    `;
 
     const core = document.createElement('div');
-    core.style.cssText = `position: relative; width: 14px; height: 14px; border-radius: 50%; background: radial-gradient(circle at center, #020202 30%, #151515 60%, rgba(200,200,200,0.4) 100%); box-shadow: 0 0 10px rgba(0,0,0,0.9), inset 0 0 5px rgba(0,0,0,1); z-index: 3;`;
+    core.style.cssText = `
+        position: relative; width: 14px; height: 14px; border-radius: 50%;
+        background: radial-gradient(circle at center, #020202 30%, #151515 60%, rgba(200,200,200,0.4) 100%);
+        box-shadow: 0 0 10px rgba(0,0,0,0.9), inset 0 0 5px rgba(0,0,0,1);
+        z-index: 3;
+    `;
     
     const crackMask = document.createElement('div');
-    crackMask.style.cssText = `position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 70px; height: 70px; border-radius: 50%; pointer-events: none; background: conic-gradient(from ${Math.random()*360}deg, transparent 0deg, rgba(255,255,255,0.4) 1deg, transparent 3deg, transparent 40deg, rgba(255,255,255,0.2) 41deg, transparent 43deg, transparent 110deg, rgba(255,255,255,0.6) 111deg, transparent 113deg, transparent 200deg, rgba(255,255,255,0.3) 201deg, transparent 204deg, transparent 310deg, rgba(255,255,255,0.5) 311deg, transparent 313deg); mix-blend-mode: overlay; z-index: 1; filter: contrast(200%) grayscale(100%);`;
+    crackMask.style.cssText = `
+        position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+        width: 60px; height: 60px; border-radius: 50%; pointer-events: none;
+        background: conic-gradient(
+          from ${Math.random()*360}deg, 
+          transparent 0deg, 
+          rgba(255,255,255,0.4) 1deg, 
+          transparent 3deg, transparent 40deg, 
+          rgba(255,255,255,0.2) 41deg, 
+          transparent 43deg, transparent 110deg, 
+          rgba(255,255,255,0.6) 111deg, 
+          transparent 113deg, transparent 200deg, 
+          rgba(255,255,255,0.3) 201deg, transparent 204deg, transparent 310deg, 
+          rgba(255,255,255,0.5) 311deg, transparent 313deg
+        );
+        mix-blend-mode: overlay; z-index: 1; filter: contrast(200%) grayscale(100%);
+    `;
     
-    holeContainer.appendChild(crackMask); holeContainer.appendChild(core); wrap.appendChild(holeContainer);
+    holeContainer.appendChild(crackMask);
+    holeContainer.appendChild(core);
+    wrap.appendChild(holeContainer);
   };
 
   (function() {
-    const phases = [{delay:150,duration:400},{delay:600,duration:500},{delay:1200,duration:350}];
-    const barFill = document.getElementById('eas-bar'), pct = document.getElementById('eas-pct');
-    const pctTargets = [0, 45, 82, 100]; 
-    let progress = 0;
-    
-    function animateBar(targetPct, duration, cb) {
-      const start = progress, startTime = performance.now();
-      function step(now) {
-        const t = Math.min((now - startTime)/duration, 1), current = Math.round(start + (targetPct - start) * (1 - Math.pow(1 - t, 3)));
-        progress = current; barFill.style.width = current + '%'; pct.textContent = current + '%';
-        if (t < 1) requestAnimationFrame(step); else if (cb) cb();
-      } requestAnimationFrame(step);
+    const phases = [
+      { delay: 200,  duration: 700  },
+      { delay: 1100, duration: 900  },
+      { delay: 2200, duration: 800  },
+      { delay: 3200, duration: 700  },
+      { delay: 4100, duration: 600  },
+    ];
+    const barLabel = document.getElementById('eas-bar-label');
+    const barFill  = document.getElementById('eas-bar');
+    const pct      = document.getElementById('eas-pct');
+    const ets      = document.getElementById('eas-timestamp');
+
+    function updateTimestamp() {
+      const now = new Date();
+      ets.textContent = now.toISOString().replace('T',' ').substring(0,19) + ' UTC';
     }
-    
-    setTimeout(() => {
-       const eas = document.getElementById('eas-screen'); eas.classList.add('eas-flash'); 
-       setTimeout(() => eas.classList.remove('eas-flash'), 100); 
-       animateBar(pctTargets[1], 400);
-       phases.forEach((p,i)=> setTimeout(()=>{ 
-          document.getElementById('pi-'+i).className='eas-phase-icon active'; 
-          animateBar(pctTargets[i+1], p.duration, ()=>{ document.getElementById('pi-'+i).className='eas-phase-icon done';}); 
-       }, p.delay));
-       setTimeout(()=>{ 
-         pct.style.color = 'var(--tech)';
-         eas.classList.add('eas-flash');
-         setTimeout(()=> { 
-            eas.style.opacity = '0'; eas.style.pointerEvents='none'; setTimeout(()=> eas.remove(), 600);
-            document.getElementById('main-content').style.display='block'; 
-            document.querySelectorAll('.reveal').forEach(el=>new IntersectionObserver(en=>en.forEach(e=>{if(e.isIntersecting)e.target.classList.add('active');}), {threshold:0.12}).observe(el));
-         },200);
-       }, 2100);
-    }, 200);
+    updateTimestamp();
+    const tsInterval = setInterval(updateTimestamp, 1000);
+
+    let progress = 0;
+    const pctTargets = [0, 20, 42, 65, 82, 100];
+    const labels = ['INICIALIZANDO...', 'CIFRANDO CANAL...', 'AUTENTICANDO...', 'VERIFICANDO...', 'DESENCRIPTANDO...', 'ACCESO CONCEDIDO'];
+
+    function animateBar(targetPct, label, duration, cb) {
+      barLabel.textContent = label;
+      const start = progress;
+      const startTime = performance.now();
+      function step(now) {
+        const elapsed = now - startTime;
+        const t = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - t, 3);
+        const current = Math.round(start + (targetPct - start) * eased);
+        progress = current;
+        barFill.style.width = current + '%';
+        pct.textContent = current + '%';
+        if (t < 1) requestAnimationFrame(step); else if (cb) cb();
+      }
+      requestAnimationFrame(step);
+    }
+
+    function activatePhase(i) {
+      const icon  = document.getElementById('pi-' + i), label = document.getElementById('pl-' + i), stat  = document.getElementById('ps-' + i);
+      icon.className = 'eas-phase-icon active'; icon.textContent = '◌'; label.className = 'eas-phase-label active'; stat.className = 'eas-phase-status active'; stat.textContent = 'PROCESANDO';
+    }
+    function completePhase(i) {
+      const icon  = document.getElementById('pi-' + i), label = document.getElementById('pl-' + i), stat  = document.getElementById('ps-' + i);
+      icon.className = 'eas-phase-icon done'; icon.textContent = '✓'; label.className = 'eas-phase-label done'; stat.className = 'eas-phase-status done'; stat.textContent = 'OK';
+    }
+
+    function runSequence() {
+      animateBar(pctTargets[1], labels[1], 800);
+      phases.forEach((ph, i) => { setTimeout(() => { activatePhase(i); animateBar(pctTargets[i+1], labels[i+1], ph.duration, () => { completePhase(i); }); }, ph.delay); });
+      setTimeout(() => {
+        barLabel.textContent = 'ACCESO CONCEDIDO';
+        pct.textContent = '100%'; pct.style.color = 'var(--tech)'; pct.style.textShadow = '0 0 20px rgba(255,179,0,0.5)';
+        setTimeout(() => {
+          const eas = document.getElementById('eas-screen'); eas.classList.add('eas-flash');
+          setTimeout(() => { eas.style.transition = 'opacity 0.7s ease'; eas.style.opacity = '0';
+            setTimeout(() => {
+              eas.style.display = 'none'; clearInterval(tsInterval);
+              const mc = document.getElementById('main-content'); mc.style.display = 'block'; mc.style.opacity = '0'; mc.style.transition = 'opacity 0.8s ease';
+              setTimeout(() => { mc.style.opacity = '1'; }, 50);
+              initScrollReveal();
+            }, 750);
+          }, 350);
+        }, 600);
+      }, 5200);
+    }
+    setTimeout(() => { const eas = document.getElementById('eas-screen'); eas.classList.add('eas-flash'); setTimeout(() => { eas.classList.remove('eas-flash'); }, 300); runSequence(); }, 400);
   })();
 
-  let nO = false; function toggleNav() { nO=!nO; document.getElementById('nav-bar').classList.toggle('menu-open',nO); document.getElementById('nav-overlay').classList.toggle('open',nO); document.getElementById('nbIcon').classList.toggle('open',nO); document.body.style.overflow=nO?'hidden':'';} window.addEventListener('scroll', ()=> document.getElementById('nav-bar').classList.toggle('scrolled', window.scrollY>40));
+  function initScrollReveal() {
+    const els = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.12 });
+    els.forEach(el => obs.observe(el));
+  }
+
+  let navOpen = false;
+  function toggleNav() {
+    navOpen = !navOpen;
+    document.getElementById('nav-bar').classList.toggle('menu-open', navOpen);
+    document.getElementById('nav-overlay').classList.toggle('open', navOpen);
+    document.getElementById('nbIcon').classList.toggle('open', navOpen);
+    document.body.style.overflow = navOpen ? 'hidden' : '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && navOpen) toggleNav(); });
+  window.addEventListener('scroll', () => { document.getElementById('nav-bar').classList.toggle('scrolled', window.scrollY > 40); });
+
+  (function() {
+    const curtain = document.createElement('div');
+    curtain.id = 'curtain'; curtain.style.cssText = 'position:fixed;inset:0;z-index:9998;pointer-events:none;display:flex;';
+    curtain.innerHTML = '<div class="c-half L" style="flex:1;height:100%;background:#0d0a06;transform:scaleX(0);transform-origin:left;"></div><div class="c-half R" style="flex:1;height:100%;background:#0d0a06;transform:scaleX(0);transform-origin:right;"></div>';
+    document.body.prepend(curtain);
+    const s = document.createElement('style');
+    s.textContent = `
+      body.entering .c-half.L{animation:cOpenL .65s cubic-bezier(.77,0,.18,1) forwards;}
+      body.entering .c-half.R{animation:cOpenR .65s cubic-bezier(.77,0,.18,1) .05s forwards;}
+      body.exiting  .c-half.L{animation:cCloseL .45s cubic-bezier(.77,0,.18,1) forwards;}
+      body.exiting  .c-half.R{animation:cCloseR .45s cubic-bezier(.77,0,.18,1) .04s forwards;}
+      @keyframes cOpenL{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+      @keyframes cOpenR{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+      @keyframes cCloseL{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+      @keyframes cCloseR{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+    `;
+    document.head.appendChild(s);
+    document.body.classList.add('entering');
+    window.navigateTo = function(url) {
+      document.body.classList.remove('entering'); document.body.classList.add('exiting'); document.getElementById('curtain').style.pointerEvents = 'all';
+      setTimeout(() => { window.location.href = url; }, 520);
+    };
+  })();
 </script>
 </body>
 </html>
