@@ -31,42 +31,138 @@
     }
 
     /* ══════════════════════════════════════
-       NUEVO LOADER: EL MARMOL Y LA FORJA
+       LOADER — ROMANO ANTIGUO (Restaurado)
     ══════════════════════════════════════ */
-    #loader-dais {
+    #loader {
       position:fixed; inset:0; z-index:9999;
-      background: #050403;
+      background: radial-gradient(ellipse at 50% 80%, #3b0808 0%, #1a0303 40%, #050101 100%);
       display:flex; flex-direction:column; align-items:center; justify-content:center;
-      transition:opacity 1.2s ease, visibility 1.2s;
+      transition:opacity 1.2s ease, transform 1.4s ease;
+      overflow:hidden;
     }
-    #loader-dais.hide { opacity:0; visibility:hidden; }
-    
-    .loader-ring {
-      position:relative; width:150px; height:150px;
+    #loader.hide { opacity:0; transform:scale(1.04); pointer-events:none; }
+
+    .loader-fire-base {
+      position:absolute; bottom:0; left:0; right:0; height:220px;
+      background: linear-gradient(to top, rgba(180,40,10,0.55) 0%, rgba(200,80,20,0.3) 30%, transparent 100%);
+      pointer-events:none;
     }
-    .loader-ring::before {
-      content:''; position:absolute; inset:0;
-      border: 2px solid transparent; border-top-color: var(--gold); border-bottom-color: var(--red-lt);
-      border-radius:50%; animation: spin 2s linear infinite;
+    .loader-fire-flicker {
+      position:absolute; bottom:0; left:0; right:0; height:120px;
+      background: linear-gradient(to top, rgba(255,120,20,0.4) 0%, rgba(220,60,10,0.15) 50%, transparent 100%);
+      animation: fireFlicker 0.18s ease-in-out infinite alternate;
     }
-    .loader-ring::after {
-      content:''; position:absolute; inset:15px;
-      border: 1px solid transparent; border-left-color: var(--copper); border-right-color: var(--copper);
-      border-radius:50%; animation: spin 1.5s linear infinite reverse;
+    @keyframes fireFlicker {
+      0%  { opacity:0.6; transform:scaleX(1)   scaleY(1); }
+      50% { opacity:1;   transform:scaleX(1.02) scaleY(1.06); }
+      100%{ opacity:0.7; transform:scaleX(0.98) scaleY(0.95); }
     }
-    .loader-icon {
-      position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);
-      font-family: 'Uncial Antiqua', serif; font-size: 2.5rem; color: var(--silver);
-      text-shadow: 0 0 15px rgba(212,175,55,0.5);
-      animation: pulse 2s ease-in-out infinite;
+
+    .loader-torch { position:absolute; bottom:0; width:60px; display:flex; flex-direction:column; align-items:center; }
+    .loader-torch.left  { left:8%; }
+    .loader-torch.right { right:8%; }
+    .torch-flame {
+      width:24px; height:48px;
+      background:radial-gradient(ellipse at 50% 80%, #ff9a00 0%, #e05a00 40%, rgba(180,20,0,0.3) 100%);
+      border-radius:50% 50% 30% 30%;
+      animation:torchFlame 0.22s ease-in-out infinite alternate;
+      filter:blur(1.5px);
     }
-    .loader-text {
-      margin-top: 30px; font-family: 'Cinzel', serif; font-size: 0.8rem;
-      letter-spacing: 0.5em; color: var(--gold-lt); text-transform: uppercase;
-      animation: pulse 2s ease-in-out infinite alternate;
+    @keyframes torchFlame {
+      0%  { transform:scaleX(1) scaleY(1) rotate(-3deg); opacity:0.9; }
+      100%{ transform:scaleX(0.85) scaleY(1.18) rotate(3deg); opacity:1; }
     }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-    @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; text-shadow: 0 0 20px rgba(212,175,55,0.8); } }
+    .torch-inner {
+      width:10px; height:10px; margin-top:-6px;
+      background:radial-gradient(circle, #fff8e0, #ffd060);
+      border-radius:50%; filter:blur(2px);
+      animation:torchFlame 0.15s ease-in-out infinite alternate-reverse;
+    }
+    .torch-body {
+      width:10px; height:90px;
+      background:linear-gradient(to bottom, #8b6914, #5a3e10, #2a1a08);
+      border-radius:2px;
+    }
+
+    .loader-scroll {
+      position:relative; z-index:2;
+      width:min(560px, 90vw);
+      background:linear-gradient(160deg, #1e1508 0%, #120e05 50%, #1a1309 100%);
+      border:1px solid rgba(180,130,40,0.35);
+      box-shadow:
+        0 0 60px rgba(180,60,0,0.3),
+        0 0 120px rgba(140,30,0,0.15),
+        inset 0 0 40px rgba(0,0,0,0.7),
+        inset 0 1px 0 rgba(212,175,55,0.15);
+      padding:48px 52px 44px;
+      text-align:center;
+    }
+    .loader-scroll::before, .loader-scroll::after {
+      content:'';
+      position:absolute; left:0; right:0; height:6px;
+      background:linear-gradient(90deg, transparent, rgba(180,115,51,0.6) 20%, rgba(212,175,55,0.9) 50%, rgba(180,115,51,0.6) 80%, transparent);
+    }
+    .loader-scroll::before { top:0; }
+    .loader-scroll::after  { bottom:0; }
+
+    .loader-eagle {
+      width:70px; height:70px; object-fit:contain; margin:0 auto 20px;
+      filter: invert(0.85) sepia(0.6) hue-rotate(5deg) saturate(2);
+      animation:eaglePulse 2.5s ease-in-out infinite;
+    }
+    @keyframes eaglePulse {
+      0%,100%{ opacity:0.7; filter:invert(0.85) sepia(0.6) hue-rotate(5deg) saturate(2) drop-shadow(0 0 8px rgba(212,175,55,0.4)); }
+      50%    { opacity:1;   filter:invert(0.85) sepia(0.6) hue-rotate(5deg) saturate(2) drop-shadow(0 0 18px rgba(212,175,55,0.8)); }
+    }
+
+    .loader-spqr {
+      font-family:'Uncial Antiqua',serif;
+      font-size:0.55rem; letter-spacing:0.55em; color:rgba(212,175,55,0.5);
+      text-transform:uppercase; margin-bottom:14px;
+    }
+    .loader-alert-title {
+      font-family:'Uncial Antiqua',serif;
+      font-size:clamp(1.1rem,3vw,1.7rem);
+      color:#c0bfbb;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+      margin-bottom:8px;
+      text-shadow:0 2px 12px rgba(180,60,10,0.6);
+      animation:carve 0.8s ease both;
+    }
+    .loader-proclama {
+      font-family:'Cinzel',serif;
+      font-size:clamp(0.62rem,1.5vw,0.78rem);
+      color:rgba(180,115,51,0.8);
+      letter-spacing:0.28em; text-transform:uppercase;
+      margin:14px 0 22px;
+      line-height:2.2;
+    }
+    .loader-sep {
+      width:100%; height:1px; margin:18px 0;
+      background:linear-gradient(90deg,transparent,rgba(212,175,55,0.4),transparent);
+    }
+    .loader-status-roman {
+      font-family:'Cormorant Garamond',serif; font-style:italic;
+      font-size:1rem; color:rgba(200,169,122,0.75);
+      letter-spacing:0.06em; min-height:1.4em;
+      margin-bottom:20px;
+    }
+    .loader-tally {
+      display:flex; justify-content:center; gap:8px; margin-top:12px;
+    }
+    .tally-mark {
+      width:2px; height:20px; background:rgba(212,175,55,0.2);
+      border-radius:1px; transition:background 0.3s, box-shadow 0.3s;
+    }
+    .tally-mark.lit {
+      background:rgba(212,175,55,0.8);
+      box-shadow:0 0 8px rgba(212,175,55,0.5);
+    }
+    @keyframes carve {
+      from { opacity:0; letter-spacing:0.3em; }
+      to   { opacity:1; letter-spacing:0.12em; }
+    }
 
     /* ══════════════════════════════════════
        PARTÍCULAS DE FUEGO / CENIZAS
@@ -125,7 +221,7 @@
     }
 
     /* ══════════════════════════════════════
-       CONTEXTO ADICIONAL (Arreglo de Imagen)
+       CONTEXTO ADICIONAL 
     ══════════════════════════════════════ */
     .context-board {
       position: relative; max-width: 1200px; margin: 0 auto 100px; padding: 0 5%;
@@ -147,13 +243,11 @@
       border: 2px solid var(--red-lt); opacity: 0.3; z-index: 1;
     }
     
-    /* El contenedor de la imagen tiene un sombreado interno para difuminar los bordes */
     .context-img-wrapper {
       position: absolute; inset: 0; z-index: 2;
-      box-shadow: inset 0 0 50px 20px var(--dark); /* Efecto difuminado en los bordes */
+      box-shadow: inset 0 0 50px 20px var(--dark);
     }
     
-    /* Imagen arreglada con object-position: top center para no cortar cabezas */
     .context-visual img {
       width: 100%; height: 100%; 
       object-fit: cover; 
@@ -165,40 +259,53 @@
     }
 
     /* ══════════════════════════════════════
-       EFECTO CIFRADO EN LOS NOMBRES
+       EFECTO CIFRADO EN LOS NOMBRES (CORREGIDO)
     ══════════════════════════════════════ */
     .name-cipher-wrap {
-      position: relative; display: inline-block; cursor: crosshair;
-      margin-bottom: 25px;
-    }
-    .name-plain {
-      font-family: 'Uncial Antiqua', serif; font-size: 2.5rem; color: var(--silver-lt);
-      display: block; transition: opacity 0.4s ease, filter 0.4s ease;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-    }
-    .name-cipher {
-      position: absolute; inset: 0;
-      font-family: 'Uncial Antiqua', serif; font-size: 2.5rem; 
-      color: rgba(220, 40, 40, 0.9); letter-spacing: 0.05em; 
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.4s ease, filter 0.4s ease, transform 0.4s ease;
-      transform: scale(0.95);
-      white-space: nowrap;
+      position: relative; 
+      display: flex; 
+      align-items: center;
+      height: 50px; /* Altura fija para que no empuje el texto de abajo */
+      margin-bottom: 25px; 
+      cursor: crosshair;
     }
     
-    /* Hover state para el texto cifrado */
-    .name-cipher-wrap:hover .name-plain {
-      opacity: 0; filter: blur(8px); transform: scale(1.05);
-    }
-    .name-cipher-wrap:hover .name-cipher {
-      opacity: 1; transform: scale(1);
-      text-shadow: 0 0 15px rgba(255, 0, 0, 0.8), 0 0 30px rgba(200, 20, 20, 0.4);
-      animation: cipherGlitch 0.2s infinite alternate;
+    /* Estado inicial: El Cifrado visible */
+    .name-cipher {
+      font-family: 'Uncial Antiqua', serif; 
+      font-size: clamp(1.4rem, 3.5vw, 2.1rem); /* Tamaño seguro */
+      color: rgba(200, 169, 122, 0.4); /* Color desvanecido/pergamino original */
+      letter-spacing: 0.1em;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      position: absolute;
+      text-shadow: 0 0 5px rgba(0,0,0,0.8);
+      white-space: nowrap; /* Evita que se rompa en dos líneas */
+      transform: scale(1);
+      opacity: 1;
     }
 
-    @keyframes cipherGlitch {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(1px, -1px) scale(1.01); }
+    /* Estado secundario: El nombre real oculto */
+    .name-plain {
+      font-family: 'Cinzel', serif; 
+      font-size: clamp(1.4rem, 3.5vw, 2.1rem); /* Tamaño seguro */
+      color: var(--gold-lt); /* Dorado resplandeciente */
+      letter-spacing: 0.15em;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      position: absolute;
+      text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+      white-space: nowrap; /* Evita que se rompa en dos líneas */
+    }
+    
+    /* Al pasar el mouse: Ocultar cifrado, mostrar real */
+    .name-cipher-wrap:hover .name-cipher { 
+      opacity: 0; 
+      transform: scale(1.05); 
+    }
+    .name-cipher-wrap:hover .name-plain { 
+      opacity: 1; 
+      transform: scale(1); 
     }
 
     /* ══════════════════════════════════════
@@ -301,7 +408,7 @@
       .profiles-container::before { left: 10%; }
       .context-board { flex-direction: column; }
       .context-text { padding-right: 0; margin-bottom: 30px; }
-      .name-plain, .name-cipher { font-size: 2rem; white-space: normal;}
+      .name-plain, .name-cipher { white-space: normal; line-height: 1.2;}
     }
     
     footer { background:linear-gradient(to top, #060401, #0d0a06); padding:40px 20px; text-align:center; border-top:1px solid rgba(180,115,51,0.2); margin-top: 50px; position:relative; z-index: 2;}
@@ -314,11 +421,57 @@
 <!-- CANVAS PARA EL FUEGO/CENIZAS EN EL FONDO -->
 <canvas id="ash-canvas"></canvas>
 
-<!-- LOADER -->
-<div id="loader-dais">
-  <div class="loader-ring"></div>
-  <div class="loader-icon">SPQR</div>
-  <div class="loader-text">Convocando al Alto Mando...</div>
+<!-- LOADER (El original de Crisis, con textos adaptados) -->
+<div id="loader">
+  <div class="loader-fire-base"></div>
+  <div class="loader-fire-flicker"></div>
+
+  <div class="loader-torch left">
+    <div class="torch-flame"></div>
+    <div class="torch-inner"></div>
+    <div class="torch-body"></div>
+  </div>
+  <div class="loader-torch right">
+    <div class="torch-flame"></div>
+    <div class="torch-inner"></div>
+    <div class="torch-body"></div>
+  </div>
+
+  <div class="loader-scroll">
+    <img class="loader-eagle"
+         src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Aquila.svg/200px-Aquila.svg.png"
+         alt="Aquila SPQR"
+         onerror="this.style.display='none'">
+    <div class="loader-spqr">· Senatus Populusque Romanus ·</div>
+
+    <div class="loader-sep"></div>
+
+    <div class="loader-alert-title">Alto Mando</div>
+
+    <div class="loader-proclama">
+      CRISIS COMITIALIS · SVPMUN MMXXVI<br>
+      Conoce a la Mesa Directiva
+    </div>
+
+    <div class="loader-sep"></div>
+
+    <div class="loader-status-roman" id="loader-status">
+      Convocando a los Magistrados...
+    </div>
+
+    <div class="loader-tally" id="loader-tally">
+      <div class="tally-mark"></div>
+      <div class="tally-mark"></div>
+      <div class="tally-mark"></div>
+      <div class="tally-mark"></div>
+      <div class="tally-mark"></div>
+      <div class="tally-mark"></div>
+      <div class="tally-mark"></div>
+      <div class="tally-mark"></div>
+      <div class="tally-mark"></div>
+      <div class="tally-mark"></div>
+    </div>
+  </div>
 </div>
 
 <!-- NAVBAR -->
@@ -377,10 +530,10 @@
     <div class="profile-info">
       <span class="role-label">Magistrado Supremo · Presidente de Mesa</span>
       
-      <!-- Efecto de Cifrado César en el Nombre (+3 Desplazamiento) -->
+      <!-- EFECTO CIFRADO CÉSAR: Se muestra cifrado por defecto, revela original en hover -->
       <div class="name-cipher-wrap" title="Descifrando identidad...">
-        <span class="name-plain">Daniel Guanipa</span>
         <span class="name-cipher">GDQLHO JXDQLSD</span>
+        <span class="name-plain">Daniel Guanipa</span>
       </div>
 
       <p style="font-family:'Cormorant Garamond', serif; font-size: 1.1rem; color: #c0bfbb; margin-bottom: 20px; line-height: 1.5; font-style: italic;">
@@ -409,10 +562,10 @@
     <div class="profile-info" style="border-color: rgba(139,26,26,0.3);">
       <span class="role-label" style="color: var(--copper);">Arquitecta del Caos · Crisis Staff</span>
       
-      <!-- Efecto de Cifrado César en el Nombre (+3 Desplazamiento) -->
+      <!-- EFECTO CIFRADO CÉSAR: Se muestra cifrado por defecto, revela original en hover -->
       <div class="name-cipher-wrap" title="Descifrando identidad...">
-        <span class="name-plain">Amarantha Marthorano</span>
         <span class="name-cipher">DPDUDQWKD PDUWKRUDQR</span>
+        <span class="name-plain">Amarantha Marthorano</span>
       </div>
 
       <p style="font-family:'Cormorant Garamond', serif; font-size: 1.1rem; color: #c0bfbb; margin-bottom: 20px; line-height: 1.5; font-style: italic;">
@@ -441,10 +594,10 @@
     <div class="profile-info">
       <span class="role-label">Identidad Oculta · Vicepresidente de Mesa</span>
       
-      <!-- Efecto de Cifrado César en el Nombre (+3 Desplazamiento) -->
+      <!-- EFECTO CIFRADO CÉSAR: Se muestra cifrado por defecto, revela original en hover -->
       <div class="name-cipher-wrap" title="Descifrando identidad...">
-        <span class="name-plain" style="color:#888;">CENSURADO</span>
-        <span class="name-cipher" style="color:rgba(180,50,50,0.8);">FHQVXUDGR</span>
+        <span class="name-cipher">FHQVXUDGR</span>
+        <span class="name-plain" style="color:#888; text-shadow: none;">CENSURADO</span>
       </div>
 
       <p class="secret-text">
@@ -468,6 +621,43 @@
 </footer>
 
 <script>
+  /* ══════════════════════════════════════
+     LOGICA DEL LOADER ROMANO
+  ══════════════════════════════════════ */
+  (function(){
+    const statusMsgs = [
+      'Convocando al Alto Mando...',
+      'Preparando el tablero de guerra...',
+      'Repartiendo legiones...',
+      'Las Parcas hilan el destino...',
+      'El Senado aguarda su veredicto...',
+      'Consilium Deorum preparado.'
+    ];
+    const marks = document.querySelectorAll('.tally-mark');
+    const statusEl = document.getElementById('loader-status');
+    let step = 0;
+    const total = marks.length;
+
+    function advance() {
+      if (step < total) {
+        marks[step].classList.add('lit');
+        step++;
+        if (statusMsgs[Math.floor(step * statusMsgs.length / total)]) {
+          statusEl.textContent = statusMsgs[Math.floor(step * statusMsgs.length / total)];
+        }
+      }
+      if (step < total) {
+        setTimeout(advance, 280 + Math.random() * 180);
+      } else {
+        setTimeout(() => {
+          document.getElementById('loader').classList.add('hide');
+          setTimeout(()=>{ document.getElementById('loader').style.display='none'; }, 1400);
+        }, 600);
+      }
+    }
+    setTimeout(advance, 600);
+  })();
+
   /* ══════════════════════════════════════
      SISTEMA DE PARTÍCULAS / CENIZAS
   ══════════════════════════════════════ */
@@ -548,16 +738,8 @@
   })();
 
   /* ══════════════════════════════════════
-     ANIMACIONES DE CARGA Y SCROLL
+     ANIMACIONES DE SCROLL Y EFECTO 3D
   ══════════════════════════════════════ */
-  // Quitar loader
-  window.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-      document.getElementById('loader-dais').classList.add('hide');
-    }, 1500);
-  });
-
-  // Animación de aparición al hacer scroll (Scroll Reveal)
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
