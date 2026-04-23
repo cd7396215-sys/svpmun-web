@@ -185,7 +185,7 @@
     @keyframes fullFlash { 0%,50%{ background: #fff; } 25%,75%{ background: #000; } }
 
     /* ════════════════════════════════════════════════
-       NAVBAR 
+       NAVBAR UNIFICADO
     ════════════════════════════════════════════════ */
     #nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; display: flex; align-items: center; justify-content: space-between; padding: 0 52px; height: 76px; }
     #nav-bar::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg,rgba(7,22,48,0.75) 0%,rgba(7,22,48,0) 100%); backdrop-filter: blur(0px); transition: background 0.6s, backdrop-filter 0.6s; pointer-events: none; }
@@ -195,6 +195,8 @@
     #nav-bar.menu-open::after { opacity: 0; }
 
     .nb-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; position: relative; z-index: 1; }
+    .nb-emblem { width: 34px; height: 34px; object-fit: contain; filter: brightness(0) invert(1) drop-shadow(0 0 12px rgba(142,197,247,0.65)); transition: filter 0.4s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+    .nb-brand:hover .nb-emblem { transform: rotate(-12deg) scale(1.1); }
     .nb-word { font-family: 'Cinzel', serif; font-weight: 900; font-size: 1.08rem; letter-spacing: 0.32em; color: #fff; position: relative; }
     .nb-word .nb-sep { color: var(--gold-nav); margin: 0 4px; }
     .nb-word::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg, var(--gold-nav), transparent); transform: scaleX(0); transform-origin: left; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); }
@@ -222,6 +224,7 @@
     #nav-overlay.open { clip-path: circle(150% at calc(100% - 72px) 38px); pointer-events: all; }
     .nvo-deco-panel { width: 36%; flex-shrink: 0; position: relative; overflow: hidden; border-right: 1px solid rgba(58,143,224,0.1); display: flex; flex-direction: column; justify-content: space-between; padding: 110px 52px 52px; }
     .nvo-deco-panel::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 80% 55% at 30% 15%,rgba(18,72,168,0.55) 0%,transparent 60%),radial-gradient(ellipse 55% 70% at 75% 85%,rgba(58,143,224,0.1) 0%,transparent 60%); }
+    .nvo-deco-emblem { position: absolute; right: -40px; top: 50%; transform: translateY(-50%); width: 300px; height: 300px; object-fit: contain; opacity: 0.035; filter: brightness(0) invert(1); pointer-events: none; }
     .nvo-deco-brand { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.42em; text-transform: uppercase; color: rgba(201,168,76,0.55); margin-bottom: 22px; }
     .nvo-deco-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.7rem,3.2vw,2.6rem); font-style: italic; color: rgba(255,255,255,0.82); line-height: 1.28; margin-bottom: 24px; }
     .nvo-deco-line { width: 38px; height: 1px; background: linear-gradient(90deg,var(--gold-nav),transparent); margin-bottom: 22px; }
@@ -229,16 +232,34 @@
     .nvo-deco-bottom { position: relative; z-index: 2; }
     .nvo-deco-year { font-family: 'Bebas Neue', serif; font-size: 4.5rem; line-height: 1; letter-spacing: 0.06em; color: rgba(255,255,255,0.04); }
     .nvo-deco-copy { font-size: 0.58rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(142,197,247,0.18); margin-top: 8px; }
+    
     .nvo-list-panel { flex: 1; position: relative; overflow-y: auto; display: flex; flex-direction: column; padding-top: 76px; }
     .nvo-list-panel::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0; background-image: linear-gradient(rgba(58,143,224,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(58,143,224,0.025) 1px,transparent 1px); background-size: 60px 60px; }
+    
     .nvo-item { display: grid; grid-template-columns: 72px 1fr auto; align-items: center; gap: 0 24px; padding: 26px 52px 26px 40px; border-bottom: 1px solid rgba(58,143,224,0.07); cursor: pointer; position: relative; overflow: hidden; z-index: 1; opacity: 0; transform: translateX(28px); transition: opacity 0.5s ease,transform 0.5s ease; }
+    .nvo-item:last-child { border-bottom: none; }
     #nav-overlay.open .nvo-item { opacity: 1; transform: translateX(0); }
+    
+    /* Cascading Delays */
+    #nav-overlay.open .nvo-item:nth-child(1) { transition-delay: 0.22s; }
+    #nav-overlay.open .nvo-item:nth-child(2) { transition-delay: 0.28s; }
+    #nav-overlay.open .nvo-item:nth-child(3) { transition-delay: 0.34s; }
+    #nav-overlay.open .nvo-item:nth-child(4) { transition-delay: 0.40s; }
+    #nav-overlay.open .nvo-item:nth-child(5) { transition-delay: 0.46s; }
+    #nav-overlay.open .nvo-item:nth-child(6) { transition-delay: 0.52s; }
+    #nav-overlay.open .nvo-item:nth-child(7) { transition-delay: 0.58s; }
+    #nav-overlay.open .nvo-item:nth-child(8) { transition-delay: 0.64s; }
+    #nav-overlay.open .nvo-item:nth-child(9) { transition-delay: 0.70s; }
+    #nav-overlay.open .nvo-item:nth-child(10) { transition-delay: 0.76s; }
+
     .nvo-item::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg,rgba(58,143,224,0) 0%,rgba(58,143,224,0.05) 50%,rgba(58,143,224,0) 100%); opacity: 0; transition: opacity 0.4s; }
     .nvo-item:hover::before { opacity: 1; }
     .nvo-item::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 2px; background: linear-gradient(180deg,transparent,var(--gold-nav) 50%,transparent); transform: scaleY(0); transform-origin: center; transition: transform 0.42s cubic-bezier(0.4,0,0.2,1); }
     .nvo-item:hover::after { transform: scaleY(1); }
+    
     .nvo-num { font-family: 'Bebas Neue', serif; font-size: 0.68rem; letter-spacing: 0.32em; color: var(--gold-nav); opacity: 0.45; text-align: right; padding-right: 10px; border-right: 1px solid rgba(201,168,76,0.1); transition: opacity 0.3s; line-height: 1; }
     .nvo-item:hover .nvo-num { opacity: 1; text-shadow: 0 0 14px rgba(201,168,76,0.5); }
+    
     .nvo-body { display: flex; flex-direction: column; gap: 5px; }
     .nvo-title { font-family: 'Cinzel', serif; font-size: clamp(1rem,1.8vw,1.4rem); font-weight: 700; letter-spacing: 0.06em; color: rgba(255,255,255,0.82); transition: color 0.3s,letter-spacing 0.4s; }
     .nvo-item:hover .nvo-title { color: var(--gold-lt-nav); letter-spacing: 0.1em; }
@@ -246,6 +267,27 @@
     .nvo-item:hover .nvo-subs-inline { color: rgba(142,197,247,0.55); }
     .nvo-arrow { font-size: 1.3rem; color: rgba(255,255,255,0.15); transition: color 0.3s,transform 0.3s; }
     .nvo-item:hover .nvo-arrow { color: var(--gold-nav); transform: translateX(4px); }
+
+    .nvo-arrow-expand { font-size: 1.2rem; color: rgba(255,255,255,0.15); transition: color 0.3s, transform 0.45s cubic-bezier(0.4,0,0.2,1); line-height: 1; }
+    .nvo-item:hover .nvo-arrow-expand { color: var(--gold-nav); }
+    .nvo-item.sub-open .nvo-arrow-expand { transform: rotate(90deg); color: var(--gold-nav); }
+
+    .nvo-sub-list { max-height: 0; overflow: hidden; transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1); background: rgba(255,255,255,0.015); border-bottom: 1px solid rgba(58,143,224,0.07); }
+    .nvo-sub-list.open { max-height: 260px; }
+
+    .nvo-sub-item { display: flex; align-items: center; gap: 20px; padding: 16px 52px 16px 130px; cursor: pointer; border-top: 1px solid rgba(58,143,224,0.05); transition: background 0.3s; }
+    .nvo-sub-item:hover { background: rgba(58,143,224,0.04); }
+    .nvo-sub-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(201,168,76,0.35); flex-shrink: 0; transition: background 0.3s; }
+    .nvo-sub-item:hover .nvo-sub-dot { background: var(--gold-nav); }
+    .nvo-sub-name { font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.18em; color: rgba(255,255,255,0.45); text-transform: uppercase; transition: color 0.3s; }
+    .nvo-sub-item:hover .nvo-sub-name { color: rgba(237,217,138,0.85); }
+
+    .nvo-item-back .nvo-title { font-size: clamp(0.85rem, 1.4vw, 1.1rem); color: rgba(255,255,255,0.45); }
+    .nvo-item-back:hover .nvo-title { color: var(--gold-lt-nav); }
+    .nvo-item-back .nvo-num { color: rgba(201,168,76,0.3); }
+    .nvo-back-arr { font-size: 1.1rem; color: rgba(255,255,255,0.15); transition: color 0.3s, transform 0.3s; }
+    .nvo-item-back:hover .nvo-back-arr { color: var(--gold-nav); transform: translateX(-4px); }
+
 
     /* ════════════════════════════════════════════════
        MAIN CONTENT
@@ -522,18 +564,43 @@
     .back-link:hover { color: var(--ghost); border-color: var(--ghost); background: rgba(207,255,244,0.04); }
 
     /* ── MOBILE ── */
+    #mob-bottomnav { display: none; }
+
     @media(max-width: 768px) {
       #nav-bar { display: none !important; }
       #nav-bar.menu-open { display: flex !important; padding: 0 20px; z-index: 10001; }
       #nav-bar.menu-open .nb-brand, #nav-bar.menu-open .nb-center { display: none !important; }
       #nav-bar.menu-open .nb-trigger { margin-left: auto; }
+      
       #nav-overlay { z-index: 9990; }
       .nvo-deco-panel { display: none; }
       .nvo-list-panel { padding-top: 60px; }
       .nvo-item { padding: 16px 20px; grid-template-columns: 42px 1fr auto; gap: 0 12px; }
+      .nvo-sub-item { padding: 12px 20px 12px 74px; gap: 12px; }
+      .nvo-title { font-size: 1rem; }
+      .nvo-subs-inline { display: none; }
+      
       .hero-corner.tr, .hero-corner.bl, .hero-corner.br { display: none; }
       .rec-badge { top: 70px; }
       .eliminated-text { font-size: 2rem; }
+
+      /* BOTTOM NAV */
+      #mob-bottomnav {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(0, 1fr)) !important;
+        gap: 0 !important; width: 100% !important; padding: 0 5px !important;
+        position: fixed; bottom: 0; left: 0; right: 0; z-index: 5000; height: 64px;
+        background: rgba(13,10,6,0.96); backdrop-filter: blur(24px); border-top: 1px solid rgba(255,0,51,0.3);
+      }
+      .mob-nav-item {
+        display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important;
+        padding: 8px 0 !important; min-width: 0 !important; cursor: pointer; text-decoration: none;
+      }
+      .mob-nav-icon { font-size: 18px !important; margin-bottom: 2px !important; color: rgba(224,224,224,0.3); }
+      .mob-nav-label { font-size: 10px !important; text-align: center !important; width: 100% !important; white-space: nowrap !important; color: rgba(224,224,224,0.3); font-family: var(--font-body); letter-spacing: 0.1em; text-transform: uppercase;}
+      .mob-nav-item.active .mob-nav-icon, .mob-nav-item.active .mob-nav-label { color: var(--alert); }
+
+      .page-footer { padding-bottom: 80px !important; }
     }
   </style>
 </head>
@@ -585,53 +652,119 @@
   </div>
 </div>
 
-<nav id="nav-bar">
-  <a class="nb-brand" href="/crisis_ue_2035" onclick="event.preventDefault(); navigateTo('/crisis_ue_2035')">
-    <span class="nb-word">CRISIS<span class="nb-sep">·</span>UE</span>
+<header id="nav-bar">
+  <a class="nb-brand" href="/">
+    <img class="nb-emblem" src="/static/ONU.png" alt="ONU" onerror="this.style.display='none'">
+    <span class="nb-word">SVPMUN <span class="nb-sep">·</span> CRISIS UE</span>
   </a>
-  <div class="nb-center">
-    <a class="nb-quick-link" href="/crisis_ue_2035" onclick="event.preventDefault(); navigateTo('/crisis_ue_2035')">Inicio</a>
-    <a class="nb-quick-link" href="/mesa_crisis_ue" onclick="event.preventDefault(); navigateTo('/mesa_crisis_ue')">Mesa</a>
-  </div>
-  <button class="nb-trigger" onclick="toggleNav()">
+  <nav class="nb-center" aria-label="Acceso rápido">
+    <a class="nb-quick-link" href="/" onclick="event.preventDefault();navigateTo('/')">Inicio</a>
+    <a class="nb-quick-link" href="/drills" onclick="event.preventDefault();navigateTo('/drills')">Drills</a>
+    <a class="nb-quick-link" href="/crisis_ue_2035" onclick="event.preventDefault();navigateTo('/crisis_ue_2035')">Volver al Comité</a>
+    <a class="nb-quick-link" href="/Matrices" onclick="event.preventDefault();navigateTo('/Matrices')">Matrices</a>
+  </nav>
+  <button class="nb-trigger" id="nbTrigger" onclick="toggleNav()" aria-label="Menú">
     <span class="nb-trigger-label">Menú</span>
     <div class="nb-icon" id="nbIcon">
       <span></span><span></span><span></span>
     </div>
   </button>
-</nav>
+</header>
 
-<div id="nav-overlay">
+<div id="nav-overlay" role="navigation" aria-label="Menú Principal">
   <div class="nvo-deco-panel">
-    <div>
-      <div class="nvo-deco-brand">Crisis · UE · 2035</div>
-      <div class="nvo-deco-title">El último bastión<br>de Europa</div>
+    <img class="nvo-deco-emblem" src="/static/ONU.png" alt="">
+    <div class="nvo-deco-top">
+      <div class="nvo-deco-brand">SVPMUN · Central de Drills</div>
+      <div class="nvo-deco-title">"El debate<br>constante<br>forja al<br>diplomático."</div>
       <div class="nvo-deco-line"></div>
-      <div class="nvo-deco-sub">Mesa Directiva<br>Consejo de Emergencia<br>Protocolo EU-DELTA</div>
+      <div class="nvo-deco-sub">Simulaciones Continuas<br>Drills · Comités · 2026</div>
     </div>
     <div class="nvo-deco-bottom">
-      <div class="nvo-deco-year">2035</div>
-      <div class="nvo-deco-copy">Sesión Clasificada</div>
+      <div class="nvo-deco-year">2026</div>
+      <div class="nvo-deco-copy">© 2026 SVPMUN · Model United Nations</div>
     </div>
   </div>
   <div class="nvo-list-panel">
-    <div class="nvo-item" onclick="navigateTo('/crisis_ue_2035'); toggleNav();">
+    <div class="nvo-item nvo-item-back" onclick="navigateTo('/crisis_ue_2035')" style="cursor:pointer;">
+      <div class="nvo-num">←</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Volver a Crisis UE</div>
+        <div class="nvo-subs-inline">El último bastión de Europa</div>
+      </div>
+      <div class="nvo-back-arr">‹</div>
+    </div>
+    <div class="nvo-item" onclick="navigateTo('/')" style="cursor:pointer;">
       <div class="nvo-num">01</div>
       <div class="nvo-body">
-        <div class="nvo-title">Crisis EU 2035</div>
-        <div class="nvo-subs-inline">Página principal · Informe completo</div>
+        <div class="nvo-title">Inicio</div>
+        <div class="nvo-subs-inline">Página principal · SVPMUN</div>
       </div>
-      <div class="nvo-arrow">→</div>
+      <div class="nvo-arrow">›</div>
     </div>
-    <div class="nvo-item" onclick="navigateTo('/mesa_crisis_ue'); toggleNav();">
+    <div class="nvo-item" id="nvo-comites-trigger" onclick="toggleComites()" style="cursor:pointer;">
       <div class="nvo-num">02</div>
       <div class="nvo-body">
-        <div class="nvo-title">Mesa Directiva</div>
-        <div class="nvo-subs-inline">Presidente · Vicepresidente</div>
+        <div class="nvo-title">Comités</div>
+        <div class="nvo-subs-inline">Crisis Roma · OMS · Unión Europea</div>
       </div>
-      <div class="nvo-arrow">→</div>
+      <div class="nvo-arrow-expand">›</div>
     </div>
-  </div>
+    <div class="nvo-sub-list" id="nvo-comites-sub">
+      <div class="nvo-sub-item" onclick="navigateTo('/crisis-roma')">
+        <div class="nvo-sub-dot"></div>
+        <div class="nvo-sub-name">Crisis — Segunda Guerra Civil Romana</div>
+      </div>
+      <div class="nvo-sub-item" onclick="navigateTo('/oms')">
+        <div class="nvo-sub-dot"></div>
+        <div class="nvo-sub-name">OMS — Organización Mundial de la Salud</div>
+      </div>
+      <div class="nvo-sub-item" onclick="navigateTo('/crisis_ue_2035')">
+        <div class="nvo-sub-dot"></div>
+        <div class="nvo-sub-name">Unión Europea</div>
+      </div>
+    </div>
+    
+    <div class="nvo-item" id="nvo-mesas-trigger" onclick="toggleMesas()" style="cursor:pointer;">
+      <div class="nvo-num">03</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Conoce a las Mesas</div>
+        <div class="nvo-subs-inline">Crisis · OMS · Unión Europea</div>
+      </div>
+      <div class="nvo-arrow-expand">›</div>
+    </div>
+    <div class="nvo-sub-list" id="nvo-mesas-sub">
+      <div class="nvo-sub-item" onclick="navigateTo('/Mesas')">
+        <div class="nvo-sub-dot"></div>
+        <div class="nvo-sub-name">Crisis — Segunda Guerra Civil Romana</div>
+      </div>
+      <div class="nvo-sub-item" onclick="navigateTo('/MesasOMS')">
+        <div class="nvo-sub-dot"></div>
+        <div class="nvo-sub-name">OMS — Organización Mundial de la Salud</div>
+      </div>
+      <div class="nvo-sub-item" onclick="navigateTo('/mesaUE')">
+        <div class="nvo-sub-dot"></div>
+        <div class="nvo-sub-name">Unión Europea</div>
+      </div>
+    </div>
+
+    <div class="nvo-item" onclick="navigateTo('/inscripciones-drills')" style="cursor:pointer;">
+      <div class="nvo-num">04</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Inscripciones</div>
+        <div class="nvo-subs-inline">Registro · Costos · Fechas</div>
+      </div>
+      <div class="nvo-arrow">›</div>
+    </div>
+    <div class="nvo-item" onclick="navigateTo('/Matrices')" style="cursor:pointer;">
+      <div class="nvo-num">05</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Matrices</div>
+        <div class="nvo-subs-inline">Base de Datos Estratégica</div>
+      </div>
+      <div class="nvo-arrow">›</div>
+    </div>
+  </div> 
 </div>
 
 <div id="main-content">
@@ -781,7 +914,6 @@
         <p>En Francia, Alemania e Italia, el debate sobre identidad, cultura y el lugar del islam en Europa se convirtió en la grieta política más profunda del continente. Los partidos nacionalistas se consolidaron bajo una misma agenda: <span style="color:var(--alert); font-weight:bold;">"menos Bruselas, más capital nacional"</span>.</p>
         
         <div class="drone-feed">
-          <!-- Asegúrate de tener este video en static/drill.mp4 o reemplázalo con una URL -->
           <video autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover; filter: sepia(1) hue-rotate(180deg) saturate(3) brightness(0.4);" src="static/drill.mp4"></video>
           <div class="crosshair"></div>
           <div class="drone-text">UAV FEED // PARIS_RIOT_0306 // REC</div>
@@ -810,7 +942,6 @@
         </div>
       </div>
     </div>
-    <!-- /FIN DEL ANEXO -->
 
     <div style="text-align:center; padding-bottom: 60px;" class="reveal">
       <a class="back-link" href="/crisis_ue_2035" onclick="event.preventDefault(); navigateTo('/crisis_ue_2035')">
@@ -826,6 +957,30 @@
   </footer>
 
 </div><!-- /main-content -->
+
+<!-- BOTTOM NAV MÓVIL -->
+<div id="mob-bottomnav">
+  <a href="/drills" class="mob-nav-item" onclick="event.preventDefault();navigateTo('/drills')">
+    <div class="mob-nav-icon">⚡</div>
+    <div class="mob-nav-label">Drills</div>
+  </a>
+  <a href="/crisis_ue_2035" class="mob-nav-item" onclick="event.preventDefault();navigateTo('/crisis_ue_2035')">
+    <div class="mob-nav-icon">🇪🇺</div>
+    <div class="mob-nav-label">Crisis UE</div>
+  </a>
+  <a href="/mesaUE" class="mob-nav-item active">
+    <div class="mob-nav-icon">👥</div>
+    <div class="mob-nav-label">Mesas</div>
+  </a>
+  <a href="/Matrices" class="mob-nav-item" onclick="event.preventDefault();navigateTo('/Matrices')">
+    <div class="mob-nav-icon">📊</div>
+    <div class="mob-nav-label">Matrices</div>
+  </a>
+  <div class="mob-nav-item" onclick="toggleNav()">
+    <div class="mob-nav-icon">☰</div>
+    <div class="mob-nav-label">Menú</div>
+  </div>
+</div>
 
 <script>
   /* ════════════════════════════════════════════════
@@ -986,6 +1141,9 @@
     els.forEach(el => obs.observe(el));
   }
 
+  /* ════════════════════════════════════════════════
+     NAVBAR LOGIC (UNIFICADO)
+  ════════════════════════════════════════════════ */
   let navOpen = false;
   function toggleNav() {
     navOpen = !navOpen;
@@ -993,7 +1151,28 @@
     document.getElementById('nav-overlay').classList.toggle('open', navOpen);
     document.getElementById('nbIcon').classList.toggle('open', navOpen);
     document.body.style.overflow = navOpen ? 'hidden' : '';
+    if (!navOpen) {
+      const cs = document.getElementById('nvo-comites-sub');
+      const ct = document.getElementById('nvo-comites-trigger');
+      if (cs) cs.classList.remove('open');
+      if (ct) ct.classList.remove('sub-open');
+      const ms = document.getElementById('nvo-mesas-sub');
+      const mt = document.getElementById('nvo-mesas-trigger');
+      if (ms) ms.classList.remove('open');
+      if (mt) mt.classList.remove('sub-open');
+    }
   }
+
+  function toggleComites() {
+    document.getElementById('nvo-comites-sub').classList.toggle('open');
+    document.getElementById('nvo-comites-trigger').classList.toggle('sub-open');
+  }
+
+  function toggleMesas() {
+    document.getElementById('nvo-mesas-sub').classList.toggle('open');
+    document.getElementById('nvo-mesas-trigger').classList.toggle('sub-open');
+  }
+  
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && navOpen) toggleNav(); });
   window.addEventListener('scroll', () => { document.getElementById('nav-bar').classList.toggle('scrolled', window.scrollY > 40); });
 

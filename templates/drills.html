@@ -216,12 +216,19 @@
 
     .nvo-item { display: grid; grid-template-columns: 72px 1fr auto; align-items: center; gap: 0 24px; padding: 26px 52px 26px 40px; border-bottom: 1px solid rgba(58,143,224,0.07); cursor: pointer; position: relative; overflow: hidden; z-index: 1; opacity: 0; transform: translateX(28px); transition: opacity 0.5s ease, transform 0.5s ease; }
     .nvo-item:last-child { border-bottom: none; }
+    
+    /* Cascading delays for menu items */
     #nav-overlay.open .nvo-item { opacity: 1; transform: translateX(0); }
     #nav-overlay.open .nvo-item:nth-child(1) { transition-delay: 0.22s; }
     #nav-overlay.open .nvo-item:nth-child(2) { transition-delay: 0.28s; }
     #nav-overlay.open .nvo-item:nth-child(3) { transition-delay: 0.34s; }
     #nav-overlay.open .nvo-item:nth-child(4) { transition-delay: 0.40s; }
     #nav-overlay.open .nvo-item:nth-child(5) { transition-delay: 0.46s; }
+    #nav-overlay.open .nvo-item:nth-child(6) { transition-delay: 0.52s; }
+    #nav-overlay.open .nvo-item:nth-child(7) { transition-delay: 0.58s; }
+    #nav-overlay.open .nvo-item:nth-child(8) { transition-delay: 0.64s; }
+    #nav-overlay.open .nvo-item:nth-child(9) { transition-delay: 0.70s; }
+    #nav-overlay.open .nvo-item:nth-child(10) { transition-delay: 0.76s; }
 
     .nvo-item::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(58,143,224,0.0) 0%, rgba(58,143,224,0.05) 50%, rgba(58,143,224,0.0) 100%); opacity: 0; transition: opacity 0.4s; }
     .nvo-item:hover::before { opacity: 1; }
@@ -632,8 +639,33 @@
           <div class="nvo-sub-name">Unión Europea</div>
         </div>
       </div>
+
+      <!-- NUEVO APARTADO: CONOCE A LAS MESAS -->
+      <div class="nvo-item" id="nvo-mesas-trigger" onclick="toggleMesas()" style="cursor:pointer;">
+        <div class="nvo-num">03</div>
+        <div class="nvo-body">
+          <div class="nvo-title">Conoce a las Mesas</div>
+          <div class="nvo-subs-inline">Crisis · OMS · Unión Europea</div>
+        </div>
+        <div class="nvo-arrow-expand">›</div>
+      </div>
+      <div class="nvo-sub-list" id="nvo-mesas-sub">
+        <div class="nvo-sub-item" onclick="navigateTo('/Mesas')">
+          <div class="nvo-sub-dot"></div>
+          <div class="nvo-sub-name">Crisis — Segunda Guerra Civil Romana</div>
+        </div>
+        <div class="nvo-sub-item" onclick="navigateTo('/MesasOMS')">
+          <div class="nvo-sub-dot"></div>
+          <div class="nvo-sub-name">OMS — Organización Mundial de la Salud</div>
+        </div>
+        <div class="nvo-sub-item" onclick="navigateTo('/mesaUE')">
+          <div class="nvo-sub-dot"></div>
+          <div class="nvo-sub-name">Unión Europea</div>
+        </div>
+      </div>
+
      <div class="nvo-item" onclick="navigateTo('/inscripciones-drills')" style="cursor:pointer;">
-      <div class="nvo-num">03</div>
+      <div class="nvo-num">04</div>
       <div class="nvo-body">
         <div class="nvo-title">Inscripciones</div>
         <div class="nvo-subs-inline">Registro · Costos · Fechas</div>
@@ -641,9 +673,8 @@
       <div class="nvo-arrow">›</div>
     </div>
 
-    <!-- AQUÍ ESTÁ LA SOLUCIÓN: El ítem 04 ahora está DENTRO del nvo-list-panel -->
     <div class="nvo-item" onclick="navigateTo('/Matrices')" style="cursor:pointer;">
-      <div class="nvo-num">04</div>
+      <div class="nvo-num">05</div>
       <div class="nvo-body">
         <div class="nvo-title">Matrices</div>
         <div class="nvo-subs-inline">Base de Datos Estratégica</div>
@@ -651,8 +682,8 @@
       <div class="nvo-arrow">›</div>
     </div>
 
-  </div> <!-- ESTE es el cierre correcto de nvo-list-panel -->
-</div> <!-- ESTE es el cierre de nav-overlay -->
+  </div> <!-- Cierre de nvo-list-panel -->
+</div> <!-- Cierre de nav-overlay -->
 
   <section id="hero">
     <div class="hero-video-wrap">
@@ -960,6 +991,10 @@
     if (!navOpen) {
       document.getElementById('nvo-comites-sub').classList.remove('open');
       document.getElementById('nvo-comites-trigger').classList.remove('sub-open');
+      if (document.getElementById('nvo-mesas-sub')) {
+        document.getElementById('nvo-mesas-sub').classList.remove('open');
+        document.getElementById('nvo-mesas-trigger').classList.remove('sub-open');
+      }
     }
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && navOpen) toggleNav(); });
@@ -968,6 +1003,14 @@
   function toggleComites() {
     const sub     = document.getElementById('nvo-comites-sub');
     const trigger = document.getElementById('nvo-comites-trigger');
+    sub.classList.toggle('open');
+    trigger.classList.toggle('sub-open');
+  }
+
+  /* ══ MESAS SUB-LIST TOGGLE ══ */
+  function toggleMesas() {
+    const sub     = document.getElementById('nvo-mesas-sub');
+    const trigger = document.getElementById('nvo-mesas-trigger');
     sub.classList.toggle('open');
     trigger.classList.toggle('sub-open');
   }

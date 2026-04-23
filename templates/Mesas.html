@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Alto Mando — Crisis SVPMUN</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Uncial+Antiqua&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Uncial+Antiqua&family=Rajdhani:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
   <style>
     :root {
       /* Fondos y neutros */
@@ -19,10 +19,16 @@
       --gold:       #d4af37;
       --gold-lt:    #edd98a;
       
-      /* Nuevos tonos Morados coherentes con el Loader */
+      /* Tonos Morados coherentes con el Loader */
       --purple:     #a855c0;
       --purple-lt:  #d29bf0;
       --purple-dk:  #501478;
+
+      /* Variables importadas del Navbar Unificado */
+      --navy:       #071630;
+      --navy-mid:   #0e254a;
+      --gold-nav:   #c9a84c;
+      --gold-lt-nav:#edd98a;
     }
 
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
@@ -34,15 +40,75 @@
       overflow-x:hidden;
     }
 
-    /* LOADER */
-    #loader{position:fixed;inset:0;z-index:9999;background:radial-gradient(ellipse at 50% 55%,#1a0d2e 0%,#0e0820 45%,#030108 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 1.3s ease,transform 1.5s ease;overflow:hidden;}
-    #loader.hide{opacity:0;transform:scale(1.03);pointer-events:none;}
-    .loader-nebula{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 45% at 30% 40%,rgba(80,20,120,0.18) 0%,transparent 100%),radial-gradient(ellipse 45% 60% at 75% 60%,rgba(50,0,90,0.12) 0%,transparent 100%);}
-    .loader-col{position:absolute;bottom:0;display:flex;flex-direction:column;align-items:center;}
-    .loader-col.left{left:6%}.loader-col.right{right:6%}
-    .col-capital-top{width:40px;height:14px;background:linear-gradient(to bottom,rgba(212,175,55,0.4),rgba(139,105,20,0.2));border-radius:2px 2px 0 0;border-top:1px solid rgba(212,175,55,0.3);border-left:1px solid rgba(212,175,55,0.15);border-right:1px solid rgba(212,175,55,0.15);}
-    .col-shaft-body{width:16px;background:linear-gradient(to right,rgba(212,175,55,0.06),rgba(180,130,40,0.12),rgba(212,175,55,0.06));border-left:1px solid rgba(212,175,55,0.1);border-right:1px solid rgba(212,175,55,0.1);min-height:55vh;}
-    .col-base-foot{width:30px;height:10px;background:linear-gradient(to top,rgba(212,175,55,0.25),rgba(139,105,20,0.15));border-bottom:1px solid rgba(212,175,55,0.2);}
+    /* ══════════════════════════════════════
+       LOADER CON LLAMAS MORADAS
+    ══════════════════════════════════════ */
+    #loader {
+      position:fixed; inset:0; z-index:9999;
+      background:radial-gradient(ellipse at 50% 55%,#1a0d2e 0%,#0e0820 45%,#030108 100%);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      transition:opacity 1.3s ease,transform 1.5s ease; overflow:hidden;
+    }
+    #loader.hide { opacity:0; transform:scale(1.03); pointer-events:none; }
+    .loader-nebula {
+      position:absolute; inset:0; pointer-events:none;
+      background:radial-gradient(ellipse 55% 45% at 30% 40%,rgba(80,20,120,0.18) 0%,transparent 100%),
+                 radial-gradient(ellipse 45% 60% at 75% 60%,rgba(50,0,90,0.12) 0%,transparent 100%);
+    }
+    
+    .loader-col { position:absolute; bottom:0; display:flex; flex-direction:column; align-items:center; }
+    .loader-col.left { left:6%; }
+    .loader-col.right { right:6%; }
+
+    /* Fuego Morado en los Pilares */
+    .loader-flame-wrap {
+      position: relative; width: 100%; height: 40px;
+      display: flex; justify-content: center; align-items: flex-end;
+      margin-bottom: -5px; z-index: 1;
+    }
+    .loader-flame-wrap::before {
+      content: ''; position: absolute; bottom: -10px; width: 60px; height: 60px;
+      background: radial-gradient(circle, rgba(168,85,192,0.5) 0%, transparent 70%);
+      animation: pGlow 1.5s ease-in-out infinite alternate; pointer-events: none;
+    }
+    .purple-flame {
+      position: absolute; bottom: 0; width: 24px; height: 48px;
+      background: radial-gradient(ellipse at 50% 80%, #d29bf0 0%, #a855c0 40%, rgba(80,20,120,0.3) 100%);
+      border-radius: 50% 50% 30% 30%; filter: blur(1.5px);
+      animation: pFlame 0.22s ease-in-out infinite alternate;
+    }
+    .purple-flame-inner {
+      position: absolute; bottom: 4px; width: 10px; height: 10px;
+      background: radial-gradient(circle, #ffffff, #d29bf0);
+      border-radius: 50%; filter: blur(2px);
+      animation: pFlame 0.15s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes pFlame {
+      0%  { transform:scaleX(1) scaleY(1) rotate(-3deg); opacity:0.9; }
+      100%{ transform:scaleX(0.85) scaleY(1.18) rotate(3deg); opacity:1; }
+    }
+    @keyframes pGlow {
+      from { opacity: 0.6; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1.1); }
+    }
+
+    .col-capital-top {
+      width:40px; height:14px; position:relative; z-index: 2;
+      background:linear-gradient(to bottom,rgba(212,175,55,0.4),rgba(139,105,20,0.2));
+      border-radius:2px 2px 0 0; border-top:1px solid rgba(212,175,55,0.3);
+      border-left:1px solid rgba(212,175,55,0.15); border-right:1px solid rgba(212,175,55,0.15);
+    }
+    .col-shaft-body {
+      width:16px; min-height:55vh;
+      background:linear-gradient(to right,rgba(212,175,55,0.06),rgba(180,130,40,0.12),rgba(212,175,55,0.06));
+      border-left:1px solid rgba(212,175,55,0.1); border-right:1px solid rgba(212,175,55,0.1);
+    }
+    .col-base-foot {
+      width:30px; height:10px;
+      background:linear-gradient(to top,rgba(212,175,55,0.25),rgba(139,105,20,0.15));
+      border-bottom:1px solid rgba(212,175,55,0.2);
+    }
+
     .loader-card{position:relative;z-index:5;width:min(520px,88vw);background:linear-gradient(160deg,#170f2c 0%,#0f0a1e 55%,#150c26 100%);border:1px solid rgba(168,85,192,0.2);box-shadow:0 0 80px rgba(100,20,160,0.25),0 0 160px rgba(80,10,130,0.1),inset 0 0 60px rgba(0,0,0,0.55),inset 0 1px 0 rgba(212,175,55,0.08);padding:46px 52px 42px;text-align:center;}
     .loader-card-line{position:absolute;left:0;right:0;height:2px;}
     .loader-card-line.top{top:0;background:linear-gradient(90deg,transparent,rgba(168,85,192,0.4) 20%,rgba(212,175,55,0.9) 50%,rgba(168,85,192,0.4) 80%,transparent);}
@@ -68,26 +134,140 @@
     @keyframes loaderCarve{from{opacity:0;letter-spacing:.28em}to{opacity:1;letter-spacing:.1em}}
 
     /* ══════════════════════════════════════
-       PARTÍCULAS DE FUEGO / CENIZAS (SE MANTIENE EL FUEGO)
+       PARTÍCULAS DE FUEGO / CENIZAS
     ══════════════════════════════════════ */
-    #ash-canvas {
-      position:fixed; inset:0; z-index:0; pointer-events:none;
-    }
+    #ash-canvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
 
     /* ══════════════════════════════════════
-       NAVBAR
+       NAVBAR UNIFICADO & OVERLAY
     ══════════════════════════════════════ */
     #nav-bar {
-      position:fixed; top:0; left:0; right:0; z-index:800; display:flex; align-items:center; justify-content:space-between; padding:0 52px; height:76px;
-      background:linear-gradient(180deg,rgba(13,10,6,0.9) 0%,rgba(13,10,6,0) 100%); backdrop-filter:blur(5px);
-      border-bottom: 1px solid rgba(168,85,192,0.2);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 8000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 52px; height: 76px; font-family: 'Rajdhani', sans-serif;
     }
-    .nb-brand { display:flex; align-items:center; gap:14px; text-decoration:none; z-index:1; }
-    .nb-emblem { width:34px; height:34px; object-fit:contain; filter:brightness(0) invert(1); }
-    .nb-word { font-family:'Cinzel',serif; font-weight:900; font-size:1rem; letter-spacing:0.32em; color:#fff; }
-    .nb-center { position:absolute; left:50%; transform:translateX(-50%); display:flex; align-items:center; z-index:1; }
-    .nb-quick-link { font-family:'Cinzel',serif; font-size:0.56rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.5); padding:6px 18px; text-decoration:none; transition:color 0.3s; }
-    .nb-quick-link:hover { color:var(--purple-lt); }
+    #nav-bar::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(7,22,48,0.75) 0%, rgba(7,22,48,0) 100%);
+      backdrop-filter: blur(0px); transition: background 0.6s, backdrop-filter 0.6s;
+      pointer-events: none;
+    }
+    #nav-bar.scrolled::before { background: rgba(7,22,48,0.90); backdrop-filter: blur(26px) saturate(1.9); }
+    #nav-bar.menu-open::before { background: transparent; backdrop-filter: none; }
+    #nav-bar::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.0) 10%, rgba(201,168,76,0.55) 35%, rgba(237,217,138,1.0) 50%, rgba(201,168,76,0.55) 65%, rgba(201,168,76,0.0) 90%, transparent 100%);
+      opacity: 1; transition: opacity 0.4s;
+    }
+    #nav-bar.menu-open::after { opacity: 0; }
+
+    .nb-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; position: relative; z-index: 1; }
+    .nb-emblem { width: 34px; height: 34px; object-fit: contain; filter: brightness(0) invert(1) drop-shadow(0 0 12px rgba(142,197,247,0.65)); transition: filter 0.4s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+    .nb-brand:hover .nb-emblem { transform: rotate(-12deg) scale(1.1); }
+    .nb-word { font-family: 'Cinzel', serif; font-weight: 900; font-size: 1.08rem; letter-spacing: 0.32em; color: #fff; position: relative; }
+    .nb-word .nb-sep { color: var(--gold-nav); margin: 0 4px; }
+    .nb-word::after {
+      content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 1px;
+      background: linear-gradient(90deg, var(--gold-nav), transparent); transform: scaleX(0); transform-origin: left;
+      transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .nb-brand:hover .nb-word::after { transform: scaleX(1); }
+
+    .nb-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; pointer-events: all; z-index: 1; transition: opacity 0.35s, transform 0.35s; }
+    .nb-quick-link { font-family: 'Cinzel', serif; font-size: 0.56rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.3); padding: 6px 18px; position: relative; cursor: pointer; transition: color 0.3s; text-decoration: none; }
+    .nb-quick-link::after { content: '·'; position: absolute; right: -1px; top: 50%; transform: translateY(-50%); color: rgba(201,168,76,0.2); pointer-events: none; }
+    .nb-quick-link:last-child::after { display: none; }
+    .nb-quick-link:hover { color: rgba(237,217,138,0.9); }
+    #nav-bar.menu-open .nb-center { opacity: 0; transform: translateX(-50%) scale(0.9); pointer-events: none; }
+
+    .nb-trigger { position: relative; z-index: 1; display: flex; align-items: center; gap: 16px; background: none; border: none; cursor: pointer; padding: 8px 0; }
+    .nb-trigger-label { font-family: 'Cinzel', serif; font-size: 0.56rem; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(255,255,255,0.4); transition: color 0.3s, opacity 0.3s; }
+    .nb-trigger:hover .nb-trigger-label { color: rgba(201,168,76,0.85); }
+    #nav-bar.menu-open .nb-trigger-label { opacity: 0; }
+
+    .nb-icon { display: flex; flex-direction: column; gap: 5px; width: 28px; cursor: pointer; }
+    .nb-icon span { display: block; height: 1.5px; border-radius: 2px; background: rgba(255,255,255,0.85); transform-origin: center; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease, width 0.4s ease, background 0.3s; }
+    .nb-icon span:nth-child(1) { width: 28px; }
+    .nb-icon span:nth-child(2) { width: 18px; margin-left: 10px; }
+    .nb-icon span:nth-child(3) { width: 28px; }
+    .nb-icon.open span:nth-child(1) { transform: translateY(6.75px) rotate(45deg); width: 28px; margin-left: 0; background: var(--gold-lt-nav); }
+    .nb-icon.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nb-icon.open span:nth-child(3) { transform: translateY(-6.75px) rotate(-45deg); background: var(--gold-lt-nav); }
+
+    /* OVERLAY */
+    #nav-overlay {
+      position: fixed; inset: 0; z-index: 7900; font-family: 'Rajdhani', sans-serif;
+      background: var(--navy); display: flex;
+      clip-path: circle(0% at calc(100% - 72px) 38px);
+      transition: clip-path 0.85s cubic-bezier(0.77,0,0.18,1); pointer-events: none; overflow: hidden;
+    }
+    #nav-overlay.open { clip-path: circle(150% at calc(100% - 72px) 38px); pointer-events: all; }
+
+    .nvo-deco-panel { width: 36%; flex-shrink: 0; position: relative; overflow: hidden; border-right: 1px solid rgba(58,143,224,0.1); display: flex; flex-direction: column; justify-content: space-between; padding: 110px 52px 52px; }
+    .nvo-deco-panel::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 80% 55% at 30% 15%, rgba(18,72,168,0.55) 0%, transparent 60%), radial-gradient(ellipse 55% 70% at 75% 85%, rgba(58,143,224,0.1) 0%, transparent 60%); }
+    .nvo-deco-panel::after { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(58,143,224,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(58,143,224,0.04) 1px, transparent 1px); background-size: 48px 48px; }
+    .nvo-deco-emblem { position: absolute; right: -40px; top: 50%; transform: translateY(-50%); width: 300px; height: 300px; object-fit: contain; opacity: 0.035; filter: brightness(0) invert(1); pointer-events: none; }
+    .nvo-deco-top { position: relative; z-index: 2; }
+    .nvo-deco-brand { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.42em; text-transform: uppercase; color: rgba(201,168,76,0.55); margin-bottom: 22px; }
+    .nvo-deco-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.7rem, 3.2vw, 2.6rem); font-style: italic; color: rgba(255,255,255,0.82); line-height: 1.28; margin-bottom: 24px; }
+    .nvo-deco-line { width: 38px; height: 1px; background: linear-gradient(90deg, var(--gold-nav), transparent); margin-bottom: 22px; }
+    .nvo-deco-sub { font-family: 'Rajdhani', sans-serif; font-size: 0.78rem; letter-spacing: 0.16em; color: rgba(142,197,247,0.3); text-transform: uppercase; line-height: 1.9; }
+    .nvo-deco-bottom { position: relative; z-index: 2; }
+    .nvo-deco-year { font-family: 'Bebas Neue', serif; font-size: 4.5rem; line-height: 1; letter-spacing: 0.06em; color: rgba(255,255,255,0.04); }
+    .nvo-deco-copy { font-size: 0.58rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(142,197,247,0.18); margin-top: 8px; }
+
+    .nvo-list-panel { flex: 1; position: relative; overflow-y: auto; display: flex; flex-direction: column; padding-top: 76px; }
+    .nvo-list-panel::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0; background-image: linear-gradient(rgba(58,143,224,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(58,143,224,0.025) 1px, transparent 1px); background-size: 60px 60px; }
+
+    .nvo-item { display: grid; grid-template-columns: 72px 1fr auto; align-items: center; gap: 0 24px; padding: 26px 52px 26px 40px; border-bottom: 1px solid rgba(58,143,224,0.07); cursor: pointer; position: relative; overflow: hidden; z-index: 1; opacity: 0; transform: translateX(28px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .nvo-item:last-child { border-bottom: none; }
+    
+    /* Cascading Delays */
+    #nav-overlay.open .nvo-item { opacity: 1; transform: translateX(0); }
+    #nav-overlay.open .nvo-item:nth-child(1) { transition-delay: 0.22s; }
+    #nav-overlay.open .nvo-item:nth-child(2) { transition-delay: 0.28s; }
+    #nav-overlay.open .nvo-item:nth-child(3) { transition-delay: 0.34s; }
+    #nav-overlay.open .nvo-item:nth-child(4) { transition-delay: 0.40s; }
+    #nav-overlay.open .nvo-item:nth-child(5) { transition-delay: 0.46s; }
+    #nav-overlay.open .nvo-item:nth-child(6) { transition-delay: 0.52s; }
+    #nav-overlay.open .nvo-item:nth-child(7) { transition-delay: 0.58s; }
+
+    .nvo-item::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(58,143,224,0.0) 0%, rgba(58,143,224,0.05) 50%, rgba(58,143,224,0.0) 100%); opacity: 0; transition: opacity 0.4s; }
+    .nvo-item:hover::before { opacity: 1; }
+    .nvo-item::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, transparent, var(--gold-nav) 50%, transparent); transform: scaleY(0); transform-origin: center; transition: transform 0.42s cubic-bezier(0.4,0,0.2,1); }
+    .nvo-item:hover::after { transform: scaleY(1); }
+
+    .nvo-num { font-family: 'Bebas Neue', serif; font-size: 0.68rem; letter-spacing: 0.32em; color: var(--gold-nav); opacity: 0.45; text-align: right; padding-right: 10px; border-right: 1px solid rgba(201,168,76,0.1); transition: opacity 0.3s; line-height: 1; }
+    .nvo-item:hover .nvo-num { opacity: 1; text-shadow: 0 0 14px rgba(201,168,76,0.5); }
+
+    .nvo-body { display: flex; flex-direction: column; gap: 5px; }
+    .nvo-title { font-family: 'Cinzel', serif; font-size: clamp(1rem, 1.8vw, 1.4rem); font-weight: 700; letter-spacing: 0.06em; color: rgba(255,255,255,0.82); transition: color 0.3s, letter-spacing 0.4s; }
+    .nvo-item:hover .nvo-title { color: var(--gold-lt-nav); letter-spacing: 0.1em; }
+    .nvo-subs-inline { font-family: 'Rajdhani', sans-serif; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(142,197,247,0.28); transition: color 0.3s; }
+    .nvo-item:hover .nvo-subs-inline { color: rgba(142,197,247,0.55); }
+    .nvo-arrow { font-size: 1.3rem; color: rgba(255,255,255,0.15); transition: color 0.3s, transform 0.3s; }
+    .nvo-item:hover .nvo-arrow { color: var(--gold-nav); transform: translateX(4px); }
+
+    .nvo-arrow-expand { font-size: 1.2rem; color: rgba(255,255,255,0.15); transition: color 0.3s, transform 0.45s cubic-bezier(0.4,0,0.2,1); line-height: 1; }
+    .nvo-item:hover .nvo-arrow-expand { color: var(--gold-nav); }
+    .nvo-item.sub-open .nvo-arrow-expand { transform: rotate(90deg); color: var(--gold-nav); }
+
+    .nvo-sub-list { max-height: 0; overflow: hidden; transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1); background: rgba(255,255,255,0.015); border-bottom: 1px solid rgba(58,143,224,0.07); }
+    .nvo-sub-list.open { max-height: 260px; }
+
+    .nvo-sub-item { display: flex; align-items: center; gap: 20px; padding: 16px 52px 16px 130px; cursor: pointer; border-top: 1px solid rgba(58,143,224,0.05); transition: background 0.3s; }
+    .nvo-sub-item:hover { background: rgba(58,143,224,0.04); }
+    .nvo-sub-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(201,168,76,0.35); flex-shrink: 0; transition: background 0.3s; }
+    .nvo-sub-item:hover .nvo-sub-dot { background: var(--gold-nav); }
+    .nvo-sub-name { font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.18em; color: rgba(255,255,255,0.45); text-transform: uppercase; transition: color 0.3s; }
+    .nvo-sub-item:hover .nvo-sub-name { color: rgba(237,217,138,0.85); }
+
+    .nvo-item-back .nvo-title { font-size: clamp(0.85rem, 1.4vw, 1.1rem); color: rgba(255,255,255,0.45); }
+    .nvo-item-back:hover .nvo-title { color: var(--gold-lt-nav); }
+    .nvo-item-back .nvo-num { color: rgba(201,168,76,0.3); }
+    .nvo-back-arr { font-size: 1.1rem; color: rgba(255,255,255,0.15); transition: color 0.3s, transform 0.3s; }
+    .nvo-item-back:hover .nvo-back-arr { color: var(--gold-nav); transform: translateX(-4px); }
+
 
     /* ══════════════════════════════════════
        HERO ASIMÉTRICO
@@ -304,8 +484,10 @@
     .secret-text { font-family: 'Cormorant Garamond', monospace; font-size: 1rem; color: #666; letter-spacing: 0.2em; text-transform: uppercase; }
 
     /* ══════════════════════════════════════
-       RESPONSIVE
+       RESPONSIVE & MOBILE
     ══════════════════════════════════════ */
+    #mob-bottomnav { display: none; }
+
     @media (max-width: 900px) {
       .profile-card, .profile-card:nth-child(even) { flex-direction: column; margin-bottom: 80px; }
       .profile-img-wrap, .profile-info { flex: 0 0 100%; width: 100%; }
@@ -313,10 +495,47 @@
       .name-plain, .name-cipher { white-space: normal; line-height: 1.2;}
       .epic-context-banner { min-height: 400px; }
     }
-    
+
+    @media (max-width: 768px) {
+      /* Bottom Nav Visible */
+      #mob-bottomnav {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(0, 1fr)) !important;
+        gap: 0 !important; width: 100% !important; padding: 0 5px !important;
+        position: fixed; bottom: 0; left: 0; right: 0; z-index: 5000; height: 64px;
+        background: rgba(13,10,6,0.96); backdrop-filter: blur(24px); border-top: 1px solid rgba(168,85,192,0.3);
+      }
+      .mob-nav-item {
+        display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important;
+        padding: 8px 0 !important; min-width: 0 !important; cursor: pointer; text-decoration: none;
+      }
+      .mob-nav-icon { font-size: 18px !important; margin-bottom: 2px !important; color: rgba(224,224,224,0.3); }
+      .mob-nav-label { font-size: 10px !important; text-align: center !important; width: 100% !important; white-space: nowrap !important; color: rgba(224,224,224,0.3); font-family: 'Cinzel', serif; letter-spacing: 0.1em; text-transform: uppercase;}
+      .mob-nav-item.active .mob-nav-icon, .mob-nav-item.active .mob-nav-label { color: var(--purple-lt); }
+
+      /* Adjust Desktop Navbar */
+      #nav-bar { padding: 0 20px; }
+      .nb-center { display: none !important; }
+      
+      /* Adjust overlay panel sizes for mobile */
+      .nvo-deco-panel { display: none; }
+      .nvo-list-panel { padding-top: 60px; }
+      .nvo-item { padding: 16px 20px; grid-template-columns: 42px 1fr auto; gap: 0 12px; }
+      .nvo-sub-item { padding: 12px 20px 12px 74px; gap: 12px; }
+      .nvo-title { font-size: 1rem; }
+      .nvo-subs-inline { display: none; }
+
+      /* Adjust Footer padding for nav */
+      footer { padding-bottom: 80px !important; }
+    }
+
+    @media (max-width: 480px) {
+      .nvo-item { padding: 14px 16px; grid-template-columns: 36px 1fr auto; gap: 0 10px; }
+      .nvo-sub-item { padding-left: 62px; }
+    }
+
     footer { background:linear-gradient(to top, #060401, #0d0a06); padding:40px 20px; text-align:center; border-top:1px solid rgba(168,85,192,0.3); margin-top: 50px; position:relative; z-index: 2;}
     .foot-spqr { font-family:'Uncial Antiqua',serif; font-size:1rem; color:rgba(212,175,55,0.25); letter-spacing:0.4em; margin-bottom:12px; }
-
   </style>
 </head>
 <body>
@@ -324,11 +543,23 @@
 <!-- CANVAS PARA EL FUEGO/CENIZAS EN EL FONDO -->
 <canvas id="ash-canvas"></canvas>
 
-<!-- LOADER -->
+<!-- LOADER CON FUEGO MORADO -->
 <div id="loader">
   <div class="loader-nebula"></div>
-  <div class="loader-col left"><div class="col-capital-top"></div><div class="col-shaft-body"></div><div class="col-base-foot"></div></div>
-  <div class="loader-col right"><div class="col-capital-top"></div><div class="col-shaft-body"></div><div class="col-base-foot"></div></div>
+  <div class="loader-col left">
+    <div class="loader-flame-wrap">
+      <div class="purple-flame"></div>
+      <div class="purple-flame-inner"></div>
+    </div>
+    <div class="col-capital-top"></div><div class="col-shaft-body"></div><div class="col-base-foot"></div>
+  </div>
+  <div class="loader-col right">
+    <div class="loader-flame-wrap">
+      <div class="purple-flame"></div>
+      <div class="purple-flame-inner"></div>
+    </div>
+    <div class="col-capital-top"></div><div class="col-shaft-body"></div><div class="col-base-foot"></div>
+  </div>
   <div class="loader-card">
     <div class="loader-card-line top"></div><div class="loader-card-line bot"></div>
     <div class="lc-corner tl"></div><div class="lc-corner tr"></div><div class="lc-corner bl"></div><div class="lc-corner br"></div>
@@ -348,17 +579,122 @@
   </div>
 </div>
 
-<!-- NAVBAR -->
+<!-- NAVBAR DESKTOP & MOBILE TRIGGER -->
 <header id="nav-bar">
   <a class="nb-brand" href="/">
     <img class="nb-emblem" src="static/ONU.png" alt="ONU" onerror="this.style.display='none'">
-    <span class="nb-word">SVPMUN</span>
+    <span class="nb-word">SVPMUN <span class="nb-sep">·</span> CRISIS</span>
   </a>
-  <nav class="nb-center">
-    <a class="nb-quick-link" href="/">Inicio</a>
-    <a class="nb-quick-link" href="/crisis-roma">Volver al Comité</a>
+  <nav class="nb-center" aria-label="Acceso rápido">
+    <a class="nb-quick-link" href="/" onclick="event.preventDefault();navigateTo('/')">Inicio</a>
+    <a class="nb-quick-link" href="/drills" onclick="event.preventDefault();navigateTo('/drills')">Drills</a>
+    <a class="nb-quick-link" href="/crisis-roma" onclick="event.preventDefault();navigateTo('/crisis-roma')">Volver a Roma</a>
+    <a class="nb-quick-link" href="/Matrices" onclick="event.preventDefault();navigateTo('/Matrices')">Matrices</a>
   </nav>
+  <button class="nb-trigger" id="nbTrigger" onclick="toggleNav()" aria-label="Menú">
+    <span class="nb-trigger-label">Menú</span>
+    <div class="nb-icon" id="nbIcon">
+      <span></span><span></span><span></span>
+    </div>
+  </button>
 </header>
+
+<!-- NAV OVERLAY UNIFICADO -->
+<div id="nav-overlay" role="navigation" aria-label="Menú Principal">
+  <div class="nvo-deco-panel">
+    <img class="nvo-deco-emblem" src="/static/ONU.png" alt="">
+    <div class="nvo-deco-top">
+      <div class="nvo-deco-brand">SVPMUN · Central de Drills</div>
+      <div class="nvo-deco-title">"El debate<br>constante<br>forja al<br>diplomático."</div>
+      <div class="nvo-deco-line"></div>
+      <div class="nvo-deco-sub">Simulaciones Continuas<br>Drills · Comités · 2026</div>
+    </div>
+    <div class="nvo-deco-bottom">
+      <div class="nvo-deco-year">2026</div>
+      <div class="nvo-deco-copy">© 2026 SVPMUN · Model United Nations</div>
+    </div>
+  </div>
+  <div class="nvo-list-panel">
+    <div class="nvo-item nvo-item-back" onclick="navigateTo('/crisis-roma')" style="cursor:pointer;">
+      <div class="nvo-num">←</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Volver a Roma</div>
+        <div class="nvo-subs-inline">Segunda Guerra Civil Romana</div>
+      </div>
+      <div class="nvo-back-arr">‹</div>
+    </div>
+    <div class="nvo-item" onclick="navigateTo('/')" style="cursor:pointer;">
+      <div class="nvo-num">01</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Inicio</div>
+        <div class="nvo-subs-inline">Página principal · SVPMUN</div>
+      </div>
+      <div class="nvo-arrow">›</div>
+    </div>
+    <div class="nvo-item" id="nvo-comites-trigger" onclick="toggleComites()" style="cursor:pointer;">
+      <div class="nvo-num">02</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Comités</div>
+        <div class="nvo-subs-inline">Crisis Roma · OMS · Unión Europea</div>
+      </div>
+      <div class="nvo-arrow-expand">›</div>
+    </div>
+    <div class="nvo-sub-list" id="nvo-comites-sub">
+      <div class="nvo-sub-item" onclick="navigateTo('/crisis-roma')">
+        <div class="nvo-sub-dot"></div>
+        <div class="nvo-sub-name">Crisis — Segunda Guerra Civil Romana</div>
+      </div>
+      <div class="nvo-sub-item" onclick="navigateTo('/oms')">
+        <div class="nvo-sub-dot"></div>
+        <div class="nvo-sub-name">OMS — Organización Mundial de la Salud</div>
+      </div>
+      <div class="nvo-sub-item" onclick="navigateTo('/crisis_ue_2035')">
+        <div class="nvo-sub-dot"></div>
+        <div class="nvo-sub-name">Unión Europea</div>
+      </div>
+    </div>
+    
+    <div class="nvo-item" id="nvo-mesas-trigger" onclick="toggleMesas()" style="cursor:pointer;">
+      <div class="nvo-num">03</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Conoce a las Mesas</div>
+        <div class="nvo-subs-inline">Crisis · OMS · Unión Europea</div>
+      </div>
+      <div class="nvo-arrow-expand">›</div>
+    </div>
+    <div class="nvo-sub-list" id="nvo-mesas-sub">
+      <div class="nvo-sub-item" onclick="navigateTo('/Mesas')">
+        <div class="nvo-sub-dot"></div>
+        <div class="nvo-sub-name">Crisis — Segunda Guerra Civil Romana</div>
+      </div>
+      <div class="nvo-sub-item" onclick="navigateTo('/MesasOMS')">
+        <div class="nvo-sub-dot"></div>
+        <div class="nvo-sub-name">OMS — Organización Mundial de la Salud</div>
+      </div>
+      <div class="nvo-sub-item" onclick="navigateTo('/mesaUE')">
+        <div class="nvo-sub-dot"></div>
+        <div class="nvo-sub-name">Unión Europea</div>
+      </div>
+    </div>
+
+    <div class="nvo-item" onclick="navigateTo('/inscripciones-drills')" style="cursor:pointer;">
+      <div class="nvo-num">04</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Inscripciones</div>
+        <div class="nvo-subs-inline">Registro · Costos · Fechas</div>
+      </div>
+      <div class="nvo-arrow">›</div>
+    </div>
+    <div class="nvo-item" onclick="navigateTo('/Matrices')" style="cursor:pointer;">
+      <div class="nvo-num">05</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Matrices</div>
+        <div class="nvo-subs-inline">Base de Datos Estratégica</div>
+      </div>
+      <div class="nvo-arrow">›</div>
+    </div>
+  </div> 
+</div>
 
 <!-- HERO -->
 <section class="dais-hero">
@@ -373,7 +709,7 @@
   </div>
 </section>
 
-<!-- NUEVO BANNER DE CONTEXTO (COLISEO) -->
+<!-- BANNER DE CONTEXTO (COLISEO) -->
 <section class="epic-context-banner">
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/1280px-Colosseo_2020.jpg" alt="Coliseo Romano">
   <div class="epic-context-overlay"></div>
@@ -407,7 +743,7 @@
       </div>
 
       <p style="font-family:'Cormorant Garamond', serif; font-size: 1.1rem; color: #c0bfbb; margin-bottom: 20px; line-height: 1.5; font-style: italic;">
-        "La ley de Roma se dicta en esta sala. Mi deber es mantener el orden; el vuestro, sobrevivir al caos."
+        "La ley de Roma se dicta en esta sala. Mi deber es mantener el order; el vuestro, sobrevivir al caos."
       </p>
       <div class="achievements-grid">
         <span class="achievement-badge highlight-badge">Mejor Crisis Staff - SALTOMUN</span>
@@ -507,8 +843,34 @@
   </div>
 </footer>
 
+<!-- BOTTOM NAV MÓVIL -->
+<div id="mob-bottomnav">
+  <a href="/drills" class="mob-nav-item" onclick="event.preventDefault();navigateTo('/drills')">
+    <div class="mob-nav-icon">⚡</div>
+    <div class="mob-nav-label">Drills</div>
+  </a>
+  <a href="/crisis-roma" class="mob-nav-item" onclick="event.preventDefault();navigateTo('/crisis-roma')">
+    <div class="mob-nav-icon">🏛️</div>
+    <div class="mob-nav-label">Roma</div>
+  </a>
+  <a href="/Mesas" class="mob-nav-item active">
+    <div class="mob-nav-icon">👥</div>
+    <div class="mob-nav-label">Mesas</div>
+  </a>
+  <a href="/Matrices" class="mob-nav-item" onclick="event.preventDefault();navigateTo('/Matrices')">
+    <div class="mob-nav-icon">📊</div>
+    <div class="mob-nav-label">Matrices</div>
+  </a>
+  <div class="mob-nav-item" onclick="toggleNav()">
+    <div class="mob-nav-icon">☰</div>
+    <div class="mob-nav-label">Menú</div>
+  </div>
+</div>
+
 <script>
-  /* LOADER (Ajustado para durar al menos ~6.5 segundos visuales) */
+  /* ══════════════════════════════════════
+     LOADER LOGIC
+  ══════════════════════════════════════ */
   (function(){
     const phrases=[
       'Convocando al Directorio...',
@@ -523,7 +885,6 @@
     let phrase = 0;
     let nodeIdx = 0;
     
-    // Alentizado el intervalo a 700ms para llenar mejor los ~6 segundos.
     const interval = setInterval(()=>{
       if(nodeIdx < nodes.length){
         nodes[nodeIdx].classList.add('lit');
@@ -535,7 +896,7 @@
       }
     }, 700);
 
-    const minLoaderTime = 6500; // Mínimo 6.5 segundos
+    const minLoaderTime = 6500; 
     const startTime = Date.now();
 
     window.addEventListener('load', () => {
@@ -554,7 +915,6 @@
       }, remainingTime);
     });
 
-    // Fallback de seguridad en caso de que tarde demasiado o falle el window onload
     setTimeout(()=>{
       const loader = document.getElementById('loader');
       if (!loader.classList.contains('hide')) {
@@ -565,7 +925,7 @@
   })();
 
   /* ══════════════════════════════════════
-     SISTEMA DE PARTÍCULAS / CENIZAS (Se mantienen cálidas/fuego)
+     SISTEMA DE PARTÍCULAS / CENIZAS
   ══════════════════════════════════════ */
   (function(){
     const canvas = document.getElementById('ash-canvas');
@@ -579,13 +939,11 @@
     window.addEventListener('resize', resize);
     resize();
 
-    function Particle() {
-      this.reset();
-    }
+    function Particle() { this.reset(); }
     Particle.prototype.reset = function() {
       this.x = Math.random() * W;
       this.y = H + 10;
-      this.vy = -(0.5 + Math.random() * 2.0); // Velocidad de subida
+      this.vy = -(0.5 + Math.random() * 2.0);
       this.vx = (Math.random() - 0.5) * 0.8;
       this.size = 1.0 + Math.random() * 3.5;
       this.alpha = 0;
@@ -597,16 +955,13 @@
       const g = Math.floor(Math.random() * 100 + 40); 
       const b = Math.floor(Math.random() * 20);
       this.color = `rgb(${r},${g},${b})`;
-      
       this.wobble = Math.random() * Math.PI * 2;
     };
     Particle.prototype.update = function() {
-      this.life++;
-      this.wobble += 0.03;
+      this.life++; this.wobble += 0.03;
       this.x += this.vx + Math.sin(this.wobble) * 0.6;
       this.y += this.vy;
       
-      // Control de opacidad (aparece y desaparece suavemente)
       const prog = this.life / this.maxLife;
       if (prog < 0.2) this.alpha = (prog / 0.2) * this.maxAlpha;
       else if (prog > 0.7) this.alpha = ((1 - prog) / 0.3) * this.maxAlpha;
@@ -615,23 +970,15 @@
       if (this.life >= this.maxLife || this.y < -20) this.reset();
     };
     Particle.prototype.draw = function() {
-      ctx.save();
-      ctx.globalAlpha = this.alpha;
-      ctx.fillStyle = this.color;
-      ctx.shadowBlur = 10;
-      ctx.shadowColor = this.color;
-      
-      ctx.beginPath();
-      ctx.ellipse(this.x, this.y, this.size, this.size * 0.6, this.wobble, 0, Math.PI*2);
-      ctx.fill();
-      ctx.restore();
+      ctx.save(); ctx.globalAlpha = this.alpha;
+      ctx.fillStyle = this.color; ctx.shadowBlur = 10; ctx.shadowColor = this.color;
+      ctx.beginPath(); ctx.ellipse(this.x, this.y, this.size, this.size * 0.6, this.wobble, 0, Math.PI*2);
+      ctx.fill(); ctx.restore();
     };
 
-    // Crear partículas
     for (let i = 0; i < 40; i++) {
       const p = new Particle();
-      p.life = Math.random() * p.maxLife; 
-      p.y = H - Math.random() * H;
+      p.life = Math.random() * p.maxLife; p.y = H - Math.random() * H;
       particles.push(p);
     }
 
@@ -644,9 +991,74 @@
   })();
 
   /* ══════════════════════════════════════
+     NAVBAR LOGIC
+  ══════════════════════════════════════ */
+  let navOpen = false;
+  function toggleNav() {
+    navOpen = !navOpen;
+    const bar = document.getElementById('nav-bar');
+    const overlay = document.getElementById('nav-overlay');
+    const icon = document.getElementById('nbIcon');
+    if(bar) bar.classList.toggle('menu-open', navOpen);
+    if(overlay) overlay.classList.toggle('open', navOpen);
+    if(icon) icon.classList.toggle('open', navOpen);
+    document.body.style.overflow = navOpen ? 'hidden' : '';
+    if (!navOpen) {
+      document.getElementById('nvo-comites-sub').classList.remove('open');
+      document.getElementById('nvo-comites-trigger').classList.remove('sub-open');
+      document.getElementById('nvo-mesas-sub').classList.remove('open');
+      document.getElementById('nvo-mesas-trigger').classList.remove('sub-open');
+    }
+  }
+  function toggleComites() {
+    document.getElementById('nvo-comites-sub').classList.toggle('open');
+    document.getElementById('nvo-comites-trigger').classList.toggle('sub-open');
+  }
+  function toggleMesas() {
+    document.getElementById('nvo-mesas-sub').classList.toggle('open');
+    document.getElementById('nvo-mesas-trigger').classList.toggle('sub-open');
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && navOpen) toggleNav(); });
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav-bar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  /* ══════════════════════════════════════
+     PAGE TRANSITION CURTAIN
+  ══════════════════════════════════════ */
+  (function(){
+    const curtain = document.createElement('div');
+    curtain.id = 'curtain';
+    curtain.style.cssText = 'position:fixed;inset:0;z-index:9998;pointer-events:none;display:flex;';
+    curtain.innerHTML =
+      '<div class="c-half L" style="flex:1;height:100%;background:#0d0a06;transform:scaleX(0);transform-origin:left;"></div>'+
+      '<div class="c-half R" style="flex:1;height:100%;background:#0d0a06;transform:scaleX(0);transform-origin:right;"></div>';
+    document.body.prepend(curtain);
+    const s = document.createElement('style');
+    s.textContent = `
+      body.entering .c-half.L{animation:cOpenL .65s cubic-bezier(.77,0,.18,1) forwards;}
+      body.entering .c-half.R{animation:cOpenR .65s cubic-bezier(.77,0,.18,1) .05s forwards;}
+      body.exiting  .c-half.L{animation:cCloseL .45s cubic-bezier(.77,0,.18,1) forwards;}
+      body.exiting  .c-half.R{animation:cCloseR .45s cubic-bezier(.77,0,.18,1) .04s forwards;}
+      @keyframes cOpenL{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+      @keyframes cOpenR{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+      @keyframes cCloseL{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+      @keyframes cCloseR{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+    `;
+    document.head.appendChild(s);
+    document.body.classList.add('entering');
+    window.navigateTo = function(url){
+      document.body.classList.remove('entering');
+      document.body.classList.add('exiting');
+      document.getElementById('curtain').style.pointerEvents='all';
+      setTimeout(()=>{window.location.href=url;},520);
+    };
+  })();
+
+  /* ══════════════════════════════════════
      ANIMACIONES DE SCROLL Y EFECTO 3D
   ══════════════════════════════════════ */
-  const observer = new IntersectionObserver((entries) => {
+  const obs = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
@@ -655,10 +1067,9 @@
   }, { threshold: 0.15 });
 
   document.querySelectorAll('.reveal-item').forEach(card => {
-    observer.observe(card);
+    obs.observe(card);
   });
 
-  // Efecto Tilt 3D sutil para las imágenes de los perfiles
   function tiltEffect(event, element) {
     const rect = element.getBoundingClientRect();
     const x = event.clientX - rect.left; 

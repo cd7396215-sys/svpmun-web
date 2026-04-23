@@ -19,6 +19,7 @@
             --text-muted: #666666;
             --oms-blue: #003366;
             --alert-crimson: #cc0000;
+            --bio-green: #00ffcc;
             
             --font-title: 'Cormorant Garamond', serif;
             --font-body: 'Inter', sans-serif;
@@ -78,24 +79,55 @@
         body.rejected .truth-hidden-block { display: none; }
         
         /* ════════════════════════════════════════
-           MÓDULO 2: TERMINAL CLASIFICADA (LOADER)
+           MÓDULO 2: NUEVO LOADER BIOMÉTRICO (ECG)
            ════════════════════════════════════════ */
         #loader {
-            position: fixed; inset: 0; background-color: #050505; color: #00ff00;
-            z-index: 10000; display: flex; align-items: flex-start; justify-content: flex-start;
-            font-family: var(--font-mono); font-size: 0.9rem; padding: 40px;
-            transition: opacity 0.5s ease;
+            position: fixed; inset: 0; background-color: #030a06; 
+            z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-family: var(--font-mono); transition: opacity 0.8s ease;
+        }
+        
+        .biometric-container {
+            width: 100%; max-width: 600px; padding: 20px; text-align: center;
+        }
+        
+        .loader-ecg-svg {
+            width: 100%; height: 120px; margin-bottom: 20px;
+        }
+        
+        .ecg-line {
+            fill: none; stroke: var(--bio-green); stroke-width: 3;
+            stroke-linecap: round; stroke-linejoin: round;
+            filter: drop-shadow(0 0 8px rgba(0, 255, 204, 0.6));
+            stroke-dasharray: 1000; stroke-dashoffset: 1000;
+            animation: dash 2.5s linear infinite;
         }
 
-        .terminal-container { width: 100%; max-width: 800px; }
-        .terminal-header { font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .terminal-line { margin-bottom: 5px; opacity: 0; }
-        .terminal-line.visible { opacity: 1; }
-        .blink-cursor { display: inline-block; width: 10px; height: 1.2em; background-color: #00ff00; animation: blink 1s step-end infinite; vertical-align: bottom; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes dash {
+            0% { stroke-dashoffset: 1000; }
+            100% { stroke-dashoffset: 0; }
+        }
+
+        .loader-title {
+            color: var(--bio-green); font-size: 1.2rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
+        }
+        
+        .loader-status {
+            color: #888; font-size: 0.85rem; letter-spacing: 1px; min-height: 20px; margin-bottom: 30px;
+        }
+
+        .loader-progress-bar {
+            width: 100%; height: 2px; background: #222; position: relative; overflow: hidden;
+        }
+        .loader-progress-fill {
+            position: absolute; top: 0; left: 0; height: 100%; width: 0%;
+            background: var(--bio-green); box-shadow: 0 0 10px var(--bio-green);
+            transition: width 0.3s ease;
+        }
 
         /* ════════════════════════════════════════
-           MÓDULO 3: NAVBAR ESCRITORIO
+           MÓDULO 3: NAVBAR Y OVERLAY
            ════════════════════════════════════════ */
         #nav-bar {
             position: fixed; top: 0; left: 0; right: 0; z-index: 8000;
@@ -162,13 +194,52 @@
         .nvo-deco-sub { font-family: 'Rajdhani', sans-serif; font-size: 0.78rem; letter-spacing: 0.16em; color: rgba(142,197,247,0.3); text-transform: uppercase; }
         
         .nvo-list-panel { flex: 1; position: relative; overflow-y: auto; display: flex; flex-direction: column; padding-top: 76px; }
-        .nvo-item { display: grid; grid-template-columns: 72px 1fr auto; align-items: center; gap: 0 24px; padding: 26px 52px 26px 40px; border-bottom: 1px solid rgba(58,143,224,0.07); cursor: pointer; transition: opacity 0.5s ease; }
-        .nvo-num { font-family: 'Bebas Neue', serif; font-size: 0.68rem; letter-spacing: 0.32em; color: var(--gold); opacity: 0.45; text-align: right; padding-right: 10px; border-right: 1px solid rgba(201,168,76,0.1); }
+        .nvo-item { display: grid; grid-template-columns: 72px 1fr auto; align-items: center; gap: 0 24px; padding: 26px 52px 26px 40px; border-bottom: 1px solid rgba(58,143,224,0.07); cursor: pointer; transition: opacity 0.5s ease; opacity: 0; transform: translateX(28px); }
+        .nvo-item:last-child { border-bottom: none; }
+        
+        /* Cascading Delays */
+        #nav-overlay.open .nvo-item { opacity: 1; transform: translateX(0); }
+        #nav-overlay.open .nvo-item:nth-child(1) { transition-delay: 0.22s; }
+        #nav-overlay.open .nvo-item:nth-child(2) { transition-delay: 0.28s; }
+        #nav-overlay.open .nvo-item:nth-child(3) { transition-delay: 0.34s; }
+        #nav-overlay.open .nvo-item:nth-child(4) { transition-delay: 0.40s; }
+        #nav-overlay.open .nvo-item:nth-child(5) { transition-delay: 0.46s; }
+        #nav-overlay.open .nvo-item:nth-child(6) { transition-delay: 0.52s; }
+        #nav-overlay.open .nvo-item:nth-child(7) { transition-delay: 0.58s; }
+
+        .nvo-item::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(58,143,224,0.0) 0%, rgba(58,143,224,0.05) 50%, rgba(58,143,224,0.0) 100%); opacity: 0; transition: opacity 0.4s; }
+        .nvo-item:hover::before { opacity: 1; }
+        .nvo-item::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, transparent, var(--gold) 50%, transparent); transform: scaleY(0); transform-origin: center; transition: transform 0.42s cubic-bezier(0.4,0,0.2,1); }
+        .nvo-item:hover::after { transform: scaleY(1); }
+
+        .nvo-num { font-family: 'Bebas Neue', serif; font-size: 0.68rem; letter-spacing: 0.32em; color: var(--gold); opacity: 0.45; text-align: right; padding-right: 10px; border-right: 1px solid rgba(201,168,76,0.1); transition: opacity 0.3s; line-height: 1; }
+        .nvo-item:hover .nvo-num { opacity: 1; text-shadow: 0 0 14px rgba(201,168,76,0.5); }
         .nvo-body { display: flex; flex-direction: column; gap: 5px; }
         .nvo-title { font-family: 'Cinzel', serif; font-size: clamp(1rem, 1.8vw, 1.4rem); font-weight: 700; letter-spacing: 0.06em; color: rgba(255,255,255,0.82); transition: color 0.3s; }
         .nvo-item:hover .nvo-title { color: var(--gold-lt); }
         .nvo-subs-inline { font-family: 'Rajdhani', sans-serif; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(142,197,247,0.28); }
-        .nvo-arrow { font-size: 1.3rem; color: rgba(255,255,255,0.15); }
+        .nvo-arrow { font-size: 1.3rem; color: rgba(255,255,255,0.15); transition: transform 0.3s; }
+        .nvo-item:hover .nvo-arrow { color: var(--gold); transform: translateX(4px); }
+
+        .nvo-arrow-expand { font-size: 1.2rem; color: rgba(255,255,255,0.15); transition: color 0.3s, transform 0.45s cubic-bezier(0.4,0,0.2,1); line-height: 1; }
+        .nvo-item:hover .nvo-arrow-expand { color: var(--gold); }
+        .nvo-item.sub-open .nvo-arrow-expand { transform: rotate(90deg); color: var(--gold); }
+
+        .nvo-sub-list { max-height: 0; overflow: hidden; transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1); background: rgba(255,255,255,0.015); border-bottom: 1px solid rgba(58,143,224,0.07); }
+        .nvo-sub-list.open { max-height: 260px; }
+
+        .nvo-sub-item { display: flex; align-items: center; gap: 20px; padding: 16px 52px 16px 130px; cursor: pointer; border-top: 1px solid rgba(58,143,224,0.05); transition: background 0.3s; }
+        .nvo-sub-item:hover { background: rgba(58,143,224,0.04); }
+        .nvo-sub-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(201,168,76,0.35); flex-shrink: 0; transition: background 0.3s; }
+        .nvo-sub-item:hover .nvo-sub-dot { background: var(--gold); }
+        .nvo-sub-name { font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.18em; color: rgba(255,255,255,0.45); text-transform: uppercase; transition: color 0.3s; }
+        .nvo-sub-item:hover .nvo-sub-name { color: rgba(237,217,138,0.85); }
+
+        .nvo-item-back .nvo-title { font-size: clamp(0.85rem, 1.4vw, 1.1rem); color: rgba(255,255,255,0.45); }
+        .nvo-item-back:hover .nvo-title { color: var(--gold-lt); }
+        .nvo-item-back .nvo-num { color: rgba(201,168,76,0.3); }
+        .nvo-back-arr { font-size: 1.1rem; color: rgba(255,255,255,0.15); transition: color 0.3s, transform 0.3s; }
+        .nvo-item-back:hover .nvo-back-arr { color: var(--gold); transform: translateX(-4px); }
 
         #mob-topbar, #mob-bottomnav { display: none; }
 
@@ -396,22 +467,34 @@
     <div class="global-watermark">OMS - CONFIDENCIAL</div>
     <div id="rejection-watermark">AUTORIZADO PARA MILITARIZACIÓN</div>
 
+    <!-- NUEVO LOADER BIOMÉTRICO (ECG) -->
     <div id="loader">
-        <div class="terminal-container">
-            <div class="terminal-header">OMS SECURE INTRANET - BASE DE DATOS DEL COMITÉ</div>
-            <div id="terminal-output"></div>
-            <div><span class="blink-cursor" id="cursor"></span></div>
+        <div class="biometric-container">
+            <div class="loader-title">VERIFICACIÓN BIOMÉTRICA DEL COMITÉ</div>
+            
+            <svg class="loader-ecg-svg" viewBox="0 0 500 100">
+                <polyline class="ecg-line" points="0,50 150,50 170,20 190,90 220,10 240,50 500,50"></polyline>
+            </svg>
+            
+            <div class="loader-status" id="loader-status">INICIALIZANDO LECTURA DE CONSTANTES VITALES...</div>
+            
+            <div class="loader-progress-bar">
+                <div class="loader-progress-fill" id="loader-fill"></div>
+            </div>
         </div>
     </div>
 
+    <!-- NAVBAR DESKTOP & MOBILE TRIGGER -->
     <header id="nav-bar">
         <a class="nb-brand" href="/oms">
           <img class="nb-emblem" src="/static/ONU.png" alt="ONU">
           <span class="nb-word">SVPMUN <span class="nb-sep">·</span> OMS</span>
         </a>
         <nav class="nb-center" aria-label="Acceso rápido">
+          <a class="nb-quick-link" href="/" onclick="event.preventDefault();navigateTo('/')">Inicio</a>
           <a class="nb-quick-link" href="/oms" onclick="event.preventDefault();navigateTo('/oms')">Informe Central</a>
-          <a class="nb-quick-link" href="#" onclick="event.preventDefault();">Mesa Directiva</a>
+          <a class="nb-quick-link" href="/drills" onclick="event.preventDefault();navigateTo('/drills')">Drills</a>
+          <a class="nb-quick-link" href="/Matrices" onclick="event.preventDefault();navigateTo('/Matrices')">Matrices</a>
         </nav>
         <button class="nb-trigger" id="nbTrigger" onclick="toggleNav()" aria-label="Menú">
           <span class="nb-trigger-label">Menú</span>
@@ -421,6 +504,7 @@
         </button>
     </header>
 
+    <!-- NAV OVERLAY UNIFICADO -->
     <div id="nav-overlay" role="navigation" aria-label="Menú">
         <div class="nvo-deco-panel">
           <img class="nvo-deco-emblem" src="/static/ONU.png" alt="">
@@ -448,17 +532,73 @@
             </div>
             <div class="nvo-arrow">›</div>
           </div>
-          <div class="nvo-item" onclick="navigateTo('/drills')">
+          <div class="nvo-item" id="nvo-comites-trigger" onclick="toggleComites()" style="cursor:pointer;">
             <div class="nvo-num">02</div>
             <div class="nvo-body">
-              <div class="nvo-title">Drills</div>
-              <div class="nvo-subs-inline">Módulo de Simulaciones</div>
+              <div class="nvo-title">Comités</div>
+              <div class="nvo-subs-inline">Crisis Roma · OMS · Unión Europea</div>
+            </div>
+            <div class="nvo-arrow-expand">›</div>
+          </div>
+          <div class="nvo-sub-list" id="nvo-comites-sub">
+            <div class="nvo-sub-item" onclick="navigateTo('/crisis-roma')">
+              <div class="nvo-sub-dot"></div>
+              <div class="nvo-sub-name">Crisis — Segunda Guerra Civil Romana</div>
+            </div>
+            <div class="nvo-sub-item" onclick="navigateTo('/oms')">
+              <div class="nvo-sub-dot"></div>
+              <div class="nvo-sub-name">OMS — Organización Mundial de la Salud</div>
+            </div>
+            <div class="nvo-sub-item" onclick="navigateTo('/crisis_ue_2035')">
+              <div class="nvo-sub-dot"></div>
+              <div class="nvo-sub-name">Unión Europea</div>
+            </div>
+          </div>
+
+          <!-- APARTADO CONOCE A LAS MESAS -->
+          <div class="nvo-item" id="nvo-mesas-trigger" onclick="toggleMesas()" style="cursor:pointer;">
+            <div class="nvo-num">03</div>
+            <div class="nvo-body">
+              <div class="nvo-title">Conoce a las Mesas</div>
+              <div class="nvo-subs-inline">Crisis · OMS · Unión Europea</div>
+            </div>
+            <div class="nvo-arrow-expand">›</div>
+          </div>
+          <div class="nvo-sub-list" id="nvo-mesas-sub">
+            <div class="nvo-sub-item" onclick="navigateTo('/Mesas')">
+              <div class="nvo-sub-dot"></div>
+              <div class="nvo-sub-name">Crisis — Segunda Guerra Civil Romana</div>
+            </div>
+            <div class="nvo-sub-item" onclick="navigateTo('/MesasOMS')">
+              <div class="nvo-sub-dot"></div>
+              <div class="nvo-sub-name">OMS — Organización Mundial de la Salud</div>
+            </div>
+            <div class="nvo-sub-item" onclick="navigateTo('/mesaUE')">
+              <div class="nvo-sub-dot"></div>
+              <div class="nvo-sub-name">Unión Europea</div>
+            </div>
+          </div>
+
+          <div class="nvo-item" onclick="navigateTo('/inscripciones-drills')" style="cursor:pointer;">
+            <div class="nvo-num">04</div>
+            <div class="nvo-body">
+              <div class="nvo-title">Inscripciones</div>
+              <div class="nvo-subs-inline">Registro · Costos · Fechas</div>
             </div>
             <div class="nvo-arrow">›</div>
           </div>
-        </div>
+          <div class="nvo-item" onclick="navigateTo('/Matrices')" style="cursor:pointer;">
+            <div class="nvo-num">05</div>
+            <div class="nvo-body">
+              <div class="nvo-title">Matrices</div>
+              <div class="nvo-subs-inline">Base de Datos Estratégica</div>
+            </div>
+            <div class="nvo-arrow">›</div>
+          </div>
+        </div> 
     </div>
 
+    <!-- CONTENIDO DEL EXPEDIENTE MESA -->
     <main id="dossier-container">
         
         <header class="dossier-hero">
@@ -578,6 +718,7 @@
 
     </main>
 
+    <!-- MOBILE TOP Y BOTTOM NAV -->
     <div id="mob-topbar">
       <div class="mob-brand">
         <img src="/static/ONU.png" alt="ONU">
@@ -591,7 +732,7 @@
         <div class="mob-nav-label">OMS</div>
       </a>
       <div class="mob-nav-item active">
-        <div class="mob-nav-icon">📁</div>
+        <div class="mob-nav-icon">👥</div>
         <div class="mob-nav-label">Mesa</div>
       </div>
       <a href="/drills" class="mob-nav-item" onclick="event.preventDefault();navigateTo('/drills')">
@@ -609,31 +750,36 @@
     </div>
 
     <script>
-        // TERMINAL LOADER
+        // LÓGICA DEL LOADER BIOMÉTRICO
         document.addEventListener('DOMContentLoaded', () => {
-            const lines = [
-                "ESTABLECIENDO CONEXIÓN SEGURA CON EL SERVIDOR SUIZO...",
-                "VERIFICANDO CREDENCIALES NIVEL OMEGA...",
-                "BYPASS DE CORTAFUEGOS BIOÉTICO COMPLETADO.",
-                "ACCEDIENDO A LOS PERFILES CLÍNICOS DE LA MESA DIRECTIVA...",
-                "ADVERTENCIA: LAS IDENTIDADES MOSTRADAS PODRÍAN ESTAR COMPROMETIDAS.",
-                "DESENCRIPTACIÓN COMPLETADA. ABRIENDO EXPEDIENTE..."
+            const statusEl = document.getElementById('loader-status');
+            const fillEl = document.getElementById('loader-fill');
+            const msgs = [
+                "INICIALIZANDO LECTURA DE CONSTANTES VITALES...",
+                "CALIBRANDO SENSOR ELECTROENCEFALOGRÁFICO...",
+                "ANALIZANDO RITMO CARDÍACO...",
+                "HUELLA GENÉTICA VERIFICADA.",
+                "ACCESO CONCEDIDO. DESCIFRANDO PERFILES..."
             ];
             
-            const output = document.getElementById('terminal-output');
-            let i = 0;
-
-            function typeLine() {
-                if (i < lines.length) {
-                    const p = document.createElement('div');
-                    p.className = 'terminal-line';
-                    p.innerText = "> " + lines[i];
-                    output.appendChild(p);
-                    setTimeout(() => p.classList.add('visible'), 50);
-                    i++;
-                    const delay = (i === lines.length - 1) ? 1200 : Math.random() * 300 + 150;
-                    setTimeout(typeLine, delay);
-                } else {
+            let p = 0;
+            let msgIdx = 0;
+            
+            const interval = setInterval(() => {
+                p += Math.random() * 12 + 3; // Sube aleatoriamente
+                if (p >= 100) p = 100;
+                
+                fillEl.style.width = p + '%';
+                
+                // Cambia el mensaje basado en el porcentaje
+                const nextIdx = p < 25 ? 0 : p < 50 ? 1 : p < 75 ? 2 : p < 95 ? 3 : 4;
+                if (nextIdx !== msgIdx) {
+                    msgIdx = nextIdx;
+                    statusEl.innerText = msgs[msgIdx];
+                }
+                
+                if (p >= 100) {
+                    clearInterval(interval);
                     setTimeout(() => {
                         const loader = document.getElementById('loader');
                         const dossier = document.getElementById('dossier-container');
@@ -641,14 +787,13 @@
                         setTimeout(() => {
                             loader.style.display = 'none';
                             dossier.classList.add('unroll-animation');
-                        }, 500);
-                    }, 500);
+                        }, 800);
+                    }, 800); // Pequeño retraso al llegar al 100%
                 }
-            }
-            setTimeout(typeLine, 600);
+            }, 180);
         });
 
-        // NAVBAR & NAVIGATION
+        // NAVBAR & MENU OVERLAY LOGIC
         let navOpen = false;
         function toggleNav() {
             navOpen = !navOpen;
@@ -661,6 +806,31 @@
             if(icon) icon.classList.toggle('open', navOpen);
             
             document.body.style.overflow = navOpen ? 'hidden' : 'auto';
+            if(!navOpen){
+                const sub = document.getElementById('nvo-comites-sub');
+                const trigger = document.getElementById('nvo-comites-trigger');
+                if(sub) sub.classList.remove('open');
+                if(trigger) trigger.classList.remove('sub-open');
+                
+                const mesasSub = document.getElementById('nvo-mesas-sub');
+                const mesasTrigger = document.getElementById('nvo-mesas-trigger');
+                if(mesasSub) mesasSub.classList.remove('open');
+                if(mesasTrigger) mesasTrigger.classList.remove('sub-open');
+            }
+        }
+
+        function toggleComites() {
+            const sub = document.getElementById('nvo-comites-sub');
+            const trigger = document.getElementById('nvo-comites-trigger');
+            if(sub) sub.classList.toggle('open');
+            if(trigger) trigger.classList.toggle('sub-open');
+        }
+
+        function toggleMesas() {
+            const sub = document.getElementById('nvo-mesas-sub');
+            const trigger = document.getElementById('nvo-mesas-trigger');
+            if(sub) sub.classList.toggle('open');
+            if(trigger) trigger.classList.toggle('sub-open');
         }
         
         window.addEventListener('scroll', () => {
@@ -668,11 +838,37 @@
             if(bar) bar.classList.toggle('scrolled', window.scrollY > 40);
         });
 
-        function navigateTo(url) {
-            window.location.href = url;
-        }
+        // PAGE TRANSITION CURTAIN
+        (function(){
+            const curtain = document.createElement('div');
+            curtain.id = 'curtain';
+            curtain.style.cssText = 'position:fixed;inset:0;z-index:9998;pointer-events:none;display:flex;';
+            curtain.innerHTML =
+              '<div class="c-half L" style="flex:1;height:100%;background:#ffffff;transform:scaleX(0);transform-origin:left;"></div>'+
+              '<div class="c-half R" style="flex:1;height:100%;background:#ffffff;transform:scaleX(0);transform-origin:right;"></div>';
+            document.body.prepend(curtain);
+            const s = document.createElement('style');
+            s.textContent = `
+              body.entering .c-half.L{animation:cOpenL .65s cubic-bezier(.77,0,.18,1) forwards;}
+              body.entering .c-half.R{animation:cOpenR .65s cubic-bezier(.77,0,.18,1) .05s forwards;}
+              body.exiting  .c-half.L{animation:cCloseL .45s cubic-bezier(.77,0,.18,1) forwards;}
+              body.exiting  .c-half.R{animation:cCloseR .45s cubic-bezier(.77,0,.18,1) .04s forwards;}
+              @keyframes cOpenL{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+              @keyframes cOpenR{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+              @keyframes cCloseL{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+              @keyframes cCloseR{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+            `;
+            document.head.appendChild(s);
+            document.body.classList.add('entering');
+            window.navigateTo = function(url){
+              document.body.classList.remove('entering');
+              document.body.classList.add('exiting');
+              document.getElementById('curtain').style.pointerEvents='all';
+              setTimeout(()=>{window.location.href=url;},520);
+            };
+        })();
 
-        // LÓGICA DEL ESCÁNER ÉTICO (GIMMICK DE DUALIDAD)
+        // LÓGICA DEL ESCÁNER ÉTICO (SLIDER)
         const slider = document.getElementById('ethics-slider');
         const body = document.body;
 

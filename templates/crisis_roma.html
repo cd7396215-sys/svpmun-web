@@ -1,3 +1,4 @@
+html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -240,8 +241,20 @@
     .nvo-list-panel::before { content:''; position:absolute; inset:0; pointer-events:none; z-index:0; background-image:linear-gradient(rgba(58,143,224,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(58,143,224,0.025) 1px,transparent 1px); background-size:60px 60px; }
     .nvo-item { display:grid; grid-template-columns:72px 1fr auto; align-items:center; gap:0 24px; padding:26px 52px 26px 40px; border-bottom:1px solid rgba(58,143,224,0.07); cursor:pointer; position:relative; overflow:hidden; z-index:1; opacity:0; transform:translateX(28px); transition:opacity 0.5s ease,transform 0.5s ease; }
     .nvo-item:last-child { border-bottom:none; }
+    
+    /* Cascading delays */
     #nav-overlay.open .nvo-item { opacity:1; transform:translateX(0); }
-    #nav-overlay.open .nvo-item:nth-child(1){transition-delay:0.22s;} #nav-overlay.open .nvo-item:nth-child(2){transition-delay:0.28s;} #nav-overlay.open .nvo-item:nth-child(3){transition-delay:0.34s;} #nav-overlay.open .nvo-item:nth-child(4){transition-delay:0.40s;}
+    #nav-overlay.open .nvo-item:nth-child(1) { transition-delay: 0.22s; }
+    #nav-overlay.open .nvo-item:nth-child(2) { transition-delay: 0.28s; }
+    #nav-overlay.open .nvo-item:nth-child(3) { transition-delay: 0.34s; }
+    #nav-overlay.open .nvo-item:nth-child(4) { transition-delay: 0.40s; }
+    #nav-overlay.open .nvo-item:nth-child(5) { transition-delay: 0.46s; }
+    #nav-overlay.open .nvo-item:nth-child(6) { transition-delay: 0.52s; }
+    #nav-overlay.open .nvo-item:nth-child(7) { transition-delay: 0.58s; }
+    #nav-overlay.open .nvo-item:nth-child(8) { transition-delay: 0.64s; }
+    #nav-overlay.open .nvo-item:nth-child(9) { transition-delay: 0.70s; }
+    #nav-overlay.open .nvo-item:nth-child(10) { transition-delay: 0.76s; }
+
     .nvo-item::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg,rgba(58,143,224,0) 0%,rgba(58,143,224,0.05) 50%,rgba(58,143,224,0) 100%); opacity:0; transition:opacity 0.4s; }
     .nvo-item:hover::before { opacity:1; }
     .nvo-item::after { content:''; position:absolute; top:0; left:0; bottom:0; width:2px; background:linear-gradient(180deg,transparent,var(--gold-nav) 50%,transparent); transform:scaleY(0); transform-origin:center; transition:transform 0.42s cubic-bezier(0.4,0,0.2,1); }
@@ -518,68 +531,62 @@
     /* ══════════════════════════════════════
        MAPAS TÁCTICOS (PINTADOS CON CÓDIGO)
     ══════════════════════════════════════ */
-    /* ══════════════════════════════════════
-   MAPAS TÁCTICOS (PINTADOS CON CÓDIGO)
-══════════════════════════════════════ */
-.map-section {
-  position: relative;
-  margin: 80px auto;
-  max-width: 900px;
-  padding: 40px;
-  background: linear-gradient(160deg, #1e1508 0%, #120e05 100%);
-  border: 1px solid rgba(180,115,51,0.3);
-  box-shadow: inset 0 0 60px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.9);
-  border-radius: 4px;
-}
-.map-title {
-  font-family: 'Cinzel', serif;
-  font-size: 1.2rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gold-lt);
-  text-align: center;
-  margin-bottom: 30px;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-}
-.map-container {
-  position: relative;
-  width: 100%;
-  height: 450px;
-  /* 1. Colores del mar más opacos y grises */
-  background: linear-gradient(to bottom right, #8c7e68, #5a4f3b);
-  border: 3px solid #0d0a06; /* Marco oscuro tipo foto */
-  border-radius: 6px; /* Bordes ligeramente redondeados */
-  overflow: hidden;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.6); /* Sombra exterior */
-}
+    .map-section {
+      position: relative;
+      margin: 80px auto;
+      max-width: 900px;
+      padding: 40px;
+      background: linear-gradient(160deg, #1e1508 0%, #120e05 100%);
+      border: 1px solid rgba(180,115,51,0.3);
+      box-shadow: inset 0 0 60px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.9);
+      border-radius: 4px;
+    }
+    .map-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-lt);
+      text-align: center;
+      margin-bottom: 30px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+    }
+    .map-container {
+      position: relative;
+      width: 100%;
+      height: 450px;
+      background: linear-gradient(to bottom right, #8c7e68, #5a4f3b);
+      border: 3px solid #0d0a06; 
+      border-radius: 6px; 
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.6); 
+    }
 
-/* 2. El truco del marco quemado: una capa por encima del SVG */
-.map-container::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none; /* ¡Vital para que se puedan seguir tocando los hotspots! */
-  box-shadow: 
-    inset 0 0 60px 25px rgba(25, 10, 5, 0.95),  /* Quemado muy oscuro en el borde */
-    inset 0 0 120px 40px rgba(10, 5, 0, 0.7);   /* Oscurecimiento general hacia el centro */
-  z-index: 5;
-}
+    .map-container::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none; 
+      box-shadow: 
+        inset 0 0 60px 25px rgba(25, 10, 5, 0.95),  
+        inset 0 0 120px 40px rgba(10, 5, 0, 0.7);   
+      z-index: 5;
+    }
 
-.map-svg {
-  width: 100%;
-  height: 100%;
-  filter: url(#coastline-filter) drop-shadow(2px 2px 5px rgba(0,0,0,0.6));
-}
+    .map-svg {
+      width: 100%;
+      height: 100%;
+      filter: url(#coastline-filter) drop-shadow(2px 2px 5px rgba(0,0,0,0.6));
+    }
 
-/* 3. Colores de la tierra más sucios/tipo pergamino antiguo */
-.map-land {
-  fill: #b09f80; /* Antes era #e1cfab (muy brillante) */
-  stroke: #36291b; /* Borde costero más oscuro */
-  stroke-width: 2px;
-}
-.map-sea {
-  fill: transparent;
-}
+    .map-land {
+      fill: #b09f80; 
+      stroke: #36291b; 
+      stroke-width: 2px;
+    }
+    .map-sea {
+      fill: transparent;
+    }
     
     /* Hotspots (Puntos Interactivos) */
     .hotspot {
@@ -739,6 +746,7 @@
     }
     .caesar-ruin { border-left: 3px solid rgba(139, 26, 26, 0.6); }
     .pompey-ruin { border-left: 3px solid rgba(90, 100, 160, 0.6); }
+
     /* ══════════════════════════════════════
        FACTION SECTIONS
     ══════════════════════════════════════ */
@@ -1704,7 +1712,7 @@
       </div>
       <div class="nvo-arrow-expand">›</div>
     </div>
-   <div class="nvo-sub-list" id="nvo-comites-sub">
+    <div class="nvo-sub-list" id="nvo-comites-sub">
       <div class="nvo-sub-item" onclick="navigateTo('/crisis-roma')">
         <div class="nvo-sub-dot"></div>
         <div class="nvo-sub-name">Crisis — Segunda Guerra Civil Romana</div>
@@ -1718,18 +1726,41 @@
         <div class="nvo-sub-name">Unión Europea</div>
       </div>
     </div>
-    <div class="nvo-item" onclick="navigateTo('/inscripciones-drills')" style="cursor:pointer;">
+    
+    <!-- NUEVO APARTADO: CONOCE A LAS MESAS -->
+    <div class="nvo-item" id="nvo-mesas-trigger" onclick="toggleMesas()" style="cursor:pointer;">
       <div class="nvo-num">03</div>
+      <div class="nvo-body">
+        <div class="nvo-title">Conoce a las Mesas</div>
+        <div class="nvo-subs-inline">Crisis · OMS · Unión Europea</div>
+      </div>
+      <div class="nvo-arrow-expand">›</div>
+    </div>
+    <div class="nvo-sub-list" id="nvo-mesas-sub">
+      <div class="nvo-sub-item" onclick="navigateTo('/Mesas')">
+        <div class="nvo-sub-dot"></div>
+        <div class="nvo-sub-name">Crisis — Segunda Guerra Civil Romana</div>
+      </div>
+      <div class="nvo-sub-item" onclick="navigateTo('/MesasOMS')">
+        <div class="nvo-sub-dot"></div>
+        <div class="nvo-sub-name">OMS — Organización Mundial de la Salud</div>
+      </div>
+      <div class="nvo-sub-item" onclick="navigateTo('/mesaUE')">
+        <div class="nvo-sub-dot"></div>
+        <div class="nvo-sub-name">Unión Europea</div>
+      </div>
+    </div>
+
+    <div class="nvo-item" onclick="navigateTo('/inscripciones-drills')" style="cursor:pointer;">
+      <div class="nvo-num">04</div>
       <div class="nvo-body">
         <div class="nvo-title">Inscripciones</div>
         <div class="nvo-subs-inline">Registro · Costos · Fechas</div>
       </div>
       <div class="nvo-arrow">›</div>
     </div>
-
-    <!-- AQUÍ ESTÁ LA SOLUCIÓN: El ítem 04 ahora está DENTRO del nvo-list-panel -->
     <div class="nvo-item" onclick="navigateTo('/Matrices')" style="cursor:pointer;">
-      <div class="nvo-num">04</div>
+      <div class="nvo-num">05</div>
       <div class="nvo-body">
         <div class="nvo-title">Matrices</div>
         <div class="nvo-subs-inline">Base de Datos Estratégica</div>
@@ -1737,8 +1768,8 @@
       <div class="nvo-arrow">›</div>
     </div>
 
-  </div> <!-- ESTE es el cierre correcto de nvo-list-panel -->
-</div> <!-- ESTE es el cierre de nav-overlay -->
+  </div> 
+</div> 
 
 <section id="hero">
   <div class="hero-bg"></div>
@@ -2157,7 +2188,7 @@
       <p class="fsec-body-text rv d4" style="color:rgba(180,190,220,0.7);">
         La retirada hacia Brindisi no es cobardía: es estrategia. En Grecia y el Oriente
         tienes nueve legiones, las flotas más poderosas del Mediterráneo y el apoyo de
-        docenas de reyes clientes. Cuando regreses, regresarás con un ejército que
+        docenas de reyes clientes. Cuando regreses, regreses con un ejército que
         aplastará la aventura de César como se aplasta una serpiente bajo el talón de Roma.
       </p>
     </div>
@@ -2667,7 +2698,6 @@
    CRISIS COUNTDOWN LOGIC
 ══════════════════════════════════════ */
 (function() {
-  // Establece la fecha de la simulación: 1 de Junio de 2026 (Puedes cambiarla)
   const countDownDate = new Date("May 2, 2026 00:00:00").getTime();
 
   const timer = setInterval(function() {
@@ -2774,6 +2804,10 @@ function toggleNav(){
   if(!navOpen){
     document.getElementById('nvo-comites-sub').classList.remove('open');
     document.getElementById('nvo-comites-trigger').classList.remove('sub-open');
+    if (document.getElementById('nvo-mesas-sub')) {
+      document.getElementById('nvo-mesas-sub').classList.remove('open');
+      document.getElementById('nvo-mesas-trigger').classList.remove('sub-open');
+    }
   }
 }
 function toggleComites(){
@@ -2782,6 +2816,13 @@ function toggleComites(){
   sub.classList.toggle('open');
   trigger.classList.toggle('sub-open');
 }
+function toggleMesas() {
+  const sub=document.getElementById('nvo-mesas-sub');
+  const trigger=document.getElementById('nvo-mesas-trigger');
+  sub.classList.toggle('open');
+  trigger.classList.toggle('sub-open');
+}
+
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&navOpen)toggleNav();});
 window.addEventListener('scroll',()=>{
   document.getElementById('nav-bar').classList.toggle('scrolled',window.scrollY>40);
