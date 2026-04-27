@@ -1,2 +1,473 @@
 <!DOCTYPE html>
-<html lang='es'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1.0'><title>AI Chat UI</title><style>*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:radial-gradient(circle at top,#10385e,#07111f 60%,#03070d);color:#fff;height:100vh;overflow:hidden}.wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;padding:20px}.greet{font-size:48px;font-weight:700;text-align:center}.sub{opacity:.8;margin-top:8px}.bar{margin-top:30px;width:min(900px,95%);display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(14px);padding:14px 16px;border-radius:24px;position:relative}.triangle{width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:16px solid #000;cursor:pointer;filter:drop-shadow(0 0 2px #fff)}input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-size:18px}.iconbtn{cursor:pointer;border:none;background:rgba(255,255,255,.08);color:#fff;padding:10px 12px;border-radius:14px}.menu{position:absolute;left:0;bottom:70px;width:320px;background:#111827;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:10px;display:none}.item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;cursor:pointer}.item:hover{background:rgba(255,255,255,.08)}.item img{width:26px;height:26px;border-radius:50%}.carouselWrap{position:absolute;bottom:15px;width:100%;text-align:center}.track{display:flex;gap:50px;white-space:nowrap;animation:move 25s linear infinite}.track img{height:38px;filter:grayscale(1) brightness(1.2)}@keyframes move{from{transform:translateX(0)}to{transform:translateX(-50%)}}</style></head><body><div class='wrap'><div class='greet' id='greet'></div><div class='sub'>¿En qué puedo ayudarte hoy?</div><div class='bar'><div class='triangle' onclick='toggleMenu()'></div><div class='menu' id='menu'></div><input id='prompt' placeholder=''/><input type='file' id='file' hidden multiple><button class='iconbtn' onclick='document.getElementById("file").click()'>＋</button><button class='iconbtn' onclick='startRec()'>🎤</button><button class='iconbtn' onclick='sendMsg()'>↵</button></div></div><div class='carouselWrap'><div>Las IAs Provienen de:</div><div class='track' id='track'></div></div><script>const hour=new Date().getHours();document.getElementById('greet').innerText=hour<12?'Buenos días':hour<19?'Buenas tardes':'Buenas noches';const qs=[...'¿Cómo crear una web moderna?|Resume este PDF|Explícame Python|Haz una estrategia de ventas|Corrige este texto|Crea una imagen futurista|Analiza este contrato|Tradúcelo al inglés|Haz una dieta semanal|Escribe código FastAPI|Mejora mi CV|Ideas de negocio IA|Plan de marketing|Cómo aprender inglés|Haz un dashboard|Optimiza SEO|Diseña logo|Escribe poema|Plan de viaje|Haz chatbot|Analiza Excel|Genera SQL|Explica matemáticas|Resume reunión|Crea email profesional|Plan financiero|Ideas TikTok|Guion YouTube|Automatiza tareas|Configura servidor|Debug código|Mejorar ventas ecommerce|Campaña Meta Ads|Prompt engineering|Analiza competencia|Crea landing page|Estudia historia|Explica física|Aprender JavaScript|Haz presentación|Calendario contenidos|Plan gimnasio|Menú saludable|Carta ventas|Investigación mercado|Modelo negocio|Estrategia B2B|Cold email|Pitch startup|Encuesta clientes|UX app|Wireframe SaaS|Integrar API|Node.js ayuda|Docker básico|Linux comandos|Branding premium|Atención cliente|Soporte técnico|Roadmap producto|CRM ideal|ERP opciones|Data science|Machine learning|Fine tuning LLM|Análisis sentimientos|Regex ayuda|Macros Excel|Power BI|Tableau|Google Ads|Email funnel|Ventas WhatsApp|Telegram bot|Scraping web|Prompt legal|Contrato freelance|Factura plantilla|Cashflow|KPIs empresa|OKRs equipo|Hiring plan|Onboarding|Manual SOP|Copywriting ads|Storytelling marca|Plan podcast|Script reels|Campaña navidad|Ideas Black Friday|Gestión inventario|Forecast ventas|Negociación|Meditación guiada|Rutina mañana|Aprender rápido|Técnicas memoria'.split('|')];let i=0,j=0,dir=1;const inp=document.getElementById('prompt');setInterval(()=>{if(document.activeElement===inp||inp.value)return;let t=qs[i];inp.placeholder=t.slice(0,j);j+=dir;if(j>=t.length+6)dir=-1;if(j<=0){dir=1;i=(i+1)%qs.length;}},120);const models=[['NVIDIA Nemotron 3 Super','https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/nvidia.svg'],['Llama 3.3 70B','https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/meta.svg'],['Qwen 3.6 Plus','https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/alibabacloud.svg'],['Gemma 3','https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/google.svg'],['GPT-4o mini','https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/openai.svg'],['Gemini 2.5 flash','https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/google.svg']];const menu=document.getElementById('menu');models.forEach(m=>menu.innerHTML+=`<div class='item'><img src='${m[1]}'><span>${m[0]}</span></div>`);function toggleMenu(){menu.style.display=menu.style.display==='block'?'none':'block'}function sendMsg(){alert('Enviar: '+inp.value)}function startRec(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return alert('No compatible');const r=new SR();r.lang='es-ES';r.onresult=e=>inp.value=e.results[0][0].transcript;r.start()}inp.addEventListener('keydown',e=>{if(e.key==='Enter')sendMsg()});const logos=['openai','google','meta','nvidia','microsoft','amazon','alibabacloud'];const tr=document.getElementById('track');let html='';for(let k=0;k<3;k++)logos.forEach(l=>html+=`<img src='https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${l}.svg'>`);tr.innerHTML=html;</script></body></html>
+<html lang='es'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width,initial-scale=1.0'>
+    <title>AI Chat UI - Glassmorphism</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Fondo animado orgánico */
+        body {
+            margin: 0;
+            background: linear-gradient(-45deg, #e2e8f0, #f8fafc, #edf2f7, #e2e8f0);
+            background-size: 400% 400%;
+            animation: organicBg 15s ease infinite;
+            color: #2D3748;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            line-height: 1.5;
+        }
+
+        @keyframes organicBg {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Animación escalonada de entrada */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in { opacity: 0; animation: slideUpFade 0.4s ease-out forwards; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        /* NAVBAR / SIDEBAR VERTICAL */
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-right: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 16px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 20;
+        }
+
+        .sidebar.closed {
+            transform: translateX(-100%);
+            position: absolute;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 0 8px;
+            position: relative;
+        }
+
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 16px solid #000;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .triangle:hover { transform: scale(1.1); }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #4A5568;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn-close:hover { transform: scale(1.1); color: #000; }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            color: #4A5568;
+            font-weight: 500;
+            cursor: pointer;
+            background: transparent;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        /* Hover inteligente y táctil */
+        .nav-item:hover {
+            background: #F7FAFC;
+            border: 1px solid #63B3ED;
+            color: #2D3748;
+            transform: scale(1.02);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .history-section {
+            margin-top: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .history-section h3 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #A0AEC0;
+            margin: 0 0 10px 16px;
+        }
+
+        .history-list {
+            padding: 0 8px;
+            font-size: 14px;
+            color: #718096;
+            text-align: center;
+            font-style: italic;
+        }
+
+        /* Menú de Modelos (Glassmorphism) */
+        .menu {
+            position: absolute;
+            left: 10px;
+            top: 40px;
+            width: 260px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border-radius: 16px;
+            padding: 10px;
+            display: none;
+            z-index: 30;
+        }
+
+        .menu .item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .menu .item:hover {
+            background: #F7FAFC;
+            border-radius: 10px;
+        }
+
+        .menu .item img {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* ÁREA PRINCIPAL */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 20px;
+        }
+
+        .btn-open-sidebar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #2D3748;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        .btn-open-sidebar:hover { background: #F7FAFC; transform: scale(1.05); }
+
+        .greet {
+            font-size: 48px;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: -0.5px;
+            color: #1A202C;
+        }
+
+        .sub {
+            color: #718096;
+            font-size: 18px;
+            margin-top: 8px;
+        }
+
+        /* Barra de búsqueda (Glassmorphism) */
+        .bar {
+            margin-top: 40px;
+            width: min(800px, 95%);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+            padding: 12px 16px;
+            border-radius: 24px;
+            position: relative;
+            transition: box-shadow 0.3s;
+        }
+
+        .bar:focus-within {
+            box-shadow: 0 10px 25px rgba(99, 179, 237, 0.15);
+            border: 1px solid #63B3ED;
+        }
+
+        input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #2D3748;
+            font-size: 18px;
+            padding: 0 10px;
+        }
+        input::placeholder { color: #A0AEC0; }
+
+        .iconbtn {
+            cursor: pointer;
+            border: 1px solid transparent;
+            background: rgba(0, 0, 0, 0.03);
+            color: #4A5568;
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+        
+        .iconbtn:hover {
+            background: #F7FAFC;
+            border: 1px solid #63B3ED;
+            transform: scale(1.02);
+            color: #2D3748;
+        }
+
+        /* Micro-animación de Estado de Ánimo (Indicador de escritura) */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            align-items: center;
+            height: 20px;
+            margin-top: 15px;
+            opacity: 0; /* Cambiar a 1 mediante JS cuando el bot responda */
+            transition: opacity 0.3s;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #A0AEC0;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Carrusel */
+        .carouselWrap {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: #718096;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .track {
+            display: flex;
+            gap: 50px;
+            margin-top: 10px;
+            white-space: nowrap;
+            animation: move 30s linear infinite;
+        }
+
+        .track img {
+            height: 32px;
+            opacity: 0.5;
+            filter: grayscale(1);
+            transition: opacity 0.3s;
+        }
+        .track img:hover { opacity: 1; filter: none; }
+
+        @keyframes move {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="triangle" onclick="toggleMenu()" title="Cambiar modelo"></div>
+            <button class="btn-close" onclick="toggleSidebar()" title="Cerrar menú">✕</button>
+            <div class="menu" id="menu"></div>
+        </div>
+
+        <div class="nav-item">💬 Nuevo Chat</div>
+        <div class="nav-item">🔍 Buscar chats</div>
+        <div class="nav-item">📁 Proyectos</div>
+        <div class="nav-item">💡 Conoce más de nosotros</div>
+
+        <div class="history-section">
+            <h3>Historial</h3>
+            <div class="history-list">
+                Aún no hay chats recientes.
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <button id="btnOpenSidebar" class="btn-open-sidebar" style="display: none;" onclick="toggleSidebar()">☰</button>
+
+        <div class="greet animate-in delay-1" id="greet"></div>
+        <div class="sub animate-in delay-2">¿En qué puedo ayudarte hoy?</div>
+        
+        <div class="bar animate-in delay-3">
+            <input id="prompt" placeholder="" autocomplete="off" />
+            <input type="file" id="file" hidden multiple>
+            <button class="iconbtn" onclick="document.getElementById('file').click()">＋</button>
+            <button class="iconbtn" onclick="startRec()">🎤</button>
+            <button class="iconbtn" onclick="sendMsg()">↵</button>
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+
+        <div class="carouselWrap animate-in delay-3">
+            <div>Las IAs Provienen de:</div>
+            <div class="track" id="track"></div>
+        </div>
+    </main>
+
+    <script>
+        // Lógica de Saludo
+        const hour = new Date().getHours();
+        document.getElementById('greet').innerText = hour < 12 ? 'Buenos días' : hour < 19 ? 'Buenas tardes' : 'Buenas noches';
+
+        // Lógica del Sidebar
+        const sidebar = document.getElementById('sidebar');
+        const btnOpenSidebar = document.getElementById('btnOpenSidebar');
+        function toggleSidebar() {
+            sidebar.classList.toggle('closed');
+            if(sidebar.classList.contains('closed')){
+                btnOpenSidebar.style.display = 'block';
+            } else {
+                btnOpenSidebar.style.display = 'none';
+            }
+        }
+
+        // Lógica del Placeholder Animado
+        const qs = [...'¿Cómo crear una web moderna?|Resume este PDF|Explícame Python|Haz una estrategia de ventas|Corrige este texto|Crea una imagen futurista|Analiza este contrato|Tradúcelo al inglés|Haz una dieta semanal|Escribe código FastAPI'.split('|')];
+        let i = 0, j = 0, dir = 1;
+        const inp = document.getElementById('prompt');
+        setInterval(() => {
+            if (document.activeElement === inp || inp.value) return;
+            let t = qs[i];
+            inp.placeholder = t.slice(0, j);
+            j += dir;
+            if (j >= t.length + 6) dir = -1;
+            if (j <= 0) {
+                dir = 1;
+                i = (i + 1) % qs.length;
+            }
+        }, 120);
+
+        // Modelos y Menú Flotante
+        const models = [
+            ['NVIDIA Nemotron 3', 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/nvidia.svg'],
+            ['Llama 3.3 70B', 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/meta.svg'],
+            ['Qwen 3.6 Plus', 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/alibabacloud.svg'],
+            ['Gemma 3', 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/google.svg'],
+            ['GPT-4o mini', 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/openai.svg'],
+            ['Gemini 2.5 flash', 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/google.svg']
+        ];
+        const menu = document.getElementById('menu');
+        models.forEach(m => menu.innerHTML += `<div class='item'><img src='${m[1]}'><span>${m[0]}</span></div>`);
+        
+        function toggleMenu() {
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Enviar Mensaje y Simular "Estado de Ánimo" (Escritura)
+        function sendMsg() {
+            if(!inp.value) return;
+            // Mostramos el indicador de escritura para probar el pilar #1
+            document.getElementById('typingIndicator').style.opacity = '1';
+            inp.value = '';
+            
+            setTimeout(() => {
+                document.getElementById('typingIndicator').style.opacity = '0';
+                alert('Aquí aparecería la respuesta del bot con efecto Slide up + Fade in.');
+            }, 2000);
+        }
+
+        // Dictado por voz
+        function startRec() {
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SR) return alert('No compatible');
+            const r = new SR();
+            r.lang = 'es-ES';
+            r.onresult = e => inp.value = e.results[0][0].transcript;
+            r.start();
+        }
+
+        inp.addEventListener('keydown', e => {
+            if (e.key === 'Enter') sendMsg();
+        });
+
+        // Carrusel infinito de logos
+        const logos = ['openai', 'google', 'meta', 'nvidia', 'microsoft', 'amazon', 'alibabacloud'];
+        const tr = document.getElementById('track');
+        let html = '';
+        for (let k = 0; k < 3; k++) {
+            logos.forEach(l => html += `<img src='https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${l}.svg'>`);
+        }
+        tr.innerHTML = html;
+        
+        // Cerrar menú si se hace clic fuera
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.sidebar-header') && menu.style.display === 'block') {
+                menu.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
