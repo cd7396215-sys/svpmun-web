@@ -3,21 +3,20 @@
 <head>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width,initial-scale=1.0'>
-    <title>AI Chat UI - Glassmorphism</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>AI Chat UI - Professional</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
             font-family: 'Inter', sans-serif;
         }
 
-        /* Fondo animado orgánico */
         body {
             margin: 0;
-            background: linear-gradient(-45deg, #e2e8f0, #f8fafc, #edf2f7, #e2e8f0);
+            background: linear-gradient(-45deg, #f8fafc, #ffffff, #f1f5f9, #f8fafc);
             background-size: 400% 400%;
             animation: organicBg 15s ease infinite;
-            color: #2D3748;
+            color: #1f1f1f;
             height: 100vh;
             display: flex;
             overflow: hidden;
@@ -30,7 +29,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Animación escalonada de entrada */
         @keyframes slideUpFade {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -41,20 +39,17 @@
         .delay-2 { animation-delay: 0.2s; }
         .delay-3 { animation-delay: 0.3s; }
 
-        /* NAVBAR / SIDEBAR VERTICAL */
+        /* NAVBAR / SIDEBAR VERTICAL (Estilo Gemini) */
         .sidebar {
             width: 280px;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-right: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.03);
+            background: #f0f4f9; /* Color característico tipo Gemini */
             display: flex;
             flex-direction: column;
-            padding: 24px 16px;
+            padding: 16px 12px;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             z-index: 20;
+            border-right: none;
         }
 
         .sidebar.closed {
@@ -66,90 +61,100 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
             padding: 0 8px;
             position: relative;
         }
 
+        /* Triángulo negro en la esquina */
         .triangle {
             width: 0;
             height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 16px solid #000;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 14px solid #1f1f1f;
             cursor: pointer;
             transition: transform 0.2s;
         }
         .triangle:hover { transform: scale(1.1); }
 
-        .btn-close {
+        .btn-icon {
             background: none;
             border: none;
-            font-size: 20px;
-            color: #4A5568;
+            color: #444746;
             cursor: pointer;
-            transition: transform 0.2s;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
         }
-        .btn-close:hover { transform: scale(1.1); color: #000; }
+        .btn-icon:hover { background: #e1e5ea; color: #1f1f1f; }
 
         .nav-item {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
             padding: 12px 16px;
-            margin-bottom: 8px;
-            border-radius: 12px;
-            color: #4A5568;
+            margin-bottom: 4px;
+            border-radius: 24px; /* Estilo píldora */
+            color: #444746;
+            font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            background: transparent;
-            border: 1px solid transparent;
             transition: all 0.2s ease;
         }
 
-        /* Hover inteligente y táctil */
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2px;
+        }
+
         .nav-item:hover {
-            background: #F7FAFC;
-            border: 1px solid #63B3ED;
-            color: #2D3748;
-            transform: scale(1.02);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            background: #e1e5ea;
+            color: #1f1f1f;
+        }
+
+        /* Simulación de un item activo */
+        .nav-item.active {
+            background: #d3e3fd;
+            color: #041e49;
         }
 
         .history-section {
-            margin-top: 20px;
+            margin-top: 24px;
             flex: 1;
             overflow-y: auto;
         }
 
         .history-section h3 {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #A0AEC0;
-            margin: 0 0 10px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #444746;
+            margin: 0 0 12px 16px;
         }
 
         .history-list {
-            padding: 0 8px;
-            font-size: 14px;
-            color: #718096;
-            text-align: center;
+            padding: 0 16px;
+            font-size: 13px;
+            color: #747775;
             font-style: italic;
         }
 
-        /* Menú de Modelos (Glassmorphism) */
+        /* Menú de Modelos */
         .menu {
             position: absolute;
             left: 10px;
             top: 40px;
-            width: 260px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-            border-radius: 16px;
-            padding: 10px;
+            width: 240px;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            padding: 8px;
             display: none;
             z-index: 30;
         }
@@ -157,24 +162,16 @@
         .menu .item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px;
-            border-radius: 10px;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s;
             font-size: 14px;
-            font-weight: 500;
+            color: #1f1f1f;
         }
 
-        .menu .item:hover {
-            background: #F7FAFC;
-            border-radius: 10px;
-        }
-
-        .menu .item img {
-            width: 22px;
-            height: 22px;
-        }
+        .menu .item:hover { background: #f0f4f9; }
+        .menu .item img { width: 20px; height: 20px; }
 
         /* ÁREA PRINCIPAL */
         .main-content {
@@ -189,56 +186,47 @@
 
         .btn-open-sidebar {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.5);
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 20px;
-            cursor: pointer;
-            color: #2D3748;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: all 0.2s;
+            top: 16px;
+            left: 16px;
             z-index: 10;
         }
-        .btn-open-sidebar:hover { background: #F7FAFC; transform: scale(1.05); }
 
         .greet {
-            font-size: 48px;
-            font-weight: 700;
+            font-size: 44px;
+            font-weight: 600;
             text-align: center;
             letter-spacing: -0.5px;
-            color: #1A202C;
+            color: #1f1f1f;
+            background: -webkit-linear-gradient(45deg, #1f1f1f, #5f6368);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .sub {
-            color: #718096;
-            font-size: 18px;
-            margin-top: 8px;
+            color: #444746;
+            font-size: 16px;
+            margin-top: 12px;
         }
 
-        /* Barra de búsqueda (Glassmorphism) */
+        /* Barra de búsqueda */
         .bar {
-            margin-top: 40px;
+            margin-top: 36px;
             width: min(800px, 95%);
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+            gap: 8px;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
             padding: 12px 16px;
-            border-radius: 24px;
+            border-radius: 32px;
             position: relative;
-            transition: box-shadow 0.3s;
+            transition: box-shadow 0.3s, border 0.3s;
         }
 
         .bar:focus-within {
-            box-shadow: 0 10px 25px rgba(99, 179, 237, 0.15);
-            border: 1px solid #63B3ED;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid #c7c7c7;
         }
 
         input {
@@ -246,31 +234,32 @@
             background: transparent;
             border: none;
             outline: none;
-            color: #2D3748;
-            font-size: 18px;
+            color: #1f1f1f;
+            font-size: 16px;
             padding: 0 10px;
         }
-        input::placeholder { color: #A0AEC0; }
+        input::placeholder { color: #747775; }
 
         .iconbtn {
             cursor: pointer;
-            border: 1px solid transparent;
-            background: rgba(0, 0, 0, 0.03);
-            color: #4A5568;
-            padding: 10px 14px;
-            border-radius: 14px;
-            font-size: 16px;
+            border: none;
+            background: #f0f4f9;
+            color: #444746;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.2s;
         }
         
         .iconbtn:hover {
-            background: #F7FAFC;
-            border: 1px solid #63B3ED;
-            transform: scale(1.02);
-            color: #2D3748;
+            background: #e1e5ea;
+            color: #1f1f1f;
         }
 
-        /* Micro-animación de Estado de Ánimo (Indicador de escritura) */
+        /* Indicador de escritura */
         .typing-indicator {
             display: flex;
             gap: 4px;
@@ -278,13 +267,13 @@
             align-items: center;
             height: 20px;
             margin-top: 15px;
-            opacity: 0; /* Cambiar a 1 mediante JS cuando el bot responda */
+            opacity: 0;
             transition: opacity 0.3s;
         }
         .dot {
-            width: 8px;
-            height: 8px;
-            background-color: #A0AEC0;
+            width: 6px;
+            height: 6px;
+            background-color: #747775;
             border-radius: 50%;
             animation: bounce 1.4s infinite ease-in-out both;
         }
@@ -296,32 +285,47 @@
             40% { transform: scale(1); }
         }
 
-        /* Carrusel */
+        /* Carrusel Ajustado */
         .carouselWrap {
             position: absolute;
-            bottom: 20px;
-            width: 100%;
+            bottom: 30px;
+            width: min(600px, 90%); /* Más pequeño para evitar exceso visual */
             text-align: center;
-            color: #718096;
-            font-size: 14px;
+            overflow: hidden;
+        }
+
+        .carousel-title {
+            color: #747775;
+            font-size: 12px;
             font-weight: 500;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .track-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            /* Degradados a los lados para disimular la entrada/salida */
+            mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
         }
 
         .track {
             display: flex;
-            gap: 50px;
-            margin-top: 10px;
-            white-space: nowrap;
-            animation: move 30s linear infinite;
+            gap: 70px;
+            width: max-content;
+            animation: move 20s linear infinite;
         }
 
         .track img {
-            height: 32px;
-            opacity: 0.5;
+            height: 48px; /* Logos mucho más grandes */
+            opacity: 0.4;
             filter: grayscale(1);
-            transition: opacity 0.3s;
+            transition: all 0.3s;
         }
-        .track img:hover { opacity: 1; filter: none; }
+        .track img:hover { opacity: 1; filter: none; transform: scale(1.05); }
 
         @keyframes move {
             from { transform: translateX(0); }
@@ -334,17 +338,31 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="triangle" onclick="toggleMenu()" title="Cambiar modelo"></div>
-            <button class="btn-close" onclick="toggleSidebar()" title="Cerrar menú">✕</button>
+            <button class="btn-icon" onclick="toggleSidebar()" title="Ocultar menú">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
             <div class="menu" id="menu"></div>
         </div>
 
-        <div class="nav-item">💬 Nuevo Chat</div>
-        <div class="nav-item">🔍 Buscar chats</div>
-        <div class="nav-item">📁 Proyectos</div>
-        <div class="nav-item">💡 Conoce más de nosotros</div>
+        <div class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            Nuevo chat
+        </div>
+        <div class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            Buscar chats
+        </div>
+        <div class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            Proyectos
+        </div>
+        <div class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            Conoce más de nosotros
+        </div>
 
         <div class="history-section">
-            <h3>Historial</h3>
+            <h3>Chats</h3>
             <div class="history-list">
                 Aún no hay chats recientes.
             </div>
@@ -352,7 +370,9 @@
     </aside>
 
     <main class="main-content">
-        <button id="btnOpenSidebar" class="btn-open-sidebar" style="display: none;" onclick="toggleSidebar()">☰</button>
+        <button id="btnOpenSidebar" class="btn-icon btn-open-sidebar" style="display: none;" onclick="toggleSidebar()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
 
         <div class="greet animate-in delay-1" id="greet"></div>
         <div class="sub animate-in delay-2">¿En qué puedo ayudarte hoy?</div>
@@ -360,9 +380,15 @@
         <div class="bar animate-in delay-3">
             <input id="prompt" placeholder="" autocomplete="off" />
             <input type="file" id="file" hidden multiple>
-            <button class="iconbtn" onclick="document.getElementById('file').click()">＋</button>
-            <button class="iconbtn" onclick="startRec()">🎤</button>
-            <button class="iconbtn" onclick="sendMsg()">↵</button>
+            <button class="iconbtn" onclick="document.getElementById('file').click()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+            <button class="iconbtn" onclick="startRec()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+            </button>
+            <button class="iconbtn" onclick="sendMsg()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
         </div>
 
         <div class="typing-indicator" id="typingIndicator">
@@ -372,13 +398,15 @@
         </div>
 
         <div class="carouselWrap animate-in delay-3">
-            <div>Las IAs Provienen de:</div>
-            <div class="track" id="track"></div>
+            <div class="carousel-title">Las IAs Provienen de</div>
+            <div class="track-container">
+                <div class="track" id="track"></div>
+            </div>
         </div>
     </main>
 
     <script>
-        // Lógica de Saludo
+        // Saludo Dinámico
         const hour = new Date().getHours();
         document.getElementById('greet').innerText = hour < 12 ? 'Buenos días' : hour < 19 ? 'Buenas tardes' : 'Buenas noches';
 
@@ -388,14 +416,14 @@
         function toggleSidebar() {
             sidebar.classList.toggle('closed');
             if(sidebar.classList.contains('closed')){
-                btnOpenSidebar.style.display = 'block';
+                btnOpenSidebar.style.display = 'flex';
             } else {
                 btnOpenSidebar.style.display = 'none';
             }
         }
 
-        // Lógica del Placeholder Animado
-        const qs = [...'¿Cómo crear una web moderna?|Resume este PDF|Explícame Python|Haz una estrategia de ventas|Corrige este texto|Crea una imagen futurista|Analiza este contrato|Tradúcelo al inglés|Haz una dieta semanal|Escribe código FastAPI'.split('|')];
+        // Placeholder Animado
+        const qs = [...'¿Cómo crear una web moderna?|Resume este PDF|Explícame Python|Haz una estrategia de ventas|Corrige este texto|Analiza este contrato|Tradúcelo al inglés'.split('|')];
         let i = 0, j = 0, dir = 1;
         const inp = document.getElementById('prompt');
         setInterval(() => {
@@ -410,7 +438,7 @@
             }
         }, 120);
 
-        // Modelos y Menú Flotante
+        // Modelos (Triángulo negro en el sidebar)
         const models = [
             ['NVIDIA Nemotron 3', 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/nvidia.svg'],
             ['Llama 3.3 70B', 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/meta.svg'],
@@ -426,20 +454,16 @@
             menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
         }
 
-        // Enviar Mensaje y Simular "Estado de Ánimo" (Escritura)
+        // Enviar Mensaje
         function sendMsg() {
             if(!inp.value) return;
-            // Mostramos el indicador de escritura para probar el pilar #1
             document.getElementById('typingIndicator').style.opacity = '1';
             inp.value = '';
-            
             setTimeout(() => {
                 document.getElementById('typingIndicator').style.opacity = '0';
-                alert('Aquí aparecería la respuesta del bot con efecto Slide up + Fade in.');
-            }, 2000);
+            }, 1500);
         }
 
-        // Dictado por voz
         function startRec() {
             const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SR) return alert('No compatible');
@@ -453,11 +477,11 @@
             if (e.key === 'Enter') sendMsg();
         });
 
-        // Carrusel infinito de logos
+        // Carrusel: Solo se multiplica x2 para un bucle infinito limpio y menos saturado
         const logos = ['openai', 'google', 'meta', 'nvidia', 'microsoft', 'amazon', 'alibabacloud'];
         const tr = document.getElementById('track');
         let html = '';
-        for (let k = 0; k < 3; k++) {
+        for (let k = 0; k < 2; k++) {
             logos.forEach(l => html += `<img src='https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${l}.svg'>`);
         }
         tr.innerHTML = html;
