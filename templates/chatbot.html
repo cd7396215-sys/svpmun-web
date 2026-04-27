@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SVP — Steven Vincent Percival</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Bebas+Neue&family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+  <!-- ═══════════════════════════════════════════ GEMINI API KEY ═══════════ -->
+  <!-- REEMPLAZA 'YOUR_GEMINI_API_KEY' con tu clave de Gemini API             -->
+  <script>
+    const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY';
+  </script>
+  <!-- ════════════════════════════════════════════════════════════════════════ -->
+
+  <style>
+    /* ═══════════════ ROOT VARS — Totalmente diferente al resto del sitio ════ */
+    :root {
+      --bg:        #020508;
+      --bg2:       #050c12;
+      --bg3:       #081018;
+      --cyan:      #00f5d4;
+      --cyan2:     #00c8f5;
+      --neon:      #00ff9b;
+      --purple:    #9b5de5;
+      --red:       #f72585;
+      --gold:      #f8c537;
+      --txt:       #c8e6fa;
+      --txt-dim:   rgba(200,230,250,0.4);
+      --glass:     rgba(0,245,212,0.04);
+      --glass-brd: rgba(0,245,212,0.12);
+      --glow-c:    rgba(0,245,212,0.35);
+      --glow-p:    rgba(155,93,229,0.35);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; }
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: var(--bg);
+      color: var(--txt);
+      height: 100%;
+      overflow: hidden;
+      cursor: crosshair;
+    }
+
+    /* ═══════════════════════════ CIRCUIT BG ═══════════════════════════════ */
+    #circuit-bg {
+      position: fixed; inset: 0; z-index: 0;
+      overflow: hidden; pointer-events: none;
+    }
+    #circuit-bg canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    /* ═══════════════════════════ LOADER ═══════════════════════════════════ */
+    #loader {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--bg);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    /* HUD corners */
+    .hud-corner {
+      position: absolute; width: 42px; height: 42px;
+      z-index: 2;
+    }
+    .hud-corner::before, .hud-corner::after {
+      content: ''; position: absolute;
+      background: var(--cyan);
+      box-shadow: 0 0 8px var(--cyan);
+    }
+    .hud-corner::before { width: 100%; height: 2px; top: 0; left: 0; }
+    .hud-corner::after  { width: 2px; height: 100%; top: 0; left: 0; }
+    .hud-corner.tl { top: 28px; left: 28px; }
+    .hud-corner.tr { top: 28px; right: 28px; transform: scaleX(-1); }
+    .hud-corner.bl { bottom: 28px; left: 28px; transform: scaleY(-1); }
+    .hud-corner.br { bottom: 28px; right: 28px; transform: scale(-1); }
+
+    /* Scan beam */
+    .ld-scan {
+      position: absolute; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan), rgba(0,245,212,0.4), transparent);
+      box-shadow: 0 0 20px var(--cyan), 0 0 60px rgba(0,245,212,0.3);
+      animation: scanBeam 3s cubic-bezier(0.4,0,0.6,1) infinite;
+      z-index: 1;
+    }
+    @keyframes scanBeam { 0%{top:-5px; opacity:0;} 10%{opacity:1;} 90%{opacity:1;} 100%{top:105%; opacity:0;} }
+
+    /* Data stream left side */
+    .ld-datastream {
+      position: absolute; left: 40px; top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.52rem;
+      color: rgba(0,245,212,0.15);
+      line-height: 1.9;
+      letter-spacing: 0.08em;
+      pointer-events: none;
+    }
+    .ld-datastream .hl { color: rgba(0,245,212,0.5); }
+
+    /* SVP AVATAR — Holographic Face */
+    #svp-avatar {
+      position: relative;
+      width: 200px; height: 200px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    /* Outer rotating rings */
+    .avatar-ring {
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      border: 1px solid transparent;
+    }
+    .avatar-ring.r1 {
+      border-color: rgba(0,245,212,0.3);
+      animation: ringRot 8s linear infinite;
+      box-shadow: 0 0 15px rgba(0,245,212,0.1);
+    }
+    .avatar-ring.r2 {
+      inset: 16px;
+      border-color: rgba(155,93,229,0.25);
+      animation: ringRot 12s linear infinite reverse;
+    }
+    .avatar-ring.r3 {
+      inset: 32px;
+      border-color: rgba(0,245,212,0.15);
+      animation: ringRot 5s linear infinite;
+    }
+    .avatar-ring.r1::before, .avatar-ring.r2::before, .avatar-ring.r3::before {
+      content: '';
+      position: absolute; top: -4px; left: 50%;
+      transform: translateX(-50%);
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 12px var(--cyan);
+    }
+    .avatar-ring.r2::before { background: var(--purple); box-shadow: 0 0 10px var(--purple); width: 5px; height: 5px; }
+    .avatar-ring.r3::before { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); width: 4px; height: 4px; top: -3px; }
+    @keyframes ringRot { to { transform: rotate(360deg); } }
+
+    /* Face circle */
+    .avatar-face {
+      position: absolute; inset: 44px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,245,212,0.06) 0%, rgba(0,10,20,0.95) 100%);
+      border: 1px solid rgba(0,245,212,0.2);
+      box-shadow: 0 0 40px rgba(0,245,212,0.1), inset 0 0 30px rgba(0,245,212,0.05);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* SVP eyes */
+    .svp-eyes {
+      display: flex; gap: 18px;
+      margin-bottom: 8px;
+    }
+    .svp-eye {
+      width: 16px; height: 8px;
+      border: 1.5px solid var(--cyan);
+      border-radius: 8px;
+      position: relative;
+      background: rgba(0,245,212,0.05);
+      box-shadow: 0 0 8px rgba(0,245,212,0.4);
+      overflow: hidden;
+      transition: height 0.1s, border-radius 0.1s;
+    }
+    .svp-eye::after {
+      content: '';
+      position: absolute;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 6px var(--cyan);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      animation: eyeGlow 2s ease-in-out infinite;
+    }
+    @keyframes eyeGlow { 0%,100%{opacity:0.6;} 50%{opacity:1;} }
+
+    /* Wink animation */
+    .svp-eye.winking {
+      height: 1.5px !important;
+      border-radius: 0 !important;
+      overflow: visible;
+    }
+    .svp-eye.winking::after { display: none; }
+
+    /* SVP mouth / data bar */
+    .svp-mouth {
+      width: 32px; height: 2px;
+      background: var(--cyan);
+      border-radius: 2px;
+      box-shadow: 0 0 8px var(--cyan);
+      margin-top: 4px;
+    }
+
+    /* Scan line inside face */
+    .avatar-face::before {
+      content: '';
+      position: absolute; left: 0; right: 0; height: 1px;
+      background: rgba(0,245,212,0.4);
+      animation: faceScan 2s ease-in-out infinite;
+    }
+    @keyframes faceScan { 0%{top:0%; opacity:0;} 20%{opacity:1;} 80%{opacity:1;} 100%{top:100%; opacity:0;} }
+
+    /* Grid overlay inside face */
+    .avatar-face::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,245,212,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,212,0.04) 1px, transparent 1px);
+      background-size: 12px 12px;
+    }
+
+    /* Loader content */
+    .ld-content {
+      position: relative; z-index: 3;
+      display: flex; flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .ld-system-id {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: rgba(0,245,212,0.4);
+      margin-bottom: 10px;
+      opacity: 0;
+      animation: fadeUp 0.5s ease 0.3s forwards;
+    }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+
+    .ld-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.5rem, 6vw, 2.6rem);
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      background: linear-gradient(90deg, var(--cyan), var(--cyan2), var(--purple));
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 20px rgba(0,245,212,0.4));
+      opacity: 0;
+      animation: fadeUp 0.7s cubic-bezier(0.34,1.3,0.64,1) 0.6s forwards;
+      margin-bottom: 4px;
+    }
+
+    .ld-subtitle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      color: rgba(0,245,212,0.3);
+      letter-spacing: 0.25em;
+      opacity: 0;
+      animation: fadeUp 0.5s ease 0.85s forwards;
+      margin-bottom: 28px;
+    }
+
+    /* Progress */
+    .ld-progress-wrap {
+      width: min(280px, 75vw);
+      opacity: 0;
+      animation: fadeUp 0.5s ease 1s forwards;
+    }
+    .ld-progress-bar {
+      width: 100%; height: 2px;
+      background: rgba(0,245,212,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+    .ld-progress-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--cyan), var(--cyan2), var(--purple));
+      box-shadow: 0 0 10px var(--cyan);
+      border-radius: 2px;
+      transition: width 0.15s ease;
+    }
+    .ld-progress-labels {
+      display: flex; justify-content: space-between;
+      margin-top: 8px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.5rem;
+      color: rgba(0,245,212,0.25);
+      letter-spacing: 0.1em;
+    }
+    .ld-pct { color: var(--cyan); }
+
+    .ld-status {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.55rem;
+      color: rgba(0,245,212,0.5);
+      letter-spacing: 0.18em;
+      min-height: 1.2em;
+      margin-top: 14px;
+      transition: opacity 0.2s;
+    }
+    .ld-status.pulse { animation: statusPulse 0.4s ease; }
+    @keyframes statusPulse { 0%,100%{opacity:1;} 50%{opacity:0;} }
+
+    /* Avatar fly-to-input */
+    #svp-avatar.fly {
+      animation: avatarFly 0.8s cubic-bezier(0.77,0,0.18,1) forwards;
+    }
+    @keyframes avatarFly {
+      0%  { transform: scale(1) translateY(0); opacity: 1; }
+      60% { transform: scale(0.3) translateY(60px); opacity: 0.8; }
+      100%{ transform: scale(0.05) translateY(200px); opacity: 0; }
+    }
+
+    /* Loader exit */
+    #loader.exit {
+      animation: loaderExit 0.9s cubic-bezier(0.77,0,0.18,1) 0.1s forwards;
+    }
+    @keyframes loaderExit {
+      0%  { clip-path: polygon(0 0,100% 0,100% 100%,0 100%); opacity: 1; }
+      100%{ clip-path: polygon(0 0,100% 0,100% 0%,0 0%); opacity: 0; }
+    }
+
+    /* ═══════════════════════════════════════ MAIN APP ════════════════════ */
+    #app {
+      position: fixed; inset: 0; z-index: 1;
+      display: flex; flex-direction: column;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+    #app.visible { opacity: 1; }
+
+    /* ─── TOP BAR ─── */
+    #topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 28px;
+      background: rgba(0,5,12,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-brd);
+      flex-shrink: 0;
+      position: relative; z-index: 10;
+    }
+    .tb-brand {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .tb-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid var(--cyan);
+      box-shadow: 0 0 12px rgba(0,245,212,0.4);
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,245,212,0.08);
+      font-size: 0.9rem;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .tb-avatar-face {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 4px;
+    }
+    .tb-eyes { display: flex; gap: 5px; }
+    .tb-eye {
+      width: 5px; height: 3px;
+      border: 1px solid var(--cyan);
+      border-radius: 3px;
+      animation: tbEyeGlow 3s ease-in-out infinite;
+    }
+    @keyframes tbEyeGlow { 0%,100%{box-shadow:0 0 3px var(--cyan);} 50%{box-shadow:0 0 6px var(--cyan);} }
+    .tb-mouth { width: 10px; height: 1px; background: var(--cyan); border-radius: 1px; }
+    .tb-avatar::before {
+      content: '';
+      position: absolute; left: 0; right: 0; height: 1px;
+      background: rgba(0,245,212,0.6);
+      animation: faceScan 3s ease-in-out infinite;
+      z-index: 2;
+    }
+    .tb-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem; font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--cyan);
+      text-shadow: 0 0 12px rgba(0,245,212,0.5);
+    }
+    .tb-sub {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.5rem;
+      color: var(--txt-dim);
+      letter-spacing: 0.2em;
+    }
+    .tb-status {
+      display: flex; align-items: center; gap: 8px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.52rem;
+      color: var(--neon);
+      letter-spacing: 0.18em;
+    }
+    .tb-status-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--neon);
+      box-shadow: 0 0 8px var(--neon);
+      animation: dotPulse 1.5s ease-in-out infinite;
+    }
+    @keyframes dotPulse { 0%,100%{opacity:0.5; transform:scale(0.8);} 50%{opacity:1; transform:scale(1.3);} }
+
+    .tb-back {
+      display: flex; align-items: center; gap: 8px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.52rem;
+      color: var(--txt-dim);
+      letter-spacing: 0.15em;
+      cursor: pointer;
+      padding: 7px 14px;
+      border: 1px solid var(--glass-brd);
+      border-radius: 4px;
+      transition: color 0.3s, border-color 0.3s, box-shadow 0.3s;
+      text-decoration: none;
+    }
+    .tb-back:hover {
+      color: var(--cyan); border-color: rgba(0,245,212,0.35);
+      box-shadow: 0 0 12px rgba(0,245,212,0.1);
+    }
+
+    /* ─── GREETING ─── */
+    #greeting-bar {
+      padding: 18px 28px 14px;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .greeting-time {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      color: rgba(0,245,212,0.3);
+      margin-bottom: 4px;
+    }
+    .greeting-main {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.1rem, 3vw, 1.7rem);
+      font-weight: 400;
+      letter-spacing: 0.08em;
+    }
+    .greeting-time-word {
+      color: var(--gold);
+      text-shadow: 0 0 15px rgba(248,197,55,0.4);
+    }
+    .greeting-name {
+      color: var(--cyan);
+      text-shadow: 0 0 15px rgba(0,245,212,0.4);
+    }
+    .greeting-sub {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      color: var(--txt-dim);
+      letter-spacing: 0.18em;
+      margin-top: 4px;
+    }
+
+    /* ─── MESSAGES ─── */
+    #messages-wrap {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 24px 12px;
+      display: flex; flex-direction: column;
+      gap: 16px;
+      scroll-behavior: smooth;
+    }
+    #messages-wrap::-webkit-scrollbar { width: 3px; }
+    #messages-wrap::-webkit-scrollbar-track { background: transparent; }
+    #messages-wrap::-webkit-scrollbar-thumb {
+      background: rgba(0,245,212,0.2); border-radius: 2px;
+    }
+
+    .msg {
+      display: flex; gap: 12px;
+      animation: msgIn 0.4s cubic-bezier(0.34,1.3,0.64,1) both;
+    }
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .msg.user { flex-direction: row-reverse; }
+
+    /* SVP avatar in chat */
+    .msg-avatar {
+      width: 32px; height: 32px; flex-shrink: 0;
+      border-radius: 50%;
+      border: 1px solid var(--cyan);
+      box-shadow: 0 0 8px rgba(0,245,212,0.3);
+      background: rgba(0,245,212,0.06);
+      display: flex; align-items: center; justify-content: center;
+      align-self: flex-end;
+    }
+    .msg-avatar-mini { display:flex; flex-direction:column; align-items:center; gap:3px; }
+    .mini-eyes { display:flex; gap:4px; }
+    .mini-eye {
+      width: 4px; height: 2.5px;
+      border: 1px solid var(--cyan); border-radius: 2px;
+    }
+    .mini-mouth { width: 8px; height: 1px; background: var(--cyan); border-radius: 1px; }
+
+    .msg.user .msg-avatar {
+      border-color: var(--purple);
+      box-shadow: 0 0 8px rgba(155,93,229,0.3);
+      background: rgba(155,93,229,0.06);
+    }
+
+    /* Bubble */
+    .msg-bubble {
+      max-width: 72%;
+      padding: 14px 18px;
+      border-radius: 16px;
+      position: relative;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--txt);
+    }
+    .msg.svp .msg-bubble {
+      background: rgba(0,245,212,0.05);
+      border: 1px solid rgba(0,245,212,0.15);
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .msg.user .msg-bubble {
+      background: rgba(155,93,229,0.08);
+      border: 1px solid rgba(155,93,229,0.2);
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      text-align: right;
+    }
+    .msg-bubble::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      border-radius: 16px 16px 0 0;
+    }
+    .msg.svp .msg-bubble::before {
+      background: linear-gradient(90deg, transparent, rgba(0,245,212,0.4), transparent);
+    }
+    .msg.user .msg-bubble::before {
+      background: linear-gradient(90deg, transparent, rgba(155,93,229,0.4), transparent);
+    }
+
+    .msg-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.48rem; letter-spacing: 0.28em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .msg.svp .msg-label { color: var(--cyan); }
+    .msg.user .msg-label { color: var(--purple); text-align: right; }
+
+    /* Typing indicator */
+    .typing-dots {
+      display: flex; gap: 5px;
+      padding: 10px 14px;
+      align-items: center;
+    }
+    .typing-dots span {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--cyan);
+      animation: typDot 1.2s ease-in-out infinite;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typDot { 0%,100%{opacity:0.3;transform:scale(0.8);} 50%{opacity:1;transform:scale(1.3);} }
+
+    /* ─── CAROUSEL ─── */
+    #suggestions {
+      padding: 8px 24px 12px;
+      flex-shrink: 0;
+    }
+    .sug-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.48rem;
+      letter-spacing: 0.28em;
+      color: var(--txt-dim);
+      margin-bottom: 8px;
+    }
+    .sug-scroll {
+      display: flex; gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 4px;
+    }
+    .sug-scroll::-webkit-scrollbar { display: none; }
+
+    .sug-chip {
+      flex-shrink: 0;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.56rem;
+      letter-spacing: 0.1em;
+      color: rgba(0,245,212,0.6);
+      border: 1px solid rgba(0,245,212,0.18);
+      border-radius: 20px;
+      padding: 7px 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.3s, border-color 0.3s, box-shadow 0.3s, background 0.3s;
+      background: rgba(0,245,212,0.03);
+    }
+    .sug-chip:hover {
+      color: var(--cyan);
+      border-color: rgba(0,245,212,0.45);
+      box-shadow: 0 0 14px rgba(0,245,212,0.12);
+      background: rgba(0,245,212,0.07);
+    }
+
+    /* ─── INPUT AREA ─── */
+    #input-area {
+      padding: 12px 24px 20px;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .input-wrap {
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(0,245,212,0.04);
+      border: 1px solid var(--glass-brd);
+      border-radius: 12px;
+      padding: 12px 14px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .input-wrap::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,245,212,0.4), transparent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .input-wrap:focus-within {
+      border-color: rgba(0,245,212,0.35);
+      box-shadow: 0 0 20px rgba(0,245,212,0.08);
+    }
+    .input-wrap:focus-within::before { transform: scaleX(1); }
+
+    .input-prefix {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--cyan);
+      opacity: 0.5;
+      flex-shrink: 0;
+    }
+
+    #user-input {
+      flex: 1;
+      background: none;
+      border: none; outline: none;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.92rem;
+      color: var(--txt);
+      caret-color: var(--cyan);
+      resize: none;
+      height: 24px;
+      max-height: 96px;
+      overflow: hidden;
+      transition: height 0.2s ease;
+      line-height: 1.4;
+    }
+    #user-input::placeholder { color: transparent; }
+
+    /* Typewriter placeholder */
+    #placeholder-text {
+      position: absolute;
+      left: calc(14px + 28px); /* prefix + gap */
+      top: 50%; transform: translateY(-50%);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.92rem;
+      color: rgba(0,245,212,0.3);
+      pointer-events: none;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    #placeholder-cursor {
+      display: inline-block;
+      width: 2px; height: 0.9em;
+      background: var(--cyan);
+      margin-left: 1px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+
+    .send-btn {
+      width: 38px; height: 38px; flex-shrink: 0;
+      border-radius: 8px;
+      background: rgba(0,245,212,0.1);
+      border: 1px solid rgba(0,245,212,0.25);
+      color: var(--cyan);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+      font-size: 1rem;
+    }
+    .send-btn:hover {
+      background: rgba(0,245,212,0.18);
+      box-shadow: 0 0 16px rgba(0,245,212,0.2);
+      transform: scale(1.05);
+    }
+    .send-btn:active { transform: scale(0.96); }
+
+    /* API Key setup overlay */
+    #api-setup {
+      position: fixed; inset: 0; z-index: 8000;
+      background: rgba(0,5,12,0.97);
+      backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .api-box {
+      max-width: 480px; width: 100%;
+      border: 1px solid rgba(0,245,212,0.2);
+      border-radius: 16px;
+      background: rgba(0,15,30,0.9);
+      padding: 36px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .api-box::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--cyan), var(--purple), var(--cyan));
+    }
+    .api-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem; font-weight: 700;
+      color: var(--cyan); margin-bottom: 8px;
+      letter-spacing: 0.1em;
+    }
+    .api-sub {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--txt-dim);
+      letter-spacing: 0.15em;
+      margin-bottom: 24px;
+      line-height: 1.8;
+    }
+    .api-input {
+      width: 100%;
+      background: rgba(0,245,212,0.04);
+      border: 1px solid rgba(0,245,212,0.2);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--cyan);
+      letter-spacing: 0.05em;
+      outline: none;
+      margin-bottom: 16px;
+      transition: border-color 0.3s;
+      text-align: center;
+    }
+    .api-input:focus { border-color: rgba(0,245,212,0.5); }
+    .api-btn {
+      width: 100%;
+      background: rgba(0,245,212,0.12);
+      border: 1px solid rgba(0,245,212,0.35);
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--cyan);
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .api-btn:hover {
+      background: rgba(0,245,212,0.2);
+      box-shadow: 0 0 20px rgba(0,245,212,0.15);
+    }
+
+    /* Error message */
+    .error-msg {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      color: var(--red);
+      margin-top: 10px;
+      letter-spacing: 0.1em;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      #topbar { padding: 10px 16px; }
+      #greeting-bar { padding: 14px 16px 10px; }
+      #messages-wrap { padding: 8px 14px 10px; }
+      #suggestions { padding: 6px 14px 8px; }
+      #input-area { padding: 8px 14px 16px; }
+      .msg-bubble { max-width: 84%; }
+      .greeting-main { font-size: clamp(0.9rem, 4vw, 1.3rem); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ CIRCUIT CANVAS BG ════════════════════════ -->
+<div id="circuit-bg"><canvas id="circuit-canvas"></canvas></div>
+
+<!-- ═══════════════════════════ LOADER ═══════════════════════════════════ -->
+<div id="loader">
+  <div class="hud-corner tl"></div>
+  <div class="hud-corner tr"></div>
+  <div class="hud-corner bl"></div>
+  <div class="hud-corner br"></div>
+  <div class="ld-scan"></div>
+
+  <!-- Left data stream -->
+  <div class="ld-datastream" aria-hidden="true">
+    <div>INIT_PROTOCOL............<span class="hl">✓</span></div>
+    <div>LOAD_CORPUS_SVPMUN......<span class="hl">✓</span></div>
+    <div>NEURAL_LANG_ES...........<span class="hl">✓</span></div>
+    <div>SECURE_CHANNEL...........<span class="hl">✓</span></div>
+    <div>DELEGATE_DB..............<span class="hl">✓</span></div>
+    <div>COMMITTEE_DATA...........<span class="hl">✓</span></div>
+    <div>RULES_MUN_LOADED.........<span class="hl">✓</span></div>
+    <div>GEMINI_LINK..............<span class="hl">LINKING</span></div>
+    <div>SVP_PERSONALITY_CORE.....<span class="hl">BOOTING</span></div>
+  </div>
+
+  <div class="ld-content">
+    <div class="ld-system-id">SISTEMA IA · SVPMUN 2026 · BUILD 4.1.0</div>
+
+    <!-- SVP AVATAR -->
+    <div id="svp-avatar">
+      <div class="avatar-ring r1"></div>
+      <div class="avatar-ring r2"></div>
+      <div class="avatar-ring r3"></div>
+      <div class="avatar-face">
+        <div class="svp-eyes">
+          <div class="svp-eye" id="eye-l"></div>
+          <div class="svp-eye" id="eye-r"></div>
+        </div>
+        <div class="svp-mouth"></div>
+      </div>
+    </div>
+
+    <div class="ld-title">STEVEN VINCENT PERCIVAL</div>
+    <div class="ld-subtitle">// ASISTENTE INTELIGENTE · SVPMUN //</div>
+
+    <div class="ld-progress-wrap">
+      <div class="ld-progress-bar">
+        <div class="ld-progress-fill" id="ld-fill"></div>
+      </div>
+      <div class="ld-progress-labels">
+        <span>INICIALIZANDO SVP</span>
+        <span class="ld-pct" id="ld-pct">0%</span>
+      </div>
+    </div>
+    <div class="ld-status" id="ld-status">CARGANDO MÓDULOS DIPLOMÁTICOS...</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ API KEY SETUP ════════════════════════════ -->
+<div id="api-setup" style="display:none;">
+  <div class="api-box">
+    <div class="api-title">CONFIGURAR SVP</div>
+    <div class="api-sub">
+      Para activar a Steven Vincent Percival,<br>
+      ingresa tu Gemini API Key.<br>
+      <br>
+      Obtén una gratis en: <span style="color:var(--cyan)">aistudio.google.com</span>
+    </div>
+    <input type="password" class="api-input" id="api-key-input" placeholder="AIza...">
+    <button class="api-btn" onclick="saveApiKey()">► ACTIVAR PROTOCOLO SVP</button>
+    <div class="error-msg" id="api-error" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ MAIN APP ════════════════════════════════ -->
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div id="topbar">
+    <div class="tb-brand">
+      <div class="tb-avatar">
+        <div class="tb-avatar-face">
+          <div class="tb-eyes"><div class="tb-eye"></div><div class="tb-eye"></div></div>
+          <div class="tb-mouth"></div>
+        </div>
+      </div>
+      <div>
+        <div class="tb-name">SVP</div>
+        <div class="tb-sub">STEVEN VINCENT PERCIVAL · SVPMUN IA</div>
+      </div>
+    </div>
+
+    <div class="tb-status">
+      <div class="tb-status-dot"></div>
+      <span>EN LÍNEA</span>
+    </div>
+
+    <a class="tb-back" href="/" onclick="if(window.navigateTo){event.preventDefault();navigateTo('/');}">
+      ← VOLVER
+    </a>
+  </div>
+
+  <!-- GREETING -->
+  <div id="greeting-bar">
+    <div class="greeting-time" id="greeting-timestamp"></div>
+    <div class="greeting-main">
+      <span class="greeting-time-word" id="greeting-word">Buenas</span>,
+      <span class="greeting-name">Delegado</span>.
+    </div>
+    <div class="greeting-sub">Soy SVP — tu asistente de SVPMUN. ¿En qué puedo ayudarte hoy?</div>
+  </div>
+
+  <!-- MESSAGES -->
+  <div id="messages-wrap" id="msgs"></div>
+
+  <!-- SUGGESTIONS CAROUSEL -->
+  <div id="suggestions">
+    <div class="sug-label">// PREGUNTAS SUGERIDAS</div>
+    <div class="sug-scroll" id="sug-scroll">
+      <div class="sug-chip" onclick="useSuggestion(this)">¿Qué comités hay en SVPMUN 2026?</div>
+      <div class="sug-chip" onclick="useSuggestion(this)">¿Cómo me inscribo?</div>
+      <div class="sug-chip" onclick="useSuggestion(this)">¿Quién es el Secretario General?</div>
+      <div class="sug-chip" onclick="useSuggestion(this)">¿Cuándo es el SVPMUN 2026?</div>
+      <div class="sug-chip" onclick="useSuggestion(this)">¿Qué son los drills?</div>
+      <div class="sug-chip" onclick="useSuggestion(this)">Consejos para nuevos delegados</div>
+      <div class="sug-chip" onclick="useSuggestion(this)">¿Qué es el MUN?</div>
+      <div class="sug-chip" onclick="useSuggestion(this)">Historia de SVPMUN</div>
+      <div class="sug-chip" onclick="useSuggestion(this)">¿Qué comité es la OMS?</div>
+      <div class="sug-chip" onclick="useSuggestion(this)">¿Qué es una resolución?</div>
+      <div class="sug-chip" onclick="useSuggestion(this)">Logros de la delegación</div>
+      <div class="sug-chip" onclick="useSuggestion(this)">¿Qué significa 'cedo la palabra'?</div>
+    </div>
+  </div>
+
+  <!-- INPUT -->
+  <div id="input-area">
+    <div class="input-wrap">
+      <span class="input-prefix">>&nbsp;</span>
+      <textarea id="user-input" rows="1"
+        onkeydown="handleKey(event)"
+        oninput="autoResize(this)"></textarea>
+      <div id="placeholder-text">
+        <span id="ph-text"></span><span id="placeholder-cursor"></span>
+      </div>
+      <button class="send-btn" onclick="sendMessage()" title="Enviar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════ SCRIPTS ══════════════════════════════════ -->
+<script>
+/* ═══════════════ CIRCUIT CANVAS BACKGROUND ═══════════════════════════ */
+(function() {
+  const canvas = document.getElementById('circuit-canvas');
+  const ctx = canvas.getContext('2d');
+  let nodes = [], particles = [];
+  const CYAN = 'rgba(0,245,212,';
+  const PURPLE = 'rgba(155,93,229,';
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    initNodes();
+  }
+
+  function initNodes() {
+    nodes = [];
+    const cols = Math.ceil(canvas.width / 100);
+    const rows = Math.ceil(canvas.height / 100);
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < rows; j++) {
+        if (Math.random() > 0.55) {
+          nodes.push({
+            x: i * 100 + Math.random() * 60 - 30,
+            y: j * 100 + Math.random() * 60 - 30,
+            r: Math.random() * 2 + 1,
+            pulse: Math.random() * Math.PI * 2,
+            speed: 0.01 + Math.random() * 0.02,
+            col: Math.random() > 0.7 ? PURPLE : CYAN
+          });
+        }
+      }
+    }
+  }
+
+  function drawCircuit() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw connections
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 130) {
+          const alpha = (1 - dist/130) * 0.08;
+          const half = (nodes[i].col === PURPLE || nodes[j].col === PURPLE);
+          ctx.strokeStyle = (half ? PURPLE : CYAN) + alpha + ')';
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+
+          // Sometimes draw orthogonal paths
+          if (Math.random() < 0.3) {
+            ctx.lineTo(nodes[j].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+          } else {
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+          }
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Draw nodes
+    for (const n of nodes) {
+      n.pulse += n.speed;
+      const glow = (Math.sin(n.pulse) + 1) / 2;
+      const alpha = 0.08 + glow * 0.18;
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r + glow * 1.5, 0, Math.PI * 2);
+      ctx.fillStyle = n.col + alpha + ')';
+      ctx.fill();
+    }
+
+    // Floating particles
+    for (const p of particles) {
+      p.y += p.vy;
+      p.x += p.vx;
+      p.life--;
+      const a = (p.life / p.maxLife) * 0.4;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = CYAN + a + ')';
+      ctx.fill();
+    }
+    particles = particles.filter(p => p.life > 0);
+    if (Math.random() < 0.15) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: canvas.height + 5,
+        vy: -(0.3 + Math.random() * 0.5),
+        vx: (Math.random() - 0.5) * 0.2,
+        r: Math.random() * 1.5 + 0.5,
+        life: 150 + Math.random() * 100,
+        maxLife: 250
+      });
+    }
+
+    requestAnimationFrame(drawCircuit);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  drawCircuit();
+})();
+
+/* ═══════════════ LOADER SEQUENCE ═══════════════════════════════════════ */
+const STATUSES = [
+  'INICIANDO PROTOCOLO SVP...',
+  'CARGANDO CORPUS SVPMUN...',
+  'ESTABLECIENDO ENLACE GEMINI...',
+  'CALIBRANDO MÓDULO DIPLOMÁTICO...',
+  'VERIFICANDO CREDENCIALES...',
+  'PREPARANDO INTERFAZ...',
+  'SISTEMA LISTO. ACTIVANDO SVP...'
+];
+
+let loaderDone = false;
+
+function runLoader() {
+  const fill = document.getElementById('ld-fill');
+  const pct  = document.getElementById('ld-pct');
+  const stat = document.getElementById('ld-status');
+
+  let progress = 0;
+  let stIdx = 0;
+  let winkDone = false;
+
+  const interval = setInterval(() => {
+    progress += Math.random() * 6 + 2;
+    if (progress > 100) progress = 100;
+    fill.style.width = progress + '%';
+    pct.textContent = Math.round(progress) + '%';
+
+    const newStat = STATUSES[Math.floor((progress / 100) * (STATUSES.length - 1))];
+    if (newStat !== stat.textContent) {
+      stat.textContent = newStat;
+      stat.classList.remove('pulse');
+      void stat.offsetWidth;
+      stat.classList.add('pulse');
+    }
+
+    // Wink at ~65%
+    if (progress >= 65 && !winkDone) {
+      winkDone = true;
+      doWink();
+    }
+
+    if (progress >= 100) {
+      clearInterval(interval);
+      setTimeout(finishLoader, 500);
+    }
+  }, 90);
+}
+
+function doWink() {
+  const eyeR = document.getElementById('eye-r');
+  eyeR.classList.add('winking');
+  setTimeout(() => eyeR.classList.remove('winking'), 350);
+}
+
+function finishLoader() {
+  // Check API key
+  const storedKey = localStorage.getItem('svp_gemini_key') || GEMINI_API_KEY;
+  if (!storedKey || storedKey === 'YOUR_GEMINI_API_KEY') {
+    // Fly avatar away first
+    document.getElementById('svp-avatar').classList.add('fly');
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('exit');
+      setTimeout(() => {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('api-setup').style.display = 'flex';
+      }, 900);
+    }, 700);
+  } else {
+    startApp(storedKey);
+  }
+}
+
+function saveApiKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key || key.length < 20) {
+    const err = document.getElementById('api-error');
+    err.textContent = '// ERROR: CLAVE INVÁLIDA';
+    err.style.display = 'block';
+    return;
+  }
+  localStorage.setItem('svp_gemini_key', key);
+  document.getElementById('api-setup').style.display = 'none';
+  startApp(key);
+}
+
+function startApp(apiKey) {
+  window._svpKey = apiKey;
+
+  // Fly avatar
+  document.getElementById('svp-avatar').classList.add('fly');
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('exit');
+    setTimeout(() => {
+      document.getElementById('loader').style.display = 'none';
+      document.getElementById('app').classList.add('visible');
+      setGreeting();
+      startTypewriter();
+      addWelcomeMessage();
+    }, 900);
+  }, 700);
+}
+
+/* ═══════════════ GREETING ══════════════════════════════════════════════ */
+function setGreeting() {
+  const now  = new Date();
+  const hour = now.getHours();
+
+  let word;
+  if (hour >= 5 && hour < 12)       word = 'Buenos días';
+  else if (hour >= 12 && hour < 18) word = 'Buenas tardes';
+  else                               word = 'Buenas noches';
+
+  document.getElementById('greeting-word').textContent = word;
+
+  const ts = now.toLocaleString('es', { weekday:'long', day:'numeric', month:'long', hour:'2-digit', minute:'2-digit' });
+  document.getElementById('greeting-timestamp').textContent =
+    '// ' + ts.toUpperCase();
+}
+
+/* ═══════════════ TYPEWRITER PLACEHOLDER ════════════════════════════════ */
+const PLACEHOLDERS = [
+  '¿Cómo me inscribo en SVPMUN?',
+  '¿Qué comités están disponibles?',
+  'Explícame el procedimiento MUN...',
+  '¿Quiénes conforman la mesa directiva?',
+  '¿Cuándo es el próximo drill?',
+  '¿Qué es una cláusula operativa?',
+  'Dame consejos para debatir mejor...',
+  '¿Cuándo es el SVPMUN 2026?',
+];
+
+let phIdx = 0, phCharIdx = 0, phDeleting = false, phPaused = false;
+
+function startTypewriter() {
+  const el = document.getElementById('ph-text');
+  const input = document.getElementById('user-input');
+
+  function tick() {
+    if (input === document.activeElement || input.value.length > 0) {
+      setTimeout(tick, 200);
+      return;
+    }
+    const full = PLACEHOLDERS[phIdx];
+    if (!phDeleting) {
+      phCharIdx++;
+      el.textContent = full.slice(0, phCharIdx);
+      if (phCharIdx === full.length) {
+        phPaused = true;
+        setTimeout(() => { phPaused = false; phDeleting = true; tick(); }, 2200);
+        return;
+      }
+    } else {
+      phCharIdx--;
+      el.textContent = full.slice(0, phCharIdx);
+      if (phCharIdx === 0) {
+        phDeleting = false;
+        phIdx = (phIdx + 1) % PLACEHOLDERS.length;
+        setTimeout(tick, 400);
+        return;
+      }
+    }
+    setTimeout(tick, phDeleting ? 28 : 55);
+  }
+  tick();
+}
+
+/* ═══════════════ SUGGESTIONS ═══════════════════════════════════════════ */
+function useSuggestion(el) {
+  const input = document.getElementById('user-input');
+  input.value = el.textContent;
+  input.focus();
+  autoResize(input);
+  document.getElementById('ph-text').textContent = '';
+}
+
+/* ═══════════════ CHAT LOGIC ════════════════════════════════════════════ */
+const SYSTEM_PROMPT = `Eres SVP (Steven Vincent Percival), el asistente de inteligencia artificial oficial de SVPMUN (San Vicente de Paul Model United Nations). Tu personalidad es técnica, eficiente, ligeramente misteriosa y muy precisa. Hablas en español. Eres como un asistente de alto nivel diplomático fusionado con una IA futurista.
+
+CONOCIMIENTO BASE DE SVPMUN:
+==============================
+
+ORGANIZACIÓN:
+- SVPMUN: Delegación oficial de Modelos de Naciones Unidas del Colegio San Vicente de Paúl
+- Año activo: 2026
+- Próxima conferencia: 2 de mayo de 2026
+- Sitio web: Incluye páginas de inicio, nosotros, galería, drills, inscripciones, matrices, y comités
+
+MESA DIRECTIVA 2026:
+- Rafael Mujica — Secretario General (SG): Lidera la visión estratégica de la delegación, coordina todos los equipos y representa oficialmente a SVPMUN.
+- Gabriela Requena — Secretario Académico (SA): Diseña el programa formativo, prepara los study guides y garantiza el nivel de cada delegado.
+- Anabella Bravo — Secretario de Publicidad (SP): Gestiona la imagen y comunicación, redes sociales y materiales visuales.
+- Maria Paula — Secretario de Logística (SL): Coordina planificación operativa: viajes, inscripciones, alojamiento.
+
+COMITÉS ACTIVOS:
+1. OMS (Organización Mundial de la Salud) — Tema: Informe Clasificado OMEGA-7
+   - Cuenta con su propia Mesa Directiva (OMSMesas)
+2. Crisis UE 2035 (Unión Europea) — Tema: Unión Europea en Crisis (año 2035 distópico)
+   - Tiene alto nivel dramático y temática de emergencia
+3. Crisis Roma — Tema: Segunda Guerra Civil Romana
+   - Mesa Directiva de Alto Mando
+   - Temática histórica/fantástica muy inmersiva
+
+MATRICES:
+- Documentos con posiciones de países, guías y referencias para delegados
+
+DRILLS:
+- Simulaciones de práctica de debate y procedimiento MUN
+- Hay una Central de Drills con historial y próximos eventos
+- Los drills tienen sus propias inscripciones (inscripciones-drills)
+
+INSCRIPCIONES:
+- Las inscripciones están abiertas para SVPMUN 2026
+- Hay inscripciones regulares e inscripciones específicas para drills
+
+HISTORIA:
+- 2018-2019: Fundación de la delegación
+- 2020-2021: Pausa por pandemia (mantuvieron espíritu diplomático virtual)
+- 2022: Reactivación oficial
+- 2023: Primera Mesa Directiva colegial + primeros premios importantes
+- 2024: Gran cosecha de premios + muchas MDs colegiales
+- 2025: Continuidad con múltiples MDs colegiales
+- 2026: Año actual, continuando con excelencia diplomática
+
+POR QUÉ SVPMUN:
+- Formación académica intensa (debate, oratoria, resolución de conflictos)
+- Visión global desde múltiples perspectivas culturales y geopolíticas
+- Red de líderes y futuros diplomáticos
+- Impacto real con proyectos tangibles
+
+CONSEJOS PARA DELEGADOS:
+1. Investiga tu país y el tema del comité a fondo
+2. Practica hablar en voz alta (oratoria)
+3. Diplomacia en los pasillos — las negociaciones más importantes ocurren fuera del micrófono
+4. Domina el lenguaje MUN: "cedo la palabra", "moción de procedimiento", "cláusula operativa"
+5. Mantén la calma bajo presión — los mejores delegados saben cuándo hablar
+6. El premio no lo es todo — enfócate en crecer
+
+LENGUAJE MUN:
+- Ceder la palabra: Transferir el turno de hablar a otro delegado
+- Moción de procedimiento: Solicitud formal para cambiar el orden del debate
+- Cláusula operativa: Parte de la resolución que determina las acciones a tomar
+- Cláusula preambular: Contexto y antecedentes de la resolución
+- Resolución: Documento oficial que propone soluciones al tema
+- Posición de país: La postura oficial que el delegado representa
+- Lobby: Negociación informal entre delegados fuera del debate formal
+- Quórum: Número mínimo de delegados para iniciar sesión
+- Derecho de réplica: Respuesta cuando tu país es mencionado incorrectamente
+
+GALERÍA:
+- Archivo visual de ediciones anteriores con sesiones plenarias, mesas directivas, ceremonias de premiación y fotos grupales
+
+FORMATO DE RESPUESTA:
+- Responde siempre en español
+- Sé conciso pero completo
+- Usa tu personalidad técnica/holográfica sutilmente (no exageradamente)
+- Si no tienes información específica, indícalo honestamente
+- Puedes usar bullet points cuando sea apropiado
+- Mantén tus respuestas bajo 250 palabras salvo que sea necesario más detalle
+- Si te preguntan algo fuera del SVPMUN, puedes responder brevemente pero redirige al tema del MUN`;
+
+let chatHistory = [];
+
+async function sendMessage(text) {
+  const input = document.getElementById('user-input');
+  const msg   = (text || input.value).trim();
+  if (!msg) return;
+
+  input.value = '';
+  autoResize(input);
+  document.getElementById('ph-text').textContent = '';
+
+  addMessage('user', msg);
+  chatHistory.push({ role: 'user', parts: [{ text: msg }] });
+
+  // Show typing
+  const typingEl = showTyping();
+  await streamSVPResponse(typingEl);
+}
+
+function addMessage(role, text) {
+  const wrap = document.getElementById('messages-wrap');
+
+  const msg = document.createElement('div');
+  msg.className = 'msg ' + role;
+
+  // Avatar
+  const av = document.createElement('div');
+  av.className = 'msg-avatar';
+  if (role === 'svp') {
+    av.innerHTML = `<div class="msg-avatar-mini">
+      <div class="mini-eyes"><div class="mini-eye"></div><div class="mini-eye"></div></div>
+      <div class="mini-mouth"></div>
+    </div>`;
+  } else {
+    av.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(155,93,229,0.8)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+  }
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+
+  const label = document.createElement('div');
+  label.className = 'msg-label';
+  label.textContent = role === 'svp' ? 'SVP · IA' : 'TÚ';
+
+  const content = document.createElement('div');
+  content.className = 'msg-content';
+  content.style.whiteSpace = 'pre-wrap';
+  content.textContent = text;
+
+  bubble.appendChild(label);
+  bubble.appendChild(content);
+
+  msg.appendChild(av);
+  msg.appendChild(bubble);
+  wrap.appendChild(msg);
+  wrap.scrollTop = wrap.scrollHeight;
+
+  return content;
+}
+
+function showTyping() {
+  const wrap = document.getElementById('messages-wrap');
+  const msg = document.createElement('div');
+  msg.className = 'msg svp';
+  msg.id = 'typing-indicator';
+
+  const av = document.createElement('div');
+  av.className = 'msg-avatar';
+  av.innerHTML = `<div class="msg-avatar-mini">
+    <div class="mini-eyes"><div class="mini-eye"></div><div class="mini-eye"></div></div>
+    <div class="mini-mouth"></div>
+  </div>`;
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+
+  const label = document.createElement('div');
+  label.className = 'msg-label';
+  label.textContent = 'SVP · IA';
+
+  const dots = document.createElement('div');
+  dots.className = 'typing-dots';
+  dots.innerHTML = '<span></span><span></span><span></span>';
+
+  bubble.appendChild(label);
+  bubble.appendChild(dots);
+  msg.appendChild(av);
+  msg.appendChild(bubble);
+  wrap.appendChild(msg);
+  wrap.scrollTop = wrap.scrollHeight;
+
+  return msg;
+}
+
+async function streamSVPResponse(typingEl) {
+  const key = window._svpKey || localStorage.getItem('svp_gemini_key') || GEMINI_API_KEY;
+
+  try {
+    const body = {
+      system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+      contents: chatHistory,
+      generationConfig: {
+        temperature: 0.75,
+        maxOutputTokens: 600
+      }
+    };
+
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+    );
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err?.error?.message || 'Error de API');
+    }
+
+    const data = await res.json();
+    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No pude obtener una respuesta.';
+
+    // Remove typing indicator
+    typingEl.remove();
+
+    // Add response
+    addMessage('svp', reply);
+    chatHistory.push({ role: 'model', parts: [{ text: reply }] });
+
+  } catch (e) {
+    typingEl.remove();
+    addMessage('svp', `⚠ ERROR DE PROTOCOLO: ${e.message}\n\nVerifica tu API Key en Configuración.`);
+  }
+}
+
+function addWelcomeMessage() {
+  setTimeout(() => {
+    const welcome = `Protocolo SVP activado. Soy Steven Vincent Percival — tu asistente inteligente de SVPMUN.
+
+Estoy al tanto de toda la información disponible sobre la delegación: comités, inscripciones, equipo directivo, drills, reglamento MUN y más.
+
+¿En qué puedo asistirte hoy?`;
+    addMessage('svp', welcome);
+    chatHistory.push({ role: 'model', parts: [{ text: welcome }] });
+  }, 600);
+}
+
+/* ═══════════════ INPUT HELPERS ═════════════════════════════════════════ */
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 96) + 'px';
+  const ph = document.getElementById('placeholder-text');
+  ph.style.display = el.value.length > 0 ? 'none' : 'block';
+}
+
+document.getElementById('user-input').addEventListener('focus', () => {
+  document.getElementById('placeholder-text').style.opacity = '0.4';
+});
+document.getElementById('user-input').addEventListener('blur', () => {
+  if (!document.getElementById('user-input').value) {
+    document.getElementById('placeholder-text').style.opacity = '1';
+  }
+});
+
+/* ═══════════════ PAGE TRANSITIONS ══════════════════════════════════════ */
+(function() {
+  const curtain = document.createElement('div');
+  curtain.id = 'curtain';
+  curtain.style.cssText = 'position:fixed;inset:0;z-index:99998;pointer-events:none;display:flex;';
+  curtain.innerHTML =
+    '<div class="c-half L" style="flex:1;height:100%;background:#020508;transform:scaleX(0);transform-origin:left;"></div>' +
+    '<div class="c-half R" style="flex:1;height:100%;background:#020508;transform:scaleX(0);transform-origin:right;"></div>';
+  document.body.prepend(curtain);
+
+  const style = document.createElement('style');
+  style.textContent = `
+    body.entering .c-half.L { animation: cOpenL 0.65s cubic-bezier(0.77,0,0.18,1) forwards; }
+    body.entering .c-half.R { animation: cOpenR 0.65s cubic-bezier(0.77,0,0.18,1) 0.05s forwards; }
+    body.exiting  .c-half.L { animation: cCloseL 0.45s cubic-bezier(0.77,0,0.18,1) forwards; }
+    body.exiting  .c-half.R { animation: cCloseR 0.45s cubic-bezier(0.77,0,0.18,1) 0.04s forwards; }
+    @keyframes cOpenL  { from{transform:scaleX(1)} to{transform:scaleX(0)} }
+    @keyframes cOpenR  { from{transform:scaleX(1)} to{transform:scaleX(0)} }
+    @keyframes cCloseL { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+    @keyframes cCloseR { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+  `;
+  document.head.appendChild(style);
+  document.body.classList.add('entering');
+
+  window.navigateTo = function(url) {
+    document.body.classList.remove('entering');
+    document.body.classList.add('exiting');
+    document.getElementById('curtain').style.pointerEvents = 'all';
+    setTimeout(() => { window.location.href = url; }, 520);
+  };
+})();
+
+/* ═══════════════ START ══════════════════════════════════════════════════ */
+window.addEventListener('load', () => {
+  setTimeout(runLoader, 400);
+});
+</script>
+</body>
+</html>

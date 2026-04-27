@@ -33,6 +33,10 @@ async def crisis_roma(request: Request):
 async def crisis_ue(request: Request):
     return templates.TemplateResponse(request=request, name="crisis_ue_2035.html")
 
+@app.get("/bot", response_class=HTMLResponse)
+async def crisis_ue(request: Request):
+    return templates.TemplateResponse(request=request, name="chatbot.html")
+
 @app.get("/drills", response_class=HTMLResponse)
 async def drills(request: Request):
     return templates.TemplateResponse(request=request, name="drills.html")
