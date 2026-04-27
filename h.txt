@@ -1330,3 +1330,339 @@ document.querySelectorAll('.rv, .divider').forEach(function(el){ io.observe(el);
   </script>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steven Vicent Percival — SVP Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&family=Space+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #05070a;
+            --accent-blue: #3a8fe0;
+            --accent-gold: #c9a84c;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #e8e4dc;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 50% -20%, #1a2a44 0%, #05070a 60%);
+        }
+
+        /* ══════════════════════════════════════
+           LOADER: STEVEN VICENT PERCIVAL (SVP)
+        ══════════════════════════════════════ */
+        #loader {
+            position: fixed; inset: 0; z-index: 9999;
+            background: #000;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            transition: transform 1s cubic-bezier(0.86, 0, 0.07, 1), opacity 0.8s;
+        }
+
+        .bot-avatar-loader {
+            width: 100px; height: 100px;
+            background: radial-gradient(circle, var(--accent-blue) 0%, transparent 70%);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 50px rgba(58, 143, 224, 0.3);
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .bot-eyes {
+            display: flex; gap: 15px;
+        }
+
+        .eye {
+            width: 12px; height: 12px; background: #fff; border-radius: 50%;
+            box-shadow: 0 0 15px #fff;
+        }
+
+        .eye.wink {
+            animation: winkAnim 0.5s ease 1.5s forwards;
+        }
+
+        @keyframes winkAnim {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.1); }
+        }
+
+        .loader-text {
+            margin-top: 30px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+        }
+
+        /* ══════════════════════════════════════
+           MAIN INTERFACE
+        ══════════════════════════════════════ */
+        #main-interface {
+            width: 100%; max-width: 900px;
+            padding: 20px;
+            display: flex; flex-direction: column;
+            align-items: center;
+            opacity: 0; transform: translateY(20px);
+            transition: all 1s ease 0.5s;
+        }
+
+        .greeting-container { text-align: center; margin-bottom: 60px; }
+        
+        .greeting-time {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #fff, var(--accent-blue));
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .bot-identity {
+            font-size: 1rem; letter-spacing: 2px; color: var(--accent-gold);
+            opacity: 0.7; font-weight: 300;
+        }
+
+        /* CHAT BOX */
+        .chat-input-wrapper {
+            width: 100%; position: relative;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 10px 20px;
+            backdrop-filter: blur(20px);
+            display: flex; align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: border 0.3s;
+        }
+
+        .chat-input-wrapper:focus-within { border-color: var(--accent-blue); }
+
+        .bot-mini-avatar {
+            width: 40px; height: 40px;
+            background: var(--accent-blue);
+            border-radius: 50%; margin-right: 15px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 15px rgba(58, 143, 224, 0.4);
+        }
+
+        .mini-eye { width: 5px; height: 5px; background: #fff; border-radius: 50%; margin: 0 3px; }
+
+        input#user-input {
+            flex: 1; background: transparent; border: none;
+            color: #fff; font-size: 1.1rem; padding: 15px 0;
+            outline: none; font-family: 'Montserrat', sans-serif;
+        }
+
+        input#user-input::placeholder { color: rgba(255,255,255,0.2); }
+
+        .send-btn {
+            background: transparent; border: none; cursor: pointer;
+            color: var(--accent-blue); font-size: 1.5rem; padding: 5px;
+            transition: transform 0.3s;
+        }
+        .send-btn:hover { transform: scale(1.1) rotate(-10deg); }
+
+        /* ══════════════════════════════════════
+           CARRUSEL DE PREGUNTAS (INFINITO)
+        ══════════════════════════════════════ */
+        .carousel-container {
+            width: 100vw; overflow: hidden;
+            margin-top: 40px; position: relative;
+        }
+
+        .carousel-track {
+            display: flex; gap: 20px;
+            animation: scrollCarousel 40s linear infinite;
+            width: max-content;
+        }
+
+        .q-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 12px 25px;
+            border-radius: 30px;
+            white-space: nowrap;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.5);
+            transition: all 0.3s;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .q-card:hover {
+            background: rgba(58, 143, 224, 0.1);
+            border-color: var(--accent-blue);
+            color: #fff;
+            transform: translateY(-5px);
+        }
+
+        @keyframes scrollCarousel {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ══════════════════════════════════════
+           RESPONSIVE
+        ══════════════════════════════════════ */
+        @media (max-width: 600px) {
+            .carousel-track { animation-duration: 20s; }
+            .greeting-time { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PANTALLA DE CARGA -->
+    <div id="loader">
+        <div class="bot-avatar-loader">
+            <div class="bot-eyes">
+                <div class="eye"></div>
+                <div class="eye wink"></div>
+            </div>
+        </div>
+        <div class="loader-text">Steven Vicent Percival</div>
+    </div>
+
+    <!-- INTERFAZ PRINCIPAL -->
+    <main id="main-interface">
+        <div class="greeting-container">
+            <h1 id="greeting" class="greeting-time">Cargando sistema...</h1>
+            <div class="bot-identity">STEVEN VICENT PERCIVAL · ASISTENTE SVP</div>
+        </div>
+
+        <div class="chat-input-wrapper">
+            <div class="bot-mini-avatar">
+                <div class="mini-eye"></div>
+                <div class="mini-eye"></div>
+            </div>
+            <input type="text" id="user-input" placeholder="">
+            <button class="send-btn" title="Preguntar a SVP">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+        </div>
+
+        <!-- CARRUSEL -->
+        <div class="carousel-container">
+            <div class="carousel-track" id="carousel-track">
+                <!-- Se rellena con JS -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 1. Lógica del Saludo Dinámico
+        function setGreeting() {
+            const hour = new Date().getHours();
+            const greetingEl = document.getElementById('greeting');
+            if (hour < 12) greetingEl.textContent = "Buenos días, delegado";
+            else if (hour < 18) greetingEl.textContent = "Buenas tardes, delegado";
+            else greetingEl.textContent = "Buenas noches, delegado";
+        }
+
+        // 2. Animación Placeholder (Typing Effect)
+        const phrases = [
+            "¿Cómo cruzar el Rubicón?",
+            "Explícame la crisis de la Unión Europea 2035...",
+            "¿Cuáles son los requisitos de inscripción?",
+            "Dime las metas de la OMS para este Drill...",
+            "¿Quién es Cayo Julio César?",
+            "Estrategias para un Gabinete de Crisis..."
+        ];
+
+        let i = 0, j = 0, current = "", deleting = false;
+        function typeEffect() {
+            const input = document.getElementById('user-input');
+            const speed = deleting ? 50 : 100;
+            
+            if (!deleting && j <= phrases[i].length) {
+                current = phrases[i].substring(0, j++);
+            } else if (deleting && j >= 0) {
+                current = phrases[i].substring(0, j--);
+            }
+
+            input.placeholder = current;
+
+            if (j > phrases[i].length) {
+                deleting = true;
+                setTimeout(typeEffect, 2000);
+            } else if (deleting && j < 0) {
+                deleting = false;
+                i = (i + 1) % phrases.length;
+                j = 0;
+                setTimeout(typeEffect, 500);
+            } else {
+                setTimeout(typeEffect, speed);
+            }
+        }
+
+        // 3. Carrusel de Preguntas
+        const questions = [
+            "Historia de SVPMUN", "Temario Crisis Roma", "Protocolos OMS", "Unión Europea 2035",
+            "Inscripciones Drills", "Mesa Directiva", "Líneas Rojas", "Reglamento de Debate",
+            "Nacional de Caracas", "Premios de la Delegación"
+        ];
+
+        function buildCarousel() {
+            const track = document.getElementById('carousel-track');
+            // Duplicamos para efecto infinito
+            const items = [...questions, ...questions];
+            items.forEach(q => {
+                const div = document.createElement('div');
+                div.className = 'q-card';
+                div.textContent = q;
+                div.onclick = () => {
+                    document.getElementById('user-input').value = "¿Podrías darme información sobre " + q + "?";
+                    document.getElementById('user-input').focus();
+                };
+                track.appendChild(div);
+            });
+        }
+
+        // 4. Salida del Loader
+        window.onload = () => {
+            setGreeting();
+            buildCarousel();
+            typeEffect();
+
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                const main = document.getElementById('main-interface');
+                
+                loader.style.opacity = '0';
+                loader.style.transform = 'translateY(-100%)';
+                main.style.opacity = '1';
+                main.style.transform = 'translateY(0)';
+                
+                setTimeout(() => loader.style.display = 'none', 1000);
+            }, 3000); // 3 segundos de carga
+        };
+
+        // 5. Simulación de Gemini (Estructura)
+        /*
+        async function askGemini(prompt) {
+            // Aquí iría tu conexión con la API de Google Gemini
+            // Ejemplo de configuración:
+            // const response = await fetch('TU_API_ENDPOINT_O_LAMBDA', { method: 'POST', body: JSON.stringify({prompt}) });
+            console.log("SVP pensando en:", prompt);
+        }
+        */
+    </script>
+</body>
+</html>
