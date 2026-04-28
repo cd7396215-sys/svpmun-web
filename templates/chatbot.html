@@ -733,7 +733,8 @@
 
             try {
                 // Petición al Backend en Python (Asegúrate de que main.py esté corriendo)
-                const response = await fetch('http://localhost:8000/chat', {
+                // Al usar '/chat', Vercel sabrá que debe buscar en su propio servidor
+                const response = await fetch('/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

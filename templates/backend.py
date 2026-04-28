@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from openai import AsyncOpenAI
 import google.generativeai as genai
-
+from fastapi.responses import FileResponse
 # =====================================================================
 # CARGAR VARIABLES DE ENTORNO (.env)
 # =====================================================================
@@ -71,8 +71,11 @@ Ejemplo: Si pide un gato cyberpunk, escribe: ![Gato Cyberpunk](https://image.pol
 # =====================================================================
 # RUTAS DE LA API
 # =====================================================================
-
-@app.post("/chat", response_model=ChatResponse)
+@app.get("/bot")
+async def serve_frontend():
+    # Esto le dice a FastAPI que muestre tu HTML cuando entren a la página principal
+    return FileResponse("chatbot.html")
+@app.post("/bot", response_model=ChatResponse)
 async def generate_chat_response(request: ChatRequest):
     prompt = request.prompt
     model_choice = request.model_name
@@ -137,6 +140,3 @@ async def generate_chat_response(request: ChatRequest):
         raise HTTPException(status_code=500, detail=f"Error procesando la solicitud: {str(e)}")
 
 # Para ejecutar fácilmente desde la terminal
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
