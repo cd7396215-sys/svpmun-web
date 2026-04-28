@@ -744,6 +744,10 @@
                     })
                 });
 
+                if (!response.ok) {
+                    throw new Error(`Error HTTP: ${response.status}`);
+                }
+
                 const data = await response.json();
                 
                 // Ocultar carga y mostrar respuesta de la IA
@@ -752,7 +756,8 @@
 
             } catch (error) {
                 document.getElementById('typingIndicator').style.opacity = '0';
-                appendMessage("**Error de conexión:** Asegúrate de que el archivo `main.py` esté ejecutándose en el puerto 8000.", 'ai');
+                // CORRECCIÓN AQUÍ: Mensaje de error dinámico y adaptado a Vercel
+                appendMessage(`**Error de conexión:** No se pudo conectar con el servidor en Vercel. Verifica que la ruta de la API sea correcta y que las variables de entorno (API Keys) estén configuradas en el dashboard de Vercel.\n\nDetalle técnico: \`${error.message}\``, 'ai');
             }
         }
 

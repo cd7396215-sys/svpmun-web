@@ -7,10 +7,11 @@ from pydantic import BaseModel
 from openai import AsyncOpenAI
 import google.generativeai as genai
 from fastapi.responses import FileResponse
+
 # =====================================================================
 # CARGAR VARIABLES DE ENTORNO (.env)
 # =====================================================================
-load_dotenv() # Esto lee automáticamente el archivo .env en tu carpeta
+load_dotenv() # Esto lee automáticamente el archivo .env en tu carpeta (En Vercel usa las Environment Variables del dashboard)
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -36,7 +37,7 @@ app = FastAPI(title="AI Chat UI Backend", version="1.0.0")
 # Permitir CORS para que tu HTML pueda comunicarse sin problemas
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Permite peticiones desde tu HTML local
+    allow_origins=["*"],  # Permite peticiones desde tu HTML local y Vercel
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -71,11 +72,14 @@ Ejemplo: Si pide un gato cyberpunk, escribe: ![Gato Cyberpunk](https://image.pol
 # =====================================================================
 # RUTAS DE LA API
 # =====================================================================
+
 @app.get("/bot")
 async def serve_frontend():
     # Esto le dice a FastAPI que muestre tu HTML cuando entren a la página principal
     return FileResponse("chatbot.html")
-@app.post("/bot", response_model=ChatResponse)
+
+# CORRECCIÓN AQUÍ: Cambiado de "/bot" a "/chat" para que coincida con el frontend
+@app.post("/chat", response_model=ChatResponse)
 async def generate_chat_response(request: ChatRequest):
     prompt = request.prompt
     model_choice = request.model_name
@@ -131,12 +135,10 @@ async def generate_chat_response(request: ChatRequest):
             response_text = response.text
 
         else:
-            raise HTTPException(status_code=400, detail="Modelo no soportado o API Key faltante en el .env")
+            raise HTTPException(status_code=400, detail="Modelo no soportado o API Key faltante en las variables de entorno de Vercel")
 
         return ChatResponse(response=response_text, model_used=model_choice)
 
     except Exception as e:
         print(f"Error en el servidor con el modelo {model_choice}: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error procesando la solicitud: {str(e)}")
-
-# Para ejecutar fácilmente desde la terminal
