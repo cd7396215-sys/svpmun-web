@@ -11,7 +11,7 @@ from fastapi.responses import FileResponse
 # =====================================================================
 # CARGAR VARIABLES DE ENTORNO (.env)
 # =====================================================================
-load_dotenv() # Esto lee automáticamente el archivo .env en tu carpeta (En Vercel usa las Environment Variables del dashboard)
+load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -34,10 +34,10 @@ qwen_client = AsyncOpenAI(api_key=ALIBABA_API_KEY, base_url="https://dashscope.a
 # =====================================================================
 app = FastAPI(title="AI Chat UI Backend", version="1.0.0")
 
-# Permitir CORS para que tu HTML pueda comunicarse sin problemas
+# Permitir CORS para que tu HTML pueda comunicarse sin problemas en Vercel
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Permite peticiones desde tu HTML local y Vercel
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -75,11 +75,10 @@ Ejemplo: Si pide un gato cyberpunk, escribe: ![Gato Cyberpunk](https://image.pol
 
 @app.get("/bot")
 async def serve_frontend():
-    # Esto le dice a FastAPI que muestre tu HTML cuando entren a la página principal
     return FileResponse("chatbot.html")
 
-# CORRECCIÓN AQUÍ: Cambiado de "/bot" a "/chat" para que coincida con el frontend
-@app.post("/chat", response_model=ChatResponse)
+# CORRECCIÓN AQUÍ: Usamos /api/chat para que Vercel lo enrute correctamente
+@app.post("/api/chat", response_model=ChatResponse)
 async def generate_chat_response(request: ChatRequest):
     prompt = request.prompt
     model_choice = request.model_name

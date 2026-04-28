@@ -592,7 +592,7 @@
     </main>
 
     <script>
-        // VARIABLES GLOBALES (Conexión Frontend - Backend)
+        // VARIABLES GLOBALES
         let selectedModel = null;
         let isFirstMessage = true;
 
@@ -631,12 +631,11 @@
             ['Qwen 3.6 Plus', 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/alibabacloud.svg'],
             ['Gemma 3', 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/google.svg'],
             ['GPT-4o mini', 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/openai.svg'],
-            ['Gemini-2.5-flash', 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/google.svg']
+            ['Gemini 2.5 flash', 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/google.svg']
         ];
         
         const menu = document.getElementById('menu');
         models.forEach(m => {
-            // Se le asigna la función de selección a cada modelo
             menu.innerHTML += `<div class='item' onclick="selectModel('${m[0]}')"><img src='${m[1]}'><span>${m[0]}</span></div>`;
         });
         
@@ -644,7 +643,6 @@
             menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
         }
 
-        // Seleccionar IA y mostrar temperatura
         function selectModel(modelName) {
             selectedModel = modelName;
             document.getElementById('activeModelDisplay').innerText = `IA Activa: ${modelName}`;
@@ -653,25 +651,21 @@
             menu.style.display = 'none';
         }
 
-        // Actualizar label de temperatura
         function updateTemp(val) {
             document.getElementById('tempValue').innerText = val;
         }
 
-        // Rellenar Input con Sugerencias (Chips)
         function setPrompt(el) {
             inp.value = el.innerText;
             inp.focus();
         }
 
-        // Mostrar Notificación Elegante (Toast)
         function showToast() {
             const toast = document.getElementById('toast');
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3500);
         }
 
-        // Transición de la Interfaz a Modo Chat
         function transitionToChat() {
             if (isFirstMessage) {
                 document.getElementById('homeContainer').style.display = 'none';
@@ -684,7 +678,6 @@
             }
         }
 
-        // Agregar Burbujas de Mensajes al Chat
         function appendMessage(text, sender) {
             const container = document.getElementById('chatContainer');
             const msgDiv = document.createElement('div');
@@ -695,13 +688,11 @@
                 msgDiv.innerText = text;
             } else {
                 msgDiv.classList.add('msg-ai');
-                // Utilizamos Marked.js para interpretar Markdown (imágenes, código, negritas)
                 msgDiv.innerHTML = marked.parse(text); 
             }
 
             container.appendChild(msgDiv);
             
-            // Scroll automático hacia abajo
             setTimeout(() => {
                 window.scrollTo({
                     top: document.body.scrollHeight,
@@ -710,30 +701,24 @@
             }, 100);
         }
 
-        // ENVIAR MENSAJE Y CONECTAR CON FASTAPI
+        // ENVIAR MENSAJE AL MAIN.PY
         async function sendMsg() {
             const text = inp.value.trim();
             if(!text) return;
 
-            // Validación Obligatoria de Modelo
             if (!selectedModel) {
                 showToast();
                 return;
             }
 
-            // Cambiar UI al chat visual
             transitionToChat();
-            
-            // Mostrar mensaje del usuario
             appendMessage(text, 'user');
             inp.value = '';
             
-            // Mostrar animación de carga
             document.getElementById('typingIndicator').style.opacity = '1';
 
             try {
-                // Petición al Backend en Python (Asegúrate de que main.py esté corriendo)
-                // Al usar '/chat', Vercel sabrá que debe buscar en su propio servidor
+                // Ahora apunta a la ruta /chat que está en tu main.py
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -750,14 +735,12 @@
 
                 const data = await response.json();
                 
-                // Ocultar carga y mostrar respuesta de la IA
                 document.getElementById('typingIndicator').style.opacity = '0';
                 appendMessage(data.response, 'ai');
 
             } catch (error) {
                 document.getElementById('typingIndicator').style.opacity = '0';
-                // CORRECCIÓN AQUÍ: Mensaje de error dinámico y adaptado a Vercel
-                appendMessage(`**Error de conexión:** No se pudo conectar con el servidor en Vercel. Verifica que la ruta de la API sea correcta y que las variables de entorno (API Keys) estén configuradas en el dashboard de Vercel.\n\nDetalle técnico: \`${error.message}\``, 'ai');
+                appendMessage(`**Error de conexión:** No se pudo conectar con el servidor. Detalle técnico: \`${error.message}\``, 'ai');
             }
         }
 
