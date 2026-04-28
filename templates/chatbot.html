@@ -5,6 +5,7 @@
     <meta name='viewport' content='width=device-width,initial-scale=1.0'>
     <title>AI Chat UI - Professional</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -39,10 +40,10 @@
         .delay-2 { animation-delay: 0.2s; }
         .delay-3 { animation-delay: 0.3s; }
 
-        /* NAVBAR / SIDEBAR VERTICAL (Estilo Gemini) */
+        /* NAVBAR / SIDEBAR VERTICAL */
         .sidebar {
             width: 280px;
-            background: #f0f4f9; /* Color característico tipo Gemini */
+            background: #f0f4f9;
             display: flex;
             flex-direction: column;
             padding: 16px 12px;
@@ -66,7 +67,6 @@
             position: relative;
         }
 
-        /* Triángulo negro en la esquina */
         .triangle {
             width: 0;
             height: 0;
@@ -93,13 +93,48 @@
         }
         .btn-icon:hover { background: #e1e5ea; color: #1f1f1f; }
 
+        /* Controles de Modelo Activo en el Sidebar */
+        #activeModelDisplay {
+            font-size: 13px;
+            font-weight: 600;
+            color: #041e49;
+            margin-bottom: 12px;
+            padding: 0 16px;
+            display: none;
+        }
+
+        .temp-control {
+            display: none; /* Se activa por JS */
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            background: #e9eef6;
+            border-radius: 16px;
+            margin-left: 8px;
+            margin-right: 8px;
+        }
+
+        .temp-control label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #444746;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .temp-control input[type="range"] {
+            width: 100%;
+            accent-color: #1f1f1f;
+            cursor: pointer;
+        }
+
         .nav-item {
             display: flex;
             align-items: center;
             gap: 16px;
             padding: 12px 16px;
             margin-bottom: 4px;
-            border-radius: 24px; /* Estilo píldora */
+            border-radius: 24px;
             color: #444746;
             font-size: 14px;
             font-weight: 500;
@@ -107,22 +142,8 @@
             transition: all 0.2s ease;
         }
 
-        .nav-item svg {
-            width: 20px;
-            height: 20px;
-            stroke-width: 2px;
-        }
-
-        .nav-item:hover {
-            background: #e1e5ea;
-            color: #1f1f1f;
-        }
-
-        /* Simulación de un item activo */
-        .nav-item.active {
-            background: #d3e3fd;
-            color: #041e49;
-        }
+        .nav-item svg { width: 20px; height: 20px; stroke-width: 2px; }
+        .nav-item:hover { background: #e1e5ea; color: #1f1f1f; }
 
         .history-section {
             margin-top: 24px;
@@ -150,9 +171,10 @@
             left: 10px;
             top: 40px;
             width: 240px;
-            background: #ffffff;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             border: 1px solid #e0e0e0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
             border-radius: 12px;
             padding: 8px;
             display: none;
@@ -168,6 +190,7 @@
             cursor: pointer;
             font-size: 14px;
             color: #1f1f1f;
+            transition: background 0.2s;
         }
 
         .menu .item:hover { background: #f0f4f9; }
@@ -179,9 +202,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             position: relative;
             padding: 20px;
+            overflow-y: auto;
         }
 
         .btn-open-sidebar {
@@ -189,6 +212,16 @@
             top: 16px;
             left: 16px;
             z-index: 10;
+        }
+
+        .home-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 800px;
         }
 
         .greet {
@@ -208,6 +241,64 @@
             margin-top: 12px;
         }
 
+        /* Contenedor de Chat (Oculto al inicio) */
+        .chat-container {
+            display: none;
+            flex-direction: column;
+            width: min(800px, 95%);
+            flex: 1;
+            padding-bottom: 120px;
+            gap: 24px;
+            margin-top: 60px;
+        }
+
+        .msg-bubble {
+            max-width: 85%;
+            padding: 16px 20px;
+            border-radius: 16px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        .msg-user {
+            background: #f0f4f9;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+            color: #1f1f1f;
+        }
+
+        .msg-ai {
+            background: transparent;
+            align-self: flex-start;
+            color: #1f1f1f;
+            width: 100%;
+        }
+
+        .msg-ai pre {
+            background: #1f1f1f;
+            color: #f8fafc;
+            padding: 16px;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 13px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .msg-ai code {
+            font-family: monospace;
+            background: #e1e5ea;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .msg-ai img {
+            max-width: 100%;
+            border-radius: 12px;
+            margin-top: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
         /* Barra de búsqueda */
         .bar {
             margin-top: 36px;
@@ -221,7 +312,15 @@
             padding: 12px 16px;
             border-radius: 32px;
             position: relative;
-            transition: box-shadow 0.3s, border 0.3s;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .bar.chat-mode {
+            position: fixed;
+            bottom: 30px;
+            margin-top: 0;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
         }
 
         .bar:focus-within {
@@ -254,10 +353,7 @@
             transition: all 0.2s;
         }
         
-        .iconbtn:hover {
-            background: #e1e5ea;
-            color: #1f1f1f;
-        }
+        .iconbtn:hover { background: #e1e5ea; color: #1f1f1f; }
 
         /* Indicador de escritura */
         .typing-indicator {
@@ -285,13 +381,44 @@
             40% { transform: scale(1); }
         }
 
+        /* Chips / Mensajes emergentes */
+        .prompt-chips {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: min(800px, 95%);
+        }
+        
+        .chip {
+            background: rgba(255,255,255,0.7);
+            border: 1px solid #e0e0e0;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #444746;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(4px);
+        }
+        
+        .chip:hover {
+            background: #ffffff;
+            border-color: #c7c7c7;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            color: #1f1f1f;
+            transform: translateY(-2px);
+        }
+
         /* Carrusel Ajustado */
         .carouselWrap {
             position: absolute;
             bottom: 30px;
-            width: min(600px, 90%); /* Más pequeño para evitar exceso visual */
+            width: min(600px, 90%);
             text-align: center;
             overflow: hidden;
+            transition: opacity 0.4s;
         }
 
         .carousel-title {
@@ -307,7 +434,6 @@
             width: 100%;
             overflow: hidden;
             position: relative;
-            /* Degradados a los lados para disimular la entrada/salida */
             mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
             -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
         }
@@ -320,7 +446,7 @@
         }
 
         .track img {
-            height: 48px; /* Logos mucho más grandes */
+            height: 48px;
             opacity: 0.4;
             filter: grayscale(1);
             transition: all 0.3s;
@@ -331,9 +457,48 @@
             from { transform: translateX(0); }
             to { transform: translateX(-50%); }
         }
+
+        /* Tostada de Error Minimalista */
+        .toast {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-size: 14px;
+            color: #1f1f1f;
+            font-weight: 500;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .toast svg {
+            color: #d93025;
+            width: 18px;
+            height: 18px;
+        }
+
     </style>
 </head>
 <body>
+
+    <div id="toast" class="toast">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <span>Por favor, selecciona una IA en el menú lateral antes de continuar.</span>
+    </div>
 
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -342,6 +507,15 @@
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
             <div class="menu" id="menu"></div>
+        </div>
+
+        <div id="activeModelDisplay">Ninguna IA seleccionada</div>
+        <div id="tempControl" class="temp-control">
+            <label>
+                <span>Creatividad (Temp)</span>
+                <span id="tempValue">0.7</span>
+            </label>
+            <input type="range" id="temperature" min="0.0" max="1.0" step="0.1" value="0.7" oninput="updateTemp(this.value)">
         </div>
 
         <div class="nav-item">
@@ -369,15 +543,20 @@
         </div>
     </aside>
 
-    <main class="main-content">
+    <main class="main-content" id="mainContent">
         <button id="btnOpenSidebar" class="btn-icon btn-open-sidebar" style="display: none;" onclick="toggleSidebar()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </button>
 
-        <div class="greet animate-in delay-1" id="greet"></div>
-        <div class="sub animate-in delay-2">¿En qué puedo ayudarte hoy?</div>
-        
-        <div class="bar animate-in delay-3">
+        <div class="home-container" id="homeContainer">
+            <div class="greet animate-in delay-1" id="greet"></div>
+            <div class="sub animate-in delay-2">¿En qué puedo ayudarte hoy?</div>
+        </div>
+
+        <div class="chat-container" id="chatContainer">
+            </div>
+
+        <div class="bar animate-in delay-3" id="inputBar">
             <input id="prompt" placeholder="" autocomplete="off" />
             <input type="file" id="file" hidden multiple>
             <button class="iconbtn" onclick="document.getElementById('file').click()">
@@ -391,13 +570,20 @@
             </button>
         </div>
 
+        <div class="prompt-chips animate-in delay-3" id="promptChips">
+            <div class="chip" onclick="setPrompt(this)">Escribe una función en Python</div>
+            <div class="chip" onclick="setPrompt(this)">Crea la imagen de un paisaje minimalista</div>
+            <div class="chip" onclick="setPrompt(this)">¿Cuáles son las mejores prácticas en UI?</div>
+            <div class="chip" onclick="setPrompt(this)">Explícame el concepto de Glassmorphism</div>
+        </div>
+
         <div class="typing-indicator" id="typingIndicator">
             <div class="dot"></div>
             <div class="dot"></div>
             <div class="dot"></div>
         </div>
 
-        <div class="carouselWrap animate-in delay-3">
+        <div class="carouselWrap animate-in delay-3" id="carouselWrap">
             <div class="carousel-title">Las IAs Provienen de</div>
             <div class="track-container">
                 <div class="track" id="track"></div>
@@ -406,6 +592,10 @@
     </main>
 
     <script>
+        // VARIABLES GLOBALES (Conexión Frontend - Backend)
+        let selectedModel = null;
+        let isFirstMessage = true;
+
         // Saludo Dinámico
         const hour = new Date().getHours();
         document.getElementById('greet').innerText = hour < 12 ? 'Buenos días' : hour < 19 ? 'Buenas tardes' : 'Buenas noches';
@@ -415,15 +605,11 @@
         const btnOpenSidebar = document.getElementById('btnOpenSidebar');
         function toggleSidebar() {
             sidebar.classList.toggle('closed');
-            if(sidebar.classList.contains('closed')){
-                btnOpenSidebar.style.display = 'flex';
-            } else {
-                btnOpenSidebar.style.display = 'none';
-            }
+            btnOpenSidebar.style.display = sidebar.classList.contains('closed') ? 'flex' : 'none';
         }
 
         // Placeholder Animado
-        const qs = [...'¿Cómo crear una web moderna?|Resume este PDF|Explícame Python|Haz una estrategia de ventas|Corrige este texto|Analiza este contrato|Tradúcelo al inglés'.split('|')];
+        const qs = [...'¿Cómo crear una web moderna?|Genera un código en Python|Muestra un paisaje cyberpunk|Haz una estrategia de ventas|Corrige este texto'.split('|')];
         let i = 0, j = 0, dir = 1;
         const inp = document.getElementById('prompt');
         setInterval(() => {
@@ -438,7 +624,7 @@
             }
         }, 120);
 
-        // Modelos (Triángulo negro en el sidebar)
+        // Modelos y Menú
         const models = [
             ['NVIDIA Nemotron 3', 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/nvidia.svg'],
             ['Llama 3.3 70B', 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/meta.svg'],
@@ -447,26 +633,131 @@
             ['GPT-4o mini', 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/openai.svg'],
             ['Gemini 2.5 flash', 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/google.svg']
         ];
+        
         const menu = document.getElementById('menu');
-        models.forEach(m => menu.innerHTML += `<div class='item'><img src='${m[1]}'><span>${m[0]}</span></div>`);
+        models.forEach(m => {
+            // Se le asigna la función de selección a cada modelo
+            menu.innerHTML += `<div class='item' onclick="selectModel('${m[0]}')"><img src='${m[1]}'><span>${m[0]}</span></div>`;
+        });
         
         function toggleMenu() {
             menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
         }
 
-        // Enviar Mensaje
-        function sendMsg() {
-            if(!inp.value) return;
-            document.getElementById('typingIndicator').style.opacity = '1';
-            inp.value = '';
+        // Seleccionar IA y mostrar temperatura
+        function selectModel(modelName) {
+            selectedModel = modelName;
+            document.getElementById('activeModelDisplay').innerText = `IA Activa: ${modelName}`;
+            document.getElementById('activeModelDisplay').style.display = 'block';
+            document.getElementById('tempControl').style.display = 'block';
+            menu.style.display = 'none';
+        }
+
+        // Actualizar label de temperatura
+        function updateTemp(val) {
+            document.getElementById('tempValue').innerText = val;
+        }
+
+        // Rellenar Input con Sugerencias (Chips)
+        function setPrompt(el) {
+            inp.value = el.innerText;
+            inp.focus();
+        }
+
+        // Mostrar Notificación Elegante (Toast)
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3500);
+        }
+
+        // Transición de la Interfaz a Modo Chat
+        function transitionToChat() {
+            if (isFirstMessage) {
+                document.getElementById('homeContainer').style.display = 'none';
+                document.getElementById('promptChips').style.display = 'none';
+                document.getElementById('carouselWrap').style.display = 'none';
+                
+                document.getElementById('chatContainer').style.display = 'flex';
+                document.getElementById('inputBar').classList.add('chat-mode');
+                isFirstMessage = false;
+            }
+        }
+
+        // Agregar Burbujas de Mensajes al Chat
+        function appendMessage(text, sender) {
+            const container = document.getElementById('chatContainer');
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('msg-bubble');
+            
+            if (sender === 'user') {
+                msgDiv.classList.add('msg-user');
+                msgDiv.innerText = text;
+            } else {
+                msgDiv.classList.add('msg-ai');
+                // Utilizamos Marked.js para interpretar Markdown (imágenes, código, negritas)
+                msgDiv.innerHTML = marked.parse(text); 
+            }
+
+            container.appendChild(msgDiv);
+            
+            // Scroll automático hacia abajo
             setTimeout(() => {
+                window.scrollTo({
+                    top: document.body.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }, 100);
+        }
+
+        // ENVIAR MENSAJE Y CONECTAR CON FASTAPI
+        async function sendMsg() {
+            const text = inp.value.trim();
+            if(!text) return;
+
+            // Validación Obligatoria de Modelo
+            if (!selectedModel) {
+                showToast();
+                return;
+            }
+
+            // Cambiar UI al chat visual
+            transitionToChat();
+            
+            // Mostrar mensaje del usuario
+            appendMessage(text, 'user');
+            inp.value = '';
+            
+            // Mostrar animación de carga
+            document.getElementById('typingIndicator').style.opacity = '1';
+
+            try {
+                // Petición al Backend en Python (Asegúrate de que main.py esté corriendo)
+                const response = await fetch('http://localhost:8000/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        prompt: text,
+                        model_name: selectedModel,
+                        temperature: parseFloat(document.getElementById('temperature').value)
+                    })
+                });
+
+                const data = await response.json();
+                
+                // Ocultar carga y mostrar respuesta de la IA
                 document.getElementById('typingIndicator').style.opacity = '0';
-            }, 1500);
+                appendMessage(data.response, 'ai');
+
+            } catch (error) {
+                document.getElementById('typingIndicator').style.opacity = '0';
+                appendMessage("**Error de conexión:** Asegúrate de que el archivo `main.py` esté ejecutándose en el puerto 8000.", 'ai');
+            }
         }
 
         function startRec() {
             const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SR) return alert('No compatible');
+            if (!SR) return alert('El reconocimiento de voz no es compatible con este navegador.');
             const r = new SR();
             r.lang = 'es-ES';
             r.onresult = e => inp.value = e.results[0][0].transcript;
@@ -477,7 +768,7 @@
             if (e.key === 'Enter') sendMsg();
         });
 
-        // Carrusel: Solo se multiplica x2 para un bucle infinito limpio y menos saturado
+        // Carrusel
         const logos = ['openai', 'google', 'meta', 'nvidia', 'microsoft', 'amazon', 'alibabacloud'];
         const tr = document.getElementById('track');
         let html = '';
